@@ -1,0 +1,812 @@
+%\documentclass{sig-alternate}
+\documentclass{amsart}
+\usepackage[utf8]{inputenc}
+
+\usepackage[plainpages=false,pdfpagelabels,colorlinks=true,citecolor=blue,hypertexnames=false]{hyperref}
+\usepackage{color}
+\usepackage{stmaryrd}
+\usepackage{enumerate}
+
+\begin{document}
+
+\newtheorem{theo}{Theorem}[section]
+\newtheorem{lem}[theo]{Lemma}
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{cor}[theo]{Corollary}
+\newtheorem{quest}[theo]{Question}
+\newtheorem{rem}[theo]{Remark}
+\newtheorem{ex}[theo]{Example}
+\theoremstyle{definition}
+\newtheorem{deftn}[theo]{Definition}
+\newtheorem{rmk}[theo]{Remark}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Zp}{\Z_p}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Qp}{\Q_p}
+\newcommand{\R}{\mathbb R}
+\renewcommand{\O}{\mathcal O}
+
+\newcommand{\val}{\text{\rm val}}
+
+\def\todo#1{\ \!\!{\color{red} #1}}
+\definecolor{purple}{rgb}{0.6,0,0.6}
+\def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
+
+%
+% --- Author Metadata here ---
+%\conferenceinfo{ISSAC}{}
+
+% --- End of Author Metadata ---
+
+\title{p-adic precision}
+
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% NOTE: You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+%\numberofauthors{3} 
+%\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+%\alignauthor
+%Xavier Caruso\\
+%       \affaddr{CNRS/Université de Rennes I}\\
+%       \email{xavier.caruso@univ-rennes1.fr}
+% 2nd. author
+%\alignauthor
+%David Roe\\
+%       \affaddr{University of Calgary}\\
+%       \email{roed.math@gmail.com}
+% 3rd. author
+%\alignauthor 
+%Tristan Vaccon\\
+%       \affaddr{Université de Rennes 1}\\
+%       \email{tristan.vaccon@univ-rennes1.fr}
+%}
+
+\date{november 2013}
+
+\maketitle
+\begin{abstract}
+A method to handle $p$-adic precision, to handle \textit{precision balance}.
+\end{abstract}
+
+% A category with the (minimum) three required fields
+%\category{I.1.2}{Computing Methodologies}{Symbolic and Algebraic Manipulations}[Algebraic Algorithms]
+
+%\terms{Algorithms, Theory}
+
+%\keywords{$p$-adic precision, $p$-adic algorithm}
+
+\section{Introduction}
+
+During the last two decades, $p$-adic methods have become a tremendous tool in computer algebra, since it allows computation not feasible on finite fields, can control the growth of the size of the coefficients when dealing with rationnal numbers, or is needed when performing algorithm of $p$-adic nature.
+
+Yet, $p$-adic algorithms are necessarily numeric or symbolic-numeric: one can not avoid working with finite precision, and thus, keeping track of loss in precision during the computation.
+
+Here are some examples of algorithm that rely on $p$-adic computations:
+\begin{itemize}
+\item Bostan \cite{Bostan}, on how polynomials in $\mathbb{F}_p$ can be computed from theirs Newton series lifted in $\mathbb{Z}_p$;
+\item Gaudry \cite{Gaudry}, on generation of genus $2$ curves via $p$-adic lifting;
+\item Kedlaya \cite{Kedlaya}, on point counting on hyperelliptic curves using Monsky--Washnitzer cohomology;
+\item Lercier \cite{Lercier}, on computing isogenies between elliptic curves using $p$-adic differential equations.
+\end{itemize}
+
+Many usual softwares (\emph{e.g.} {\tt magma} and {\tt sage}) include 
+primitives to handle $p$-adic numbers. Since $p$-adic numbers are by 
+nature infinite, one needs to truncate them up to some finite level (we 
+generally say \emph{finite precision}) in order to manipulate them on a 
+computed. The usual technics to achieve this are inspired from case of 
+real numbers: the computer works with ``truncated $p$-adic numbers'' 
+represented as $x + O(p^n)$ and performs all basic operations (addition, 
+product) on this representation. For instance, it computes: 
+$$(x + O(p^n)) + (y + O(p^m)) = (x+y) + O(p^{\min(n,m)}).$$
+However, in many important cases (\emph{e.g.} those discussed just 
+above), this approach is too naive since it creates artificially 
+important losses of precision (see \S\ref{ssec:stepbystep}). 
+It is the so-called \emph{numerical instability} issue.
+
+The aim of the current paper is to provide a systematical theorical 
+study of $p$-adic precision (and more generally nonarchimedian 
+precision) and to derive from this study new methods to handle 
+precision, that turns out to give nearly optimal results in a quite 
+large setting.
+
+\section{Motivations and aims}
+
+\todofor{David}{Add a general introduction to this section.}
+
+\subsection{Separate precision and approximation}
+
+\todofor{David}{
+Explain here why it might be useful to work separately with 
+approximation on the one hand and precision on the other hand.
+}
+
+\subsection{Step-by-step tracking is not sharp}
+\label{ssec:stepbystep}
+
+In this subsection, we illustrate by some examples that tracking
+$p$-adic precision step by step may lead to important numerical
+instability.
+
+\subsubsection*{A first stupid example}
+
+Let $f : \Qp^2 \to \Qp^2$ be the function mapping $(x,y)$ to $(x+y, 
+x-y)$. We consider in addition two $p$-adic numbers $x$ and $y$, 
+which are known up to precision $O(p^n)$ and $O(p^m)$ respectively.
+The question we would like to address in this example is the
+computation of $f \circ f(x,y)$.
+
+Two approaches are possible. The first one consists in doing the 
+computation step-by-step: we first compute $(z,t) = f(x,y)$ and we 
+compute then $f(z,t)$ which gives the result. Proceeding this way, we 
+see that $z$ and $t$ are both known up to precision $O(p^{\min(n,m)})$ 
+are consequently the same holds for the coordinates of the result.
+
+The second approach consists in remarking that $f \circ f$ maps
+$(x,y)$ to $(2x, 2y)$. CComputing $f \circ f(x,y)$ using the latter
+formula, it is clear that the result we get is known up to precision
+$(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p$
+equals $2$.
+
+As a conclusion, the second approach yields a more accurate result.
+In other words, computing step-by-step creates ``artificial'' losses 
+of precision.
+
+\subsubsection*{The SOMOS 4 sequence}
+
+The SOMOS 4 sequence is a four-term inductive sequence satisfying:
+$$u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}.$$
+In this example, we shall consider the situation where the initial
+terms $u_0$, $u_1$, $u_2$ and $u_3$ are \emph{invertible} $p$-adic 
+integers, \emph{i.e.} lie in $\Zp^\times$.
+
+Let us first examine what happens (regarding to the precision) when
+we are computing the sequence $(u_n)$ naively. The computation of
+$u_{n+4}$ involves a division by $u_n$ and hence, roughly speaking,
+decreases the precision by a factor $p^{\val(u_n)}$ where $\val$
+stands for the $p$-adic valuation. Hence, if we assume that $u_0$,
+$u_1$, $u_2$ and $u_3$ are given with precision $O(p^N)$ then the
+naive computation returns the value of $u_n$ with precision
+\begin{equation}
+\label{eq:SOMOS}
+O(p^{N-v_n})
+\quad \text{with}\quad
+v_n = \val(u_0) + \cdots + \val(u_{n-4}).
+\end{equation}
+
+However, on the other hand, one can prove that the SOMOS 4 sequence 
+exhibits the \emph{Laurent phenomenon}. This means that, for all integer 
+$n$, there exists a polynomial $P_n$ in $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 
+1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$.
+From the latter formula, it follows directly that if $u_0$, $u_1$,
+$u_2$ and $u_3$ are known up to precision $O(p^N)$ then all $u_n$'s
+are also known with the same precision. Thus, the term $v_n$ that 
+appears in \eqref{eq:SOMOS} does not reflect an intrinsic loss of
+precision but some numerical instability related to the algorithm ---
+which includes the model precision --- we used to compute to SOMOS 
+sequence.
+
+\begin{rmk}
+From the above discussion, one can easily derive a numerically stable 
+algorithm that computes the SOMOS 4 sequence: (1)~we compute the 
+Laurent polynomials $P_n$ using the induction formula (and working in 
+the ring $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 1}, T^{\pm 1}]$) and (2)~we 
+evaluate $P_n$ at the point $(u_0, u_1, u_2, u_3)$.
+However this algorithm is not efficient at all since computing the 
+$P_n$'s is very time-consuming for two reasons: first, it requires 
+division in a polynomial ring with $4$ variables and, second, the
+size of the coefficients of $P_n$ explodes as $n$ grows.
+
+In \S \ref{ssec:SOMOS-solution}, we shall design an algorithm computing 
+the SOMOS 4 sequence which turns out to be, at the same time, efficient 
+and numerically stable.
+\end{rmk}
+
+\subsubsection*{LU factorization}
+
+Let us first recall that a square matrix $M$ with coefficients in $\Qp$ 
+admits a LU factorization if it can be written as a produit $LU$ where 
+$L$ and $U$ is lower triangular and upper triangular respectively. 
+The computation of a LU factorization appears as an important tool to 
+tackle many classical questions about matrices or linear systems.
+
+We first note that a LU decomposition of a given matrix $M$ is unique
+if you require further that the $L$-part of this decomposition is
+unipotent (\emph{i.e.} all diagonal entries equal $1$). Let us write
+$L(M) U(M)$ the LU factorization of $M$ satisfying the above extra
+condition (when it exists). There exists Cramer-type formulas that
+gives each individual entries of $L(M)$and $U(M)$ in a closed form
+(see \cite{Caruso}).
+
+If $M$ is random square matrix over $\Zp$ of side $d$ whose every
+coefficient is known up to precision $O(p^N)$, the two following
+results are proved in \emph{loc. cit.}:
+\begin{itemize}
+\item using usual Gauss elimination and tracking $p$-adic precision 
+step-by-step, the smallest precision on an entry of $L(M)$ is about
+$O(p^{N - \frac{2d}{p-1}})$ on average;
+\item computing $L(M)$ by evaluating Cramer-type formulas yields a
+result whose every entry is known up to precision $O(p^{N - 2 \log_p 
+d})$.
+\end{itemize}
+If $d$ is large compared to $p$, the second precision is much more
+accurate than the first one. This shows once again that ``artifical''
+losses of precision appears when one performs Gauss elimination by
+tracking precision step-by-step.
+
+%\subsubsection*{Algorithms \emph{\`a la} Kedlaya}
+
+\section{A new philosophy}
+\label{sec:philosophy}
+
+The aim of this section is to develop a new point of view on $p$-adic 
+precision based on $p$-adic analysis. Actually, we shall generalize a 
+bit the setting and work over a general ultrametric field (see defition
+below).
+
+\subsection{Ultrametric analysis}
+\label{ssec:ultrametric}
+
+In this section, we recall usual definitions and properties related to
+ultrametric analysis. We refer to Schneider \cite{Schneider} for a 
+complete exposition.
+
+An \emph{absolute value} on a field $K$ is a multiplicative map $|\cdot| 
+: K \to \R_+$ satisfying the triangle inequality and sending every 
+nonzero element of $K$ to a strictly positive real number. It is said 
+\emph{ultrametric} if it satisfies the following strong from of the 
+triangle inequality:
+$$|x+y| \leq \max(|x|, |y|).$$
+Given an absolute value $|\cdot|$ on $K$, we note that $|K^\star|$ is a 
+multiplicative subgroup of $\R_+^\star$. It is then either discrete or 
+dense. We shall say that $|\cdot|$ is \emph{discrete} if $|K^\star|$ is
+discrete. The valued field $(K, |\cdot|)$ is said \emph{complete} if all 
+Cauchy sequences (with respect to the distance $d$ defined by $d(x,y) = 
+|x-y|$) converge.
+
+The formula $|x| = p^{-\val(x)}$ defines an ultrametric absolute value on 
+the field $\Qp$ for which it is complete. More generally, the $p$-adic 
+absolute value extends uniquely to any finite extension $K$ of $\Qp$ and 
+turns $K$ into a complete ultrametric field. Another classical example of 
+complete ultrametric field is the field of Laurent series over a finite
+field, the absolute value being defined from the valuation of a series.
+
+From now, we fix a field $K$ equipped with an ultrametric absolute value 
+denoted by $|\cdot|$ and we assume that $K$ is complete. Given $v$ a 
+$K$-vector space (of possibly infinite dimension), an \emph{ultrametric 
+norm} on $V$ is a map $\Vert\cdot\Vert : V \to \R^+$ satisfying:
+\begin{enumerate}[(i)]
+\item $\Vert x\Vert = 0$ if and only if $x = 0$;
+\item $\Vert \lambda x\Vert = |\lambda| \cdot \Vert x\Vert$;
+\item $\Vert x+y\Vert \leq \max(\Vert x\Vert, \Vert y\Vert)$.
+\end{enumerate}
+A norm gives rise to a distance and a normed $K$-vector space $V$ is 
+said \emph{complete} when any Cauchy sequence with values in $V$ 
+converges. A normed $K$-vector space which is complete is called a 
+\emph{$K$-Banach}.
+
+Similarly to the real case, any finite dimensional normed $K$-vector 
+space is complete and all norms over such a space are equivalent 
+(\emph{i.e.} they define the same topology). Many usual Theorems 
+concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
+Theorem) remain true in the ultrametric setting.
+
+\begin{deftn}
+Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
+subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
+\emph{differentiable} at $v_0 \in U$ if there exists a 
+continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
+$\varepsilon >0$, there exists an open neighbourhoud $U_\varepsilon 
+\subset U$ containing $v_0$ with:
+\[ 
+\forall v, w \in U_\varepsilon, \quad
+\Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
+\leq \varepsilon \Vert v-w \Vert. 
+\]
+The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
+\end{deftn}
+
+One can derive all usual properties of the differential from this 
+definition: unicity, chain rules, \emph{etc}.
+
+\subsection{Lattices}
+
+Let $E$ be a $K$-normed vector space. Given $r \in \R^+$, 
+we denote by $B^-_E(r)$ (resp. by $B_E(r)$) the set of elements $x 
+\in E$ such that $\Vert x \Vert < r$ (resp. $\Vert x \Vert \leq r$). 
+We insist on the following maybe unusual fact: $B^-_E(r)$ and 
+$B_E(r)$ are both open and closed for the norm topology on $E$.
+Clearly, $B_K(0,1)$ is stable under multiplication. Moreover, the 
+ultrametric triangle inequality ensures that $B_K(1)$ is stable under 
+addition as well. Thus, $B_K(1)$ is a subring of $K$: it is often 
+called the \emph{integer ring} of $K$.
+
+\begin{deftn}
+Let $E$ be a $K$-Banach.
+A \emph{lattice} in $E$ is an open bounded sub-$B_K(1)$-module of $E$.
+\end{deftn}
+
+\begin{rmk}
+Any lattice $H$ in $E$ is also closed since its complement is the
+union of all cosets $a + H$ (with $a \not\in H$) which are all open.
+\end{rmk}
+
+The following Lemma shows that the notion of lattices behaves rather 
+well under linear\footnote{We shall see in the sequel (\emph{cf} Lemma 
+\ref{lem:main}) that, under some extra hypothesis, the linearity 
+assumption can be drastically relaxed.} transformations.
+
+\begin{lem}
+\label{lem:morlat}
+Let $E$ and $F$ be two $K$-Banach and $f : 
+E \to F$ be a continuous \emph{surjective} linear map.
+If $H$ is a lattice in $E$, then $f(H)$ is a lattice in $F$.
+\end{lem}
+
+\begin{proof}
+It is clear that $f(H)$ is a module over $B_K(1)$ which is bounded.
+The fact that it is open is a direct consequence of the open mapping
+Theorem.
+\end{proof}
+
+To each lattice $H$ in $E$, one can attach a norm $\Vert \cdot \Vert_H$ 
+on $E$ defined as follows. We pick $x \in E$, $x \neq 0$. We introduce
+the set $I_x$ consisting of scalars $\lambda \in K$ such that $\lambda x 
+\in H$. It follows from the fact that $H$ is open and bounded in $E$
+that $I_x$ is nonempty and bounded in $K$. Therefore, the image $|I_x|$ 
+of $I_x$ under the absolute value map is bounded and contains a positive
+element. We can then define:
+$$\Vert x \Vert_H = (\sup |I_x|)^{-1}.$$
+It is an exercise to check that $\Vert \cdot \Vert_H$ is a norm over 
+$E$.
+
+\begin{lem} \label{lem:reductionball}
+\begin{enumerate}
+\item The norms $\Vert \cdot \Vert_H$ and $\Vert \cdot \Vert$ are 
+equivalent.
+\item Let $B^-_{E,H}(1)$ (resp. by $B_{E,H}(1)$) the set of elements $x 
+\in E$ such that $\Vert x \Vert_H < 1$ (resp. $\Vert x \Vert_H \leq 1$).
+Then:
+$$B^-_{E,H}(1) \subset H \subset B_{E,H}(1)$$
+and the last inclusion is an equality if the absolute value on $K$ is
+discrete.
+\end{enumerate}
+\end{lem}
+
+\begin{proof}
+Left to the reader.
+\end{proof}
+
+The first part of Lemma \ref{lem:reductionball} asserts that the 
+identity map $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
+\Vert)$ is an homeomorphism. Furthermore, by the second of the Lemma, 
+$H$ is the image under $\iota_H$ of a lattice satisfying an extra 
+assuption: it is ``between the open unit ball and the closed unit 
+ball''.
+
+\subsubsection*{Lattices and computers}
+
+\todofor{Xavier}{Explain that if $E$ is finite dimensional and $K$ (and 
+the absolute value is discrete), a lattice can be encoded by a finite 
+amount of informations.}
+
+\subsection{The main Lemma}
+
+\begin{lem} \label{lem:main}
+Let $E$ and $F$ be two $K$-Banach and $f : U 
+\rightarrow F$ be a function defined on an open subset $U$ of $E$.
+We assume that $f$ is differentiable at some point $v_0 \subset 
+U$ and that the differential $f'(v_0)$ is surjective. 
+
+Then, there exists a positive real number $\delta$ such that, for all $r 
+\in (0, \delta)$, the equality
+\begin{equation}
+\label{eq:main}
+f(v_0 + H) = f(v_0) + f'(v_0) \cdot H.
+\end{equation}
+holds for each lattice $H$ such that $B^-_E(r) \subset H \subset
+B_E(r)$.
+\end{lem}
+
+\begin{rmk}
+Given a lattice $H_0$ in $E$, the equality \eqref{eq:main} holds for $H 
+= \lambda H_0$ with $\lambda$ small enough. To prove this, it is enough 
+to apply Lemma \ref{lem:main} to the map $f \circ \iota_{H_0}$ where 
+$\iota_{H_0} : (E, \Vert \cdot \Vert_{H_0}) \to (E, \Vert \cdot \Vert)$ 
+is the ``identity map'' (which is an homeomorphism by Lemma 
+\ref{lem:reductionball}).
+\end{rmk}
+
+\begin{proof}
+We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, by 
+the open mapping Theorem, there exists $C>0$ such that $B_F(1) \subset 
+C \cdot f'(0) \cdot B_E(1)$. Let $\varepsilon>0$ be such that 
+$\varepsilon C < 1$. Let $U_\varepsilon \subset E$ be given by the fact 
+that $f$ is differentiable at $0$. We may assume $U_\varepsilon = 
+B_E(\delta)$ for some $\delta >0$.
+
+Let $r \in (0, \delta)$.
+Let us show that $f$ maps surjectively $H$ onto $f'(0) \cdot H$.
+Let $x \in H$. We must show that $f(x) \in f'(0) \cdot H$. 
+By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq 
+\varepsilon \Vert x \Vert $. Therefore, there exists $y \in f'(0) \cdot 
+H$ such that 
+$\Vert y \Vert \leq \varepsilon r$. By the open mapping Theorem and the 
+surjectify of $f'(0)$, there exists $x_1 \in E$ such that $f'(0) \cdot 
+x_1 =y$ and $\Vert x_1 \Vert \leq \varepsilon C \cdot r < r$. Thus, $x_1 
+\in B^-_E(r) \subset H$ and $f(x)= f'(0) \cdot (x-x_1) \in f'(0) 
+\cdot H$.
+
+We shall now prove surjectivity. Let $y \in f'(0) \cdot H$. 
+Let $x_0 \in H$ be such that $y = f'(0) \cdot x_0$.
+We define by induction two sequences $(x_n)$ and $(z_n)$ by
+\begin{itemize}
+\item $z_n \in E$ is such that
+$f'(0) \cdot z_n = y - f(x_n)$ and
+$\Vert z_n \Vert \leq C \cdot \Vert y - f(x_n) \Vert$,
+\item $x_{n+1}=x_n+z_n$.
+\end{itemize}
+By definition, $\Vert z_0 \Vert < C \Vert y_0\Vert$ and $y_0 
+= -f(x_0)+f'(0) \cdot x_0$. Therefore, $\Vert y_0 \Vert < \varepsilon 
+\Vert x_0 \Vert \leq \varepsilon r$. Thus $\Vert z_0 \Vert \leq 
+\varepsilon C \cdot r < r$. Thus, $x_1$ and $z_0$ lie in $B^-_E(r) 
+\subset H$. An easy induction involving an analoguous computation
+shows that the sequences $(x_n)$ and $(z_n)$ are well defined and
+take their values in $H$.
+
+Now, we notice that
+$y - f(x_{n+1}) = f(x_n) - f(x_{n+1}) + f'(0) \cdot z_n$.
+Therefore, using differentiability, we get:
+$$\Vert y  - f(x_{n+1}) \Vert 
+\leq \varepsilon \Vert z_n \Vert \leq \varepsilon C \cdot \Vert 
+y - f(x_n) \Vert,$$
+from what we deduce that $\Vert y - f(x_{n+1}) \Vert = 
+O(a^n)$ and $\Vert z_n \Vert = O(a^n)$ with $a = \varepsilon C < 1$.
+This shows that $(x_n)$ is a Cauchy sequence and therefore converges 
+(since $E$ is complete). If $x$ denotes the limit of $(x_n)$, we have
+$x \in H$ and $y=f(x)$. The result is proven.
+\end{proof}
+
+\todofor{Tristan}{Improve the end of this Subsection}
+
+Before discussing applications of Lemma \ref{lem:main} to ultrametric 
+precision, we would like to describe a little bit more restrictive 
+setting where the constant $\delta$ appearing in this Lemma can be 
+computed explicitely.
+We refer to Schneider \cite{Schneider}, \S 6, for a definition of a 
+locally analytic function.
+
+\begin{rmk}
+Let $f$ be locally analytic function $K^n \rightarrow K^m$. Let $x \in K^n$ be such that $f'(x)$ is surjective. Then the radius of the ball needed in can be read on the Newton polygon given by the norms of the Taylor serie expansion of $f$ at $x$. We assume the $C$ given by the Banach-Schauder is given, $\varepsilon = \frac{1}{C}$ and now, we try to recover the link between $\varepsilon$ and $\delta$.
+\end{rmk}
+
+\begin{proof}
+Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=f'(0) \cdot x +\sum_{n \geq 2} \frac{f^{(n)}(0)}{n!} \cdot (x, \dots,x)$ is the Taylor serie expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
+
+We shall now find $l$ such that if $x \in B_{K^n}(0,l)$, then $\Vert \sum_{n \geq 2} \frac{f^{(n)}(0)}{n!}(x,\dots,x) \Vert \leq \varepsilon$.
+
+By continuity and ultrametricity, it is enough for $l$ to be such that, if $x \in B_{K^n}(0,l)$, then  \[ \sup_{n \geq 2} \interleave f^{(n)}(0) \interleave \frac{\Vert x \Vert^n }{ \vert n! \vert } \leq \varepsilon \Vert x \Vert .\] 
+
+Therefore, \[ \sup_{n \geq 2} \interleave f^{(n)}(0) \interleave \frac{l^{n-1} }{\vert n! \vert } \leq \varepsilon . \] 
+
+In other words, $\forall n \geq 2$, $\interleave f^{(n)}(0) \interleave \frac{l^{n-1} }{\vert n! \vert } \leq \varepsilon.$
+
+By passing to logarithm and valuation, we get for all $n \geq 2$: \[ \log_p (\interleave f^{(n)}(0) \interleave )-(n-1) \log_p l-val (n!)\geq - \log_p \varepsilon.\]
+
+By Legendre formula, it is enough that for all $n \geq 2$:
+\[\log_p (\interleave f^{(n)}(0) \interleave )-(n-1) (\log_p l-(n-1)) \geq - \log_p \varepsilon.\]
+
+If we denote by $NP_F$ the Newton polygon application of the power serie $F(t) = \sum_{k\geq 0}^{+\infty} \log_p (\interleave f^{(k+1)}(0) \interleave ) t^k$, then it is enough that:
+\[ \sup_{ x \in \mathbb{R}_+} \left( NP_F(x) -x  \left( \log_p l - \frac{1}{p-1} \right) \right) \geq - \log_p \varepsilon.\]
+
+If $NP_F^*$ is the Legendre-Fanchel transform of $NP_F$, then it is enough that:
+\[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \varepsilon.\]
+
+Therefore, by definition of the Legendre-Fanchel transform, it is enough to:
+\begin{itemize}
+\item take $M=(0,\log_p \varepsilon)$,
+\item draw the line passing by $M$ tangent to the graph of $NP_F$,
+\item if we denote by $\mu$ the slope of this line, then take $l$ such that $\mu + \frac{1}{p-1}=\log_p l$.
+\end{itemize}
+\end{proof}
+
+\subsection{Automatic sharp track of precision}
+
+\todofor{Xavier}{
+Explain here how to build a software that tracks precision automatically 
+and sharply.
+}
+
+\subsubsection*{Working precision}
+
+\section{Generalization to manifolds}
+
+It may happen that natural $p$-adic ``objects'' do not lie in vector 
+spaces. Actually, examples are numerous: points on the projective space 
+or elliptic curves, subspaces of a fixed vector space (which lie in 
+grassmannians), classes of isomorphism of certain curves (which lie in 
+various moduli spaces), \emph{etc.} 
+That is why we think that it is quite important to extend the formalism 
+developped in Section \ref{sec:philosophy} to a more general setting. 
+In this Section, we consider the quite general case of a strictly
+differentiable ultrametric manifolds locally modeled on (eventually 
+infinite dimensional) Banach spaces. This covers all the aforementioned 
+examples.
+
+In what follows, the letter $K$ always refers to an ultrametric field 
+(\emph{cf} \S \ref{ssec:ultrametric}). The absolute value over $K$ is 
+denoted by $|\cdot|$.
+
+\subsection{Strictly differentiable $K$-manifolds}
+\label{ssec:manifold}
+
+The theory of finite dimensional $K$-manifolds is presented for example 
+in \cite{Schneider}, parts 8 and 9. In this Section, we shall work with
+a slightly different notion of manifolds which allows also Banach vector 
+spaces of infinite dimension.
+More precisely, for us, a \emph{strictly differentiable $K$-manifold} 
+(or just \emph{$K$-manifold} for short) is the data of a topological 
+space $V$ together with an open covering $V = \bigcup_{i \in I} V_i$ 
+(where $I$ is some set) and, for all $i \in I$, an homeomorphism 
+$\varphi_i : V_i \to U_i$ where $U_i$ is an open subset of a $K$-Banach 
+$E_i$ such that for all $i,j \in I$ for which $V_i \cap V_j$ is 
+nonempty, the composite map
+\begin{equation}
+\label{eq:psiij}
+\psi_{ij} : 
+\varphi_i(V_{ij}) \stackrel{\varphi_i^{-1}}{\longrightarrow} 
+V_{ij} \stackrel{\varphi_j}{\longrightarrow} \varphi_j(V_{ij})
+\quad \text{(with } V_{ij} = V_i \cap V_j \text{)}
+\end{equation}
+is strictly differentiable at all points in its domain. We recall that
+the mappings $\varphi_i$ above are the so-called \emph{charts} and that
+their collection defines an \emph{atlas} of $V$. In the sequel, we shall
+assume further that the open covering $V = \bigcup_{i \in I} V_i$ is
+locally finite, which means that every point $x \in V$ lies only in a
+finite number of $V_i$'s. Trivial examples of $K$-manifolds are 
+$K$-Banach themselves.
+
+If $V$ is a $K$-manifold and $x$ is a point of $V$, we define the 
+\emph{tangent space} $T_x V$ of $V$ at $x$ as the space $E_i$ for some 
+$i$ such that $x \in V_i$. We note that if $x$ belongs to $V_i$ and 
+$V_j$, the linear map $\psi'_{ij}(\varphi_i(x))$ defines an isomorphism 
+between $E_i$ and $E_j$. Furthermore these isomorphisms are compatible 
+in an obvious way. This implies that the definition of $T_x V$ given 
+above does not depend (up to some canonical isomorphism) on the index 
+$i$ such that $x \in V_i$ and then makes sense.
+
+As usual, we can define the notion of strict differentiability (at some 
+point) for a continuous mapping between two $K$-manifolds by viewing it 
+through the charts. A strictly differentiable map $f : V \to V'$ induces 
+a linear map on tangent spaces $f'(x) : T_x V \to T_{f(x)} V'$ for all 
+$x$ in the domain $V$. It is called the \emph{differential} of $f$ at
+$x$.
+
+\subsection{Precision data}
+
+\todofor{David/Xavier}{Complete this Subsection}
+
+Going back to our problem of precision, given $V$ a $K$-manifold as 
+above, we would like to be able to deal with ``approximations up to some 
+precision'' of elements in $V$, \emph{i.e.} expressions of the form $x + 
+O(H)$ where $x$ belongs to a dense \emph{computable} subset of $V$ and 
+$H$ is a ``precision data''.
+The aim of this paragraph is to give a precise meaning to the expression 
+$x + O(H)$ and to prove several basic properties of it.
+For now, we fix a $K$-manifold $V$ and we use freely the notations $I$, 
+$V_i$, $\varphi_i$, \emph{etc.} introduced in \S \ref{ssec:manifold}.
+
+\begin{deftn}
+Let $x \in V$. 
+A \emph{precision data} at $x$ is a lattice in the tangent space 
+$T_x V$.
+\end{deftn}
+
+\begin{deftn}
+Let $x \in V$ and $H$ be a precision data at $x$.
+For all $i \in I$ such that $x \in V_i$, we set:
+$$x + O_i(H) = \varphi_i^{-1}\big(\varphi_i(x) + \varphi_i'(x)(H)\big) 
+\subset V.$$
+\end{deftn}
+
+We emphasize that if $x$ belongs to $V_i$ and $V_j$ at the same time,
+the subsets $x + O_i(H)$ and $x + O_j(H)$ differ in general. It is 
+however not the case if $H$ is small enough.
+
+\begin{prop}
+\label{prop:independance}
+Let $x \in V$ and $H$ be a precision data at $x$.
+If $H$ is ``small enough'' \todo{(precise!)}, the subset $x + 
+O_i(H)$ does not depend on $i$.
+\end{prop}
+
+\begin{proof}
+Let $i$ and $j$ be two indices such that $x$ belongs to $V_i$ and $V_j$. 
+Set $x_i = \varphi_i(x) \in E_i$ and $H_i = \varphi'_i(x)(H)$. Going 
+back to the definitions, we see that the equality $x + O_i(H) = x + 
+O_j(H)$ is equivalent to:
+$$\psi_{ij}(x_i + H_i) = \psi_{ij}(x_i) + \psi'_{ij}(x_i)(H_i)$$ 
+where we recall that $\psi_{ij}$ is defined by Eq.~\eqref{eq:psiij}.
+\todo{Complete the proof and write the correct condition on $H$!}
+\end{proof}
+
+Under the assumption of Proposition \ref{prop:independance}, we define
+$x + O(H)$ as $x + O_i(H)$ for some (equivalently all) $i$ such that
+$x \in V_i$.
+
+\subsubsection*{Change of base point}
+
+In order to restrict ourselves to elements $x$ lying in a dense 
+computable subset, we need to compare $x + O(H)$ with some $x' + 
+O(H')$ when $x$ and $x'$ are close enough.
+Let us first examine the situation in a fixed given chart: we fix some 
+index $i \in I$ and pick two elements $x$ and $x'$ in $V_i$. We consider 
+in addition a precision data $H$ at $x$ and we want to produce a 
+precision data $H'$ at $x'$ such that $x + O_i(H) = x' + O_i(H')$. 
+We remark that the tangent spaces $T_x V$ and $T_{x'} V$ are both 
+isomorphic to $E_i$ \emph{via} the maps $\varphi'_i(x)$ and 
+$\varphi'_i(x')$ respectively. A natural candidate for $H'$ is then:
+\begin{equation}
+\label{eq:Hprime}
+H' = \big(\varphi'_i(x')^{-1} \circ \varphi'_i(x)\big) (H).
+\end{equation}
+And indeed, one can check that $x + O(H)$ is indeed equal to $x' + 
+O(H')$ as soon as $x$ and $x'$ are close enough in the following sense: 
+the difference $\varphi_i(x) - \varphi_i(x')$ lies in the lattice $H_i = 
+\varphi'_i(x)(H)$. We furthermore have a proprety of independance on 
+$i$.
+
+\begin{prop}
+We assume that $H$ is ``small enough'' \todo{(precise!)} and that $x$ and 
+$x'$ are close enough. Then:
+\begin{enumerate}[(i)]
+\item the lattice $H'$ defined by Eq.~\eqref{eq:Hprime} does not depend 
+on $i$;
+\item the couples $(x,H)$ and $(x', H')$ satisfy the assumptions of
+Proposition \ref{prop:independance} and we have $x + O(H) = x' + O(H')$.
+\end{enumerate}
+\end{prop}
+
+\begin{proof}
+We first prove (i). For an index $i$ such that $x, x' \in V_i$, let us 
+denote by $f_i : T_x V \to T_{x'} V$ the composite $\varphi'_i(x')^{-1} 
+\circ \varphi'_i(x)$. Given an extra index $j$ satisfying the same
+assumption, we know by \todo{(find a reference)} that the difference
+$f_i - f_j$ goes to $0$ when $x'$ converges to $x$. Since $H$ is open
+in $T_x V$, this implies that $(f_j - f_i)(H)$ contains $f_i(H)$ and 
+$f_j(H)$ if $x'$ and $x$ are close enough. Now, pick $w \in f_j(H)$ and 
+write it $w = f_j(v)$ with $v \in H$. Then $w$ is equal to $f_i(v) + 
+(f_j - f_i)(v)$ and then belongs to $f_i(H)$ because each summand does. 
+Therefore $f_j(H) \subset f_i(H)$. The inverse inclusion can be proved 
+in the same way.
+
+We now prove (ii). \todo{Write the proof.}
+\end{proof}
+
+\subsection{Generalization of the main Lemma}
+
+\todofor{David/Xavier}{Extend Lemma \ref{lem:main} to manifolds.}
+
+\section{Examples and applications}
+
+%\subsection{Differential tracking of precision}
+%
+%\todo{
+%Explain here that we can track precision by computing differentials step 
+%by step. Note also in this subsection that this method can be very time 
+%consuming; it's why we often prefer to consider other models of precision.
+%}
+
+\todofor{Xavier}{Write this section}
+
+\subsection{Polynomials}
+
+\todo{
+Euclidean division, factorization, \emph{etc.}
+}
+
+\subsection{Matrices}
+
+\todo{
+LU factorization, determinant, characteristic polynomial, kernels, images,
+\emph{etc.}
+}
+
+\subsection{The SOMOS 4 sequence}
+\label{ssec:SOMOS-solution}
+
+\todo{
+Study SOMOS sequence
+}
+
+
+
+\section{Conclusions}
+
+
+%ACKNOWLEDGMENTS are optional
+\section{Acknowledgments}
+
+
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+%\balancecolumns
+
+\tiny \bibliographystyle{plain}
+\begin{thebibliography}{10}
+\addcontentsline{toc}{section}{Références}
+
+\bibitem{Bostan}
+{\sc Bostan, Alin, \& al.} 
+\newblock From Newton sums to coefficients: complexity issues in characteristic p. Proceedings MEGA'05, 2005. 
+
+\bibitem{Caruso}
+{\sc Caruso, X.}
+\newblock Random matrices over a DVR and LU factorization, preprint (2012)
+
+\bibitem{Gaudry}
+{\sc Gaudry,P. \& al.} 
+\newblock The 2-adic CM method for genus 2, Asiacrypt 2006, volume 4284 of Lecture Notes in Comput. Sci., pages 114–129. Springer, Berlin, 2006.
+
+\bibitem{Kedlaya}
+{\sc Kedlaya,Kiran,} 
+\newblock Counting points on hyperelliptic curves using Monsky--Washnitzer cohomology, Journal of the Ramanujan Mathematical Society 16 (2001), 
+
+\bibitem{Lercier}
+{\sc Lercier, Reynald \&  Sirvent, Thomas,} 
+\newblock On elkies subgroups of $\ell$-torsion points in elliptic curves defined over a finite field. Journal de Théorie des Nombres de Bordeaux, 20(3):783-797, December 2008.
+
+\bibitem{Schneider}
+{\sc Schneider, Peter}
+\newblock $p$-adic Lie Groups, Springer, 2011
+
+
+
+\end{thebibliography}
+
+\end{document}
