@@ -2,10 +2,11 @@
 \documentclass{amsart}
 \usepackage[utf8]{inputenc}
 
-\usepackage[plainpages=false,pdfpagelabels,colorlinks=true,citecolor=blue,hypertexnames=false]{hyperref}
+\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{color}
 \usepackage{stmaryrd}
 \usepackage{enumerate}
+\usepackage[algoruled,vlined,french,linesnumbered]{algorithm2e}
 
 \begin{document}
 
@@ -28,6 +29,7 @@
 \renewcommand{\O}{\mathcal O}
 
 \newcommand{\val}{\text{\rm val}}
+\renewcommand{\prec}{\text{\rm prec}}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
@@ -264,7 +266,7 @@ d})$.
 \end{itemize}
 If $d$ is large compared to $p$, the second precision is much more
 accurate than the first one. This shows once again that ``artifical''
-losses of precision appears when one performs Gauss elimination by
+losses of precision appear when one performs Gauss elimination by
 tracking precision step-by-step.
 
 %\subsubsection*{Algorithms \emph{\`a la} Kedlaya}
@@ -274,7 +276,7 @@ tracking precision step-by-step.
 
 The aim of this section is to develop a new point of view on $p$-adic 
 precision based on $p$-adic analysis. Actually, we shall generalize a 
-bit the setting and work over a general ultrametric field (see defition
+bit the setting and work over a general ultrametric field (see definition
 below).
 
 \subsection{Ultrametric analysis}
@@ -562,9 +564,9 @@ various moduli spaces), \emph{etc.}
 That is why we think that it is quite important to extend the formalism 
 developped in Section \ref{sec:philosophy} to a more general setting. 
 In this Section, we consider the quite general case of a strictly
-differentiable ultrametric manifolds locally modeled on (eventually 
-infinite dimensional) Banach spaces. This covers all the aforementioned 
-examples.
+differentiable manifolds locally modeled on (eventually infinite 
+dimensional) ultrametric Banach spaces. This covers all the 
+aforementioned examples.
 
 In what follows, the letter $K$ always refers to an ultrametric field 
 (\emph{cf} \S \ref{ssec:ultrametric}). The absolute value over $K$ is 
@@ -748,11 +750,79 @@ LU factorization, determinant, characteristic polynomial, kernels, images,
 \subsection{The SOMOS 4 sequence}
 \label{ssec:SOMOS-solution}
 
-\todo{
-Study SOMOS sequence
+Recall (cf \S \ref{ssec:stepbystep}) that a SOMOS 4 sequence is a 
+four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
++ u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
+Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
+u_2, u_3$ are some indeterminates, that each $u_n$ is a Laurent 
+polynomial with coefficients in $\Z$ in these indeterminates.
+
+From now, we will always consider SOMOS sequences with values in $\Q_p$ 
+(for some prime number $p$) and assume that $u_0, u_1, u_2, u_3$ are 
+chosen such that all terms $u_n$'s are determined (\emph{i.e.} there is 
+no division by zero). We assume also for simplicity that $u_0, u_1, u_2, 
+u_3$ are all units in $\Z_p$. By Laurent phenomenon, this implies first 
+that all $u_n$'s lie in $\Z_p$ and second that if $u_0, u_1, u_2, u_3$ 
+are known with finite precision $O(p^N)$ then all terms $u_n$'s are 
+known with the same precision. 
+
+In this last paragraph, we illustrate the theory developed in this 
+article by designing an algorithm for computing the $u_n$'s at precision 
+$O(p^N)$. The algorithm is presented at the top of page 
+\pageref{algo:somos}. We now prove that it is correct.
+%
+\begin{algorithm}[t]
+\SetKwInOut{Assumption}{Assumption}
+\KwIn{$a,b,c,d$ --- four initial terms of a SOMOS 4 sequence $(u_n)_{n \geq 0}$}
+\KwIn{$n, N$ --- two integers}
+\Assumption{$a$, $b$, $c$ and $d$ lie in $\Z_p^\times$ and are known at 
+precision $O(p^N)$}
+\Assumption{None of $u_i$ $(0 \leq i \leq n$) is divisible by $p^N$}
+\KwOut{$u_n$ at precision $O(p^N)$}
+\BlankLine
+$\prec$ $\leftarrow$ $N$\;
+\For {$i$ from $1$ to $n-3$}{
+  $\prec$ $\leftarrow$ $\prec + v_p(bd + c^2) - v_p(a)$\;
+  {\bf lift} (arbitrary) 
+    $b$, $c$ and $d$ to precision $O(p^{\prec})$\;
+  $\prec$ $\leftarrow$ $\prec - v_p(a)$\;
+  $e$ $\leftarrow$ $\frac{bd+c^2} a$; \hspace{1cm}
+   \tcp{$e$ is known at precision $O(p^\prec)$}
+  $a, b, c, d$ $\leftarrow$ $b + O(p^{\prec}), c + O(p^{\prec}), d + O(p^{\prec}), e$\;
 }
-
-
+\Return{$d + O(p^N)$}\;
+\caption{\sc SOMOS$(a, b, c, d, n, N)$}\label{algo:somos}
+\end{algorithm}
+%
+We introduce the (partial) function $f : \Q_p^4 \to \Q_p^4$ defined by 
+$f(a,b,c,d) = (b,c,d,\frac{bd+c^2}a)$, so that, for all $i$, we have 
+$(u_i, u_{i+1}, u_{i+2}, u_{i+3}) = f_i(u_0, u_1, u_2, u_3)$ where $f_i
+= f \circ \cdots \circ f$ ($i$ times). Apparently $f$ is strictly 
+differentiable on $\Q_p^\star \times \Q_p^3$ and its differential in the 
+canonical basis is given by the matrix:
+$$D(a,b,c,d) = \begin{pmatrix}
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+-\frac{bd+c^2}{a^2} & \frac d a & \frac {2c} a & \frac b a
+\end{pmatrix}$$
+whose determinant is $\frac{bd+c^2}{a^2}$. Thus, if the $(i+4)$-th term 
+of the SOMOS sequence is defined, the mapping $f_i$ is differentiable
+at $(u_0, u_1, u_2, u_3)$ and the matrix its differential at this point 
+is:
+$$D_i = D(u_{i-1}, u_i, u_{i+1}, u_{i+2}) \cdots
+D(u_1, u_2, u_3, u_4) \cdot D(u_0, u_1, u_2, u_3).$$
+%Its determinant is:
+%$$\det D_i = \frac{u_{i+3}}{u_{i-1}} \cdots 
+%\frac{u_5}{u_1} \cdot \frac{u_4}{u_0} =
+%\frac{u_i \cdot u_{i+1} \cdot u_{i+2} \cdot u_{i+3}}
+%{u_0 \cdot u_1 \cdot u_2 \cdot u_3}.$$
+Moreover thanks to the Laurent phenomenon, we know that $D_i$ has
+integral coefficients. Hence, letting $\varphi_i = f'_i(u_0, u_1, u_2, 
+u_3)$, we get 
+$$(\det D_i) \cdot p^N \Z_p^4 \subset \varphi_i(p^N \Z_p^4) 
+\subset p^N \Z_p^4$$
+for all integer $N$.
 
 \section{Conclusions}
 
@@ -804,8 +874,6 @@ Study SOMOS sequence
 \bibitem{Schneider}
 {\sc Schneider, Peter}
 \newblock $p$-adic Lie Groups, Springer, 2011
-
-
 
 \end{thebibliography}
 
