@@ -724,28 +724,29 @@ We now prove (ii). \todo{Write the proof.}
 
 \section{Examples and applications}
 
-%\subsection{Differential tracking of precision}
-%
-%\todo{
-%Explain here that we can track precision by computing differentials step 
-%by step. Note also in this subsection that this method can be very time 
-%consuming; it's why we often prefer to consider other models of precision.
-%}
-
 \todofor{Xavier}{Write this section}
 
-\subsection{Polynomials}
+\subsection{Differential of usual operations}
+
+\subsubsection{Numbers}
+
+\todo{sum, product, inverse, $p$-power map}
+
+\subsubsection{Polynomials}
 
 \todo{
-Euclidean division, factorization, \emph{etc.}
+Euclidean division, factorization, Grobner basis (?)
 }
 
-\subsection{Matrices}
+\subsubsection{Matrices}
 
 \todo{
-LU factorization, determinant, characteristic polynomial, kernels, images,
-\emph{etc.}
-}
+determinant, characteristic polynomial, LU factorization, QR 
+factorization, kernels, images}
+
+\subsubsection{Sub vector spaces}
+
+\todo{intersection, sum}
 
 \subsection{The SOMOS 4 sequence}
 \label{ssec:SOMOS-solution}
@@ -769,7 +770,7 @@ known with the same precision.
 In this last paragraph, we illustrate the theory developed in this 
 article by designing an algorithm for computing the $u_n$'s at precision 
 $O(p^N)$. The algorithm is presented at the top of page 
-\pageref{algo:somos}. We now prove that it is correct.
+\pageref{algo:SOMOS}. We now prove that it is correct.
 %
 \begin{algorithm}[t]
 \SetKwInOut{Assumption}{Assumption}
@@ -784,14 +785,14 @@ $\prec$ $\leftarrow$ $N$\;
 \For {$i$ from $1$ to $n-3$}{
   $\prec$ $\leftarrow$ $\prec + v_p(bd + c^2) - v_p(a)$\;
   {\bf lift} (arbitrary) 
-    $b$, $c$ and $d$ to precision $O(p^{\prec})$\;
+    $b$, $c$ and $d$ to precision $O(p^{\prec})$\label{line:lift}\;
   $\prec$ $\leftarrow$ $\prec - v_p(a)$\;
   $e$ $\leftarrow$ $\frac{bd+c^2} a$; \hspace{1cm}
    \tcp{$e$ is known at precision $O(p^\prec)$}
   $a, b, c, d$ $\leftarrow$ $b + O(p^{\prec}), c + O(p^{\prec}), d + O(p^{\prec}), e$\;
 }
 \Return{$d + O(p^N)$}\;
-\caption{\sc SOMOS$(a, b, c, d, n, N)$}\label{algo:somos}
+\caption{\sc SOMOS$(a, b, c, d, n, N)$}\label{algo:SOMOS}
 \end{algorithm}
 %
 We introduce the (partial) function $f : \Q_p^4 \to \Q_p^4$ defined by 
@@ -808,28 +809,79 @@ $$D(a,b,c,d) = \begin{pmatrix}
 \end{pmatrix}$$
 whose determinant is $\frac{bd+c^2}{a^2}$. Thus, if the $(i+4)$-th term 
 of the SOMOS sequence is defined, the mapping $f_i$ is differentiable
-at $(u_0, u_1, u_2, u_3)$ and the matrix its differential at this point 
-is:
+at $(u_0, u_1, u_2, u_3)$ and its differential $\varphi_i = 
+f'_i(u_0, u_1, u_2, u_3)$ is given by the matrix:
 $$D_i = D(u_{i-1}, u_i, u_{i+1}, u_{i+2}) \cdots
 D(u_1, u_2, u_3, u_4) \cdot D(u_0, u_1, u_2, u_3).$$
-%Its determinant is:
-%$$\det D_i = \frac{u_{i+3}}{u_{i-1}} \cdots 
-%\frac{u_5}{u_1} \cdot \frac{u_4}{u_0} =
-%\frac{u_i \cdot u_{i+1} \cdot u_{i+2} \cdot u_{i+3}}
-%{u_0 \cdot u_1 \cdot u_2 \cdot u_3}.$$
 Moreover thanks to the Laurent phenomenon, we know that $D_i$ has
-integral coefficients. Hence, letting $\varphi_i = f'_i(u_0, u_1, u_2, 
-u_3)$, we get 
-$$(\det D_i) \cdot p^N \Z_p^4 \subset \varphi_i(p^N \Z_p^4) 
-\subset p^N \Z_p^4$$
-for all integer $N$.
+integral coefficients, \emph{i.e.} $\varphi_i$ stabilizes the lattice
+$\Z_p^4$.
+We are now going to prove by induction on $i$ that, at the end of the 
+$i$-th iteration of the loop, we have $\prec = N + v_p(\det D_i)$ and
+\begin{equation}
+\label{eq:congrSOMOS}
+(a, b, c, d) \equiv (u_i, u_{i+1}, u_{i+2}, u_{i+3}) \pmod
+{p^N \varphi_i(\Z_p^4)}.
+\end{equation}
+The first point is easy. Indeed, from $D_i = D(u_{i-1}, u_i, u_{i+1}, 
+u_{i+2}) D_{i-1}$, we deduce $\det D_i = \det D_{i-1} \cdot 
+\frac{u_i}{u_{i-3}}$ and the assertion follows by taking determinants
+and using the induction hypothesis. 
+Let us now establish Eq.~\eqref{eq:congrSOMOS}. To avoid confusion, 
+let us agree to denote $a'$, $b'$, $c'$, $d'$ and $\prec'$ the values of 
+$a$, $b$, $c$, $d$ and $\prec$ respectively at the \emph{beginning} of 
+the $i$-th iteration of the loop. By induction hypothesis (or by 
+initialization if $i = 1$), we have:
+\begin{equation}
+\label{eq:congrSOMOS2}
+(a', b', c', d') \equiv (u_{i-1}, u_i, u_{i+1}, u_{i+2}) \pmod
+{p^N \varphi_{i-1}(\Z_p^4)}.
+\end{equation}
+Moreover, we know that the determinant of $\varphi_{i-1}$ has valuation
+$\prec'$. Hence \eqref{eq:congrSOMOS2} remains true if $a'$, $b'$, $c'$
+and $d'$ are replaced by other values which are congruent to them modulo
+$p^{\prec'}$. In particular it holds if $a'$, $b'$, $c'$ and $d'$ denotes
+the values of $a$, $b$, $c$ and $d$ after the execution of line
+\ref{line:lift}. Now applying Lemma \ref{lem:main} and Proposition
+\ref{prop:} to $\varphi_{i-1}$ and $\varphi_i$ (at the point $(u_0,
+u_1, u_2, u_3)$), we get:
+$$f\big((u_{i-1}, u_i, u_{i+1}, u_{i+2}) + p^N \varphi_{i-1}(\Z_p^4)\big)
+= (u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4).$$
+By the discussion above, this implies in particular that $f(a',b',c',d')$
+belongs to $(u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4)$. We
+conclude by remarking first that $(a,b,c,d) \equiv f(a',b',c',d') \pmod 
+{p^\prec \Z_p^4}$ by construction and second that $p^\prec \Z_p^4 \subset
+p^N \varphi_i(\Z_p^4)$.
+
+Finally Eq.~\eqref{eq:congrSOMOS} applied with $i = n-3$ together with
+the fact that $\varphi_i$ stabilizes $\Z_p^4$ imply that, when we exit
+the loop, the value of $d$ is congruent to $u_n$ modulo $p^N$. Hence,
+our algorithm returns the correct value.
+
+\medskip
+
+Let us conclude this subsection by remarking that Algorithm 
+\ref{algo:SOMOS} performs computations at precision at most $O(p^{N+v})$ 
+where $v$ is the sum of the valuations of five consequence terms among 
+the first $n$ terms of the SOMOS sequence we are considering. 
+Experiments show that the value of $v$ varies like $c \cdot \log n$ 
+where $c$ is some constant. Assuming that we are using a FFT-like 
+algorithm to compute products of integers, the complexity of Algorithm 
+\ref{algo:SOMOS} is then expected to be $\tilde O(N n)$ where the 
+notation $\tilde O$ means that we hide logarithmic factors.
+
+We can compare this with the complexity of the more naive algorithm 
+consisting of lifting the initial terms $u_0, u_1, u_2, u_3$ to enough 
+precision and then do the computation using a naive step-by-step 
+tracking of precision. In this setting, the required original precision 
+is $O(p^{N+2v'})$ where $v'$ is the sum of the valuation of the $u_i$'s 
+for $i$ varying between $0$ and $n$. Experiments show that $v'$ is about 
+$c' \cdot n \log n$ (where $c'$ is a constant), which leads to a 
+complexity in $\tilde O (N n + n^2)$. Our approach is then interesting
+when $n$ is large compared to $N$: under this hypothesis, it saves
+roughly a factor $n$.
 
 \section{Conclusions}
-
-
-%ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
-
 
 %
 % The following two commands are all you need in the
@@ -852,29 +904,33 @@ for all integer $N$.
 \addcontentsline{toc}{section}{Références}
 
 \bibitem{Bostan}
-{\sc Bostan, Alin, \& al.} 
-\newblock From Newton sums to coefficients: complexity issues in characteristic p. Proceedings MEGA'05, 2005. 
+  A.~Bostan, L.~Gonz\'alez-Vega, H.~Perdry, \'E.~Schost,
+  \emph{From Newton sums to coefficients: complexity issues in characteristic $p$},
+  Proceedings MEGA'05 (2005).
 
 \bibitem{Caruso}
-{\sc Caruso, X.}
-\newblock Random matrices over a DVR and LU factorization, preprint (2012)
+  X.~Caruso,
+  \emph{Random matrices over a DVR and LU factorization},
+  preprint (2012)
 
 \bibitem{Gaudry}
-{\sc Gaudry,P. \& al.} 
-\newblock The 2-adic CM method for genus 2, Asiacrypt 2006, volume 4284 of Lecture Notes in Comput. Sci., pages 114–129. Springer, Berlin, 2006.
+  P.~Gaudry, T.~Houtmann, A.~Weng, C.~Ritzenthaler, D.~Kohel,
+  \emph{The $2$-adic CM method for genus $2$}, 
+  Asiacrypt 2006, vol. 4284 of Lecture Notes in Comput. Sci. (2006), 114--129
 
 \bibitem{Kedlaya}
-{\sc Kedlaya,Kiran,} 
-\newblock Counting points on hyperelliptic curves using Monsky--Washnitzer cohomology, Journal of the Ramanujan Mathematical Society 16 (2001), 
+  K.~Kedlaya,
+  \emph{Counting points on hyperelliptic curves using Monsky--Washnitzer cohomology}, 
+  J. Ramanujan Math. Soc. {\bf 16} (2001)
 
 \bibitem{Lercier}
-{\sc Lercier, Reynald \&  Sirvent, Thomas,} 
-\newblock On elkies subgroups of $\ell$-torsion points in elliptic curves defined over a finite field. Journal de Théorie des Nombres de Bordeaux, 20(3):783-797, December 2008.
+  R.~Lercier, T.~Sirvent,
+  \emph{On Elkies subgroups of $\ell$-torsion points in elliptic curves defined over a finite field},
+  J. Th\'eorie des Nombres de Bordeaux {\bf 20} (2008), 783--797
 
 \bibitem{Schneider}
-{\sc Schneider, Peter}
-\newblock $p$-adic Lie Groups, Springer, 2011
-
+  P.~Schneider,
+  \emph{$p$-adic Lie Groups}, Springer (2011)
 \end{thebibliography}
 
 \end{document}
