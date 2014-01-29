@@ -26,8 +26,14 @@
 *.ps
 *.snm
 *.synctex.gz
+*.synctex
 *.toc
 *.vrb
 *.xdy
 *.tdo
 *.pdf
+*~
+*.tex.bak
+*.blg
+*.tex.sav
+*.out
