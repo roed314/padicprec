@@ -27,6 +27,7 @@
 \newcommand{\Qp}{\Q_p}
 \newcommand{\R}{\mathbb R}
 \renewcommand{\O}{\mathcal O}
+\newcommand{\XX}{\mathbf X}
 
 \newcommand{\val}{\text{\rm val}}
 \renewcommand{\prec}{\text{\rm prec}}
@@ -35,81 +36,22 @@
 \definecolor{purple}{rgb}{0.6,0,0.6}
 \def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
 
-%
-% --- Author Metadata here ---
-%\conferenceinfo{ISSAC}{}
-
-% --- End of Author Metadata ---
-
-\title{p-adic precision}
-
-%
-% You need the command \numberofauthors to handle the 'placement
-% and alignment' of the authors beneath the title.
-%
-% For aesthetic reasons, we recommend 'three authors at a time'
-% i.e. three 'name/affiliation blocks' be placed beneath the title.
-%
-% NOTE: You are NOT restricted in how many 'rows' of
-% "name/affiliations" may appear. We just ask that you restrict
-% the number of 'columns' to three.
-%
-% Because of the available 'opening page real-estate'
-% we ask you to refrain from putting more than six authors
-% (two rows with three columns) beneath the article title.
-% More than six makes the first-page appear very cluttered indeed.
-%
-% Use the \alignauthor commands to handle the names
-% and affiliations for an 'aesthetic maximum' of six authors.
-% Add names, affiliations, addresses for
-% the seventh etc. author(s) as the argument for the
-% \additionalauthors command.
-% These 'additional authors' will be output/set for you
-% without further effort on your part as the last section in
-% the body of your article BEFORE References or any Appendices.
-
-%\numberofauthors{3} 
-%\author{
-% You can go ahead and credit any number of authors here,
-% e.g. one 'row of three' or two rows (consisting of one row of three
-% and a second row of one, two or three).
-%
-% The command \alignauthor (no curly braces needed) should
-% precede each author name, affiliation/snail-mail address and
-% e-mail address. Additionally, tag each line of
-% affiliation/address with \affaddr, and tag the
-% e-mail address with \email.
-%
-% 1st. author
-%\alignauthor
-%Xavier Caruso\\
-%       \affaddr{CNRS/Université de Rennes I}\\
-%       \email{xavier.caruso@univ-rennes1.fr}
-% 2nd. author
-%\alignauthor
-%David Roe\\
-%       \affaddr{University of Calgary}\\
-%       \email{roed.math@gmail.com}
-% 3rd. author
-%\alignauthor 
-%Tristan Vaccon\\
-%       \affaddr{Université de Rennes 1}\\
-%       \email{tristan.vaccon@univ-rennes1.fr}
-%}
-
-\date{november 2013}
+\title{$p$-adic precision}
+\author{Xavier Caruso}
+\author{David Roe}
+\author{Tristan Vaccon}
+\date\today
 
 \maketitle
 \begin{abstract}
-A method to handle $p$-adic precision, to handle \textit{precision balance}.
+We present a new method to handle $p$-adic precision (or more generally
+precision over ultrametric fields) based on $p$-adic calculus.
+We illustrate it by many examples and give a toy application to the
+stable computation of the SOMOS 4 sequence.
 \end{abstract}
 
-% A category with the (minimum) three required fields
-%\category{I.1.2}{Computing Methodologies}{Symbolic and Algebraic Manipulations}[Algebraic Algorithms]
-
-%\terms{Algorithms, Theory}
-
-%\keywords{$p$-adic precision, $p$-adic algorithm}
+\setcounter{tocdepth}{1}
+\tableofcontents
 
 \section{Introduction}
 
@@ -176,13 +118,11 @@ computation step-by-step: we first compute $(z,t) = f(x,y)$ and we
 compute then $f(z,t)$ which gives the result. Proceeding this way, we 
 see that $z$ and $t$ are both known up to precision $O(p^{\min(n,m)})$ 
 are consequently the same holds for the coordinates of the result.
-
 The second approach consists in remarking that $f \circ f$ maps
-$(x,y)$ to $(2x, 2y)$. CComputing $f \circ f(x,y)$ using the latter
+$(x,y)$ to $(2x, 2y)$. Computing $f \circ f(x,y)$ using the latter
 formula, it is clear that the result we get is known up to precision
 $(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p$
 equals $2$.
-
 As a conclusion, the second approach yields a more accurate result.
 In other words, computing step-by-step creates ``artificial'' losses 
 of precision.
@@ -255,7 +195,7 @@ gives each individual entries of $L(M)$and $U(M)$ in a closed form
 
 If $M$ is random square matrix over $\Zp$ of side $d$ whose every
 coefficient is known up to precision $O(p^N)$, the two following
-results are proved in \emph{loc. cit.}:
+results are proved in \cite{Caruso}:
 \begin{itemize}
 \item using usual Gauss elimination and tracking $p$-adic precision 
 step-by-step, the smallest precision on an entry of $L(M)$ is about
@@ -724,29 +664,161 @@ We now prove (ii). \todo{Write the proof.}
 
 \section{Examples and applications}
 
-\todofor{Xavier}{Write this section}
+In this Section, we illustrate the theory developed in this paper by 
+giving examples and applications. In \S \ref{ssec:differentials}, we 
+compute the differential of a bunch of usual operations involving 
+$p$-adic objects of different nature. Very often, we will observe that 
+this computation is easy even if the underlying operation is 
+sophisticated (\emph{e.g.} Gr\"obner basis).
+In \S \ref{ssec:SOMOS-solution}, we study the SOMOS 4 sequence 
+introduced in \S \ref{ssec:stepbystep} and, making a crucial use of 
+Lemma \ref{lem:main} and Proposition \ref{prop:}, we design a quite 
+\emph{stable} algorithm for computing it.
 
 \subsection{Differential of usual operations}
+\label{ssec:differentials}
 
-\subsubsection{Numbers}
+As in the previous Sections, we always work over a fixed ultrametric 
+field $K$, whose absolute value is denoted by $|\cdot|$. We recall that 
+usual examples are the field of $p$-adic numbers $\Q_p$ and the field of 
+Laurent series $k((X))$ over a base field $k$.
 
-\todo{sum, product, inverse, $p$-power map}
+In what follows, we use freely the ``method of physicists'' to compute 
+differentials: given a function $f$ differentiable at some point $x$, we 
+consider a small perturbation $dx$ of $x$ and write $f(x+dx) = y + dy$ 
+by expanding LHS and neglecting terms of order $2$. The differential of 
+$f$ at $x$ is then the linear mapping $dx \mapsto dy$.
 
-\subsubsection{Polynomials}
+\subsubsection*{Numbers}
 
-\todo{
-Euclidean division, factorization, Grobner basis (?)
-}
+The most basic operations are, of course, sums, products and inverses of 
+elements of $K$. Their differential are well-known and quite easy to 
+compute: if $z = x + y$ (resp. $z = xy$, resp $z = \frac 1 x$), we have 
+$dz = dx + dy$ (resp. $dz = x \cdot dy + dx \cdot y$, resp $dz = - 
+\frac{dx}{x^2}$).
 
-\subsubsection{Matrices}
+A little bit more interesting is the $n$-th power map $f$ from $K$ to 
+itself. Its differential $f'(x)$ is obtained by differentiate the 
+equality $y = x^n$: we obtain $dy = n x^{n-1} dx$.
+Hence $f'(x)$ maps to ball $B_K(r)$ (where $r$ is some positive real 
+number) to $B_K(|n|{\cdot} r)$. According to Lemma \ref{lem:main}, this 
+means that the behaviour of the precision depends on the absolute value 
+of $n$. By the ultrametric inegality, we always have $|n| \leq 1$ but 
+this inegality might be strict. It happens for instance if the 
+characteristic of $K$ is divisible by $p$, in which case $n$ vanishes in 
+$K$. In that case $f'(x)$ also vanishes and Lemma \ref{lem:main} does 
+not apply. 
+Another situation (which is more interesting) is that of $p$-adic 
+numbers: let us take $K = \Q_p$ and $n = p^k$ for some integer $k$. Then
+$|n| = p^{-k}$ and Lemma \ref{lem:main} tells us basically that raising
+a $p$-adic number to the $p^k$-th power increases the precision by $k$
+extra digits (which is actually a well-known fact).
 
-\todo{
-determinant, characteristic polynomial, LU factorization, QR 
+\subsubsection*{Univariate polynomials}
+
+Beyond sums and products (which can be treated as before), a basic 
+operation involving polynomials is Euclidean division. Let us compute 
+the differential of it. We start with two polynomials $A$ and $B$ with 
+$B \neq 0$. The Euclidean division of $A$ by $B$ is written $A = BQ + R$ 
+with $\deg R < \deg B$. Differentiating the above equality we find: 
+$dA - dB \cdot Q = B \cdot dQ + dR$,
+which implies that $dQ$ and $dR$ are respectively obtained as the 
+quotient and the remainder of the Euclidean division of $dA - dB \cdot 
+Q$ by $B$. This gives the differential. We note that the discussion 
+above extends readily to convergent series (see also 
+\cite{caruso-lubicz}).
+
+Another usual operations on polynomials is the factorization. Suppose 
+that we are given a monic polynomial $P \in K[X]$ written as a product 
+$P_0 = A_0 B_0$ where $A_0$ and $B_0$ are monic and coprime. Hensel's 
+lemma implies that there exists a small neighbourhood $\mathcal U$ of 
+$P_0$ such that any monic polynomial $P \in \mathcal U$ factors uniquely 
+as $P = A B$ with $A$ and $B$ monic and close enough to $A_0$ and $B_0$ 
+respectively. Thus, we can consider the application $f : P \mapsto (A,B)$ 
+defined on the subset of $\mathcal U$ consisting of monic polynomials.
+We want to differentiate $f$ at $P_0$. For this, we differentiate the 
+equality $P = A B$ around $P_0$, obtaining 
+\begin{equation}
+\label{eq:difffactor}
+dP = A_0 \cdot dB + B_0 \cdot dA.
+\end{equation}
+where $dP$, $dA$ and $dB$ have degree less than $\deg P$, $\deg A$ and 
+$\deg B$ respectively. If $A_0 U_0 + B_0 V_0 = 1$ is a Bezout relation
+between $A_0$ and $B_0$, it follows from Eq.~\eqref{eq:difffactor} that
+$dA$ (resp. $dB$) is the remainder in the Euclidean division of $V_0
+{\cdot} dP$ by $A_0$ (resp. of $U_0 {\cdot} dP$ by $B_0$).
+
+An important special case of the previous study occurs when $A_0$ has 
+degree $1$, that is $A_0(X) = X - \alpha$ with some $\alpha \in K$. The 
+application $P \mapsto A$ is then nothing but the mapping that follows 
+the simple root $\alpha$. Of course, its differential around $P_0$ can 
+be computed by the above method. Nevertheless there is a more direct way 
+to obtain it in this particular case: we write $(P + dP)(\alpha + 
+d\alpha) = 0$ and expand this. We obtain this way $P'(\alpha) d\alpha + 
+dP(\alpha) = 0$ where $P'$ denotes the derivative of $P$. Since $\alpha$ 
+is a simple root, $P'(\alpha)$ does not vanish and we recover $d \alpha 
+= - \frac{dP(\alpha)}{P'(\alpha)}$.
+
+\subsubsection*{Multivariate polynomials}
+
+We consider the ring $K[\XX] = K[X_1, \ldots, X_n]$ of polynomials in $n$
+variables over $K$ and fix a monomial order on it. We then have a 
+notion of division in $K[\XX]$: if $f, f_1, \ldots, f_s$ are polynomials
+in $K[\XX]$, there exists a writing:
+$$f = q_1 f_1 + \cdots + q_s f_s + r$$
+where $q_1, \ldots, q_s, r \in K[\XX]$ and no term of $r$ is divisible
+by the leading term of some $f_i$ ($1 \leq i \leq s$). Moreover, assuming
+that $(f_1, \ldots, f_s)$ is a Gr\"obner basis\footnote{Without this
+assumption, there still exists a canonical choice of $r$. We do not know
+if the computation of the differential that follows extends to a more
+general setting.} (of the ideal generated by these polynomials), the 
+polynomial $r$ is uniquely determined and called the \emph{remainder} of 
+the division of $f$ by the family $(f_1, \ldots, f_s)$. The application 
+$(f, f_1, \ldots, f_s) \mapsto r$ is then well defined and similarly to 
+the case of univariate polynomials, we can compute its differential: we 
+find that $dr$ is obtained as the remainder of the division of $f - (q_1 
+\cdot d f_1 + \cdots + q_s \cdot d f_s)$ by $(f_1, \ldots, f_s)$.
+
+We now focus on the computation of Gr\"obner basis. Recall that any 
+ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We 
+can then consider the application mapping a family $(f_1, \ldots, f_s)$ 
+of polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
+\ldots, g_t)$. It follows from Theorem 1.1 of \cite{Vaccon} that this 
+application at $(f_1, \ldots, f_s)$ is continuous provided that:
+\begin{itemize}
+\item the sequence $(f_1, \ldots, f_s)$ is regular
+\item for all $i \in \{1, \ldots, s\}$, the ideal generated by
+$f_1, \ldots, f_i$ is wearly-$w$ where $w$ denotes the fixed monomial
+order (\emph{cf} \cite{Vaccon} for more precisions).
+\end{itemize}
+A similar argument proves that it is actually differentiable at such
+points. We are now going to compute the differential. For this we
+remark that since the families $(f_1, \ldots, f_s)$ and $(g_1, \ldots,
+g_t)$ generate the same ideal, we have a relation:
+\begin{equation}
+\label{eq:prodgrobner}
+(g_1, \ldots, g_t) = (f_1, \ldots, f_s) \cdot A
+\end{equation}
+where $A$ is a $(s \times t)$ matrix with coefficients in $K[\XX]$.
+Moreover following Vaccon's construction, we see that the entries of $A$ 
+can be chosen in such a way that they define differentiable functions.
+Differentiating Eq.~\eqref{eq:prodgrobner}, we get:
+$$(d f_1, \ldots, d f_s) \cdot A = - (f_1, \ldots, f_s) \cdot dA + 
+(d g_1, \ldots, d g_t).$$
+Finally, using that we are working with \emph{reduced} Gr\"obner
+basis, the above equality implies that $d f_i$ is the remainder in
+the division of the $i$-th coefficient of the product
+$(d f_1, \ldots, d f_s) \cdot A$ by the family $(f_1, \ldots, f_s)$.
+
+
+\subsubsection*{Matrices}
+
+\todo{Determinant, characteristic polynomial, LU factorization, QR 
 factorization, kernels, images}
 
-\subsubsection{Sub vector spaces}
+\subsubsection*{Vector spaces}
 
-\todo{intersection, sum}
+\todo{Intersection, sum}
 
 \subsection{The SOMOS 4 sequence}
 \label{ssec:SOMOS-solution}
@@ -881,27 +953,9 @@ complexity in $\tilde O (N n + n^2)$. Our approach is then interesting
 when $n$ is large compared to $N$: under this hypothesis, it saves
 roughly a factor $n$.
 
-\section{Conclusions}
+%\section{Conclusions}
 
-%
-% The following two commands are all you need in the
-% initial runs of your .tex file to
-% produce the bibliography for the citations in your paper.
-\bibliographystyle{abbrv}
-\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
-% You must have a proper ".bib" file
-%  and remember to run:
-% latex bibtex latex latex
-% to resolve all references
-%
-% ACM needs 'a single self-contained file'!
-%
-%APPENDICES are optional
-%\balancecolumns
-
-\tiny \bibliographystyle{plain}
 \begin{thebibliography}{10}
-\addcontentsline{toc}{section}{Références}
 
 \bibitem{Bostan}
   A.~Bostan, L.~Gonz\'alez-Vega, H.~Perdry, \'E.~Schost,
@@ -931,6 +985,12 @@ roughly a factor $n$.
 \bibitem{Schneider}
   P.~Schneider,
   \emph{$p$-adic Lie Groups}, Springer (2011)
+
+\bibitem{Vaccon}
+  T.~Vaccon,
+  \emph{Matrix-F5 algorithms over finite-precision complete discrete 
+  valuation fields},
+  preprint (2014)
 \end{thebibliography}
 
 \end{document}
