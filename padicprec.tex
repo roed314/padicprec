@@ -119,7 +119,11 @@ compute then $f(z,t)$ which gives the result. Proceeding this way, we
 see that $z$ and $t$ are both known up to precision $O(p^{\min(n,m)})$ 
 are consequently the same holds for the coordinates of the result.
 The second approach consists in remarking that $f \circ f$ maps
+<<<<<<< HEAD
+$(x,y)$ to $(2x, 2y)$.  Computing $f \circ f(x,y)$ using the latter
+=======
 $(x,y)$ to $(2x, 2y)$. Computing $f \circ f(x,y)$ using the latter
+>>>>>>> 177a9642401ae8c1ba0d7ad2abc160cd74e02fbf
 formula, it is clear that the result we get is known up to precision
 $(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p$
 equals $2$.
@@ -180,7 +184,7 @@ and numerically stable.
 \subsubsection*{LU factorization}
 
 Let us first recall that a square matrix $M$ with coefficients in $\Qp$ 
-admits a LU factorization if it can be written as a produit $LU$ where 
+admits a LU factorization if it can be written as a product $LU$ where 
 $L$ and $U$ is lower triangular and upper triangular respectively. 
 The computation of a LU factorization appears as an important tool to 
 tackle many classical questions about matrices or linear systems.
@@ -232,9 +236,9 @@ nonzero element of $K$ to a strictly positive real number. It is said
 \emph{ultrametric} if it satisfies the following strong from of the 
 triangle inequality:
 $$|x+y| \leq \max(|x|, |y|).$$
-Given an absolute value $|\cdot|$ on $K$, we note that $|K^\star|$ is a 
-multiplicative subgroup of $\R_+^\star$. It is then either discrete or 
-dense. We shall say that $|\cdot|$ is \emph{discrete} if $|K^\star|$ is
+Given an absolute value $|\cdot|$ on $K$, we note that $|K^\times|$ is a 
+multiplicative subgroup of $\R_+^\times$. It is then either discrete or 
+dense. We shall say that $|\cdot|$ is \emph{discrete} if $|K^\times|$ is
 discrete. The valued field $(K, |\cdot|)$ is said \emph{complete} if all 
 Cauchy sequences (with respect to the distance $d$ defined by $d(x,y) = 
 |x-y|$) converge.
@@ -271,7 +275,7 @@ Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open
 subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
 \emph{differentiable} at $v_0 \in U$ if there exists a 
 continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
-$\varepsilon >0$, there exists an open neighbourhoud $U_\varepsilon 
+$\varepsilon >0$, there exists an open neighborhood $U_\varepsilon 
 \subset U$ containing $v_0$ with:
 \[ 
 \forall v, w \in U_\varepsilon, \quad
@@ -356,7 +360,7 @@ The first part of Lemma \ref{lem:reductionball} asserts that the
 identity map $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
 \Vert)$ is an homeomorphism. Furthermore, by the second of the Lemma, 
 $H$ is the image under $\iota_H$ of a lattice satisfying an extra 
-assuption: it is ``between the open unit ball and the closed unit 
+assumption: it is ``between the open unit ball and the closed unit 
 ball''.
 
 \subsubsection*{Lattices and computers}
@@ -407,7 +411,7 @@ By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq
 \varepsilon \Vert x \Vert $. Therefore, there exists $y \in f'(0) \cdot 
 H$ such that 
 $\Vert y \Vert \leq \varepsilon r$. By the open mapping Theorem and the 
-surjectify of $f'(0)$, there exists $x_1 \in E$ such that $f'(0) \cdot 
+surjectivityy of $f'(0)$, there exists $x_1 \in E$ such that $f'(0) \cdot 
 x_1 =y$ and $\Vert x_1 \Vert \leq \varepsilon C \cdot r < r$. Thus, $x_1 
 \in B^-_E(r) \subset H$ and $f(x)= f'(0) \cdot (x-x_1) \in f'(0) 
 \cdot H$.
@@ -425,7 +429,7 @@ By definition, $\Vert z_0 \Vert < C \Vert y_0\Vert$ and $y_0
 = -f(x_0)+f'(0) \cdot x_0$. Therefore, $\Vert y_0 \Vert < \varepsilon 
 \Vert x_0 \Vert \leq \varepsilon r$. Thus $\Vert z_0 \Vert \leq 
 \varepsilon C \cdot r < r$. Thus, $x_1$ and $z_0$ lie in $B^-_E(r) 
-\subset H$. An easy induction involving an analoguous computation
+\subset H$. An easy induction involving an analogous computation
 shows that the sequences $(x_n)$ and $(z_n)$ are well defined and
 take their values in $H$.
 
@@ -447,16 +451,16 @@ $x \in H$ and $y=f(x)$. The result is proven.
 Before discussing applications of Lemma \ref{lem:main} to ultrametric 
 precision, we would like to describe a little bit more restrictive 
 setting where the constant $\delta$ appearing in this Lemma can be 
-computed explicitely.
+computed explicitly.
 We refer to Schneider \cite{Schneider}, \S 6, for a definition of a 
 locally analytic function.
 
 \begin{rmk}
-Let $f$ be locally analytic function $K^n \rightarrow K^m$. Let $x \in K^n$ be such that $f'(x)$ is surjective. Then the radius of the ball needed in can be read on the Newton polygon given by the norms of the Taylor serie expansion of $f$ at $x$. We assume the $C$ given by the Banach-Schauder is given, $\varepsilon = \frac{1}{C}$ and now, we try to recover the link between $\varepsilon$ and $\delta$.
+Let $f$ be locally analytic function $K^n \rightarrow K^m$. Let $x \in K^n$ be such that $f'(x)$ is surjective. Then the radius of the ball needed can be read from the Newton polygon given by the norms of the Taylor series expansion of $f$ at $x$. We assume the $C$ given by the Banach-Schauder is given, $\varepsilon = \frac{1}{C}$ and now, we try to recover the link between $\varepsilon$ and $\delta$.
 \end{rmk}
 
 \begin{proof}
-Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=f'(0) \cdot x +\sum_{n \geq 2} \frac{f^{(n)}(0)}{n!} \cdot (x, \dots,x)$ is the Taylor serie expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
+Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=f'(0) \cdot x +\sum_{n \geq 2} \frac{f^{(n)}(0)}{n!} \cdot (x, \dots,x)$ is the Taylor series expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
 
 We shall now find $l$ such that if $x \in B_{K^n}(0,l)$, then $\Vert \sum_{n \geq 2} \frac{f^{(n)}(0)}{n!}(x,\dots,x) \Vert \leq \varepsilon$.
 
@@ -469,10 +473,18 @@ In other words, $\forall n \geq 2$, $\interleave f^{(n)}(0) \interleave \frac{l^
 By passing to logarithm and valuation, we get for all $n \geq 2$: \[ \log_p (\interleave f^{(n)}(0) \interleave )-(n-1) \log_p l-val (n!)\geq - \log_p \varepsilon.\]
 
 By Legendre formula, it is enough that for all $n \geq 2$:
-\[\log_p (\interleave f^{(n)}(0) \interleave )-(n-1) (\log_p l-(n-1)) \geq - \log_p \varepsilon.\]
+\[
+\log_p (\interleave f^{(n)}(0) \interleave )-(n-1) (\log_p l-(n-1)) \geq - \log_p \varepsilon.
+\]
 
-If we denote by $NP_F$ the Newton polygon application of the power serie $F(t) = \sum_{k\geq 0}^{+\infty} \log_p (\interleave f^{(k+1)}(0) \interleave ) t^k$, then it is enough that:
-\[ \sup_{ x \in \mathbb{R}_+} \left( NP_F(x) -x  \left( \log_p l - \frac{1}{p-1} \right) \right) \geq - \log_p \varepsilon.\]
+If we denote by $NP_F$ the Newton polygon application of the power series 
+\[
+F(t) = \sum_{k\geq 0}^{+\infty} \log_p (\interleave f^{(k+1)}(0) \interleave ) t^k
+\]
+then it is enough that:
+\[
+\sup_{ x \in \mathbb{R}_+} \left( NP_F(x) -x  \left( \log_p l - \frac{1}{p-1} \right) \right) \geq - \log_p \varepsilon.
+\]
 
 If $NP_F^*$ is the Legendre-Fanchel transform of $NP_F$, then it is enough that:
 \[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \varepsilon.\]
@@ -496,16 +508,15 @@ and sharply.
 
 \section{Generalization to manifolds}
 
-It may happen that natural $p$-adic ``objects'' do not lie in vector 
-spaces. Actually, examples are numerous: points on the projective space 
-or elliptic curves, subspaces of a fixed vector space (which lie in 
-grassmannians), classes of isomorphism of certain curves (which lie in 
-various moduli spaces), \emph{etc.} 
-That is why we think that it is quite important to extend the formalism 
-developped in Section \ref{sec:philosophy} to a more general setting. 
-In this Section, we consider the quite general case of a strictly
-differentiable manifolds locally modeled on (eventually infinite 
-dimensional) ultrametric Banach spaces. This covers all the 
+Many natural $p$-adic objects do not lie in vector spaces:
+points in projective spaces or elliptic curves,
+subspaces of a fixed vector space (which lie in Grassmannians),
+classes of isomorphism of certain curves (which lie in various moduli spaces),
+\emph{etc.}  In this section we extend the formalism 
+developed in Section \ref{sec:philosophy} to a more general setting:
+we consider the quite general case of strictly
+differentiable manifolds locally modeled on ultrametric Banach spaces.
+This covers all the 
 aforementioned examples.
 
 In what follows, the letter $K$ always refers to an ultrametric field 
@@ -573,12 +584,12 @@ $V_i$, $\varphi_i$, \emph{etc.} introduced in \S \ref{ssec:manifold}.
 
 \begin{deftn}
 Let $x \in V$. 
-A \emph{precision data} at $x$ is a lattice in the tangent space 
+A \emph{precision datum} at $x$ is a lattice in the tangent space 
 $T_x V$.
 \end{deftn}
 
 \begin{deftn}
-Let $x \in V$ and $H$ be a precision data at $x$.
+Let $x \in V$ and $H$ be a precision datum at $x$.
 For all $i \in I$ such that $x \in V_i$, we set:
 $$x + O_i(H) = \varphi_i^{-1}\big(\varphi_i(x) + \varphi_i'(x)(H)\big) 
 \subset V.$$
@@ -589,7 +600,7 @@ the subsets $x + O_i(H)$ and $x + O_j(H)$ differ in general. It is
 however not the case if $H$ is small enough.
 
 \begin{prop}
-\label{prop:independance}
+\label{prop:independence}
 Let $x \in V$ and $H$ be a precision data at $x$.
 If $H$ is ``small enough'' \todo{(precise!)}, the subset $x + 
 O_i(H)$ does not depend on $i$.
@@ -605,54 +616,54 @@ where we recall that $\psi_{ij}$ is defined by Eq.~\eqref{eq:psiij}.
 \todo{Complete the proof and write the correct condition on $H$!}
 \end{proof}
 
-Under the assumption of Proposition \ref{prop:independance}, we define
+Under the assumption of Proposition \ref{prop:independence}, we define
 $x + O(H)$ as $x + O_i(H)$ for some (equivalently all) $i$ such that
 $x \in V_i$.
 
 \subsubsection*{Change of base point}
 
 In order to restrict ourselves to elements $x$ lying in a dense 
-computable subset, we need to compare $x + O(H)$ with some $x' + 
-O(H')$ when $x$ and $x'$ are close enough.
+computable subset, we need to compare $x_0 + O(H_0)$ with varying $x + 
+O(H)$ when $x$ and $x_0$ are close enough.
 Let us first examine the situation in a fixed given chart: we fix some 
-index $i \in I$ and pick two elements $x$ and $x'$ in $V_i$. We consider 
-in addition a precision data $H$ at $x$ and we want to produce a 
-precision data $H'$ at $x'$ such that $x + O_i(H) = x' + O_i(H')$. 
-We remark that the tangent spaces $T_x V$ and $T_{x'} V$ are both 
-isomorphic to $E_i$ \emph{via} the maps $\varphi'_i(x)$ and 
-$\varphi'_i(x')$ respectively. A natural candidate for $H'$ is then:
+index $i \in I$ and pick two elements $x_0$ and $x$ in $V_i$. We consider 
+in addition a precision datum $H_0$ at $x_0$ and we want to produce a 
+precision datum $H$ at $x$ such that $x_0 + O_i(H_0) = x + O_i(H)$. 
+We remark that the tangent spaces $T_{x_0} V$ and $T_x V$ are both 
+isomorphic to $E_i$ via the maps $\varphi'_i(x_0)$ and 
+$\varphi'_i(x)$ respectively. A natural candidate for $H$ is then:
 \begin{equation}
 \label{eq:Hprime}
-H' = \big(\varphi'_i(x')^{-1} \circ \varphi'_i(x)\big) (H).
+H = \left(\varphi'_i(x)^{-1} \circ \varphi'_i(x_0)\right) (H_0).
 \end{equation}
-And indeed, one can check that $x + O(H)$ is indeed equal to $x' + 
-O(H')$ as soon as $x$ and $x'$ are close enough in the following sense: 
-the difference $\varphi_i(x) - \varphi_i(x')$ lies in the lattice $H_i = 
-\varphi'_i(x)(H)$. We furthermore have a proprety of independance on 
+And indeed, one can check that $x + O(H)$ is indeed equal to $x_0 + 
+O(H_0)$ as soon as $x$ and $x_0$ are close enough in the following sense: 
+the difference $\varphi_i(x) - \varphi_i(x_0)$ lies in the lattice $H_i = 
+\varphi'_i(x_0)(H_0)$. We furthermore have a property of independence on 
 $i$.
 
 \begin{prop}
-We assume that $H$ is ``small enough'' \todo{(precise!)} and that $x$ and 
-$x'$ are close enough. Then:
+We assume that $H_0$ is ``small enough'' \todo{(precise!)} and that $x$ is close 
+enough to $x_0$. Then
 \begin{enumerate}[(i)]
-\item the lattice $H'$ defined by Eq.~\eqref{eq:Hprime} does not depend 
-on $i$;
-\item the couples $(x,H)$ and $(x', H')$ satisfy the assumptions of
-Proposition \ref{prop:independance} and we have $x + O(H) = x' + O(H')$.
+\item the lattice $H$ defined by \eqref{eq:Hprime} does not depend 
+on $i$,
+\item the pairs $(x,H)$ and $(x_0, H_0)$ satisfy the assumptions of
+Proposition \ref{prop:independence} and we have $x + O(H) = x_0 + O(H_0)$.
 \end{enumerate}
 \end{prop}
 
 \begin{proof}
-We first prove (i). For an index $i$ such that $x, x' \in V_i$, let us 
-denote by $f_i : T_x V \to T_{x'} V$ the composite $\varphi'_i(x')^{-1} 
-\circ \varphi'_i(x)$. Given an extra index $j$ satisfying the same
+We first prove (i). For an index $i$ such that $x, x_0 \in V_i$, let us 
+denote by $f_i : T_{x_0} V \to T_x V$ the composite $\varphi'_i(x)^{-1} 
+\circ \varphi'_i(x_0)$. Given an extra index $j$ satisfying the same
 assumption, we know by \todo{(find a reference)} that the difference
-$f_i - f_j$ goes to $0$ when $x'$ converges to $x$. Since $H$ is open
-in $T_x V$, this implies that $(f_j - f_i)(H)$ contains $f_i(H)$ and 
-$f_j(H)$ if $x'$ and $x$ are close enough. Now, pick $w \in f_j(H)$ and 
-write it $w = f_j(v)$ with $v \in H$. Then $w$ is equal to $f_i(v) + 
-(f_j - f_i)(v)$ and then belongs to $f_i(H)$ because each summand does. 
-Therefore $f_j(H) \subset f_i(H)$. The inverse inclusion can be proved 
+$f_i - f_j$ goes to $0$ when $x$ converges to $x_0$. Since $H_0$ is open
+in $T_{x_0} V$, this implies that $(f_j - f_i)(H_0)$ contains $f_i(H_0)$ and 
+$f_j(H_0)$ if $x$ and $x_0$ are close enough. Now, pick $w \in f_j(H_0)$ and 
+write it $w = f_j(v)$ with $v \in H_0$. Then $w$ is equal to $f_i(v) + 
+(f_j - f_i)(v)$ and then belongs to $f_i(H_0)$ because each summand does. 
+Therefore $f_j(H_0) \subset f_i(H_0)$. The inverse inclusion can be proved 
 in the same way.
 
 We now prove (ii). \todo{Write the proof.}
@@ -870,8 +881,8 @@ $\prec$ $\leftarrow$ $N$\;
 We introduce the (partial) function $f : \Q_p^4 \to \Q_p^4$ defined by 
 $f(a,b,c,d) = (b,c,d,\frac{bd+c^2}a)$, so that, for all $i$, we have 
 $(u_i, u_{i+1}, u_{i+2}, u_{i+3}) = f_i(u_0, u_1, u_2, u_3)$ where $f_i
-= f \circ \cdots \circ f$ ($i$ times). Apparently $f$ is strictly 
-differentiable on $\Q_p^\star \times \Q_p^3$ and its differential in the 
+= f \circ \cdots \circ f$ ($i$ times). Clearly, $f$ is strictly 
+differentiable on $\Q_p^\times \times \Q_p^3$ and its differential in the 
 canonical basis is given by the matrix:
 $$D(a,b,c,d) = \begin{pmatrix}
 0 & 1 & 0 & 0 \\

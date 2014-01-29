@@ -26,9 +26,14 @@
 *.ps
 *.snm
 *.synctex.gz
+*.synctex
 *.toc
 *.vrb
 *.xdy
 *.tdo
-
-padicprec.pdf
+*.pdf
+*~
+*.tex.bak
+*.blg
+*.tex.sav
+*.out
