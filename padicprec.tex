@@ -1,7 +1,8 @@
 %\documentclass{sig-alternate}
-\documentclass{amsart}
+\documentclass{lms}
 \usepackage[utf8]{inputenc}
 
+\usepackage{amsmath,amssymb}
 \usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{color}
 \usepackage{stmaryrd}
@@ -17,7 +18,7 @@
 \newtheorem{quest}[theo]{Question}
 \newtheorem{rem}[theo]{Remark}
 \newtheorem{ex}[theo]{Example}
-\theoremstyle{definition}
+%\theoremstyle{definition}
 \newtheorem{deftn}[theo]{Definition}
 \newtheorem{rmk}[theo]{Remark}
 
@@ -28,8 +29,14 @@
 \newcommand{\R}{\mathbb R}
 \renewcommand{\O}{\mathcal O}
 \newcommand{\XX}{\mathbf X}
+\newcommand{\trans}{{}^{\text t}}
+
+\newcommand{\GL}{\text{\rm GL}}
 
 \newcommand{\val}{\text{\rm val}}
+\newcommand{\tr}{\text{\rm Tr}}
+\newcommand{\com}{\text{\rm Com}}
+\newcommand{\Grass}{\text{\rm Grass}}
 \renewcommand{\prec}{\text{\rm prec}}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
@@ -89,6 +96,35 @@ large setting.
 
 \section{Motivations and aims}
 
+Two sources of inspiration arise when studying $p$-adic algorithms.
+The first relates $\Zp$ to its quotients $\Z/p^n\Z$.  The preimage in
+$\Zp$ of an element $a \in \Z / p^n \Z$ is a ball, and these balls cover
+$\Zp$ for any fixed $n$.  Since the projection $\Zp \to \Z/p^n\Z$ is a
+homomorphism, given unknown elements in two such balls we can
+locate the balls in which their sum and product lie.  Working on a computer
+we must find a way to write elements using only a finite amount of data.
+By lumping elements together into these balls of radius $p^{-n}$, we may
+model arithmetic in $\Zp$ using the finite ring $\Z / p^n \Z$.  In Sage
+this method for approximating elements is known as ``fixed modulus''.
+
+The second source draws upon parallels between $\Qp$ and $\R$.  Both
+occur as completions of $\Q$, and both have dense subrings:
+the localizations $\Z[\frac1p] \subset \Qp$ and $\Z[\frac12] \subset \R$.
+In $\R$, floating point arithmetic provides approximate operations $\oplus$ and $\odot$ on a
+subset $S \subset \Z[\frac12]$ that model $+$ and $\cdot$ in $\R$ up to a given relative precision $h$:
+\[
+\frac{x \circledast y}{x \ast y} - 1 \le 2^{-h}
+\]
+for all $x, y \in S$ and $\ast \in \{+, \cdot\}$.  Interval arithmetic in the reals
+is unwieldy, since arithmetic operations always increase the lengths of the inputs.
+As a consequence, most computations in the real numbers rely on
+statistical cancelation and external estimates of precision loss, rather than
+attempting to track known precision at each step.  This tendency is strengthened
+by the ubiquity of floating point arithmetic in scientific applications, where Gaussian
+distributions are more common than intervals anyway.
+
+In the $p$-adic world, these features are reversed.
+
 \todofor{David}{Add a general introduction to this section.}
 
 \subsection{Separate precision and approximation}
@@ -119,14 +155,9 @@ compute then $f(z,t)$ which gives the result. Proceeding this way, we
 see that $z$ and $t$ are both known up to precision $O(p^{\min(n,m)})$ 
 are consequently the same holds for the coordinates of the result.
 The second approach consists in remarking that $f \circ f$ maps
-<<<<<<< HEAD
-$(x,y)$ to $(2x, 2y)$.  Computing $f \circ f(x,y)$ using the latter
-=======
 $(x,y)$ to $(2x, 2y)$. Computing $f \circ f(x,y)$ using the latter
->>>>>>> 177a9642401ae8c1ba0d7ad2abc160cd74e02fbf
 formula, it is clear that the result we get is known up to precision
-$(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p$
-equals $2$.
+$(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p = 2$.
 As a conclusion, the second approach yields a more accurate result.
 In other words, computing step-by-step creates ``artificial'' losses 
 of precision.
@@ -507,6 +538,7 @@ and sharply.
 \subsubsection*{Working precision}
 
 \section{Generalization to manifolds}
+\label{sec:manifold}
 
 Many natural $p$-adic objects do not lie in vector spaces:
 points in projective spaces or elliptic curves,
@@ -721,9 +753,9 @@ $K$. In that case $f'(x)$ also vanishes and Lemma \ref{lem:main} does
 not apply. 
 Another situation (which is more interesting) is that of $p$-adic 
 numbers: let us take $K = \Q_p$ and $n = p^k$ for some integer $k$. Then
-$|n| = p^{-k}$ and Lemma \ref{lem:main} tells us basically that raising
-a $p$-adic number to the $p^k$-th power increases the precision by $k$
-extra digits (which is actually a well-known fact).
+$|n| = p^{-k}$ and Lemma \ref{lem:main} reflects the well-known fact that
+raising a $p$-adic number to the $p^k$-th power increases the precision 
+by $k$ extra digits.
 
 \subsubsection*{Univariate polynomials}
 
@@ -791,9 +823,12 @@ find that $dr$ is obtained as the remainder of the division of $f - (q_1
 \cdot d f_1 + \cdots + q_s \cdot d f_s)$ by $(f_1, \ldots, f_s)$.
 
 We now focus on the computation of Gr\"obner basis. Recall that any 
-ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We 
-can then consider the application mapping a family $(f_1, \ldots, f_s)$ 
-of polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
+ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We can 
+then consider the application mapping a family $(f_1, \ldots, f_s)$ of 
+\emph{homogeneous}\footnote{This restriction will be convenient for us 
+mainly because we are using the article \cite{Vaccon}, which deals only 
+with homogeneous polynomials. It is however probably not essential.} 
+polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
 \ldots, g_t)$. It follows from Theorem 1.1 of \cite{Vaccon} that this 
 application at $(f_1, \ldots, f_s)$ is continuous provided that:
 \begin{itemize}
@@ -821,20 +856,161 @@ basis, the above equality implies that $d g_i$ is the remainder in
 the division of the $i$-th coefficient of the product
 $(d f_1, \ldots, d f_s) \cdot A$ by the family $(g_1, \ldots, g_t)$.
 
-
 \subsubsection*{Matrices}
 
-\todo{Determinant, characteristic polynomial, LU factorization, QR 
-factorization, kernels, images}
+Differentiating ring operations (sum, products, inverse) over matrices 
+is again straightforward; we just need to be careful that matrix 
+algebras are (in general) noncommutative.
+
+We now move to determinants, \emph{i.e.} we compute the differential
+of the function $\det : M_n(K) \to K$. It is a standard computation.
+To begin with, we consider an invertible matrix $M$ and write:
+\begin{eqnarray*}
+\det(M + dM) &=& \det(M) \cdot \det(I + M^{-1} \cdot dM)  \\
+&=& \det(M) \cdot \big(1 + \tr(M^{-1} \cdot dM)\big) \\
+&=& \det(M) + \tr(\com(M) \cdot dM)
+\end{eqnarray*}
+where $\com(M)$ denotes the comatrix of $M$. The differential of 
+$\det$ at $M$ is then $dM \mapsto \tr(\com(M) \cdot dM)$. It turns
+out that this formula is still valid when $M$ is not invertible.
+The same computation extends readily to characteristic polynomials,
+since they are defined as determinants. More precisely, let us 
+consider the function $\chi : M_n(K) \to K_{\leq n}[X]$ (where
+the latter ring denotes the finite dimensional vector space of 
+polynomials over $K$ of degree at most $n$) taking a matrix $M$
+to its characteristic polynomial $\det(X-M)$.
+Then $\chi$ is differentiable at each point $M \in M_n(K)$ and its 
+differential is given by $dM \mapsto \tr(\com(X{-}M) \cdot dM)$.
+
+Other important tools related to matrices are usual factorizations as, 
+for example, LU factorization. In what follows, let us agree to define a 
+LU factorization of a square matrix $M \in M_n(K)$ as a writing $M = LU$ 
+where $L$ is lower triangular and unipotent and $U$ is upper triangular. 
+Such a writing exists and is unique provided that all principal minors 
+of $M$ do not vanish. We can then consider the mapping $M \mapsto (L,U)$ 
+defined over the Zariski-open set of matrices satisfying the above 
+condition. In order to differentiate it, we differentiate the relation 
+$M = LU$ and rewrite the result as follows:
+$$L^{-1} dM \: U^{-1} = L^{-1} \cdot dL + dU \cdot U^{-1}.$$
+We remark that in the right hand side of the above formula, the first
+summand is lower triangular and all its diagonal entries vanish whereas 
+the second summand is upper triangular. Hence in order to compute $dL$
+and $dU$, one can proceed as follows: (1)~we compute the product $dX = 
+L^{-1} dM \: U^{-1}$, (2)~we separate the lower and upper part of $dX$
+obtaining this way $L^{-1} \cdot dL$ and $dU \cdot U^{-1}$ and (3)~we
+recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the 
+left and $U$ on the right respectively. 
+The above discussion extends almost \emph{verbatim} to LUP 
+factorization; the only difference is that LUP factorizations are not 
+unique but they are on a small neighbourhood of $M$ if we fix the matrix 
+$P$.
+
+A similar argument works for QR factorization as well.
+For us, a QR factorization of a square matrix $M \in M_n(K)$ will be
+a writing $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
+orthogonal in the sense that $\trans Q \cdot Q$ is diagonal. As before, such 
+a writing exists and is unique on a Zariski-open subset of $M_n(K)$. The
+mapping $f : M \mapsto (Q,R)$ is then well defined on this subset. We 
+would like to emphasize at this point that the orthogonality condition
+defines a sub-manifold of $M_n(K)$ which is a apparently \emph{not} a
+vector space (it is defined by equations of degree $2$). The codomain
+of $f$ is then also a manifold; this example then fits to the setting
+of \S \ref{sec:manifold} but not to those of \S \ref{sec:philosophy}. 
+The generalization made in \S \ref{sec:manifold} is then needed.
+Anyway, we can differentiate $f$ by following the method we used for LU 
+factorization: differentiating the relation $M = QR$, we obtain:
+\begin{equation}
+\label{eq:diffQR}
+\trans Q \cdot dM \cdot R^{-1} = \trans Q \cdot dQ + \Delta \cdot dR 
+\cdot R^{-1}
+\end{equation}
+where $\Delta = \trans Q \cdot Q$ is a diagonal matrix by definition.
+Moreover by differentiating $\trans Q \cdot Q = \Delta$, we find that
+$\trans Q \cdot dQ$ can be written as the sum of an antisymmetric 
+matrix and a diagonal one. Since moreove $dR \cdot R^{-1}$ is upper
+triangular with all diagonal entries equal to $0$, we see that 
+Eq.~\eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
+and $dM$.
 
 \subsubsection*{Vector spaces}
 
-\todo{Intersection, sum}
+Let $d$ and $n$ be two nonnegative integers such that $d \leq n$. The 
+Grassmannian $\Grass(d,n)$ is the set of all sub-vector spaces of $K^n$ 
+of dimension $d$. It defines an algebraic variety over $K$ and hence
+\emph{a fortiori} a $K$-manifold in the sense of \S \ref{ssec:manifold}.
+Concretely, a vector space $V \subset K^n$ of dimension $d$ is given by 
+a rectangular matrix $M \in M_{d,n}(K)$ whose rows form a basis of $V$ 
+and two such matrices $M$ and $M'$ define the same vector space if there 
+exists $P \in \GL_d(K)$ such that $M = P M'$. Performing row echelon, we 
+find that we can always choose the above matrix $M$ in the particular
+shape:
+$$M = \begin{pmatrix} I_d & M' \end{pmatrix} \cdot P$$
+where $I_d$ denotes the $(d \times d)$ identity matrix, $M' \in M_{d, 
+n-d}(K)$ and $P$ is a permutation matrix of size $n$. Moreover two 
+such writings with the same $P$ necessarily coincide. Hence each 
+permutation matrix $P$ defines a chart $U_P \subset \Grass(d,n)$ which
+is canonically diffeomorphism to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
+
+Let us now consider the open subset of $M_{n,n-d}(K)$ consisting of 
+matrices of full rank. The left kernel defines a mapping $\text{LK} : 
+M_{n,n-d}(K) \to \Grass(d,n)$. Let us prove that it is differentiable 
+and compute its differential around some point $M \in M_{n,n-d}(K)$. Of 
+course, there exists a neighbourhood $\mathcal U$ of $M$ whose image is 
+entirely contained in a given chart $U_P$. We assume for simplicity that 
+$P$ is the identity. On $\mathcal U$, the map $\text{LK}$ corresponds in 
+our chart to the application that takes $M$ to the unique matrix $N \in
+M_{d, n-d}(K)$ such that $\begin{pmatrix} I_d & N \end{pmatrix} \cdot M 
+= 0$. The implicit function theorem then implies that $\text{LK}$ is
+differentiable. Furthermore, its differential satisfies the relation
+$\begin{pmatrix} 0 & dN \end{pmatrix} \cdot M +
+\begin{pmatrix} I_d & N \end{pmatrix} \cdot dM = 0$,
+from which we can compute $dN$ by projecting on the $(n-d)$ last
+columns.
+
+We can develop further this example and study what happens on the 
+closed subset of $M_{n,n-d}(K)$ where matrices have not full rank. On
+this subspace, the left kernel has dimension $< d$ and then no longer
+defines a point in $\Grass(n,d)$. Nevertheless, for all integer $r <
+n-d$, we can consider the subset $\mathcal V_r \subset M_{n,n-d}(K)$
+of matrices whose rank are exactly rank $d$. It is locally closed in
+$M_{n,n-d}(K)$ with respect to the Zariski topology and hence defines
+a $K$-manifold. Furthermore, we have a mapping $\text{LK}_r : \mathcal 
+M_r \to \Grass(n,n-r)$ which is differentiable and whose differential 
+can be computed as before.
+
+The lesson from this study is the following. If we have to compute the 
+kernel of a matrix $M$ over $K$ known with finite precision, \emph{a 
+priori} we first need to determine what is the rank of $M$. However, the 
+rank function is not continuous --- it is only lower semi-continuous --- 
+and hence cannot be determined from sure from $M$ (expect if $M$ has 
+full rank). We then need to make an extra hypothesis and the more natural 
+one is arguably to assume that $M$ has actually the minimal rank that it 
+can have. With this convention, for instance, the kernel of the zero 
+matrix $M \in M_n(K)$ \emph{known with finite precision} is always the 
+whole space although there exist invertible matrices in any 
+neighbourhood of $M$.
+
+We now focus on the computation of intersections. We pick $n$, $d_1$ and 
+$d_2$ three nonnegative integers such that $d_1 \leq n$, $d_2 \leq n$ 
+and $d_1 + d_2 \geq n$. Two subspaces of $K^n$ of dimension $d_1$ and 
+$d_2$ respectively meet along a subspace of dimension at most $d_1 + d_2 
+- n$. For all $d \leq d_1 + d_2 -n$, we can then define the subspace 
+$\mathcal V_d$ of $\Grass(n,d_1) \times \Grass(n,d_2)$ consisting of 
+pairs $(E_1, E_2)$ such that $\dim (E_1 \cap E_2) = d$ and consider the 
+function $f_d : \mathcal V_d \to \Grass(n, d)$ which sends $(E_1, E_2)$ 
+to $E_1 \cap E_2$. In charts, the function $f_d$ can be interpreted as
+the kernel of a matrix simply because $E_1 \cap E_2$ appears as the
+kernel of the canonical linear map $E_1 \oplus E_2 \to K^n$. We deduce
+for this that $f_d$ is differentiable and that its differential can be
+computed similarly to what we have done before.
+
+Finally, we note that similar results hold for images of matrices and,
+consequently, sums of subspaces.
 
 \subsection{The SOMOS 4 sequence}
 \label{ssec:SOMOS-solution}
 
-Recall (cf \S \ref{ssec:stepbystep}) that a SOMOS 4 sequence is a 
+Recall (\emph{cf} \S \ref{ssec:stepbystep}) that a SOMOS 4 sequence is a 
 four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
 + u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
 Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
