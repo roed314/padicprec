@@ -1,7 +1,8 @@
 %\documentclass{sig-alternate}
-\documentclass{amsart}
+\documentclass{lms}
 \usepackage[utf8]{inputenc}
 
+\usepackage{amsmath,amssymb}
 \usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{color}
 \usepackage{stmaryrd}
@@ -17,7 +18,7 @@
 \newtheorem{quest}[theo]{Question}
 \newtheorem{rem}[theo]{Remark}
 \newtheorem{ex}[theo]{Example}
-\theoremstyle{definition}
+%\theoremstyle{definition}
 \newtheorem{deftn}[theo]{Definition}
 \newtheorem{rmk}[theo]{Remark}
 
@@ -28,8 +29,11 @@
 \newcommand{\R}{\mathbb R}
 \renewcommand{\O}{\mathcal O}
 \newcommand{\XX}{\mathbf X}
+\newcommand{\trans}{{}^{\text t}}
 
 \newcommand{\val}{\text{\rm val}}
+\newcommand{\tr}{\text{\rm Tr}}
+\newcommand{\com}{\text{\rm Com}}
 \renewcommand{\prec}{\text{\rm prec}}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
@@ -119,14 +123,9 @@ compute then $f(z,t)$ which gives the result. Proceeding this way, we
 see that $z$ and $t$ are both known up to precision $O(p^{\min(n,m)})$ 
 are consequently the same holds for the coordinates of the result.
 The second approach consists in remarking that $f \circ f$ maps
-<<<<<<< HEAD
-$(x,y)$ to $(2x, 2y)$.  Computing $f \circ f(x,y)$ using the latter
-=======
 $(x,y)$ to $(2x, 2y)$. Computing $f \circ f(x,y)$ using the latter
->>>>>>> 177a9642401ae8c1ba0d7ad2abc160cd74e02fbf
 formula, it is clear that the result we get is known up to precision
-$(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p$
-equals $2$.
+$(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p = 2$.
 As a conclusion, the second approach yields a more accurate result.
 In other words, computing step-by-step creates ``artificial'' losses 
 of precision.
@@ -507,6 +506,7 @@ and sharply.
 \subsubsection*{Working precision}
 
 \section{Generalization to manifolds}
+\label{sec:manifold}
 
 Many natural $p$-adic objects do not lie in vector spaces:
 points in projective spaces or elliptic curves,
@@ -721,9 +721,9 @@ $K$. In that case $f'(x)$ also vanishes and Lemma \ref{lem:main} does
 not apply. 
 Another situation (which is more interesting) is that of $p$-adic 
 numbers: let us take $K = \Q_p$ and $n = p^k$ for some integer $k$. Then
-$|n| = p^{-k}$ and Lemma \ref{lem:main} tells us basically that raising
-a $p$-adic number to the $p^k$-th power increases the precision by $k$
-extra digits (which is actually a well-known fact).
+$|n| = p^{-k}$ and Lemma \ref{lem:main} reflects the well-known fact that
+raising a $p$-adic number to the $p^k$-th power increases the precision 
+by $k$ extra digits.
 
 \subsubsection*{Univariate polynomials}
 
@@ -791,9 +791,12 @@ find that $dr$ is obtained as the remainder of the division of $f - (q_1
 \cdot d f_1 + \cdots + q_s \cdot d f_s)$ by $(f_1, \ldots, f_s)$.
 
 We now focus on the computation of Gr\"obner basis. Recall that any 
-ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We 
-can then consider the application mapping a family $(f_1, \ldots, f_s)$ 
-of polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
+ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We can 
+then consider the application mapping a family $(f_1, \ldots, f_s)$ of 
+\emph{homogeneous}\footnote{This restriction will be convenient for us 
+mainly because we are using the article \cite{Vaccon}, which deals only 
+with homogeneous polynomials. It is however probably not essential.} 
+polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
 \ldots, g_t)$. It follows from Theorem 1.1 of \cite{Vaccon} that this 
 application at $(f_1, \ldots, f_s)$ is continuous provided that:
 \begin{itemize}
@@ -821,20 +824,86 @@ basis, the above equality implies that $d f_i$ is the remainder in
 the division of the $i$-th coefficient of the product
 $(d f_1, \ldots, d f_s) \cdot A$ by the family $(f_1, \ldots, f_s)$.
 
-
 \subsubsection*{Matrices}
 
-\todo{Determinant, characteristic polynomial, LU factorization, QR 
-factorization, kernels, images}
+Differentiating ring operations (sum, products, inverse) over matrices 
+is again straightforward; we just need to be careful that matrix 
+algebras are (in general) noncommutative.
+
+We now move to determinants, \emph{i.e.} we compute the differential
+of the function $\det : M_n(K) \to K$. It is a standard computation.
+To begin with, we consider an invertible matrix $M$ and write:
+\begin{eqnarray*}
+\det(M + dM) &=& \det(M) \cdot \det(I + M^{-1} \cdot dM)  \\
+&=& \det(M) \cdot \big(1 + \tr(M^{-1} \cdot dM)\big) \\
+&=& \det(M) + \tr(\com(M) \cdot dM)
+\end{eqnarray*}
+where $\com(M)$ denotes the comatrix of $M$. The differential of 
+$\det$ at $M$ is then $dM \mapsto \tr(\com(M) \cdot dM)$. It turns
+out that this formula is still valid when $M$ is not invertible.
+The same computation extends readily to characteristic polynomials,
+since they are defined as determinants. More precisely, let us 
+consider the function $\chi : M_n(K) \to K_{\leq n}[X]$ (where
+the latter ring denotes the finite dimensional vector space of 
+polynomials over $K$ of degree at most $n$) taking a matrix $M$
+to its characteristic polynomial $\det(X-M)$.
+Then $\chi$ is differentiable at each point $M \in M_n(K)$ and its 
+differential is given by $dM \mapsto \tr(\com(X{-}M) \cdot dM)$.
+
+Other important tools related to matrices are usual factorizations as, 
+for example, LU factorization. In what follows, let us agree to define a 
+LU factorization of a square matrix $M \in M_n(K)$ as a writing $M = LU$ 
+where $L$ is lower triangular and unipotent and $U$ is upper triangular. 
+Such a writing exists and is unique provided that all principal minors 
+of $M$ do not vanish. We can then consider the mapping $M \mapsto (L,U)$ 
+defined over the Zariski-open set of matrices satisfying the above 
+condition. In order to differentiate it, we differentiate the relation 
+$M = LU$ and rewrite the result as follows:
+$$L^{-1} dM \: U^{-1} = L^{-1} \cdot dL + dU \cdot U^{-1}.$$
+We remark that in the right hand side of the above formula, the first
+summand is lower triangular and all its diagonal entries vanish whereas 
+the second summand is upper triangular. Hence in order to compute $dL$
+and $dU$, one can proceed as follows: (1)~we compute the product $dX = 
+L^{-1} dM \: U^{-1}$, (2)~we separate the lower and upper part of $dX$
+obtaining this way $L^{-1} \cdot dL$ and $dU \cdot U^{-1}$ and (3)~we
+recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the 
+left and $U$ on the right respectively.
+
+A similar argument works for QR factorization.
+For us, a QR factorization of a square matrix $M \in M_n(K)$ will be
+a writing $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
+orthogonal in the sense that $\trans Q \cdot Q$ is diagonal. As before, such 
+a writing exists and is unique on a Zariski-open subset of $M_n(K)$. The
+mapping $f : M \mapsto (Q,R)$ is then well defined on this subset. We 
+would like to emphasize at this point that the orthogonality condition
+defines a sub-manifold of $M_n(K)$ which is a apparently \emph{not} a
+vector space (it is defined by equations of degree $2$). The codomain
+of $f$ is then also a manifold; this example then fits to the setting
+of \S \ref{sec:manifold} but not to those of \S \ref{sec:philosophy}. 
+The generalization made in \S \ref{sec:manifold} is then needed.
+Anyway, we can differentiate $f$ by following the method we used for LU 
+factorization: differentiating the relation $M = QR$, we obtain:
+\begin{equation}
+\label{eq:diffQR}
+\trans Q \cdot dM \cdot R^{-1} = \trans Q \cdot dQ + \Delta \cdot dR 
+\cdot R^{-1}
+\end{equation}
+where $\Delta = \trans Q \cdot Q$ is a diagonal matrix by definition.
+Moreover by differentiating $\trans Q \cdot Q = \Delta$, we find that
+$\trans Q \cdot dQ$ can be written as the sum of an antisymmetric 
+matrix and a diagonal one. Since moreove $dR \cdot R^{-1}$ is upper
+triangular with all diagonal entries equal to $0$, we see that 
+Eq.~\eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
+and $dM$.
 
 \subsubsection*{Vector spaces}
 
-\todo{Intersection, sum}
+\todo{Kernels, images, intersection, sum}
 
 \subsection{The SOMOS 4 sequence}
 \label{ssec:SOMOS-solution}
 
-Recall (cf \S \ref{ssec:stepbystep}) that a SOMOS 4 sequence is a 
+Recall (\emph{cf} \S \ref{ssec:stepbystep}) that a SOMOS 4 sequence is a 
 four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
 + u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
 Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
