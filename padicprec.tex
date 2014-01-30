@@ -31,9 +31,12 @@
 \newcommand{\XX}{\mathbf X}
 \newcommand{\trans}{{}^{\text t}}
 
+\newcommand{\GL}{\text{\rm GL}}
+
 \newcommand{\val}{\text{\rm val}}
 \newcommand{\tr}{\text{\rm Tr}}
 \newcommand{\com}{\text{\rm Com}}
+\newcommand{\Grass}{\text{\rm Grass}}
 \renewcommand{\prec}{\text{\rm prec}}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
@@ -867,9 +870,13 @@ and $dU$, one can proceed as follows: (1)~we compute the product $dX =
 L^{-1} dM \: U^{-1}$, (2)~we separate the lower and upper part of $dX$
 obtaining this way $L^{-1} \cdot dL$ and $dU \cdot U^{-1}$ and (3)~we
 recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the 
-left and $U$ on the right respectively.
+left and $U$ on the right respectively. 
+The above discussion extends almost \emph{verbatim} to LUP 
+factorization; the only difference is that LUP factorizations are not 
+unique but they are on a small neighbourhood of $M$ if we fix the matrix 
+$P$.
 
-A similar argument works for QR factorization.
+A similar argument works for QR factorization as well.
 For us, a QR factorization of a square matrix $M \in M_n(K)$ will be
 a writing $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
 orthogonal in the sense that $\trans Q \cdot Q$ is diagonal. As before, such 
@@ -898,7 +905,63 @@ and $dM$.
 
 \subsubsection*{Vector spaces}
 
-\todo{Kernels, images, intersection, sum}
+Let $d$ and $n$ be two nonnegative integers such that $d \leq n$. The 
+Grassmannian $\Grass(d,n)$ is the set of all sub-vector spaces of $K^n$ 
+of dimension $d$. It defines an algebraic variety over $K$ and hence
+\emph{a fortiori} a $K$-manifold in the sense of \S \ref{ssec:manifold}.
+Concretely, a vector space $V \subset K^n$ of dimension $d$ is given by 
+a rectangular matrix $M \in M_{d,n}(K)$ whose rows form a basis of $V$ 
+and two such matrices $M$ and $M'$ define the same vector space if there 
+exists $P \in \GL_d(K)$ such that $M = P M'$. Performing row echelon, we 
+find that we can always choose the above matrix $M$ in the particular
+shape:
+$$M = \begin{pmatrix} I_d & M' \end{pmatrix} \cdot P$$
+where $I_d$ denotes the $(d \times d)$ identity matrix, $M' \in M_{d, 
+n-d}(K)$ and $P$ is a permutation matrix of size $n$. Moreover two 
+such writings with the same $P$ necessarily coincide. Hence each 
+permutation matrix $P$ defines a chart $U_P \subset \Grass(d,n)$ which
+is canonically diffeomorphism to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
+
+Let us now consider the open subset of $M_{n,n-d}(K)$ consisting of 
+matrices of full rank. The left kernel defines a mapping $\text{LK} : 
+M_{n,n-d}(K) \to \Grass(d,n)$. Let us prove that it is differentiable 
+and compute its differential around some point $M \in M_{n,n-d}(K)$. Of 
+course, there exists a neighbourhood $\mathcal U$ of $M$ whose image is 
+entirely contained in a given chart $U_P$. We assume for simplicity that 
+$P$ is the identity. On $\mathcal U$, the map $\text{LK}$ corresponds in 
+our chart to the application that takes $M$ to the unique matrix $N \in
+M_{d, n-d}(K)$ such that $\begin{pmatrix} I_d & N \end{pmatrix} \cdot M 
+= 0$. The implicit function theorem then implies that $\text{LK}$ is
+differentiable. Furthermore, its differential satisfies the relation
+$\begin{pmatrix} 0 & dN \end{pmatrix} \cdot M +
+\begin{pmatrix} I_d & N \end{pmatrix} \cdot dM = 0$,
+from which we can compute $dN$ by projecting on the $(n-d)$ last
+columns.
+
+We can develop further this example and study what happens on the 
+closed subset of $M_{n,n-d}(K)$ where matrices have not full rank. On
+this subspace, the left kernel has dimension $< d$ and then no longer
+defines a point in $\Grass(n,d)$. Nevertheless, for all integer $r <
+n-d$, we can consider the subset $\mathcal V_r \subset M_{n,n-d}(K)$
+of matrices whose rank are exactly rank $d$. It is locally closed in
+$M_{n,n-d}(K)$ with respect to the Zariski topology and hence defines
+a $K$-manifold. Furthermore, we have a mapping $\text{LK}_r : \mathcal 
+V_r \to \Grass(n,n-r)$ which is differentiable and whose differential 
+can be computed as before.
+
+The lesson from this study is the following. If we have to compute the 
+kernel of a matrix $M$ over $K$ known with finite precision, \emph{a 
+priori} we first need to determine what is the rank of $M$. However, the 
+rank function is not continuous --- it is only lower semi-continuous --- 
+and hence cannot be determined from sure from $M$ (expect if $M$ has 
+full rank). We then need to make an extra hypothesis and the more natural 
+one is arguably to assume that $M$ has actually the minimal rank that it 
+can have. With this convention, for instance, the kernel of the zero 
+matrix $M \in M_n(K)$ \emph{known with finite precision} is always the 
+whole space although there exist invertible matrices in any 
+neighbourhood of $M$.
+
+
 
 \subsection{The SOMOS 4 sequence}
 \label{ssec:SOMOS-solution}
