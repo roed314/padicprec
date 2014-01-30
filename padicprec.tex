@@ -814,12 +814,12 @@ where $A$ is a $(s \times t)$ matrix with coefficients in $K[\XX]$.
 Moreover following Vaccon's construction, we see that the entries of $A$ 
 can be chosen in such a way that they define differentiable functions.
 Differentiating Eq.~\eqref{eq:prodgrobner}, we get:
-$$(d f_1, \ldots, d f_s) \cdot A = - (f_1, \ldots, f_s) \cdot dA + 
+$$(d f_1, \ldots, d f_s) \cdot A + (f_1, \ldots, f_s) \cdot dA = 
 (d g_1, \ldots, d g_t).$$
 Finally, using that we are working with \emph{reduced} Gr\"obner
-basis, the above equality implies that $d f_i$ is the remainder in
+basis, the above equality implies that $d g_i$ is the remainder in
 the division of the $i$-th coefficient of the product
-$(d f_1, \ldots, d f_s) \cdot A$ by the family $(f_1, \ldots, f_s)$.
+$(d f_1, \ldots, d f_s) \cdot A$ by the family $(g_1, \ldots, g_t)$.
 
 
 \subsubsection*{Matrices}
