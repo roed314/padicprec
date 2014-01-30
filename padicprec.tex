@@ -946,7 +946,7 @@ n-d$, we can consider the subset $\mathcal V_r \subset M_{n,n-d}(K)$
 of matrices whose rank are exactly rank $d$. It is locally closed in
 $M_{n,n-d}(K)$ with respect to the Zariski topology and hence defines
 a $K$-manifold. Furthermore, we have a mapping $\text{LK}_r : \mathcal 
-V_r \to \Grass(n,n-r)$ which is differentiable and whose differential 
+M_r \to \Grass(n,n-r)$ which is differentiable and whose differential 
 can be computed as before.
 
 The lesson from this study is the following. If we have to compute the 
@@ -961,7 +961,22 @@ matrix $M \in M_n(K)$ \emph{known with finite precision} is always the
 whole space although there exist invertible matrices in any 
 neighbourhood of $M$.
 
+We now focus on the computation of intersections. We pick $n$, $d_1$ and 
+$d_2$ three nonnegative integers such that $d_1 \leq n$, $d_2 \leq n$ 
+and $d_1 + d_2 \geq n$. Two subspaces of $K^n$ of dimension $d_1$ and 
+$d_2$ respectively meet along a subspace of dimension at most $d_1 + d_2 
+- n$. For all $d \leq d_1 + d_2 -n$, we can then define the subspace 
+$\mathcal V_d$ of $\Grass(n,d_1) \times \Grass(n,d_2)$ consisting of 
+pairs $(E_1, E_2)$ such that $\dim (E_1 \cap E_2) = d$ and consider the 
+function $f_d : \mathcal V_d \to \Grass(n, d)$ which sends $(E_1, E_2)$ 
+to $E_1 \cap E_2$. In charts, the function $f_d$ can be interpreted as
+the kernel of a matrix simply because $E_1 \cap E_2$ appears as the
+kernel of the canonical linear map $E_1 \oplus E_2 \to K^n$. We deduce
+for this that $f_d$ is differentiable and that its differential can be
+computed similarly to what we have done before.
 
+Finally, we note that similar results hold for images of matrices and,
+consequently, sums of subspaces.
 
 \subsection{The SOMOS 4 sequence}
 \label{ssec:SOMOS-solution}
