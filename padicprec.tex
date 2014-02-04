@@ -490,6 +490,11 @@ locally analytic function.
 Let $f$ be locally analytic function $K^n \rightarrow K^m$. Let $x \in K^n$ be such that $f'(x)$ is surjective. Then the radius of the ball needed can be read from the Newton polygon given by the norms of the Taylor series expansion of $f$ at $x$. We assume the $C$ given by the Banach-Schauder is given, $\varepsilon = \frac{1}{C}$ and now, we try to recover the link between $\varepsilon$ and $\delta$.
 \end{rmk}
 
+\begin{prop}
+\label{prop:locanalytic}
+\todo{Write a proposition.}
+\end{prop}
+
 \begin{proof}
 Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=f'(0) \cdot x +\sum_{n \geq 2} \frac{f^{(n)}(0)}{n!} \cdot (x, \dots,x)$ is the Taylor series expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
 
@@ -530,12 +535,162 @@ Therefore, by definition of the Legendre-Fanchel transform, it is enough to:
 
 \subsection{Automatic sharp track of precision}
 
-\todofor{Xavier}{
-Explain here how to build a software that tracks precision automatically 
-and sharply.
-}
+Lemma \ref{lem:main} and Proposition \ref{prop:locanalytic} have important 
+applications to effective computations with $p$-adic numbers or power 
+series, that we are going to discuss now. Let us recall first that a 
+datum involving elements of a complete ultrametric field $K$ (\emph{e.g.} 
+$p$-adic numbers or power series) cannot be stored entirely on a computed 
+because they basically convey an infinite amount of informations. That is 
+why, instead of this datum itself, we generally work with neighborhoods 
+of it. Such neighborhoods are typically sets of the form $x + H$ where 
+$x$ is some element lying in a $K$-Banach $E$ and $H$ is a lattice in 
+$E$. A basic example is the approximate $5$-adic number $1 + O(5^{10})$ 
+which corresponds to the neighborhood of $1$ in $\Z_5$, which is the set 
+of all $5$-adic numbers congruent to $1$ modulo $5^{10}$. In the context
+of computer science, we will often use the notation $x + O(H)$ to refer 
+to $x + H$.
 
-\subsubsection*{Working precision}
+Now, let us consider a function {\tt f} (in the sense of computer 
+science) that takes as input an (approximate) element lying in an open 
+subset $U$ of a $K$-Banach space $E$ and outputs another (approximate) 
+element lying in an open subset $V$ of another $K$-Banach space $F$. Of 
+course, this function can be modelised by a \emph{continuous} 
+mathematical function $f : U \to V$. The relation is the following: when 
+{\tt f} is called on the input $x + O(H)$, it outputs $x' + O(H')$ with 
+$f(x+H) \subset x' + H'$. We say that {\tt f} does not generate 
+artificial loss of precision if the above inclusion is an equality; it is 
+often not the case as shown in \S \ref{ssec:stepbystep}.
+
+\smallskip
+
+Let us assume now that $f$ is locally analytic on $U$ and that $x$ and 
+$H$ are chosen so that Lemma \ref{lem:main} applies. Then $f(x+H) = f(x) 
++ f'(x)(H)$ and the smallest possible $H'$ is $f'(x)(H)$. In other 
+words, the function {\tt f} generates artificial loss of precision if 
+the precision $H'$ it outputs is strictly larger that $f'(x)(H)$.
+The aim of this section is to explain how, under the above hypothesis, 
+one can implement the function {\tt f} so that it always outputs the
+optimal precision $O(H')$ with $H' = f'(x)(H)$.
+
+\subsubsection*{Forward computation}
+
+The execution of the function {\tt f} yields a factorization:
+$$f = f_n \circ f_{n-1} \circ \cdots \circ f_1$$
+where the $f_i$'s correspond to each individual basic step (like 
+addition, multiplication or affectation of variables); it is then a
+``nice'' (in particular locally analytic) function. For all 
+$i$, let $U_i$ denote the codomain of $f_i$. Concretely, $U_i$ is the 
+set of all possible values of all variables which are defined in the 
+program after the execution of $i$-th step. Mathematically, it is an 
+open subset in some $K$-Banach space $E_i$. We have $U_n = V$ and the 
+domain of $f_i$ is $U_{i-1}$ where, by convention, we have set $U_0 = 
+U$.
+For all $i$, we set $g_i = f_i \circ \cdots \circ f_1$ and $x_i = 
+g_i(x)$. 
+
+When we execute the function {\tt f} on the input $x + O(H)$, we apply 
+first $f_1$ to this input obtaining this way a first result $x_1 + 
+O(H_1)$ and then go on with $f_2, \ldots, f_n$. At each step, we obtain 
+a new intermediate result that we denote by $x_i + O(H_i)$. A way to 
+guarantee that no artificial loss of precision are generated is then to 
+ensure $H_i = f'_i(x)(H_{i-1}) = g_i'(x)(H)$ at each step. This can be 
+achieved by reimplementing all primitives (addition, multiplication, 
+\emph{etc.}) and make them compute at the same time the function $f_i$
+they implement together with its differential and apply the latter to
+the ``current'' lattice $H_i$.
+
+There is nevertheless an important issue with this approach: in order to 
+be sure that Lemma \ref{lem:main} applies, we need \emph{a priori} to 
+compute the exact values of all $x_i$'s, which is of course not possible! 
+Assuming that $g'_i(x)$ is surjective for all $i$, we can fix it as 
+follows. For each $i$, we fix a lattice $\tilde H_i \subset H$ such that 
+Lemma \ref{lem:main} applies to $g_i$, $x$ and $\tilde H_i$. Under our 
+assumption, such lattices always exist and can be computed dynamically 
+using Proposition \ref{prop:locanalytic}. Now, the equality $g_i(x + 
+\tilde H_i) = x_i + g'_i(x)(\tilde H_i)$ means that any perturbation of 
+$x_i$ by an element in $g'_i(x) (\tilde H_i)$ is induced by a 
+perturbation of $x$ by an element in $\tilde H_i \subset H$. Hence, we 
+can freely compute $x_i$ modulo $g'_i(x) (\tilde H_i)$ without changing 
+the final result. Since $g'_i(x)(\tilde H_i)$ is a lattice in $E_i$, this 
+remark makes possible the computation of $x_i$.
+
+\begin{rmk}
+In some cases, it would be possible to determine suitable lattices 
+$\tilde H_i$ together with their images under $g'_i(x)$ (or, at
+least, good approximations of them) before starting the computation 
+by using mathematical arguments. If possible, this generally helps a
+lot. We shall present in \S \ref{ssec:SOMOS-solution} an example of 
+this.
+\end{rmk}
+
+\subsubsection*{Backward computation}
+
+The previous approach works only if the $g'_i(x)$'s are all surjective. 
+Unfortunately, this assumption is in general not fulfilled. Indeed, 
+remember that the dimension of $E_i$ is roughly the number of used 
+variables after the step $i$. It all $g_i'(x)$ were surjective, this 
+would mean that the function {\tt f} never initializes a new variable!
+In what follows, we propose another solution that does not assume the
+surjectivity of $g'_i(x)$.
+
+For $i \in \{1, \ldots, n\}$, define $h_i = f_n \circ \cdots \circ 
+f_{i+1}$, so that we have $f = h_i \circ g_i$. On differentials, we 
+have $f'(x) = h_i'(x_i) \circ g'_i(x)$. Since $f'(x)$ is surjective (by 
+assumption), we deduce that all $h'_i(x_i)$ are surjective. Let $H'_i$ 
+be a lattice in $E_i$ such that:
+\begin{enumerate}[(a)] 
+\item \label{item:Hi1}
+$H'_i$ is contained in $H_i + \ker h'_i(x_i) = h'_i(x_i)^{-1}
+\big(f'(x)(H)\big)$;
+\item \label{item:Hi2}
+Lemma \ref{lem:main} applies with the function $h_i$, the point
+$x_i$ and the lattice $H'_i$.
+\end{enumerate}
+Applying Lemma \ref{lem:main}, we then get:
+$$h_i(x_i + H'_i) = x_n + h'_i(x_i)(H'_i) \subset x_n + f'(x)(H).$$
+Therefore, if after the $i$-th step of the execution of the function
+{\tt f}, we modify the intermediate value $x_i$ by an element of
+$H'_i$, the final result remains unchanged. In other words, it is
+enough to compute $x_i$ modulo $H'_i$.
+
+It is nevertheless not obvious to implement these ideas in practice
+because when we enter in the $i$-th step of the execution of {\tt f},
+we have not computed $h_i$ yet and hence are \emph{a priori} not able
+to determine a lattice $H'_i$ satisfying the axioms \eqref{item:Hi1}
+and \eqref{item:Hi2} above.
+A possible solution to tackle this problem is to proceed in several
+stages as follows: 
+\begin{enumerate}[(1)]
+\item \label{item:smallprec}
+for $i$ going from $1$ to $n$, we compute $x_i$, $f'_i(x_{i-1})$ 
+at small precision (but enough for the second step) together with an
+approximation of the Newton polygon of the higher order derivatives;
+\item \label{item:determineHi}
+for $i$ going from $n$ to $1$, we compute $h'_i(x_i)$ and
+determines a lattice $H'_i$ satisfying \eqref{item:Hi1} and 
+\eqref{item:Hi2};
+\item \label{item:finalcomp}
+for $i$ going from $1$ to $n$, we recompute $x_i$ modulo $H'_i$
+and finally outputs $x_n + O\big(f'(x)(H)\big)$.
+\end{enumerate}
+Using relaxed algorithms for computing with elements in $K$ (\emph{cf} 
+\cite{}), we can reuse in Step~\eqref{item:finalcomp} the computations 
+already performed in Step~\eqref{item:smallprec}. The ``backward'' method 
+we have just presented is then probably not much more expansive than the 
+``forward'' method, although it is certainly much more difficult to 
+implement. 
+
+We conclude this Section by remarking that the ``backward'' method seems 
+to be particularly well suited to computations with lazy $p$-adic. Indeed 
+in this setting, a target precision (\emph{i.e.} a precision on the 
+output) is fixed and the software determines automatically the precision 
+it needs on the input to perform the computation. To do this, it first 
+builds the ``skeleton'' of the computation (\emph{i.e.} it determines the 
+functions $f_i$ and eventually computes the $x_i$ at small precision when 
+branching points occur and it needs to decide which branch it follows) 
+and then runs over this skeleton in the reverse direction in order to 
+determine (an upper bound of) the needed precision at each step. The 
+similarity with our approach is noticeably strong.
 
 \section{Generalization to manifolds}
 \label{sec:manifold}
@@ -715,8 +870,8 @@ this computation is easy even if the underlying operation is
 sophisticated (\emph{e.g.} Gr\"obner basis).
 In \S \ref{ssec:SOMOS-solution}, we study the SOMOS 4 sequence 
 introduced in \S \ref{ssec:stepbystep} and, making a crucial use of 
-Lemma \ref{lem:main} and Proposition \ref{prop:}, we design a quite 
-\emph{stable} algorithm for computing it.
+Lemma \ref{lem:main} and Proposition \ref{prop:locanalytic}, we design
+a quite \emph{stable} algorithm for computing it.
 
 \subsection{Differential of usual operations}
 \label{ssec:differentials}
@@ -774,7 +929,7 @@ above extends readily to convergent series (see also
 Another usual operations on polynomials is the factorization. Suppose 
 that we are given a monic polynomial $P \in K[X]$ written as a product 
 $P_0 = A_0 B_0$ where $A_0$ and $B_0$ are monic and coprime. Hensel's 
-lemma implies that there exists a small neighbourhood $\mathcal U$ of 
+lemma implies that there exists a small neighborhood $\mathcal U$ of 
 $P_0$ such that any monic polynomial $P \in \mathcal U$ factors uniquely 
 as $P = A B$ with $A$ and $B$ monic and close enough to $A_0$ and $B_0$ 
 respectively. Thus, we can consider the application $f : P \mapsto (A,B)$ 
@@ -902,7 +1057,7 @@ recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the
 left and $U$ on the right respectively. 
 The above discussion extends almost \emph{verbatim} to LUP 
 factorization; the only difference is that LUP factorizations are not 
-unique but they are on a small neighbourhood of $M$ if we fix the matrix 
+unique but they are on a small neighborhood of $M$ if we fix the matrix 
 $P$.
 
 A similar argument works for QR factorization as well.
@@ -955,7 +1110,7 @@ Let us now consider the open subset of $M_{n,n-d}(K)$ consisting of
 matrices of full rank. The left kernel defines a mapping $\text{LK} : 
 M_{n,n-d}(K) \to \Grass(d,n)$. Let us prove that it is differentiable 
 and compute its differential around some point $M \in M_{n,n-d}(K)$. Of 
-course, there exists a neighbourhood $\mathcal U$ of $M$ whose image is 
+course, there exists a neighborhood $\mathcal U$ of $M$ whose image is 
 entirely contained in a given chart $U_P$. We assume for simplicity that 
 $P$ is the identity. On $\mathcal U$, the map $\text{LK}$ corresponds in 
 our chart to the application that takes $M$ to the unique matrix $N \in
@@ -988,7 +1143,7 @@ one is arguably to assume that $M$ has actually the minimal rank that it
 can have. With this convention, for instance, the kernel of the zero 
 matrix $M \in M_n(K)$ \emph{known with finite precision} is always the 
 whole space although there exist invertible matrices in any 
-neighbourhood of $M$.
+neighborhood of $M$.
 
 We now focus on the computation of intersections. We pick $n$, $d_1$ and 
 $d_2$ three nonnegative integers such that $d_1 \leq n$, $d_2 \leq n$ 
@@ -1102,8 +1257,8 @@ and $d'$ are replaced by other values which are congruent to them modulo
 $p^{\prec'}$. In particular it holds if $a'$, $b'$, $c'$ and $d'$ denotes
 the values of $a$, $b$, $c$ and $d$ after the execution of line
 \ref{line:lift}. Now applying Lemma \ref{lem:main} and Proposition
-\ref{prop:} to $\varphi_{i-1}$ and $\varphi_i$ (at the point $(u_0,
-u_1, u_2, u_3)$), we get:
+\ref{prop:locanalytic} to $\varphi_{i-1}$ and $\varphi_i$ (at the point 
+$(u_0, u_1, u_2, u_3)$), we get:
 $$f\big((u_{i-1}, u_i, u_{i+1}, u_{i+2}) + p^N \varphi_{i-1}(\Z_p^4)\big)
 = (u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4).$$
 By the discussion above, this implies in particular that $f(a',b',c',d')$
