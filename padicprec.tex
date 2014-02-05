@@ -187,7 +187,7 @@ v_n = \val(u_0) + \cdots + \val(u_{n-4}).
 However, on the other hand, one can prove that the SOMOS 4 sequence 
 exhibits the \emph{Laurent phenomenon}. This means that, for all integer 
 $n$, there exists a polynomial $P_n$ in $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 
-1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$.
+1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$ (see \cite{Fomin-Zelevinsky}).
 From the latter formula, it follows directly that if $u_0$, $u_1$,
 $u_2$ and $u_3$ are known up to precision $O(p^N)$ then all $u_n$'s
 are also known with the same precision. Thus, the term $v_n$ that 
@@ -301,7 +301,7 @@ space is complete and all norms over such a space are equivalent
 concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
 Theorem) remain true in the ultrametric setting.
 
-\begin{deftn}
+\begin{deftn} \label{deftn : diff}
 Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
 subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
 \emph{differentiable} at $v_0 \in U$ if there exists a 
@@ -431,7 +431,7 @@ is the ``identity map'' (which is an homeomorphism by Lemma
 We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, by 
 the open mapping Theorem, there exists $C>0$ such that $B_F(1) \subset 
 C \cdot f'(0) \cdot B_E(1)$. Let $\varepsilon>0$ be such that 
-$\varepsilon C < 1$. Let $U_\varepsilon \subset E$ be given by the fact 
+$\varepsilon C < 1$. Let $U_\varepsilon \subset E$ be given by definition \ref{deftn : diff} and the fact 
 that $f$ is differentiable at $0$. We may assume $U_\varepsilon = 
 B_E(\delta)$ for some $\delta >0$.
 
@@ -442,7 +442,7 @@ By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq
 \varepsilon \Vert x \Vert $. Therefore, there exists $y \in f'(0) \cdot 
 H$ such that 
 $\Vert y \Vert \leq \varepsilon r$. By the open mapping Theorem and the 
-surjectivityy of $f'(0)$, there exists $x_1 \in E$ such that $f'(0) \cdot 
+surjectivity of $f'(0)$, there exists $x_1 \in E$ such that $f'(0) \cdot 
 x_1 =y$ and $\Vert x_1 \Vert \leq \varepsilon C \cdot r < r$. Thus, $x_1 
 \in B^-_E(r) \subset H$ and $f(x)= f'(0) \cdot (x-x_1) \in f'(0) 
 \cdot H$.
@@ -1015,7 +1015,7 @@ four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4}
 + u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
 Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
 u_2, u_3$ are some indeterminates, that each $u_n$ is a Laurent 
-polynomial with coefficients in $\Z$ in these indeterminates.
+polynomial with coefficients in $\Z$ in these indeterminates (see \cite{Fomin-Zelevinsky}).
 
 From now, we will always consider SOMOS sequences with values in $\Q_p$ 
 (for some prime number $p$) and assume that $u_0, u_1, u_2, u_3$ are 
@@ -1159,6 +1159,10 @@ roughly a factor $n$.
   \emph{Linear Algebra over Zp[[u]] and related rings,} 
   to appear at LMS J. Comp. and Math. 
 
+\bibitem{Fomin-Zelevinsky}
+  S.~Fomin, A.~Zelevinsky
+  \emph{The Laurent phenomenon,}   Advances in Applied Mathematics 28: 119–144 (2002).
+  
 \bibitem{Gaudry}
   P.~Gaudry, T.~Houtmann, A.~Weng, C.~Ritzenthaler, D.~Kohel,
   \emph{The $2$-adic CM method for genus $2$}, 
