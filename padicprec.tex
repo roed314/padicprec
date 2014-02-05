@@ -400,9 +400,32 @@ ball''.
 
 \subsubsection*{Lattices and computers}
 
-\todofor{Xavier}{Explain that if $E$ is finite dimensional and $K$ (and 
-the absolute value is discrete), a lattice can be encoded by a finite 
-amount of informations.}
+Although elements of $K$ are not representable in thein entirety on a 
+computer, lattices in finite dimensional $K$-vector spaces are as soon 
+as the elements of the quotient $B_K(1)/B_K(r)$ are for all $r \in 
+(0,1)$. Indeed, given a lattice $L$ in $K^d$, there exists by definition 
+two positive rational numbers $a$ and $b$ such that 
+\begin{equation}
+\label{eq:incllattice}
+B_K(a)^d \subset L \subset B_K(b)^d.
+\end{equation}
+Moreover, a lattice $L$ satisfying \eqref{eq:incllattice} is uniquely 
+determined by its image in the quotient $B_K(b)^d / B_K(a)^d \simeq 
+(B_K(1)/B_K(r))^d$ with $r = \frac a b$. Therefore, the data of $L$ can 
+be encoded by a $(d \times d)$ matrix with coefficients in $B_K(1)/
+B_K(r)$. Thus, if elements in the latter ring are representable on a 
+computer, so are the lattices $L$ for which Eq.~\eqref{eq:incllattice} 
+holds. Finally, an arbitrary lattice $L$ in $K^d$ can be represented
+by a triple $(a,b,M)$ where $a$ and $b$ satisfies \eqref{eq:incllattice}
+and $M$ is a $(d \times d)$ matrix over $B_K(1)/B_K(\frac a b)$ 
+representing the image of $L$ in $B_K(b)^d / B_K(a)^d$.
+
+We furthermore remark that if $K = \Q_p$ (for some prime number $p$), 
+the quotient $B_K(1)/B_K(r)$ is isomorphism to some $\Z/p^n\Z$ (with $n 
+= \lfloor - \log_p r \rfloor$) are therefore is representable on a 
+computer. Thus, the above discussion applies when $K = \Q_p$. Similarly 
+it also applies when $K$ is a finite extension of $\Q_p$ or a field of
+Laurent series with coefficients in a finite field.
 
 \subsection{Images of lattices under differentiable functions}
 
@@ -534,6 +557,9 @@ In comparison with the previous proposition, $L_n=\frac{f^{(n)}(0)}{n!}$. Theref
 and therefore, \[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \varepsilon.\]
 The result follows \textit{mutatis mutandis}.
 \end{proof}
+
+\todo{Explain how Newton polygons considered above behave under
+usual operations (sum, multiplication and composition of functions).}
 
 \section{Tracking precision using differentials}
 \label{sec:tracking}
@@ -1078,7 +1104,7 @@ Q$ by $B$. This gives the differential. We note that the discussion
 above extends readily to convergent series (see also 
 \cite{Caruso-Lubicz}).
 
-\subsubsection*{Subresultants and B\'ezout coefficients}
+\subsubsection*{Greatest common divisors and B\'ezout coefficients}
 
 \todo{To be written.}
 
