@@ -246,20 +246,24 @@ tracking precision step-by-step.
 
 %\subsubsection*{Algorithms \emph{\`a la} Kedlaya}
 
-\section{A new philosophy}
-\label{sec:philosophy}
+\section{The main Lemma}
+\label{sec:mainlemma}
 
-The aim of this section is to develop a new point of view on $p$-adic 
-precision based on $p$-adic analysis. Actually, we shall generalize a 
-bit the setting and work over a general ultrametric field (see definition
-below).
+The theory of $p$-adic precision we want to develop is mainly based 
+on a single lemma of $p$-adic analysis. The aim of this Section is
+to state and prove this lemma. Consequences will be discussed after
+in Section \ref{sec:tracking}.
+
+From now, we generalize a bit the setting and work over a general 
+ultrametric complete field (see definition below). This includes 
+$p$-adic fields and Laurent series fields.
 
 \subsection{Ultrametric analysis}
 \label{ssec:ultrametric}
 
-In this section, we recall usual definitions and properties related to
-ultrametric analysis. We refer to Schneider \cite{Schneider} for a 
-complete exposition.
+We recall usual definitions and properties related to ultrametric 
+analysis. We refer to Schneider \cite{Schneider} for a complete 
+exposition.
 
 An \emph{absolute value} on a field $K$ is a multiplicative map $|\cdot| 
 : K \to \R_+$ satisfying the triangle inequality and sending every 
@@ -400,7 +404,7 @@ ball''.
 the absolute value is discrete), a lattice can be encoded by a finite 
 amount of informations.}
 
-\subsection{The main Lemma}
+\subsection{Images of lattices under differentiable functions}
 
 \begin{lem} \label{lem:main}
 Let $E$ and $F$ be two $K$-Banach and $f : U 
@@ -531,36 +535,36 @@ and therefore, \[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \va
 The result follows \textit{mutatis mutandis}.
 \end{proof}
 
-
-
-\subsection{Automatic sharp track of precision}
+\section{Tracking precision using differentials}
+\label{sec:tracking}
 
 Lemma \ref{lem:main} and Proposition \ref{prop:locanalytic} have 
 important applications to effective computations with $p$-adic numbers 
-or power series, that we are going to discuss now. Let us recall first 
+or power series, that we discuss in this Section. Let us recall first 
 that a datum involving elements of a complete ultrametric field $K$ 
 (\emph{e.g.} $p$-adic numbers or power series) cannot be stored entirely 
 on a computed because they basically convey an infinite amount of 
 informations. That is why, instead of this datum itself, we generally 
-work with neighborhoods of it. In what follows, we shall consider 
-neighborhoods of the form $x + H$ where $x$ is some element lying in a 
-$K$-Banach $E$ and $H$ is a lattice in $E$. A very basic example is the 
-approximate $p$-adic number $1 + O(p^N)$ which corresponds to the 
-neighborhood of $1$ in $\Z_p$, which is the set of all $p$-adic numbers 
-congruent to $1$ modulo $p^N$. We nevertheless emphasize that our 
-definition is quite flexible and allows many neighborhoods that we do 
-not consider in general. For instance, an ``admissible'' neighborhood 
-around a monic polynomial $P_0 \in \Q_p[X]$ of degree $d$ may be defined 
-by congruences of the form $P(a_i) \equiv P_0(a_i) \pmod {p^{n_i}}$ ($1 
-\leq i \leq d$) for some fixed elements $a_i \in \Q_p$ and relative 
-integers $n_i$.
+work with neighborhoods of it.
+
+In what follows, we shall consider neighborhoods of the form $x + H$ 
+where $x$ is some element lying in a $K$-Banach $E$ and $H$ is a lattice 
+in $E$. A very basic example is the approximate $p$-adic number $1 + 
+O(p^N)$ which corresponds to the neighborhood of $1$ in $\Z_p$, which is 
+the set of all $p$-adic numbers congruent to $1$ modulo $p^N$. We 
+nevertheless emphasize that our definition is quite flexible and allows 
+many neighborhoods that we do not consider in general. For instance, an 
+``admissible'' neighborhood around a monic polynomial $P_0 \in \Q_p[X]$ 
+of degree $d$ may be defined by congruences of the form $P(a_i) \equiv 
+P_0(a_i) \pmod {p^{n_i}}$ ($1 \leq i \leq d$) for some fixed elements 
+$a_i \in \Q_p$ and relative integers $n_i$.
 
 In the context of computer science, we will often use the notation $x + 
 O(H)$ to refer to $x + H$.
 
-\medskip
+\subsection{Automatic sharp track of precision}
 
-Now, let us consider a function {\tt f} (in the sense of computer 
+We consider a function {\tt f} (in the sense of computer 
 science) that takes as input an (approximate) element lying in an open 
 subset $U$ of a $K$-Banach space $E$ and outputs another (approximate) 
 element lying in an open subset $V$ of another $K$-Banach space $F$. Of 
@@ -849,7 +853,7 @@ points in projective spaces or elliptic curves,
 subspaces of a fixed vector space (which lie in Grassmannians),
 classes of isomorphism of certain curves (which lie in various moduli spaces),
 \emph{etc.}  In this section we extend the formalism 
-developed in Section \ref{sec:philosophy} to a more general setting:
+developed in Section \ref{sec:mainlemma} to a more general setting:
 we consider the quite general case of 
 differentiable manifolds locally modeled on ultrametric Banach spaces.
 This covers all the 
@@ -1232,7 +1236,7 @@ would like to emphasize at this point that the orthogonality condition
 defines a sub-manifold of $M_n(K)$ which is a apparently \emph{not} a
 vector space (it is defined by equations of degree $2$). The codomain
 of $f$ is then also a manifold; this example then fits to the setting
-of \S \ref{sec:manifold} but not to those of \S \ref{sec:philosophy}. 
+of \S \ref{sec:manifold} but not to those of \S \ref{sec:mainlemma}. 
 The generalization made in \S \ref{sec:manifold} is then needed.
 Anyway, we can differentiate $f$ by following the method we used for LU 
 factorization: differentiating the relation $M = QR$, we obtain:
