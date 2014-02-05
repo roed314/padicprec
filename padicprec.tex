@@ -427,54 +427,46 @@ is the ``identity map'' (which is an homeomorphism by Lemma
 \ref{lem:reductionball}).
 \end{rmk}
 
-\begin{proof}
 We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, by 
 the open mapping Theorem, there exists $C>0$ such that $B_F(1) \subset 
-C \cdot f'(0) \cdot B_E(1)$. Let $\varepsilon>0$ be such that 
-$\varepsilon C < 1$. Let $U_\varepsilon \subset E$ be given by definition \ref{deftn : diff} and the fact 
-that $f$ is differentiable at $0$. We may assume $U_\varepsilon = 
+C  f'(0) \cdot B_E(1)$. Let $\varepsilon>0$ be such that 
+$\varepsilon C < 1$. Let $U_\varepsilon \subset E$ be given by by definition \ref{deftn : diff} and the fact that $f$ is differentiable at $0$. We may assume $U_\varepsilon = 
 B_E(\delta)$ for some $\delta >0$.
 
-Let $r \in (0, \delta)$.
+Let $r \in (0, \delta)$. Let $B^-_E(r) \subset H \subset
+B_E(r).$
 Let us show that $f$ maps surjectively $H$ onto $f'(0) \cdot H$.
-Let $x \in H$. We must show that $f(x) \in f'(0) \cdot H$. 
-By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq 
-\varepsilon \Vert x \Vert $. Therefore, there exists $y \in f'(0) \cdot 
-H$ such that 
-$\Vert y \Vert \leq \varepsilon r$. By the open mapping Theorem and the 
-surjectivity of $f'(0)$, there exists $x_1 \in E$ such that $f'(0) \cdot 
-x_1 =y$ and $\Vert x_1 \Vert \leq \varepsilon C \cdot r < r$. Thus, $x_1 
-\in B^-_E(r) \subset H$ and $f(x)= f'(0) \cdot (x-x_1) \in f'(0) 
-\cdot H$.
+
+We first prove that $f(H) \subset f'(0) \cdot H$.
+Let $x \in H$. By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq 
+\varepsilon \Vert x \Vert $. Therefore, if $y=f(x)-f'(0) \cdot x,$ then $\Vert y \Vert \leq \varepsilon r$. As a consequence of the open mapping Theorem, $B_F(\varepsilon r) \subset 
+\varepsilon C  f'(0) \cdot B_E(r),$ and there exists $x_1 \in \varepsilon C  \cdot B_E(r)$ such that $f'(0) \cdot x_1 =y.$ Since $\varepsilon C <1,$  $x_1 \in B^-_E(r) \subset H.$ and finally, $f(x)= f'(0) \cdot (x-x_1) \in f'(0) \cdot H$.
 
 We shall now prove surjectivity. Let $y \in f'(0) \cdot H$. 
-Let $x_0 \in H$ be such that $y = f'(0) \cdot x_0$.
-We define by induction two sequences $(x_n)$ and $(z_n)$ by
+Let $x_0 \in H$ be such that $y = f'(0) \cdot x_0$. Since $f(x_0) \in f'(0) \cdot H,$ we can define $z_0 \in E$ to be such that $f'(0) \cdot z_0 = y - f(x_0)$ and $\Vert z_0 \Vert \leq C \cdot \Vert y - f(x_0) \Vert$.
+We then define by induction two sequences $(x_n)$ and $(z_n)$ by
 \begin{itemize}
+\item $x_{n+1}=x_n+z_n$ and 
 \item $z_n \in E$ is such that
 $f'(0) \cdot z_n = y - f(x_n)$ and
-$\Vert z_n \Vert \leq C \cdot \Vert y - f(x_n) \Vert$,
-\item $x_{n+1}=x_n+z_n$.
+$\Vert z_n \Vert \leq C \cdot \Vert y - f(x_n) \Vert$.
 \end{itemize}
-By definition, $\Vert z_0 \Vert < C \Vert y_0\Vert$ and $y_0 
-= -f(x_0)+f'(0) \cdot x_0$. Therefore, $\Vert y_0 \Vert < \varepsilon 
+By definition, $\Vert z_0 \Vert < C \Vert y_0\Vert$ and $y 
+= -f(x_0)+f'(0) \cdot x_0$. Therefore, $\Vert y \Vert < \varepsilon 
 \Vert x_0 \Vert \leq \varepsilon r$. Thus $\Vert z_0 \Vert \leq 
-\varepsilon C \cdot r < r$. Thus, $x_1$ and $z_0$ lie in $B^-_E(r) 
-\subset H$. An easy induction involving an analogous computation
+\varepsilon C \cdot r < r$. Thus, $z_0$ and $x_1=x_0+z_0$  lie in $B^-_E(r) 
+\subset H$. An easy induction involving an analoguous computation
 shows that the sequences $(x_n)$ and $(z_n)$ are well defined and
 take their values in $H$.
 
-Now, we notice that
-$y - f(x_{n+1}) = f(x_n) - f(x_{n+1}) + f'(0) \cdot z_n$.
-Therefore, using differentiability, we get:
+We notice that $y - f(x_{n+1}) = f(x_n) - f(x_{n+1}) + f'(0) \cdot z_n$.
+Since $z_n=x_{n+1}-x_n,$, if we use differentiability, we get:
 $$\Vert y  - f(x_{n+1}) \Vert 
 \leq \varepsilon \Vert z_n \Vert \leq \varepsilon C \cdot \Vert 
 y - f(x_n) \Vert,$$
 from what we deduce that $\Vert y - f(x_{n+1}) \Vert = 
 O(a^n)$ and $\Vert z_n \Vert = O(a^n)$ with $a = \varepsilon C < 1$.
-This shows that $(x_n)$ is a Cauchy sequence and therefore converges 
-(since $E$ is complete). If $x$ denotes the limit of $(x_n)$, we have
-$x \in H$ and $y=f(x)$. The result is proven.
+This shows that $(x_n)$ is a Cauchy sequence and, since $E$ is complete, it converges. If $x$ denotes the limit of $(x_n)$, we have $x \in H.$ Yet, as a consequence of the differentiability, $f$ is continuous over $U_\varepsilon.$ Therefore, since $x \in H \subset U_\varepsilon,$ then  $y=f(x)$. The result is proven.
 \end{proof}
 
 \todofor{Tristan}{Improve the end of this Subsection}
