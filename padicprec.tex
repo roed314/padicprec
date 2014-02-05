@@ -427,6 +427,7 @@ is the ``identity map'' (which is an homeomorphism by Lemma
 \ref{lem:reductionball}).
 \end{rmk}
 
+\begin{proof}
 We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, by 
 the open mapping Theorem, there exists $C>0$ such that $B_F(1) \subset 
 C  f'(0) \cdot B_E(1)$. Let $\varepsilon>0$ be such that 
@@ -466,7 +467,7 @@ $$\Vert y  - f(x_{n+1}) \Vert
 y - f(x_n) \Vert,$$
 from what we deduce that $\Vert y - f(x_{n+1}) \Vert = 
 O(a^n)$ and $\Vert z_n \Vert = O(a^n)$ with $a = \varepsilon C < 1$.
-This shows that $(x_n)$ is a Cauchy sequence and, since $E$ is complete, it converges. If $x$ denotes the limit of $(x_n)$, we have $x \in H.$ Yet, as a consequence of the differentiability, $f$ is continuous over $U_\varepsilon.$ Therefore, since $x \in H \subset U_\varepsilon,$ then  $y=f(x)$. The result is proven.
+This shows that $(x_n)$ is a Cauchy sequence and, since $E$ is complete, it converges. Because $H$ is closed, if $x$ denotes the limit of $(x_n)$, we have $x \in H.$ Yet, as a consequence of the differentiability, $f$ is continuous over $U_\varepsilon.$ Therefore, since $x \in H \subset U_\varepsilon,$ then  $y=f(x)$. The result is proven.
 \end{proof}
 
 \todofor{Tristan}{Improve the end of this Subsection}
@@ -475,55 +476,62 @@ Before discussing applications of Lemma \ref{lem:main} to ultrametric
 precision, we would like to describe a little bit more restrictive 
 setting where the constant $\delta$ appearing in this Lemma can be 
 computed explicitly.
+
+
+Indeed, when $f$ is a locally analytic function, we prove that we can recover $\delta$ from a Newton polygon defined with the Taylor series expansion of $f.$
+
 We refer to Schneider \cite{Schneider}, \S 6, for a definition of a 
 locally analytic function.
 
-\begin{rmk}
-Let $f$ be locally analytic function $K^n \rightarrow K^m$. Let $x \in K^n$ be such that $f'(x)$ is surjective. Then the radius of the ball needed can be read from the Newton polygon given by the norms of the Taylor series expansion of $f$ at $x$. We assume the $C$ given by the Banach-Schauder is given, $\varepsilon = \frac{1}{C}$ and now, we try to recover the link between $\varepsilon$ and $\delta$.
-\end{rmk}
 
-\begin{prop}
-\label{prop:locanalytic}
-\todo{Write a proposition.}
+\begin{prop}\label{prop:locanalytic}
+Let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ be locally analytic map $E \rightarrow F$.  Let $x \in E$, and let $f(x+h)=f(x)+\sum_{k \geq 0}^{+\infty} L_k \cdot (h,\dots,h)$ be the power series development of $f$ at $x$. We assume $L_1$ is surjective. 
+Let $C$ be given by the Banach-Schauder theorem for $L_1$, $\varepsilon = \frac{1}{C}$. 
+Let $F(t) = \sum_{k\geq 0}^{+\infty} \interleave L^{k+1}(0) \interleave  t^k \in \mathbb{R}[[t]]$, let $NP_F$ be its Newton polygon.
+Let $\mu$ be the slope of the line passing by $(0, \log_p \varepsilon)$ and tangent to $NP_F$.
+Then $r$ such that $\mu=\log_p r$ is enough for lemma \ref{lem:main}.
 \end{prop}
-
 \begin{proof}
-Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=f'(0) \cdot x +\sum_{n \geq 2} \frac{f^{(n)}(0)}{n!} \cdot (x, \dots,x)$ is the Taylor series expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
+Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=L_1 \cdot x +\sum_{n \geq 2} L_n \cdot (x, \dots,x)$ is the Taylor serie expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
 
-We shall now find $l$ such that if $x \in B_{K^n}(0,l)$, then $\Vert \sum_{n \geq 2} \frac{f^{(n)}(0)}{n!}(x,\dots,x) \Vert \leq \varepsilon$.
+We shall now find $l$ such that if $x \in B_{K^n}(0,l)$, then $\Vert \sum_{n \geq 2} L_n \cdot (x,\dots,x) \Vert \leq \varepsilon \vert x \vert $.
 
-By continuity and ultrametricity, it is enough for $l$ to be such that, if $x \in B_{K^n}(0,l)$, then  \[ \sup_{n \geq 2} \interleave f^{(n)}(0) \interleave \frac{\Vert x \Vert^n }{ \vert n! \vert } \leq \varepsilon \Vert x \Vert .\] 
+By continuity and ultrametricity, it is enough for $l$ to be such that, if $x \in B_{K^n}(0,l)$, then  \[ \sup_{n \geq 2} \interleave L_n \interleave \Vert x \Vert^n \leq \varepsilon \Vert x \Vert .\] 
 
-Therefore, \[ \sup_{n \geq 2} \interleave f^{(n)}(0) \interleave \frac{l^{n-1} }{\vert n! \vert } \leq \varepsilon . \] 
+Therefore, \[ \sup_{n \geq 2} \interleave L_n \interleave l^{n-1}  \leq \varepsilon . \] 
 
-In other words, $\forall n \geq 2$, $\interleave f^{(n)}(0) \interleave \frac{l^{n-1} }{\vert n! \vert } \leq \varepsilon.$
+In other words, $\forall n \geq 2$, $\interleave L_n \interleave \l^{n-1}  \leq \varepsilon.$
 
-By passing to logarithm and valuation, we get for all $n \geq 2$: \[ \log_p (\interleave f^{(n)}(0) \interleave )-(n-1) \log_p l-val (n!)\geq - \log_p \varepsilon.\]
+By passing to logarithm, we get for all $n \geq 2$ : \[ \log_p (\interleave L_n \interleave )-(n-1) \log_p l \geq - \log_p \varepsilon.\]
 
-By Legendre formula, it is enough that for all $n \geq 2$:
-\[
-\log_p (\interleave f^{(n)}(0) \interleave )-(n-1) (\log_p l-(n-1)) \geq - \log_p \varepsilon.
-\]
+If we denote by $NP_F$ the Newton polygon application of the power serie $F(t) = \sum_{k\geq 0}^{+\infty} \interleave L_{k+1} \interleave  t^k$, then it is enough that :
+\[ \sup_{ x \in \mathbb{R}_+} \left( NP_F(x) -x  \log_p l \right) \geq - \log_p \varepsilon.\]
 
-If we denote by $NP_F$ the Newton polygon application of the power series 
-\[
-F(t) = \sum_{k\geq 0}^{+\infty} \log_p (\interleave f^{(k+1)}(0) \interleave ) t^k
-\]
-then it is enough that:
-\[
-\sup_{ x \in \mathbb{R}_+} \left( NP_F(x) -x  \left( \log_p l - \frac{1}{p-1} \right) \right) \geq - \log_p \varepsilon.
-\]
+If $NP_F^*$ is the Legendre-Fanchel transform of $NP_F$, then it is enough that :
+\[ NP_F^* \left( \log_p l  \right) \leq \log_p \varepsilon.\]
 
-If $NP_F^*$ is the Legendre-Fanchel transform of $NP_F$, then it is enough that:
-\[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \varepsilon.\]
-
-Therefore, by definition of the Legendre-Fanchel transform, it is enough to:
+Therefore, by definition of the Legendre-Fanchel transform, it is enough to :
 \begin{itemize}
 \item take $M=(0,\log_p \varepsilon)$,
-\item draw the line passing by $M$ tangent to the graph of $NP_F$,
-\item if we denote by $\mu$ the slope of this line, then take $l$ such that $\mu + \frac{1}{p-1}=\log_p l$.
+\item draw the line passing by $M$ tangent to the graph of $NP_F$ (it could be tangent at infinity),
+\item if we denote by $\mu$ the slope of this line, then take $l$ such that $\mu=\log_p l$.
 \end{itemize}
 \end{proof}
+
+We remark that when considering finite-dimensional applications over $p$-adic fields, a more refined proposition is available.
+
+\begin{prop} \label{prop:locanalyticfinitedim}
+If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : Let $\mu$ be the slope of the line passing by $(0, \log_p \varepsilon)$ and tangent to $NP_F$.
+Then $r$ such that $\mu+\frac{1}{p-1}=\log_p r$ is enough for lemma \ref{lem:main}. 
+\end{prop}
+\begin{proof}
+In comparison with the previous proposition, $L_n=\frac{f^{(n)}(0)}{n!}$. Therefore, by Legendre formula, it would be enough that for all $n \geq 2$ :
+\[\log_p (\interleave f^{(n)}(0) \interleave )-(n-1) (\log_p l-(n-1)) \geq - \log_p \varepsilon,\]
+and therefore, \[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \varepsilon.\]
+The result follows \textit{mutatis mutandis}.
+\end{proof}
+
+
 
 \subsection{Automatic sharp track of precision}
 
