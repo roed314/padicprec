@@ -1167,10 +1167,10 @@ neighborhood of $(A,A)$.
 
 \subsubsection*{Factorization}
 
-Suppose that we are given a monic polynomial $P \in K[X]$ written as a 
+Suppose that we are given a polynomial $P_0 \in K_d[X]$ written as a 
 product $P_0 = A_0 B_0$ where $A_0$ and $B_0$ are monic and coprime. 
 Hensel's lemma implies that there exists a small neighborhood $\mathcal 
-U$ of $P_0$ such that any monic polynomial $P \in \mathcal U$ factors 
+U$ of $P_0$ in $K_d[X]$ such that any $P \in \mathcal U$ factors 
 uniquely as $P = A B$ with $A$ and $B$ monic and close enough to $A_0$ 
 and $B_0$ respectively. Thus, we can consider the application $f : P 
 \mapsto (A,B)$ defined on the subset of $\mathcal U$ consisting of monic 
@@ -1186,18 +1186,64 @@ between $A_0$ and $B_0$, it follows from Eq.~\eqref{eq:difffactor} that
 $dA$ (resp. $dB$) is the remainder in the Euclidean division of $V_0
 {\cdot} dP$ by $A_0$ (resp. of $U_0 {\cdot} dP$ by $B_0$).
 
-An important special case of the previous study occurs when $A_0$ has 
-degree $1$, that is $A_0(X) = X - \alpha$ with some $\alpha \in K$. The 
-application $P \mapsto A$ is then nothing but the mapping that follows 
-the simple root $\alpha$. Of course, its differential around $P_0$ can 
-be computed by the above method. Nevertheless there is a more direct way 
-to obtain it in this particular case: we write $(P + dP)(\alpha + 
-d\alpha) = 0$ and expand this. We obtain this way $P'(\alpha) d\alpha + 
-dP(\alpha) = 0$ where $P'$ denotes the derivative of $P$. Since $\alpha$ 
-is a simple root, $P'(\alpha)$ does not vanish and we recover $d \alpha 
-= - \frac{dP(\alpha)}{P'(\alpha)}$.
+\subsubsection*{Finding roots}
 
-\todo{Discuss a bit multiple roots.}
+An important special case of the previous study occurs when $A_0$ has 
+degree $1$, that is $A_0(X) = X - \alpha_0$ with some $\alpha_0 \in K$. 
+The application $P \mapsto A$ is then nothing but the mapping that 
+follows the simple root $\alpha_0$. Of course, its differential around 
+$P_0$ can be computed by the above method. Nevertheless there is a more 
+direct way to obtain it in this particular case: we write $(P_0 + 
+dP)(\alpha_0 + d\alpha) = 0$ and expand this. We obtain this way 
+$P_0'(\alpha_0) d\alpha + dP(\alpha_0) = 0$ where $P'$ denotes the 
+derivative of $P$. Since $\alpha_0$ is a simple root, $P_0'(\alpha_0)$ 
+does not vanish and we find:
+$$d \alpha = - \frac{dP(\alpha_0)}{P'_0(\alpha_0)}.$$
+
+We now address the case of a multiple roots. Let $P_0$ be a monic 
+polynomial of degree $d$ and $\alpha_0 \in K$ be a root of $P_0$ having 
+multiplicity $m > 1$. Due to the multiplicity, it is no longer possible 
+to follow to root $\alpha_0$ in a neighborhood of $P_0$. But it is if we 
+restrict ourselves to polynomials which have a root of multiplicity $m$ 
+close to $\alpha_0$. More precisely, let us consider the locus $\mathcal 
+V_m$ consisting of monic polynomials of degree $d$ having a root of 
+multiplicity at least $m$. It is a Zariski close subset of $K_d[X]$ and 
+it contains by assumption the polynomial $P_0$ we started with. 
+Moreover, the irreducible components of $\mathcal V_m$ that meet at 
+$P_0$ are in bijection with the set of roots of $P_0$ of multiplicity 
+$\geq m$. In particular $\alpha_0$ correspond to one of these 
+irreducible components; let us denote it by $\mathcal V_{m,\alpha_0}$. 
+The algebraic variety $\mathcal V_{m,\alpha_0}$ is a \emph{a fortioti} 
+$K$-manifold. Moreover there exists a differentiable function $f$ which 
+is defined on a neighborhood of $P_0$ in $\mathcal V_{m,\alpha_0}$ and 
+follows the root $\alpha_0$, \emph{i.e.} $f(P_0) = \alpha_0$ and for all 
+$P$ such that $f(P)$ is defined, $\alpha = f(P)$ is a root of 
+multiplicity (at least) $m$ of $P$. The existence of $f$ follows from 
+Hensel's Lemma applied to the factorisation $P_0(X) = (X-\alpha_0)^m 
+B_0(X)$ where $B_0(X)$ is a polynomial which is coprime to $X - 
+alpha_0$. We can finally compute the differential of $f$ at $P_0$ 
+(along $\mathcal V_{m,\alpha_0}$) by differentiating the equality
+$P^{(m-1})(\alpha) = 0$ where $P^{(i})$ denotes the $i$-th derivative
+of $P$. We find:
+\begin{equation}
+\label{eq:dalphamult}
+d \alpha = - \frac{dP^{(m-1)}(\alpha_0)}{P_0^{(m)}(\alpha_0)}.
+\end{equation}
+
+The above computation has actually interesting consequences on $p$-adic 
+precision. Let us illustrate this with an exemple. Consider the monic 
+polynomial $P(X) = X^2 + O(p^{2N}) X + O(p^{2N})$ (where $N$ is some 
+large integer) and assume that we are asking a softwate to compute one 
+of its roots. What is the right answer? We remark that, if $\alpha$ is 
+any $p$-adic number divisible by $p^n$, then $P(X)$ can be $X^2 - 
+\alpha^2$ whose roots are $\pm \alpha$. Conversely, we can prove that 
+the two roots of $P$ are necessarily divisible by $p^n$. Hence, the
+right answer is certainly $O(p^N)$. Nevertheless, if we know in addition 
+that $P$ has a double root, say $\alpha$, we can write $P(X) = (X - 
+\alpha)^2$ and identifying the coefficient in $X$, we get $\alpha =
+O(p^{2N})$ (or $O(p^{2N-1})$ if $p=2$). 
+This is exactly the result we get by applying Lemma \ref{lem:main} and
+using Eq.~\eqref{eq:dalphamult} to simplify the differential.
 
 \subsection{Multivariate polynomials}
 
