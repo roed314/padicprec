@@ -1084,6 +1084,7 @@ raising a $p$-adic number to the $p^k$-th power increases the precision
 by $k$ extra digits.
 
 \subsection{Univariate polynomials}
+\label{ssec:polynomials}
 
 For any integer $d$, let us denote by $K_{< d}[X]$ the set of 
 polynomials over $K$ of degree $< d$. It is a finite dimensional vector 
@@ -1107,7 +1108,62 @@ above extends readily to convergent series (see also
 
 \subsubsection*{Greatest common divisors and B\'ezout coefficients}
 
-\todo{To be written.}
+We fix two positive integers $n$ and $m$ with $n \geq m$. We consider the 
+function $f : K_n[X] \times K_m[X] \to (K_{\leq n}[X])^3$ which sends a 
+couple $(A,B)$ to the triple $(D, U, V)$ where $D$ is the \emph{monic} 
+greatest common divisor of $A$ and $B$ and $U$ and $V$ are the B\'ezout 
+coefficients of minimal degrees (they are those computed by extended 
+Euclide algorithm).
+The nonvanishing of the resultant of $A$ and $B$ defines a Zariski open 
+subset $\mathcal V_0$ where the function $\gcd$ takes the constant value 
+$1$. On the contrary, outside $\mathcal V_0$, $\gcd(A,B)$ is a polynomial 
+of positive degree. This implies that $f$ is not continuous outside 
+$\mathcal V_0$. On the contrary, on $\mathcal V_0$, the function $f$ is
+differentiable, and actually locally analytic.
+
+Of course, on $\mathcal V_0$, the first component $D$ is constant and 
+therefore $dD = 0$. To compute $dU$ and $dV$, one can simply 
+differentiate the B\'ezout relation $AU + BV = 1$. We get:
+$$A \cdot dU + B \cdot dV = - (dA \cdot U + dB \cdot V)$$
+from which we deduce that $dU$ (resp. $dV$) is obtained as the 
+remainder in the Euclidean division of $U{\cdot}dX$ by $B$ (resp. of 
+$V{\cdot}dX$ by $A$) where $dX = - (dA \cdot U + dB \cdot V)$.
+
+In order to go further and differentiate $f$ outside $\mathcal V_0$, we 
+define, for all integer $i$, the subset $\mathcal V_i$ of $K_n[X] \times 
+K_m[X]$ as the locus where the $\gcd$ has degree $i$. The theory of 
+subresultants shows that $\mathcal V_i$ is locally closed with respect to 
+the Zariski topology. In particular, it defines a $K$-manifold in the 
+sense of Appendix \ref{sec:manifold}. This is interesting because the 
+restriction of $f$ to $\mathcal V_i$ is now differentiable. To compute
+its differential, we proceed along the same lines as before: we 
+differentiate the relation $AU + BV = D$ and obtain this way
+$A \cdot dU + B \cdot dV - dD = dX$
+with $dX = - (dA \cdot U + dB \cdot V)$. In the above relation, the
+first two terms $A{\cdot}dU$ and $B{\cdot}dV$ are divisible by $D$ 
+whereas the term $dD$ has degree less than $i$. 
+Hence if $dX = D \cdot dQ + dR$ is the Euclidean division of $dX$ by $D$, 
+we must have $\frac A D \cdot dU + \frac B D \cdot dV = dQ$ and $dD = 
+-dR$. These relations, together with bounds on the degree of $U$ and $V$,
+imply as before that $dU$ (resp. $dV$) are equal to the remainder in the
+Euclidean division of $U{\cdot}dQ$ by $\frac B D$ (resp. of $V{\cdot}dQ$
+by $\frac A D$).
+
+\medskip
+
+The lesson we may retain from this study is the following. If we have to 
+compute the greatest common divisor of two polynomials $A$ and $B$ known 
+with finite precision, we first need to determine what is its degree. 
+However, the degree function is not continuous --- it is only upper 
+semi-continuous --- and hence cannot be determined from sure from $A$ and 
+$B$ (expect if they are coprime). We then need to make an extra 
+hypothesis and the more natural one is arguably to assume that 
+$\gcd(A,B)$ has actually the maximal degree that it can have. Once this
+assumption is made, the computation is possible and one can apply Lemma 
+\ref{lem:main} to determine the precision of the result.
+Note that with the above convention, the $\gcd$ of $A$ and $A$ is $A$ 
+itself although there exist pair of coprime polynomials in any 
+neighborhood of $(A,A)$.
 
 \subsubsection*{Factorization}
 
@@ -1140,6 +1196,8 @@ d\alpha) = 0$ and expand this. We obtain this way $P'(\alpha) d\alpha +
 dP(\alpha) = 0$ where $P'$ denotes the derivative of $P$. Since $\alpha$ 
 is a simple root, $P'(\alpha)$ does not vanish and we recover $d \alpha 
 = - \frac{dP(\alpha)}{P'(\alpha)}$.
+
+\todo{Discuss a bit multiple roots.}
 
 \subsection{Multivariate polynomials}
 
@@ -1318,28 +1376,17 @@ $\begin{pmatrix} 0 & dN \end{pmatrix} \cdot M +
 from which we can compute $dN$ by projecting on the $(n-d)$ last
 columns.
 
-We can develop further this example and study what happens on the 
-closed subset of $M_{n,n-d}(K)$ where matrices have not full rank. On
-this subspace, the left kernel has dimension $< d$ and then no longer
-defines a point in $\Grass(n,d)$. Nevertheless, for all integer $r <
-n-d$, we can consider the subset $\mathcal V_r \subset M_{n,n-d}(K)$
-of matrices whose rank are exactly rank $r$. It is locally closed in
-$M_{n,n-d}(K)$ with respect to the Zariski topology and hence defines
-a $K$-manifold. Furthermore, we have a mapping $\text{LK}_r : \mathcal 
-M_r \to \Grass(n,n-r)$ which is differentiable and whose differential 
-can be computed as before.
-
-The lesson from this study is the following. If we have to compute the 
-kernel of a matrix $M$ over $K$ known with finite precision, \emph{a 
-priori} we first need to determine what is the rank of $M$. However, the 
-rank function is not continuous --- it is only lower semi-continuous --- 
-and hence cannot be determined from sure from $M$ (expect if $M$ has 
-full rank). We then need to make an extra hypothesis and the more natural 
-one is arguably to assume that $M$ has actually the minimal rank that it 
-can have. With this convention, for instance, the kernel of the zero 
-matrix $M \in M_n(K)$ \emph{known with finite precision} is always the 
-whole space although there exist invertible matrices in any 
-neighborhood of $M$.
+Following what we have already done in \S \ref{ssec:polynomials} for 
+greatest common divisors of polynomials, we can develop further this 
+example and study what happens on the closed subset of $M_{n,n-d}(K)$ 
+where matrices have not full rank. On this subspace, the left kernel has 
+dimension $< d$ and then no longer defines a point in $\Grass(n,d)$. 
+Nevertheless, for all integer $r < n-d$, we can consider the subset 
+$\mathcal V_r \subset M_{n,n-d}(K)$ of matrices whose rank are exactly 
+rank $r$. It is locally closed in $M_{n,n-d}(K)$ with respect to the 
+Zariski topology and hence defines a $K$-manifold. Furthermore, we have a 
+mapping $\text{LK}_r : \mathcal M_r \to \Grass(n,n-r)$ which is 
+differentiable and whose differential can be computed as before.
 
 \subsubsection*{Intersections}
 
