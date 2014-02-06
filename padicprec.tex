@@ -1221,9 +1221,9 @@ $P$ such that $f(P)$ is defined, $\alpha = f(P)$ is a root of
 multiplicity (at least) $m$ of $P$. The existence of $f$ follows from 
 Hensel's Lemma applied to the factorisation $P_0(X) = (X-\alpha_0)^m 
 B_0(X)$ where $B_0(X)$ is a polynomial which is coprime to $X - 
-alpha_0$. We can finally compute the differential of $f$ at $P_0$ 
+\alpha_0$. We can finally compute the differential of $f$ at $P_0$ 
 (along $\mathcal V_{m,\alpha_0}$) by differentiating the equality
-$P^{(m-1})(\alpha) = 0$ where $P^{(i})$ denotes the $i$-th derivative
+$P^{(m-1)}(\alpha) = 0$ where $P^{(i)}$ denotes the $i$-th derivative
 of $P$. We find:
 \begin{equation}
 \label{eq:dalphamult}
@@ -1244,6 +1244,14 @@ that $P$ has a double root, say $\alpha$, we can write $P(X) = (X -
 O(p^{2N})$ (or $O(p^{2N-1})$ if $p=2$). 
 This is exactly the result we get by applying Lemma \ref{lem:main} and
 using Eq.~\eqref{eq:dalphamult} to simplify the differential.
+
+This phenomenon is general: if $P$ is a polynomial over $\Q_p$ known at 
+some finite precision $O(p^N)$, a root $\alpha$ of $P$ having possibly 
+multiplicity $m$ (\emph{i.e.} $P(\alpha), P'(\alpha), \ldots, P^{(m-1)} 
+(\alpha)$ vanish at the given precision) can be computed at precision 
+roughly $O(p^{N/m})$. However, if we know in advance that $\alpha$ has 
+indeed multiplicity $m$ then we can compute it at precision $O(p^{N-c})$ 
+where $c$ is some constant.
 
 \subsection{Multivariate polynomials}
 
