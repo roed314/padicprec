@@ -44,9 +44,7 @@
 \def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
 
 \title{$p$-adic precision}
-\author{Xavier Caruso}
-\author{David Roe}
-\author{Tristan Vaccon}
+\author{Xavier Caruso, David Roe \& Tristan Vaccon}
 \date\today
 
 \maketitle
@@ -187,7 +185,7 @@ v_n = \val(u_0) + \cdots + \val(u_{n-4}).
 However, on the other hand, one can prove that the SOMOS 4 sequence 
 exhibits the \emph{Laurent phenomenon}. This means that, for all integer 
 $n$, there exists a polynomial $P_n$ in $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 
-1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$.
+1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$ (see \cite{Fomin-Zelevinsky}).
 From the latter formula, it follows directly that if $u_0$, $u_1$,
 $u_2$ and $u_3$ are known up to precision $O(p^N)$ then all $u_n$'s
 are also known with the same precision. Thus, the term $v_n$ that 
@@ -246,20 +244,24 @@ tracking precision step-by-step.
 
 %\subsubsection*{Algorithms \emph{\`a la} Kedlaya}
 
-\section{A new philosophy}
-\label{sec:philosophy}
+\section{The main Lemma}
+\label{sec:mainlemma}
 
-The aim of this section is to develop a new point of view on $p$-adic 
-precision based on $p$-adic analysis. Actually, we shall generalize a 
-bit the setting and work over a general ultrametric field (see definition
-below).
+The theory of $p$-adic precision we want to develop is mainly based 
+on a single lemma of $p$-adic analysis. The aim of this Section is
+to state and prove this lemma. Consequences will be discussed after
+in Section \ref{sec:tracking}.
+
+From now, we generalize a bit the setting and work over a general 
+ultrametric complete field (see definition below). This includes 
+$p$-adic fields and Laurent series fields.
 
 \subsection{Ultrametric analysis}
 \label{ssec:ultrametric}
 
-In this section, we recall usual definitions and properties related to
-ultrametric analysis. We refer to Schneider \cite{Schneider} for a 
-complete exposition.
+We recall usual definitions and properties related to ultrametric 
+analysis. We refer to Schneider \cite{Schneider} for a complete 
+exposition.
 
 An \emph{absolute value} on a field $K$ is a multiplicative map $|\cdot| 
 : K \to \R_+$ satisfying the triangle inequality and sending every 
@@ -301,7 +303,7 @@ space is complete and all norms over such a space are equivalent
 concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
 Theorem) remain true in the ultrametric setting.
 
-\begin{deftn}
+\begin{deftn} \label{deftn : diff}
 Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
 subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
 \emph{differentiable} at $v_0 \in U$ if there exists a 
@@ -396,11 +398,34 @@ ball''.
 
 \subsubsection*{Lattices and computers}
 
-\todofor{Xavier}{Explain that if $E$ is finite dimensional and $K$ (and 
-the absolute value is discrete), a lattice can be encoded by a finite 
-amount of informations.}
+Although elements of $K$ are not representable in thein entirety on a 
+computer, lattices in finite dimensional $K$-vector spaces are as soon 
+as the elements of the quotient $B_K(1)/B_K(r)$ are for all $r \in 
+(0,1)$. Indeed, given a lattice $L$ in $K^d$, there exists by definition 
+two positive rational numbers $a$ and $b$ such that 
+\begin{equation}
+\label{eq:incllattice}
+B_K(a)^d \subset L \subset B_K(b)^d.
+\end{equation}
+Moreover, a lattice $L$ satisfying \eqref{eq:incllattice} is uniquely 
+determined by its image in the quotient $B_K(b)^d / B_K(a)^d \simeq 
+(B_K(1)/B_K(r))^d$ with $r = \frac a b$. Therefore, the data of $L$ can 
+be encoded by a $(d \times d)$ matrix with coefficients in $B_K(1)/
+B_K(r)$. Thus, if elements in the latter ring are representable on a 
+computer, so are the lattices $L$ for which Eq.~\eqref{eq:incllattice} 
+holds. Finally, an arbitrary lattice $L$ in $K^d$ can be represented
+by a triple $(a,b,M)$ where $a$ and $b$ satisfies \eqref{eq:incllattice}
+and $M$ is a $(d \times d)$ matrix over $B_K(1)/B_K(\frac a b)$ 
+representing the image of $L$ in $B_K(b)^d / B_K(a)^d$.
 
-\subsection{The main Lemma}
+We furthermore remark that if $K = \Q_p$ (for some prime number $p$), 
+the quotient $B_K(1)/B_K(r)$ is isomorphism to some $\Z/p^n\Z$ (with $n 
+= \lfloor - \log_p r \rfloor$) are therefore is representable on a 
+computer. Thus, the above discussion applies when $K = \Q_p$. Similarly 
+it also applies when $K$ is a finite extension of $\Q_p$ or a field of
+Laurent series with coefficients in a finite field.
+
+\subsection{Images of lattices under differentiable functions}
 
 \begin{lem} \label{lem:main}
 Let $E$ and $F$ be two $K$-Banach and $f : U 
@@ -430,51 +455,44 @@ is the ``identity map'' (which is an homeomorphism by Lemma
 \begin{proof}
 We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, by 
 the open mapping Theorem, there exists $C>0$ such that $B_F(1) \subset 
-C \cdot f'(0) \cdot B_E(1)$. Let $\varepsilon>0$ be such that 
-$\varepsilon C < 1$. Let $U_\varepsilon \subset E$ be given by the fact 
-that $f$ is differentiable at $0$. We may assume $U_\varepsilon = 
+C  f'(0) \cdot B_E(1)$. Let $\varepsilon>0$ be such that 
+$\varepsilon C < 1$. Let $U_\varepsilon \subset E$ be given by by definition \ref{deftn : diff} and the fact that $f$ is differentiable at $0$. We may assume $U_\varepsilon = 
 B_E(\delta)$ for some $\delta >0$.
 
-Let $r \in (0, \delta)$.
+Let $r \in (0, \delta)$. Let $B^-_E(r) \subset H \subset
+B_E(r).$
 Let us show that $f$ maps surjectively $H$ onto $f'(0) \cdot H$.
-Let $x \in H$. We must show that $f(x) \in f'(0) \cdot H$. 
-By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq 
-\varepsilon \Vert x \Vert $. Therefore, there exists $y \in f'(0) \cdot 
-H$ such that 
-$\Vert y \Vert \leq \varepsilon r$. By the open mapping Theorem and the 
-surjectivityy of $f'(0)$, there exists $x_1 \in E$ such that $f'(0) \cdot 
-x_1 =y$ and $\Vert x_1 \Vert \leq \varepsilon C \cdot r < r$. Thus, $x_1 
-\in B^-_E(r) \subset H$ and $f(x)= f'(0) \cdot (x-x_1) \in f'(0) 
-\cdot H$.
+
+We first prove that $f(H) \subset f'(0) \cdot H$.
+Let $x \in H$. By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq 
+\varepsilon \Vert x \Vert $. Therefore, if $y=f(x)-f'(0) \cdot x,$ then $\Vert y \Vert \leq \varepsilon r$. As a consequence of the open mapping Theorem, $B_F(\varepsilon r) \subset 
+\varepsilon C  f'(0) \cdot B_E(r),$ and there exists $x_1 \in \varepsilon C  \cdot B_E(r)$ such that $f'(0) \cdot x_1 =y.$ Since $\varepsilon C <1,$  $x_1 \in B^-_E(r) \subset H.$ and finally, $f(x)= f'(0) \cdot (x-x_1) \in f'(0) \cdot H$.
 
 We shall now prove surjectivity. Let $y \in f'(0) \cdot H$. 
-Let $x_0 \in H$ be such that $y = f'(0) \cdot x_0$.
-We define by induction two sequences $(x_n)$ and $(z_n)$ by
+Let $x_0 \in H$ be such that $y = f'(0) \cdot x_0$. Since $f(x_0) \in f'(0) \cdot H,$ we can define $z_0 \in E$ to be such that $f'(0) \cdot z_0 = y - f(x_0)$ and $\Vert z_0 \Vert \leq C \cdot \Vert y - f(x_0) \Vert$.
+We then define by induction two sequences $(x_n)$ and $(z_n)$ by
 \begin{itemize}
+\item $x_{n+1}=x_n+z_n$ and 
 \item $z_n \in E$ is such that
 $f'(0) \cdot z_n = y - f(x_n)$ and
-$\Vert z_n \Vert \leq C \cdot \Vert y - f(x_n) \Vert$,
-\item $x_{n+1}=x_n+z_n$.
+$\Vert z_n \Vert \leq C \cdot \Vert y - f(x_n) \Vert$.
 \end{itemize}
-By definition, $\Vert z_0 \Vert < C \Vert y_0\Vert$ and $y_0 
-= -f(x_0)+f'(0) \cdot x_0$. Therefore, $\Vert y_0 \Vert < \varepsilon 
+By definition, $\Vert z_0 \Vert < C \Vert y_0\Vert$ and $y 
+= -f(x_0)+f'(0) \cdot x_0$. Therefore, $\Vert y \Vert < \varepsilon 
 \Vert x_0 \Vert \leq \varepsilon r$. Thus $\Vert z_0 \Vert \leq 
-\varepsilon C \cdot r < r$. Thus, $x_1$ and $z_0$ lie in $B^-_E(r) 
-\subset H$. An easy induction involving an analogous computation
+\varepsilon C \cdot r < r$. Thus, $z_0$ and $x_1=x_0+z_0$  lie in $B^-_E(r) 
+\subset H$. An easy induction involving an analoguous computation
 shows that the sequences $(x_n)$ and $(z_n)$ are well defined and
 take their values in $H$.
 
-Now, we notice that
-$y - f(x_{n+1}) = f(x_n) - f(x_{n+1}) + f'(0) \cdot z_n$.
-Therefore, using differentiability, we get:
+We notice that $y - f(x_{n+1}) = f(x_n) - f(x_{n+1}) + f'(0) \cdot z_n$.
+Since $z_n=x_{n+1}-x_n,$, if we use differentiability, we get:
 $$\Vert y  - f(x_{n+1}) \Vert 
 \leq \varepsilon \Vert z_n \Vert \leq \varepsilon C \cdot \Vert 
 y - f(x_n) \Vert,$$
 from what we deduce that $\Vert y - f(x_{n+1}) \Vert = 
 O(a^n)$ and $\Vert z_n \Vert = O(a^n)$ with $a = \varepsilon C < 1$.
-This shows that $(x_n)$ is a Cauchy sequence and therefore converges 
-(since $E$ is complete). If $x$ denotes the limit of $(x_n)$, we have
-$x \in H$ and $y=f(x)$. The result is proven.
+This shows that $(x_n)$ is a Cauchy sequence and, since $E$ is complete, it converges. Because $H$ is closed, if $x$ denotes the limit of $(x_n)$, we have $x \in H.$ Yet, as a consequence of the differentiability, $f$ is continuous over $U_\varepsilon.$ Therefore, since $x \in H \subset U_\varepsilon,$ then  $y=f(x)$. The result is proven.
 \end{proof}
 
 \todofor{Tristan}{Improve the end of this Subsection}
@@ -483,59 +501,392 @@ Before discussing applications of Lemma \ref{lem:main} to ultrametric
 precision, we would like to describe a little bit more restrictive 
 setting where the constant $\delta$ appearing in this Lemma can be 
 computed explicitly.
+
+
+Indeed, when $f$ is a locally analytic function, we prove that we can recover $\delta$ from a Newton polygon defined with the Taylor series expansion of $f.$
+
 We refer to Schneider \cite{Schneider}, \S 6, for a definition of a 
 locally analytic function.
 
-\begin{rmk}
-Let $f$ be locally analytic function $K^n \rightarrow K^m$. Let $x \in K^n$ be such that $f'(x)$ is surjective. Then the radius of the ball needed can be read from the Newton polygon given by the norms of the Taylor series expansion of $f$ at $x$. We assume the $C$ given by the Banach-Schauder is given, $\varepsilon = \frac{1}{C}$ and now, we try to recover the link between $\varepsilon$ and $\delta$.
-\end{rmk}
 
+\begin{prop}\label{prop:locanalytic}
+Let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ be locally analytic map $E \rightarrow F$.  Let $x \in E$, and let $f(x+h)=f(x)+\sum_{k \geq 0}^{+\infty} L_k \cdot (h,\dots,h)$ be the power series development of $f$ at $x$. We assume $L_1$ is surjective. 
+Let $C$ be given by the Banach-Schauder theorem for $L_1$, $\varepsilon = \frac{1}{C}$. 
+Let $F(t) = \sum_{k\geq 0}^{+\infty} \interleave L^{k+1}(0) \interleave  t^k \in \mathbb{R}[[t]]$, let $NP_F$ be its Newton polygon.
+Let $\mu$ be the slope of the line passing by $(0, \log_p \varepsilon)$ and tangent to $NP_F$.
+Then $r$ such that $\mu=\log_p r$ is enough for lemma \ref{lem:main}.
+\end{prop}
 \begin{proof}
-Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=f'(0) \cdot x +\sum_{n \geq 2} \frac{f^{(n)}(0)}{n!} \cdot (x, \dots,x)$ is the Taylor series expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
+Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=L_1 \cdot x +\sum_{n \geq 2} L_n \cdot (x, \dots,x)$ is the Taylor serie expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
 
-We shall now find $l$ such that if $x \in B_{K^n}(0,l)$, then $\Vert \sum_{n \geq 2} \frac{f^{(n)}(0)}{n!}(x,\dots,x) \Vert \leq \varepsilon$.
+We shall now find $l$ such that if $x \in B_{K^n}(0,l)$, then $\Vert \sum_{n \geq 2} L_n \cdot (x,\dots,x) \Vert \leq \varepsilon \vert x \vert $.
 
-By continuity and ultrametricity, it is enough for $l$ to be such that, if $x \in B_{K^n}(0,l)$, then  \[ \sup_{n \geq 2} \interleave f^{(n)}(0) \interleave \frac{\Vert x \Vert^n }{ \vert n! \vert } \leq \varepsilon \Vert x \Vert .\] 
+By continuity and ultrametricity, it is enough for $l$ to be such that, if $x \in B_{K^n}(0,l)$, then  \[ \sup_{n \geq 2} \interleave L_n \interleave \Vert x \Vert^n \leq \varepsilon \Vert x \Vert .\] 
 
-Therefore, \[ \sup_{n \geq 2} \interleave f^{(n)}(0) \interleave \frac{l^{n-1} }{\vert n! \vert } \leq \varepsilon . \] 
+Therefore, \[ \sup_{n \geq 2} \interleave L_n \interleave l^{n-1}  \leq \varepsilon . \] 
 
-In other words, $\forall n \geq 2$, $\interleave f^{(n)}(0) \interleave \frac{l^{n-1} }{\vert n! \vert } \leq \varepsilon.$
+In other words, $\forall n \geq 2$, $\interleave L_n \interleave \l^{n-1}  \leq \varepsilon.$
 
-By passing to logarithm and valuation, we get for all $n \geq 2$: \[ \log_p (\interleave f^{(n)}(0) \interleave )-(n-1) \log_p l-val (n!)\geq - \log_p \varepsilon.\]
-
-By Legendre formula, it is enough that for all $n \geq 2$:
-\[
-\log_p (\interleave f^{(n)}(0) \interleave )-(n-1) (\log_p l-(n-1)) \geq - \log_p \varepsilon.
-\]
+By passing to logarithm, we get for all $n \geq 2$ : \[ \log_p (\interleave L_n \interleave )-(n-1) \log_p l \geq - \log_p \varepsilon.\]
 
 If we denote by $NP_F$ the Newton polygon of the power series 
 \[
-F(t) = \sum_{k\geq 0}^{+\infty} \log_p (\interleave f^{(k+1)}(0) \interleave ) t^k
+F(t) = \sum_{k\geq 0}^{+\infty} \interleave L_{k+1} \interleave  t^k
 \]
 then it is enough that:
 \[
-\sup_{ x \in \mathbb{R}_+} \left( NP_F(x) -x  \left( \log_p l - \frac{1}{p-1} \right) \right) \geq - \log_p \varepsilon.
+\sup_{ x \in \mathbb{R}_+} \left( NP_F(x) -x  \log_p l \right) \geq - \log_p \varepsilon.
 \]
 
-If $NP_F^*$ is the Legendre-Fanchel transform of $NP_F$, then it is enough that:
-\[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \varepsilon.\]
+If $NP_F^*$ is the Legendre-Fanchel transform of $NP_F$, then it is enough that :
+\[ NP_F^* \left( \log_p l  \right) \leq \log_p \varepsilon.\]
 
-Therefore, by definition of the Legendre-Fanchel transform, it is enough to:
+Therefore, by definition of the Legendre-Fanchel transform, it is enough to :
 \begin{itemize}
 \item take $M=(0,\log_p \varepsilon)$,
-\item draw the line passing by $M$ tangent to the graph of $NP_F$,
-\item if we denote by $\mu$ the slope of this line, then take $l$ such that $\mu + \frac{1}{p-1}=\log_p l$.
+\item draw the line passing by $M$ tangent to the graph of $NP_F$ (it could be tangent at infinity),
+\item if we denote by $\mu$ the slope of this line, then take $l$ such that $\mu=\log_p l$.
 \end{itemize}
 \end{proof}
 
+We remark that when considering finite-dimensional applications over $p$-adic fields, a more refined proposition is available.
+
+\begin{prop} \label{prop:locanalyticfinitedim}
+If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : Let $\mu$ be the slope of the line passing by $(0, \log_p \varepsilon)$ and tangent to $NP_F$.
+Then $r$ such that $\mu+\frac{1}{p-1}=\log_p r$ is enough for lemma \ref{lem:main}. 
+\end{prop}
+\begin{proof}
+In comparison with the previous proposition, $L_n=\frac{f^{(n)}(0)}{n!}$. Therefore, by Legendre formula, it would be enough that for all $n \geq 2$ :
+\[\log_p (\interleave f^{(n)}(0) \interleave )-(n-1) (\log_p l-(n-1)) \geq - \log_p \varepsilon,\]
+and therefore, \[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \varepsilon.\]
+The result follows \textit{mutatis mutandis}.
+\end{proof}
+
+\todo{Explain how Newton polygons considered above behave under
+usual operations (sum, multiplication and composition of functions).}
+
+\section{Tracking precision using differentials}
+\label{sec:tracking}
+
+Lemma \ref{lem:main} and Proposition \ref{prop:locanalytic} have 
+important applications to effective computations with $p$-adic numbers 
+or power series, that we discuss in this Section. Let us recall first 
+that a datum involving elements of a complete ultrametric field $K$ 
+(\emph{e.g.} $p$-adic numbers or power series) cannot be stored entirely 
+on a computed because they basically convey an infinite amount of 
+informations. That is why, instead of this datum itself, we generally 
+work with neighborhoods of it.
+
+In what follows, we shall consider neighborhoods of the form $x + H$ 
+where $x$ is some element lying in a $K$-Banach $E$ and $H$ is a lattice 
+in $E$. A very basic example is the approximate $p$-adic number $1 + 
+O(p^N)$ which corresponds to the neighborhood of $1$ in $\Z_p$, which is 
+the set of all $p$-adic numbers congruent to $1$ modulo $p^N$. We 
+nevertheless emphasize that our definition is quite flexible and allows 
+many neighborhoods that we do not consider in general. For instance, an 
+``admissible'' neighborhood around a monic polynomial $P_0 \in \Q_p[X]$ 
+of degree $d$ may be defined by congruences of the form $P(a_i) \equiv 
+P_0(a_i) \pmod {p^{n_i}}$ ($1 \leq i \leq d$) for some fixed elements 
+$a_i \in \Q_p$ and relative integers $n_i$.
+
+In the context of computer science, we will often use the notation $x + 
+O(H)$ to refer to $x + H$.
+
 \subsection{Automatic sharp track of precision}
 
-\todofor{Xavier}{
-Explain here how to build a software that tracks precision automatically 
-and sharply.
-}
+We consider a function {\tt f} (in the sense of computer 
+science) that takes as input an (approximate) element lying in an open 
+subset $U$ of a $K$-Banach space $E$ and outputs another (approximate) 
+element lying in an open subset $V$ of another $K$-Banach space $F$. Of 
+course, this function can be modelised by a \emph{continuous} 
+mathematical function $f : U \to V$. The relation is the following: when 
+{\tt f} is called on the input $x + O(H)$, it outputs $x' + O(H')$ with 
+$f(x+H) \subset x' + H'$. We say that {\tt f} does not generate 
+artificial loss of precision if the above inclusion is an equality; it is 
+often not the case as shown in \S \ref{ssec:stepbystep}.
 
-\subsubsection*{Working precision}
+Let us assume now that $f$ is locally analytic on $U$ and that $x$ and 
+$H$ are chosen so that Lemma \ref{lem:main} applies. Then $f(x+H) = f(x) 
++ f'(x)(H)$ and the smallest possible $H'$ is $f'(x)(H)$. In other 
+words, the function {\tt f} generates artificial loss of precision if 
+the precision $H'$ it outputs is strictly larger that $f'(x)(H)$.
+The aim of this section is to explain how, under the above hypothesis, 
+one can implement the function {\tt f} so that it always outputs the
+optimal precision $O(H')$ with $H' = f'(x)(H)$.
+
+\subsubsection*{Forward computation}
+
+The execution of the function {\tt f} yields a factorization:
+$$f = f_n \circ f_{n-1} \circ \cdots \circ f_1$$
+where the $f_i$'s correspond to each individual basic step (like 
+addition, multiplication or affectation of variables); it is then a
+``nice'' (in particular locally analytic) function. For all 
+$i$, let $U_i$ denote the codomain of $f_i$. Concretely, $U_i$ is the 
+set of all possible values of all variables which are defined in the 
+program after the execution of $i$-th step. Mathematically, it is an 
+open subset in some $K$-Banach space $E_i$. We have $U_n = V$ and the 
+domain of $f_i$ is $U_{i-1}$ where, by convention, we have set $U_0 = 
+U$.
+For all $i$, we set $g_i = f_i \circ \cdots \circ f_1$ and $x_i = 
+g_i(x)$. 
+
+When we execute the function {\tt f} on the input $x + O(H)$, we apply 
+first $f_1$ to this input obtaining this way a first result $x_1 + 
+O(H_1)$ and then go on with $f_2, \ldots, f_n$. At each step, we obtain 
+a new intermediate result that we denote by $x_i + O(H_i)$. A way to 
+guarantee that no artificial loss of precision are generated is then to 
+ensure $H_i = f'_i(x)(H_{i-1}) = g_i'(x)(H)$ at each step. This can be 
+achieved by reimplementing all primitives (addition, multiplication, 
+\emph{etc.}) and make them compute at the same time the function $f_i$
+they implement together with its differential and apply the latter to
+the ``current'' lattice $H_i$.
+
+There is nevertheless an important issue with this approach: in order to 
+be sure that Lemma \ref{lem:main} applies, we need \emph{a priori} to 
+compute the exact values of all $x_i$'s, which is of course not possible! 
+Assuming that $g'_i(x)$ is surjective for all $i$, we can fix it as 
+follows. For each $i$, we fix a lattice $\tilde H_i \subset H$ such that 
+Lemma \ref{lem:main} applies to $g_i$, $x$ and $\tilde H_i$. Under our 
+assumption, such lattices always exist and can be computed dynamically 
+using Proposition \ref{prop:locanalytic}. Now, the equality $g_i(x + 
+\tilde H_i) = x_i + g'_i(x)(\tilde H_i)$ means that any perturbation of 
+$x_i$ by an element in $g'_i(x) (\tilde H_i)$ is induced by a 
+perturbation of $x$ by an element in $\tilde H_i \subset H$. Hence, we 
+can freely compute $x_i$ modulo $g'_i(x) (\tilde H_i)$ without changing 
+the final result. Since $g'_i(x)(\tilde H_i)$ is a lattice in $E_i$, this 
+remark makes possible the computation of $x_i$.
+
+\begin{rmk}
+In some cases, it is actually possible to determine suitable lattices 
+$\tilde H_i$ together with their images under $g'_i(x)$ (or, at
+least, good approximations of them) before starting the computation 
+by using mathematical arguments. If possible, this generally helps a
+lot. We shall present in \S \ref{ssec:SOMOS-solution} an example of 
+this.
+\end{rmk}
+
+\subsubsection*{Backward computation}
+
+The previous approach works only if the $g'_i(x)$'s are all surjective. 
+Unfortunately, this assumption is in general not fulfilled. Indeed, 
+remember that the dimension of $E_i$ is roughly the number of used 
+variables after the step $i$. It all $g_i'(x)$ were surjective, this 
+would mean that the function {\tt f} never initializes a new variable!
+In what follows, we propose another solution that does not assume the
+surjectivity of $g'_i(x)$.
+
+For $i \in \{1, \ldots, n\}$, define $h_i = f_n \circ \cdots \circ 
+f_{i+1}$, so that we have $f = h_i \circ g_i$. On differentials, we 
+have $f'(x) = h_i'(x_i) \circ g'_i(x)$. Since $f'(x)$ is surjective (by 
+assumption), we deduce that all $h'_i(x_i)$ are surjective. Let $H'_i$ 
+be a lattice in $E_i$ such that:
+\begin{enumerate}[(a)] 
+\item \label{item:Hi1}
+$H'_i$ is contained in $H_i + \ker h'_i(x_i) = h'_i(x_i)^{-1}
+\big(f'(x)(H)\big)$;
+\item \label{item:Hi2}
+Lemma \ref{lem:main} applies with the function $h_i$, the point
+$x_i$ and the lattice $H'_i$.
+\end{enumerate}
+Applying Lemma \ref{lem:main}, we then get:
+$$h_i(x_i + H'_i) = x_n + h'_i(x_i)(H'_i) \subset x_n + f'(x)(H).$$
+Therefore, if after the $i$-th step of the execution of the function
+{\tt f}, we modify the intermediate value $x_i$ by an element of
+$H'_i$, the final result remains unchanged. In other words, it is
+enough to compute $x_i$ modulo $H'_i$.
+
+It is nevertheless not obvious to implement these ideas in practice
+because when we enter in the $i$-th step of the execution of {\tt f},
+we have not computed $h_i$ yet and hence are \emph{a priori} not able
+to determine a lattice $H'_i$ satisfying the axioms \eqref{item:Hi1}
+and \eqref{item:Hi2} above.
+A possible solution to tackle this problem is to proceed in several
+stages as follows: 
+\begin{enumerate}[(1)]
+\item \label{item:smallprec}
+for $i$ going from $1$ to $n$, we compute $x_i$, $f'_i(x_{i-1})$ 
+at small precision (but enough for the second step) together with an
+approximation of the Newton polygon of the higher order derivatives;
+\item \label{item:determineHi}
+for $i$ going from $n$ to $1$, we compute $h'_i(x_i)$ and
+determines a lattice $H'_i$ satisfying \eqref{item:Hi1} and 
+\eqref{item:Hi2};
+\item \label{item:finalcomp}
+for $i$ going from $1$ to $n$, we recompute $x_i$ modulo $H'_i$
+and finally outputs $x_n + O\big(f'(x)(H)\big)$.
+\end{enumerate}
+Using relaxed algorithms for computing with elements in $K$ (\emph{cf} 
+\cite{}), we can reuse in Step~\eqref{item:finalcomp} the computations 
+already performed in Step~\eqref{item:smallprec}. The ``backward'' method 
+we have just presented is then probably not much more expansive than the 
+``forward'' method, although it is certainly much more difficult to 
+implement. 
+
+We conclude this Section by remarking that the ``backward'' method seems 
+to be particularly well suited to computations with lazy $p$-adic. Indeed 
+in this setting, a target precision (\emph{i.e.} a precision on the 
+output) is fixed and the software determines automatically the precision 
+it needs on the input to perform the computation. To do this, it first 
+builds the ``skeleton'' of the computation (\emph{i.e.} it determines the 
+functions $f_i$ and eventually computes the $x_i$ at small precision when 
+branching points occur and it needs to decide which branch it follows) 
+and then runs over this skeleton in the reverse direction in order to 
+determine (an upper bound of) the needed precision at each step. The 
+similarity with our approach is noticeably strong.
+
+\subsubsection*{Quick comparison with floating point arithmetics}
+
+It worths remarking that the two strategy designed above share many 
+similarities with usual floating point arithmetics over the reals. 
+Indeed, roughly speaking, in each setting, we begin by choosing a large 
+precision, we do all our computations up to this precision understood 
+that when we are not sure about some digit, we choose it ``at random'' 
+or using good heuristics. The main difference is that, in the 
+ultrametric setting, we are able (under some mild hypothesis) to 
+quantify the precision we need at each individual step in order to be 
+sure that the final result is correct up to the required precision.
+
+\subsection{Application to SOMOS sequence}
+\label{ssec:SOMOS-solution}
+
+We illustrate the theory developed in this paper by giving a simple 
+toy application. Other applications will be discussed in subsequent 
+articles. More precisely, we study the SOMOS 4 sequence introduced in \S 
+\ref{ssec:stepbystep}. Making a crucial use of Lemma \ref{lem:main} and 
+Proposition \ref{prop:locanalytic}, we design a \emph{stable} algorithm 
+for computing it.
+
+Recall (\emph{cf} \S \ref{ssec:stepbystep}) that a SOMOS 4 sequence is a 
+four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
++ u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
+Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
+u_2, u_3$ are some indeterminates, that each $u_n$ is a Laurent 
+polynomial with coefficients in $\Z$ in these indeterminates
+(see \cite{Fomin-Zelevinsky}).
+
+From now, we will always consider SOMOS sequences with values in $\Q_p$ 
+(for some prime number $p$) and assume that $u_0, u_1, u_2, u_3$ are 
+chosen such that all terms $u_n$'s are determined (\emph{i.e.} there is 
+no division by zero). We assume also for simplicity that $u_0, u_1, u_2, 
+u_3$ are all units in $\Z_p$. By Laurent phenomenon, this implies first 
+that all $u_n$'s lie in $\Z_p$ and second that if $u_0, u_1, u_2, u_3$ 
+are known with finite precision $O(p^N)$ then all terms $u_n$'s are 
+known with the same precision. Algorithm \ref{algo:SOMOS} presented on 
+page \pageref{algo:SOMOS} performs this computation.
+
+\begin{algorithm}[t]
+\SetKwInOut{Assumption}{Assumption}
+\KwIn{$a,b,c,d$ --- four initial terms of a SOMOS 4 sequence $(u_n)_{n \geq 0}$}
+\KwIn{$n, N$ --- two integers}
+\Assumption{$a$, $b$, $c$ and $d$ lie in $\Z_p^\times$ and are known at 
+precision $O(p^N)$}
+\Assumption{None of $u_i$ $(0 \leq i \leq n$) is divisible by $p^N$}
+\KwOut{$u_n$ at precision $O(p^N)$}
+\BlankLine
+$\prec$ $\leftarrow$ $N$\;
+\For {$i$ from $1$ to $n-3$}{
+  $\prec$ $\leftarrow$ $\prec + v_p(bd + c^2) - v_p(a)$\;
+  {\bf lift} (arbitrary) 
+    $b$, $c$ and $d$ to precision $O(p^{\prec})$\label{line:lift}\;
+  $\prec$ $\leftarrow$ $\prec - v_p(a)$\;
+  $e$ $\leftarrow$ $\frac{bd+c^2} a$; \hspace{1cm}
+   \tcp{$e$ is known at precision $O(p^\prec)$}
+  $a, b, c, d$ $\leftarrow$ $b + O(p^{\prec}), c + O(p^{\prec}), d + O(p^{\prec}), e$\;
+}
+\Return{$d + O(p^N)$}\;
+\caption{\sc SOMOS$(a, b, c, d, n, N)$}\label{algo:SOMOS}
+\end{algorithm}
+
+We now prove that it is correct.
+We introduce the (partial) function $f : \Q_p^4 \to \Q_p^4$ defined by 
+$f(a,b,c,d) = (b,c,d,\frac{bd+c^2}a)$, so that, for all $i$, we have 
+$(u_i, u_{i+1}, u_{i+2}, u_{i+3}) = f_i(u_0, u_1, u_2, u_3)$ where $f_i
+= f \circ \cdots \circ f$ ($i$ times). Clearly, $f$ is  
+differentiable on $\Q_p^\times \times \Q_p^3$ and its differential in the 
+canonical basis is given by the matrix:
+$$D(a,b,c,d) = \begin{pmatrix}
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+-\frac{bd+c^2}{a^2} & \frac d a & \frac {2c} a & \frac b a
+\end{pmatrix}$$
+whose determinant is $\frac{bd+c^2}{a^2}$. Thus, if the $(i+4)$-th term 
+of the SOMOS sequence is defined, the mapping $f_i$ is differentiable
+at $(u_0, u_1, u_2, u_3)$ and its differential $\varphi_i = 
+f'_i(u_0, u_1, u_2, u_3)$ is given by the matrix:
+$$D_i = D(u_{i-1}, u_i, u_{i+1}, u_{i+2}) \cdots
+D(u_1, u_2, u_3, u_4) \cdot D(u_0, u_1, u_2, u_3).$$
+Moreover thanks to the Laurent phenomenon, we know that $D_i$ has
+integral coefficients, \emph{i.e.} $\varphi_i$ stabilizes the lattice
+$\Z_p^4$.
+We are now going to prove by induction on $i$ that, at the end of the 
+$i$-th iteration of the loop, we have $\prec = N + v_p(\det D_i)$ and
+\begin{equation}
+\label{eq:congrSOMOS}
+(a, b, c, d) \equiv (u_i, u_{i+1}, u_{i+2}, u_{i+3}) \pmod
+{p^N \varphi_i(\Z_p^4)}.
+\end{equation}
+The first point is easy. Indeed, from $D_i = D(u_{i-1}, u_i, u_{i+1}, 
+u_{i+2}) D_{i-1}$, we deduce $\det D_i = \det D_{i-1} \cdot 
+\frac{u_i}{u_{i-3}}$ and the assertion follows by taking determinants
+and using the induction hypothesis. 
+Let us now establish Eq.~\eqref{eq:congrSOMOS}. To avoid confusion, 
+let us agree to denote $a'$, $b'$, $c'$, $d'$ and $\prec'$ the values of 
+$a$, $b$, $c$, $d$ and $\prec$ respectively at the \emph{beginning} of 
+the $i$-th iteration of the loop. By induction hypothesis (or by 
+initialization if $i = 1$), we have:
+\begin{equation}
+\label{eq:congrSOMOS2}
+(a', b', c', d') \equiv (u_{i-1}, u_i, u_{i+1}, u_{i+2}) \pmod
+{p^N \varphi_{i-1}(\Z_p^4)}.
+\end{equation}
+Moreover, we know that the determinant of $\varphi_{i-1}$ has valuation
+$\prec'$. Hence \eqref{eq:congrSOMOS2} remains true if $a'$, $b'$, $c'$
+and $d'$ are replaced by other values which are congruent to them modulo
+$p^{\prec'}$. In particular it holds if $a'$, $b'$, $c'$ and $d'$ denotes
+the values of $a$, $b$, $c$ and $d$ after the execution of line
+\ref{line:lift}. Now applying Lemma \ref{lem:main} and Proposition
+\ref{prop:locanalytic} to $\varphi_{i-1}$ and $\varphi_i$ (at the point 
+$(u_0, u_1, u_2, u_3)$), we get:
+$$f\big((u_{i-1}, u_i, u_{i+1}, u_{i+2}) + p^N \varphi_{i-1}(\Z_p^4)\big)
+= (u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4).$$
+By the discussion above, this implies in particular that $f(a',b',c',d')$
+belongs to $(u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4)$. We
+conclude by remarking first that $(a,b,c,d) \equiv f(a',b',c',d') \pmod 
+{p^\prec \Z_p^4}$ by construction and second that $p^\prec \Z_p^4 \subset
+p^N \varphi_i(\Z_p^4)$.
+
+Finally Eq.~\eqref{eq:congrSOMOS} applied with $i = n-3$ together with
+the fact that $\varphi_i$ stabilizes $\Z_p^4$ imply that, when we exit
+the loop, the value of $d$ is congruent to $u_n$ modulo $p^N$. Hence,
+our algorithm returns the correct value.
+
+\medskip
+
+Let us conclude this subsection by remarking that Algorithm 
+\ref{algo:SOMOS} performs computations at precision at most $O(p^{N+v})$ 
+where $v$ is the sum of the valuations of five consequence terms among 
+the first $n$ terms of the SOMOS sequence we are considering. 
+Experiments show that the value of $v$ varies like $c \cdot \log n$ 
+where $c$ is some constant. Assuming that we are using a FFT-like 
+algorithm to compute products of integers, the complexity of Algorithm 
+\ref{algo:SOMOS} is then expected to be $\tilde O(N n)$ where the 
+notation $\tilde O$ means that we hide logarithmic factors.
+
+We can compare this with the complexity of the more naive algorithm 
+consisting of lifting the initial terms $u_0, u_1, u_2, u_3$ to enough 
+precision and then do the computation using a naive step-by-step 
+tracking of precision. In this setting, the required original precision 
+is $O(p^{N+2v'})$ where $v'$ is the sum of the valuation of the $u_i$'s 
+for $i$ varying between $0$ and $n$. Experiments show that $v'$ is about 
+$c' \cdot n \log n$ (where $c'$ is a constant), which leads to a 
+complexity in $\tilde O (N n + n^2)$. Our approach is then interesting
+when $n$ is large compared to $N$: under this hypothesis, it saves
+roughly a factor $n$.
+
+%\section{Conclusions}
+
+\appendix
 
 \section{Generalization to manifolds}
 \label{sec:manifold}
@@ -545,8 +896,8 @@ points in projective spaces or elliptic curves,
 subspaces of a fixed vector space (which lie in Grassmannians),
 classes of isomorphism of certain curves (which lie in various moduli spaces),
 \emph{etc.}  In this section we extend the formalism 
-developed in Section \ref{sec:philosophy} to a more general setting:
-we consider the quite general case of strictly
+developed in Section \ref{sec:mainlemma} to a more general setting:
+we consider the quite general case of 
 differentiable manifolds locally modeled on ultrametric Banach spaces.
 This covers all the 
 aforementioned examples.
@@ -555,14 +906,14 @@ In what follows, the letter $K$ always refers to an ultrametric field
 (\emph{cf} \S \ref{ssec:ultrametric}). The absolute value over $K$ is 
 denoted by $|\cdot|$.
 
-\subsection{Strictly differentiable $K$-manifolds}
+\subsection{Differentiable $K$-manifolds}
 \label{ssec:manifold}
 
 The theory of finite dimensional $K$-manifolds is presented for example 
 in \cite{Schneider}, parts 8 and 9. In this Section, we shall work with
 a slightly different notion of manifolds which allows also Banach vector 
 spaces of infinite dimension.
-More precisely, for us, a \emph{strictly differentiable $K$-manifold} 
+More precisely, for us, a \emph{ differentiable $K$-manifold} 
 (or just \emph{$K$-manifold} for short) is the data of a topological 
 space $V$ together with an open covering $V = \bigcup_{i \in I} V_i$ 
 (where $I$ is some set) and, for all $i \in I$, an homeomorphism 
@@ -576,7 +927,7 @@ nonempty, the composite map
 V_{ij} \stackrel{\varphi_j}{\longrightarrow} \varphi_j(V_{ij})
 \quad \text{(with } V_{ij} = V_i \cap V_j \text{)}
 \end{equation}
-is strictly differentiable at all points in its domain. We recall that
+is  differentiable at all points in its domain. We recall that
 the mappings $\varphi_i$ above are the so-called \emph{charts} and that
 their collection defines an \emph{atlas} of $V$. In the sequel, we shall
 assume further that the open covering $V = \bigcup_{i \in I} V_i$ is
@@ -595,7 +946,7 @@ $i$ such that $x \in V_i$ and then makes sense.
 
 As usual, we can define the notion of strict differentiability (at some 
 point) for a continuous mapping between two $K$-manifolds by viewing it 
-through the charts. A strictly differentiable map $f : V \to V'$ induces 
+through the charts. A  differentiable map $f : V \to V'$ induces 
 a linear map on tangent spaces $f'(x) : T_x V \to T_{f(x)} V'$ for all 
 $x$ in the domain $V$. It is called the \emph{differential} of $f$ at
 $x$.
@@ -705,26 +1056,17 @@ We now prove (ii). \todo{Write the proof.}
 
 \todofor{David/Xavier}{Extend Lemma \ref{lem:main} to manifolds.}
 
-\section{Examples and applications}
-
-In this Section, we illustrate the theory developed in this paper by 
-giving examples and applications. In \S \ref{ssec:differentials}, we 
-compute the differential of a bunch of usual operations involving 
-$p$-adic objects of different nature. Very often, we will observe that 
-this computation is easy even if the underlying operation is 
-sophisticated (\emph{e.g.} Gr\"obner basis).
-In \S \ref{ssec:SOMOS-solution}, we study the SOMOS 4 sequence 
-introduced in \S \ref{ssec:stepbystep} and, making a crucial use of 
-Lemma \ref{lem:main} and Proposition \ref{prop:}, we design a quite 
-\emph{stable} algorithm for computing it.
-
-\subsection{Differential of usual operations}
+\section{Differential of usual operations}
 \label{ssec:differentials}
 
-As in the previous Sections, we always work over a fixed ultrametric 
-field $K$, whose absolute value is denoted by $|\cdot|$. We recall that 
-usual examples are the field of $p$-adic numbers $\Q_p$ and the field of 
-Laurent series $k((X))$ over a base field $k$.
+We continue to work over a fixed ultrametric field $K$, whose absolute 
+value is denoted by $|\cdot|$. We recall that usual examples of such $K$ 
+are the field of $p$-adic numbers $\Q_p$ and the field of Laurent series 
+$k((X))$ over a base field $k$. The aim of this appendix is to compute 
+the differential of many usual operations on numbers, polynomials and 
+matrices. Surprisingly, we observe that all differentials we will 
+consider are rather easy to compute even if the underlying operation is 
+quite involved (\emph{e.g.} Gr\"obner basis).
 
 In what follows, we use freely the ``method of physicists'' to compute 
 differentials: given a function $f$ differentiable at some point $x$, we 
@@ -732,7 +1074,7 @@ consider a small perturbation $dx$ of $x$ and write $f(x+dx) = y + dy$
 by expanding LHS and neglecting terms of order $2$. The differential of 
 $f$ at $x$ is then the linear mapping $dx \mapsto dy$.
 
-\subsubsection*{Numbers}
+\subsection{Numbers}
 
 The most basic operations are, of course, sums, products and inverses of 
 elements of $K$. Their differential are well-known and quite easy to 
@@ -757,13 +1099,46 @@ $|n| = p^{-k}$ and Lemma \ref{lem:main} reflects the well-known fact that
 raising a $p$-adic number to the $p^k$-th power increases the precision 
 by $k$ extra digits.
 
-\subsubsection*{Univariate polynomials}
+\subsection{Univariate polynomials}
+\label{ssec:polynomials}
 
-Beyond sums and products (which can be treated as before), a basic 
-operation involving polynomials is Euclidean division. Let us compute 
-the differential of it. We start with two polynomials $A$ and $B$ with 
-$B \neq 0$. The Euclidean division of $A$ by $B$ is written $A = BQ + R$ 
-with $\deg R < \deg B$. Differentiating the above equality we find: 
+For any integer $d$, let us denote by $K_{< d}[X]$ the set of 
+polynomials over $K$ of degree $< d$. It is a finite dimensional vector 
+space of dimension $d+1$. The affine space $X^d + K_{< d}[X]$ is then 
+the set of monic polynomials over $K$ of degree $d$. We denote it by 
+$K_d[X]$.
+
+\subsubsection*{Evaluation and interpolation}
+
+Beyond sums and products (which can be treated as before), two basic 
+operations involving polynomials are evaluation and interpolation.
+Evaluation is modelised by the function $(P,x) \mapsto P(x)$ where
+$P$ is some polynomial and $x$ some element in $K$. Differentiating
+it can be done by computing
+\begin{equation}
+\label{eq:diffeval}
+(P + dP)(x + dx) = P(x + dx) + dP(x + dx) = P(x) + P'(x) dx + dP(x)
+\end{equation}
+by neglecting terms of order $2$. Here $P'$ denotes the derivative of 
+$P$. The differential at $P$ is then the linear map $(dP, dx) \mapsto 
+P'(x) dx + dP(x)$.
+
+As for interpolation, we consider a positive integer $d$ and the partial 
+function $f : K^{2d} \to K_{< d}[X]$ which maps the tuple $(x_1, y_1, 
+\ldots, x_d, y_d)$ to the polynomial $P$ of degree less than $d$ such 
+that $P(x_i) = y_i$ for all $i$. The polynomial $P$ exists and is unique 
+as soon as the $x_i$'s are pairwise distinct; the above function $f$ is 
+then defined on this open set. Furthermore, if $(x_1, y_1, \ldots, x_d, 
+y_d)$ is a point in it and $P$ denotes the corresponding interpolation 
+polynomial, Eq.~\eqref{eq:diffeval} shows that $d y_i = P'(x_i) dx_i + 
+dP(x_i)$ for all $i$. For this, we can compute $dP(x_i)$ from $d x_i$ 
+and $d y_i$ and finally recover $dP$ by performing a new interpolation.
+
+\subsubsection*{Euclidean division}
+
+Let $A$ and $B$ be two polynomials $B \neq 0$. The Euclidean division of 
+$A$ by $B$ is written $A = BQ + R$ with $\deg R < \deg B$. 
+Differentiating the above equality we find:
 $dA - dB \cdot Q = B \cdot dQ + dR$,
 which implies that $dQ$ and $dR$ are respectively obtained as the 
 quotient and the remainder of the Euclidean division of $dA - dB \cdot 
@@ -771,16 +1146,76 @@ Q$ by $B$. This gives the differential. We note that the discussion
 above extends readily to convergent series (see also 
 \cite{Caruso-Lubicz}).
 
-Another usual operations on polynomials is the factorization. Suppose 
-that we are given a monic polynomial $P \in K[X]$ written as a product 
-$P_0 = A_0 B_0$ where $A_0$ and $B_0$ are monic and coprime. Hensel's 
-lemma implies that there exists a small neighbourhood $\mathcal U$ of 
-$P_0$ such that any monic polynomial $P \in \mathcal U$ factors uniquely 
-as $P = A B$ with $A$ and $B$ monic and close enough to $A_0$ and $B_0$ 
-respectively. Thus, we can consider the map $f : P \mapsto (A,B)$ 
-defined on the subset of $\mathcal U$ consisting of monic polynomials.
-We want to differentiate $f$ at $P_0$. For this, we differentiate the 
-equality $P = A B$ around $P_0$, obtaining 
+\subsubsection*{Greatest common divisors and B\'ezout coefficients}
+
+We fix two positive integers $n$ and $m$ with $n \geq m$. We consider the 
+function $f : K_n[X] \times K_m[X] \to (K_{\leq n}[X])^3$ which sends a 
+couple $(A,B)$ to the triple $(D, U, V)$ where $D$ is the \emph{monic} 
+greatest common divisor of $A$ and $B$ and $U$ and $V$ are the B\'ezout 
+coefficients of minimal degrees (they are those computed by extended 
+Euclide algorithm).
+The nonvanishing of the resultant of $A$ and $B$ defines a Zariski open 
+subset $\mathcal V_0$ where the function $\gcd$ takes the constant value 
+$1$. On the contrary, outside $\mathcal V_0$, $\gcd(A,B)$ is a polynomial 
+of positive degree. This implies that $f$ is not continuous outside 
+$\mathcal V_0$. On the contrary, on $\mathcal V_0$, the function $f$ is
+differentiable, and actually locally analytic.
+
+Of course, on $\mathcal V_0$, the first component $D$ is constant and 
+therefore $dD = 0$. To compute $dU$ and $dV$, one can simply 
+differentiate the B\'ezout relation $AU + BV = 1$. We get:
+$$A \cdot dU + B \cdot dV = - (dA \cdot U + dB \cdot V)$$
+from which we deduce that $dU$ (resp. $dV$) is obtained as the 
+remainder in the Euclidean division of $U{\cdot}dX$ by $B$ (resp. of 
+$V{\cdot}dX$ by $A$) where $dX = - (dA \cdot U + dB \cdot V)$.
+
+In order to go further and differentiate $f$ outside $\mathcal V_0$, we 
+define, for all integer $i$, the subset $\mathcal V_i$ of $K_n[X] \times 
+K_m[X]$ as the locus where the $\gcd$ has degree $i$. The theory of 
+subresultants shows that $\mathcal V_i$ is locally closed with respect to 
+the Zariski topology. In particular, it defines a $K$-manifold in the 
+sense of Appendix \ref{sec:manifold}. This is interesting because the 
+restriction of $f$ to $\mathcal V_i$ is now differentiable. To compute
+its differential, we proceed along the same lines as before: we 
+differentiate the relation $AU + BV = D$ and obtain this way
+$A \cdot dU + B \cdot dV - dD = dX$
+with $dX = - (dA \cdot U + dB \cdot V)$. In the above relation, the
+first two terms $A{\cdot}dU$ and $B{\cdot}dV$ are divisible by $D$ 
+whereas the term $dD$ has degree less than $i$. 
+Hence if $dX = D \cdot dQ + dR$ is the Euclidean division of $dX$ by $D$, 
+we must have $\frac A D \cdot dU + \frac B D \cdot dV = dQ$ and $dD = 
+-dR$. These relations, together with bounds on the degree of $U$ and $V$,
+imply as before that $dU$ (resp. $dV$) are equal to the remainder in the
+Euclidean division of $U{\cdot}dQ$ by $\frac B D$ (resp. of $V{\cdot}dQ$
+by $\frac A D$).
+
+\medskip
+
+The lesson we may retain from this study is the following. If we have to 
+compute the greatest common divisor of two polynomials $A$ and $B$ known 
+with finite precision, we first need to determine what is its degree. 
+However, the degree function is not continuous --- it is only upper 
+semi-continuous --- and hence cannot be determined from sure from $A$ and 
+$B$ (expect if they are coprime). We then need to make an extra 
+hypothesis and the more natural one is arguably to assume that 
+$\gcd(A,B)$ has actually the maximal degree that it can have. Once this
+assumption is made, the computation is possible and one can apply Lemma 
+\ref{lem:main} to determine the precision of the result.
+Note that with the above convention, the $\gcd$ of $A$ and $A$ is $A$ 
+itself although there exist pair of coprime polynomials in any 
+neighborhood of $(A,A)$.
+
+\subsubsection*{Factorization}
+
+Suppose that we are given a polynomial $P_0 \in K_d[X]$ written as a 
+product $P_0 = A_0 B_0$ where $A_0$ and $B_0$ are monic and coprime. 
+Hensel's lemma implies that there exists a small neighborhood $\mathcal 
+U$ of $P_0$ in $K_d[X]$ such that any $P \in \mathcal U$ factors 
+uniquely as $P = A B$ with $A$ and $B$ monic and close enough to $A_0$ 
+and $B_0$ respectively. Thus, we can consider the map $f : P 
+\mapsto (A,B)$ defined on the subset of $\mathcal U$ consisting of monic 
+polynomials. We want to differentiate $f$ at $P_0$. For this, we 
+differentiate the equality $P = A B$ around $P_0$, obtaining
 \begin{equation}
 \label{eq:difffactor}
 dP = A_0 \cdot dB + B_0 \cdot dA.
@@ -791,23 +1226,83 @@ between $A_0$ and $B_0$, it follows from Eq.~\eqref{eq:difffactor} that
 $dA$ (resp. $dB$) is the remainder in the Euclidean division of $V_0
 {\cdot} dP$ by $A_0$ (resp. of $U_0 {\cdot} dP$ by $B_0$).
 
-An important special case of the previous study occurs when $A_0$ has 
-degree $1$, that is $A_0(X) = X - \alpha$ with some $\alpha \in K$. The 
-map $P \mapsto A$ is then nothing but the mapping that follows 
-the simple root $\alpha$. Of course, its differential around $P_0$ can 
-be computed by the above method. Nevertheless there is a more direct way 
-to obtain it in this particular case: we write $(P + dP)(\alpha + 
-d\alpha) = 0$ and expand this. We obtain this way $P'(\alpha) d\alpha + 
-dP(\alpha) = 0$ where $P'$ denotes the derivative of $P$. Since $\alpha$ 
-is a simple root, $P'(\alpha)$ does not vanish and we recover $d \alpha 
-= - \frac{dP(\alpha)}{P'(\alpha)}$.
+\subsubsection*{Finding roots}
 
-\subsubsection*{Multivariate polynomials}
+An important special case of the previous study occurs when $A_0$ has 
+degree $1$, that is $A_0(X) = X - \alpha_0$ with some $\alpha_0 \in K$. 
+The map $P \mapsto A$ is then nothing but the mapping that 
+follows the simple root $\alpha_0$. Of course, its differential around 
+$P_0$ can be computed by the above method. Nevertheless there is a more 
+direct way to obtain it in this particular case: we write $(P_0 + 
+dP)(\alpha_0 + d\alpha) = 0$ and expand this. We obtain this way 
+$P_0'(\alpha_0) d\alpha + dP(\alpha_0) = 0$ where $P'$ denotes the 
+derivative of $P$. Since $\alpha_0$ is a simple root, $P_0'(\alpha_0)$ 
+does not vanish and we find:
+$$d \alpha = - \frac{dP(\alpha_0)}{P'_0(\alpha_0)}.$$
+
+We now address the case of a multiple roots. Let $P_0$ be a monic 
+polynomial of degree $d$ and $\alpha_0 \in K$ be a root of $P_0$ having 
+multiplicity $m > 1$. Due to the multiplicity, it is no longer possible 
+to follow to root $\alpha_0$ in a neighborhood of $P_0$. But it is if we 
+restrict ourselves to polynomials which have a root of multiplicity $m$ 
+close to $\alpha_0$. More precisely, let us consider the locus $\mathcal 
+V_m$ consisting of monic polynomials of degree $d$ having a root of 
+multiplicity at least $m$. It is a Zariski close subset of $K_d[X]$ and 
+it contains by assumption the polynomial $P_0$ we started with. 
+Moreover, the irreducible components of $\mathcal V_m$ that meet at 
+$P_0$ are in bijection with the set of roots of $P_0$ of multiplicity 
+$\geq m$. In particular $\alpha_0$ correspond to one of these 
+irreducible components; let us denote it by $\mathcal V_{m,\alpha_0}$. 
+The algebraic variety $\mathcal V_{m,\alpha_0}$ is a \emph{a fortioti} 
+$K$-manifold. Moreover there exists a differentiable function $f$ which 
+is defined on a neighborhood of $P_0$ in $\mathcal V_{m,\alpha_0}$ and 
+follows the root $\alpha_0$, \emph{i.e.} $f(P_0) = \alpha_0$ and for all 
+$P$ such that $f(P)$ is defined, $\alpha = f(P)$ is a root of 
+multiplicity (at least) $m$ of $P$. The existence of $f$ follows from 
+Hensel's Lemma applied to the factorisation $P_0(X) = (X-\alpha_0)^m 
+B_0(X)$ where $B_0(X)$ is a polynomial which is coprime to $X - 
+\alpha_0$. We can finally compute the differential of $f$ at $P_0$ 
+(along $\mathcal V_{m,\alpha_0}$) by differentiating the equality
+$P^{(m-1)}(\alpha) = 0$ where $P^{(i)}$ denotes the $i$-th derivative
+of $P$. We find:
+\begin{equation}
+\label{eq:dalphamult}
+d \alpha = - \frac{dP^{(m-1)}(\alpha_0)}{P_0^{(m)}(\alpha_0)}.
+\end{equation}
+
+The above computation has actually interesting consequences on $p$-adic 
+precision. Let us illustrate this with an exemple. Consider the monic 
+polynomial $P(X) = X^2 + O(p^{2N}) X + O(p^{2N})$ (where $N$ is some 
+large integer) and assume that we are asking a softwate to compute one 
+of its roots. What is the right answer? We remark that, if $\alpha$ is 
+any $p$-adic number divisible by $p^N$, then $P(X)$ can be $X^2 - 
+\alpha^2$ whose roots are $\pm \alpha$. Conversely, we can prove that 
+the two roots of $P$ are necessarily divisible by $p^N$. Hence, the
+right answer is certainly $O(p^N)$. Nevertheless, if we know in addition 
+that $P$ has a double root, say $\alpha$, we can write $P(X) = (X - 
+\alpha)^2$ and identifying the coefficient in $X$, we get $\alpha =
+O(p^{2N})$ if $p > 2$ and $\alpha = O(p^{2N-1})$ if $p=2$.
+This is exactly the result we get by applying Lemma \ref{lem:main} and
+using Eq.~\eqref{eq:dalphamult} to simplify the differential.
+
+This phenomenon is general: if $P$ is a polynomial over $\Q_p$ known at 
+some finite precision $O(p^N)$, a root $\alpha$ of $P$ having possibly 
+multiplicity $m$ (\emph{i.e.} $P(\alpha), P'(\alpha), \ldots, P^{(m-1)} 
+(\alpha)$ vanish at the given precision) can be computed at precision 
+roughly $O(p^{N/m})$. However, if we know in advance that $\alpha$ has 
+indeed multiplicity $m$ then we can compute it at precision $O(p^{N-c})$ 
+where $c$ is some constant (depending on $P$ and $\alpha$ but not on
+$N$).
+
+\subsection{Multivariate polynomials}
 
 We consider the ring $K[\XX] = K[X_1, \ldots, X_n]$ of polynomials in $n$
-variables over $K$ and fix a monomial order on it. We then have a 
-notion of division in $K[\XX]$: if $f, f_1, \ldots, f_s$ are polynomials
-in $K[\XX]$, there exists a writing:
+variables over $K$ and fix a monomial order on it. 
+
+\subsubsection*{Division}
+
+We then have a notion of division in $K[\XX]$: if $f, f_1, \ldots, f_s$ 
+are polynomials in $K[\XX]$, there exists a writing:
 $$f = q_1 f_1 + \cdots + q_s f_s + r$$
 where $q_1, \ldots, q_s, r \in K[\XX]$ and no term of $r$ is divisible
 by the leading term of some $f_i$ ($1 \leq i \leq s$). Moreover, assuming
@@ -822,7 +1317,9 @@ the case of univariate polynomials, we can compute its differential: we
 find that $dr$ is obtained as the remainder of the division of $f - (q_1 
 \cdot d f_1 + \cdots + q_s \cdot d f_s)$ by $(f_1, \ldots, f_s)$.
 
-We now focus on the computation of Gr\"obner basis. Recall that any 
+\subsubsection*{Gr\"obner basis}
+
+Recall that any 
 ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We can 
 then consider the map sending a family $(f_1, \ldots, f_s)$ of 
 \emph{homogeneous}\footnote{This restriction will be convenient for us 
@@ -849,22 +1346,24 @@ where $A$ is a $(s \times t)$ matrix with coefficients in $K[\XX]$.
 Moreover following Vaccon's construction, we see that the entries of $A$ 
 can be chosen in such a way that they define differentiable functions.
 Differentiating Eq.~\eqref{eq:prodgrobner}, we get:
-$$(d f_1, \ldots, d f_s) \cdot A + (f_1, \ldots, f_s) \cdot dA = 
-(d g_1, \ldots, d g_t).$$
+$$(d g_1, \ldots, d g_t) =
+(d f_1, \ldots, d f_s) \cdot A + (f_1, \ldots, f_s) \cdot dA.$$
 Finally, using that we are working with \emph{reduced} Gr\"obner
 basis, the above equality implies that $d g_i$ is the remainder in
 the division of the $i$-th coefficient of the product
 $(d f_1, \ldots, d f_s) \cdot A$ by the family $(g_1, \ldots, g_t)$.
 
-\subsubsection*{Matrices}
+\subsection{Matrices}
 
 Differentiating ring operations (sum, products, inverse) over matrices 
 is again straightforward; we just need to be careful that matrix 
 algebras are (in general) noncommutative.
 
-We now move to determinants, \emph{i.e.} we compute the differential
-of the function $\det : M_n(K) \to K$. It is a standard computation.
-To begin with, we consider an invertible matrix $M$ and write:
+\subsubsection*{Determinants and characteristic polynomials}
+
+Let us first compute the differential of the function $\det : M_n(K) \to 
+K$. It is a standard computation. To begin with, we consider an 
+invertible matrix $M$ and write:
 \begin{eqnarray*}
 \det(M + dM) &=& \det(M) \cdot \det(I + M^{-1} \cdot dM)  \\
 &=& \det(M) \cdot \big(1 + \tr(M^{-1} \cdot dM)\big) \\
@@ -882,8 +1381,9 @@ to its characteristic polynomial $\det(X-M)$.
 Then $\chi$ is differentiable at each point $M \in M_n(K)$ and its 
 differential is given by $dM \mapsto \tr(\com(X{-}M) \cdot dM)$.
 
-Other important tools related to matrices are usual factorizations as, 
-for example, LU factorization. In what follows, let us agree to define a 
+\subsubsection*{LU factorization}
+
+Let us agree to define a 
 LU factorization of a square matrix $M \in M_n(K)$ as a writing $M = LU$ 
 where $L$ is lower triangular and unipotent and $U$ is upper triangular. 
 Such a writing exists and is unique provided that all principal minors 
@@ -902,10 +1402,11 @@ recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the
 left and $U$ on the right respectively. 
 The above discussion extends almost \emph{verbatim} to LUP 
 factorization; the only difference is that LUP factorizations are not 
-unique but they are on a small neighbourhood of $M$ if we fix the matrix 
+unique but they are on a small neighborhood of $M$ if we fix the matrix 
 $P$.
 
-A similar argument works for QR factorization as well.
+\subsubsection*{QR factorization}
+
 For us, a QR factorization of a square matrix $M \in M_n(K)$ will be
 a writing $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
 orthogonal in the sense that $\trans Q \cdot Q$ is diagonal. As before, such 
@@ -915,7 +1416,7 @@ would like to emphasize at this point that the orthogonality condition
 defines a sub-manifold of $M_n(K)$ which is a apparently \emph{not} a
 vector space (it is defined by equations of degree $2$). The codomain
 of $f$ is then also a manifold; this example then fits to the setting
-of \S \ref{sec:manifold} but not to those of \S \ref{sec:philosophy}. 
+of \S \ref{sec:manifold} but not to those of \S \ref{sec:mainlemma}. 
 The generalization made in \S \ref{sec:manifold} is then needed.
 Anyway, we can differentiate $f$ by following the method we used for LU 
 factorization: differentiating the relation $M = QR$, we obtain:
@@ -932,7 +1433,7 @@ triangular with all diagonal entries equal to $0$, we see that
 Eq.~\eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
 and $dM$.
 
-\subsubsection*{Vector spaces}
+\subsection{Vector spaces}
 
 Let $d$ and $n$ be two nonnegative integers such that $d \leq n$. The 
 Grassmannian $\Grass(d,n)$ is the set of all sub-vector spaces of $K^n$ 
@@ -951,46 +1452,40 @@ such writings with the same $P$ necessarily coincide. Hence each
 permutation matrix $P$ defines a chart $U_P \subset \Grass(d,n)$ which
 is canonically diffeomorphism to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
 
-Let us now consider the open subset of $M_{n,n-d}(K)$ consisting of 
-matrices of full rank. The left kernel defines a mapping $\text{LK} : 
-M_{n,n-d}(K) \to \Grass(d,n)$. Let us prove that it is differentiable 
-and compute its differential around some point $M \in M_{n,n-d}(K)$. Of 
-course, there exists a neighbourhood $\mathcal U$ of $M$ whose image is 
-entirely contained in a given chart $U_P$. We assume for simplicity that 
-$P$ is the identity. On $\mathcal U$, the map $\text{LK}$ corresponds in 
-our chart to the map that takes $M$ to the unique matrix $N \in
-M_{d, n-d}(K)$ such that $\begin{pmatrix} I_d & N \end{pmatrix} \cdot M 
-= 0$. The implicit function theorem then implies that $\text{LK}$ is
-differentiable. Furthermore, its differential satisfies the relation
+\subsubsection*{Left kernels}
+
+We consider the open subset $\mathcal V_{n-d}$ of $M_{n,n-d}(K)$ 
+consisting of matrices of full rank, \emph{i.e.} rank $n-d$. The left 
+kernel defines a mapping $\text{LK} : M_{n,n-d}(K) \to \Grass(d,n)$. Let 
+us prove that it is differentiable and compute its differential around 
+some point $M \in M_{n,n-d}(K)$. Of course, there exists a neighborhood 
+$\mathcal U$ of $M$ whose image is entirely contained in a given chart 
+$U_P$. We assume for simplicity that $P$ is the identity. On $\mathcal 
+U$, the map $\text{LK}$ corresponds in our chart to the map that 
+takes $M$ to the unique matrix $N \in M_{d, n-d}(K)$ such that 
+$\begin{pmatrix} I_d & N \end{pmatrix} \cdot M = 0$. The implicit 
+function theorem then implies that $\text{LK}$ is differentiable. 
+Furthermore, its differential satisfies the relation
 $\begin{pmatrix} 0 & dN \end{pmatrix} \cdot M +
 \begin{pmatrix} I_d & N \end{pmatrix} \cdot dM = 0$,
 from which we can compute $dN$ by projecting on the $(n-d)$ last
 columns.
 
-We can develop further this example and study what happens on the 
-closed subset of $M_{n,n-d}(K)$ where matrices have not full rank. On
-this subspace, the left kernel has dimension $< d$ and then no longer
-defines a point in $\Grass(n,d)$. Nevertheless, for all integer $r <
-n-d$, we can consider the subset $\mathcal V_r \subset M_{n,n-d}(K)$
-of matrices whose rank are exactly rank $d$. It is locally closed in
-$M_{n,n-d}(K)$ with respect to the Zariski topology and hence defines
-a $K$-manifold. Furthermore, we have a mapping $\text{LK}_r : \mathcal 
-M_r \to \Grass(n,n-r)$ which is differentiable and whose differential 
-can be computed as before.
+Following what we have already done in \S \ref{ssec:polynomials} for 
+greatest common divisors of polynomials, we can develop further this 
+example and study what happens on the closed subset of $M_{n,n-d}(K)$ 
+where matrices have not full rank. On this subspace, the left kernel has 
+dimension $< d$ and then no longer defines a point in $\Grass(n,d)$. 
+Nevertheless, for all integer $r < n-d$, we can consider the subset 
+$\mathcal V_r \subset M_{n,n-d}(K)$ of matrices whose rank are exactly 
+rank $r$. It is locally closed in $M_{n,n-d}(K)$ with respect to the 
+Zariski topology and hence defines a $K$-manifold. Furthermore, we have a 
+mapping $\text{LK}_r : \mathcal M_r \to \Grass(n,n-r)$ which is 
+differentiable and whose differential can be computed as before.
 
-The lesson from this study is the following. If we have to compute the 
-kernel of a matrix $M$ over $K$ known with finite precision, \emph{a 
-priori} we first need to determine what is the rank of $M$. However, the 
-rank function is not continuous --- it is only lower semi-continuous --- 
-and hence cannot be determined from sure from $M$ (expect if $M$ has 
-full rank). We then need to make an extra hypothesis and the more natural 
-one is arguably to assume that $M$ has actually the minimal rank that it 
-can have. With this convention, for instance, the kernel of the zero 
-matrix $M \in M_n(K)$ \emph{known with finite precision} is always the 
-whole space although there exist invertible matrices in any 
-neighbourhood of $M$.
+\subsubsection*{Intersections}
 
-We now focus on the computation of intersections. We pick $n$, $d_1$ and 
+We pick $n$, $d_1$ and 
 $d_2$ three nonnegative integers such that $d_1 \leq n$, $d_2 \leq n$ 
 and $d_1 + d_2 \geq n$. Two subspaces of $K^n$ of dimension $d_1$ and 
 $d_2$ respectively meet along a subspace of dimension at most $d_1 + d_2 
@@ -1004,143 +1499,10 @@ kernel of the canonical linear map $E_1 \oplus E_2 \to K^n$. We deduce
 for this that $f_d$ is differentiable and that its differential can be
 computed similarly to what we have done before.
 
+\subsubsection*{Sums and images}
+
 Finally, we note that similar results hold for images of matrices and,
 consequently, sums of subspaces.
-
-\subsection{The SOMOS 4 sequence}
-\label{ssec:SOMOS-solution}
-
-Recall (\emph{cf} \S \ref{ssec:stepbystep}) that a SOMOS 4 sequence is a 
-four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
-+ u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
-Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
-u_2, u_3$ are some indeterminates, that each $u_n$ is a Laurent 
-polynomial with coefficients in $\Z$ in these indeterminates.
-
-From now, we will always consider SOMOS sequences with values in $\Q_p$ 
-(for some prime number $p$) and assume that $u_0, u_1, u_2, u_3$ are 
-chosen such that all terms $u_n$'s are determined (\emph{i.e.} there is 
-no division by zero). We assume also for simplicity that $u_0, u_1, u_2, 
-u_3$ are all units in $\Z_p$. By Laurent phenomenon, this implies first 
-that all $u_n$'s lie in $\Z_p$ and second that if $u_0, u_1, u_2, u_3$ 
-are known with finite precision $O(p^N)$ then all terms $u_n$'s are 
-known with the same precision. 
-
-In this last paragraph, we illustrate the theory developed in this 
-article by designing an algorithm for computing the $u_n$'s at precision 
-$O(p^N)$. The algorithm is presented at the top of page 
-\pageref{algo:SOMOS}. We now prove that it is correct.
-%
-\begin{algorithm}[t]
-\SetKwInOut{Assumption}{Assumption}
-\KwIn{$a,b,c,d$ --- four initial terms of a SOMOS 4 sequence $(u_n)_{n \geq 0}$}
-\KwIn{$n, N$ --- two integers}
-\Assumption{$a$, $b$, $c$ and $d$ lie in $\Z_p^\times$ and are known at 
-precision $O(p^N)$}
-\Assumption{None of $u_i$ $(0 \leq i \leq n$) is divisible by $p^N$}
-\KwOut{$u_n$ at precision $O(p^N)$}
-\BlankLine
-$\prec$ $\leftarrow$ $N$\;
-\For {$i$ from $1$ to $n-3$}{
-  $\prec$ $\leftarrow$ $\prec + v_p(bd + c^2) - v_p(a)$\;
-  {\bf lift} (arbitrary) 
-    $b$, $c$ and $d$ to precision $O(p^{\prec})$\label{line:lift}\;
-  $\prec$ $\leftarrow$ $\prec - v_p(a)$\;
-  $e$ $\leftarrow$ $\frac{bd+c^2} a$; \hspace{1cm}
-   \tcp{$e$ is known at precision $O(p^\prec)$}
-  $a, b, c, d$ $\leftarrow$ $b + O(p^{\prec}), c + O(p^{\prec}), d + O(p^{\prec}), e$\;
-}
-\Return{$d + O(p^N)$}\;
-\caption{\sc SOMOS$(a, b, c, d, n, N)$}\label{algo:SOMOS}
-\end{algorithm}
-%
-We introduce the (partial) function $f : \Q_p^4 \to \Q_p^4$ defined by 
-$f(a,b,c,d) = (b,c,d,\frac{bd+c^2}a)$, so that, for all $i$, we have 
-$(u_i, u_{i+1}, u_{i+2}, u_{i+3}) = f_i(u_0, u_1, u_2, u_3)$ where $f_i
-= f \circ \cdots \circ f$ ($i$ times). Clearly, $f$ is strictly 
-differentiable on $\Q_p^\times \times \Q_p^3$ and its differential in the 
-canonical basis is given by the matrix:
-$$D(a,b,c,d) = \begin{pmatrix}
-0 & 1 & 0 & 0 \\
-0 & 0 & 1 & 0 \\
-0 & 0 & 0 & 1 \\
--\frac{bd+c^2}{a^2} & \frac d a & \frac {2c} a & \frac b a
-\end{pmatrix}$$
-whose determinant is $\frac{bd+c^2}{a^2}$. Thus, if the $(i+4)$-th term 
-of the SOMOS sequence is defined, the mapping $f_i$ is differentiable
-at $(u_0, u_1, u_2, u_3)$ and its differential $\varphi_i = 
-f'_i(u_0, u_1, u_2, u_3)$ is given by the matrix:
-$$D_i = D(u_{i-1}, u_i, u_{i+1}, u_{i+2}) \cdots
-D(u_1, u_2, u_3, u_4) \cdot D(u_0, u_1, u_2, u_3).$$
-Moreover thanks to the Laurent phenomenon, we know that $D_i$ has
-integral coefficients, \emph{i.e.} $\varphi_i$ stabilizes the lattice
-$\Z_p^4$.
-We are now going to prove by induction on $i$ that, at the end of the 
-$i$-th iteration of the loop, we have $\prec = N + v_p(\det D_i)$ and
-\begin{equation}
-\label{eq:congrSOMOS}
-(a, b, c, d) \equiv (u_i, u_{i+1}, u_{i+2}, u_{i+3}) \pmod
-{p^N \varphi_i(\Z_p^4)}.
-\end{equation}
-The first point is easy. Indeed, from $D_i = D(u_{i-1}, u_i, u_{i+1}, 
-u_{i+2}) D_{i-1}$, we deduce $\det D_i = \det D_{i-1} \cdot 
-\frac{u_i}{u_{i-3}}$ and the assertion follows by taking determinants
-and using the induction hypothesis. 
-Let us now establish Eq.~\eqref{eq:congrSOMOS}. To avoid confusion, 
-let us agree to denote $a'$, $b'$, $c'$, $d'$ and $\prec'$ the values of 
-$a$, $b$, $c$, $d$ and $\prec$ respectively at the \emph{beginning} of 
-the $i$-th iteration of the loop. By induction hypothesis (or by 
-initialization if $i = 1$), we have:
-\begin{equation}
-\label{eq:congrSOMOS2}
-(a', b', c', d') \equiv (u_{i-1}, u_i, u_{i+1}, u_{i+2}) \pmod
-{p^N \varphi_{i-1}(\Z_p^4)}.
-\end{equation}
-Moreover, we know that the determinant of $\varphi_{i-1}$ has valuation
-$\prec'$. Hence \eqref{eq:congrSOMOS2} remains true if $a'$, $b'$, $c'$
-and $d'$ are replaced by other values which are congruent to them modulo
-$p^{\prec'}$. In particular it holds if $a'$, $b'$, $c'$ and $d'$ denotes
-the values of $a$, $b$, $c$ and $d$ after the execution of line
-\ref{line:lift}. Now applying Lemma \ref{lem:main} and Proposition
-\ref{prop:} to $\varphi_{i-1}$ and $\varphi_i$ (at the point $(u_0,
-u_1, u_2, u_3)$), we get:
-$$f\big((u_{i-1}, u_i, u_{i+1}, u_{i+2}) + p^N \varphi_{i-1}(\Z_p^4)\big)
-= (u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4).$$
-By the discussion above, this implies in particular that $f(a',b',c',d')$
-belongs to $(u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4)$. We
-conclude by remarking first that $(a,b,c,d) \equiv f(a',b',c',d') \pmod 
-{p^\prec \Z_p^4}$ by construction and second that $p^\prec \Z_p^4 \subset
-p^N \varphi_i(\Z_p^4)$.
-
-Finally Eq.~\eqref{eq:congrSOMOS} applied with $i = n-3$ together with
-the fact that $\varphi_i$ stabilizes $\Z_p^4$ imply that, when we exit
-the loop, the value of $d$ is congruent to $u_n$ modulo $p^N$. Hence,
-our algorithm returns the correct value.
-
-\medskip
-
-Let us conclude this subsection by remarking that Algorithm 
-\ref{algo:SOMOS} performs computations at precision at most $O(p^{N+v})$ 
-where $v$ is the sum of the valuations of five consequence terms among 
-the first $n$ terms of the SOMOS sequence we are considering. 
-Experiments show that the value of $v$ varies like $c \cdot \log n$ 
-where $c$ is some constant. Assuming that we are using a FFT-like 
-algorithm to compute products of integers, the complexity of Algorithm 
-\ref{algo:SOMOS} is then expected to be $\tilde O(N n)$ where the 
-notation $\tilde O$ means that we hide logarithmic factors.
-
-We can compare this with the complexity of the more naive algorithm 
-consisting of lifting the initial terms $u_0, u_1, u_2, u_3$ to enough 
-precision and then do the computation using a naive step-by-step 
-tracking of precision. In this setting, the required original precision 
-is $O(p^{N+2v'})$ where $v'$ is the sum of the valuation of the $u_i$'s 
-for $i$ varying between $0$ and $n$. Experiments show that $v'$ is about 
-$c' \cdot n \log n$ (where $c'$ is a constant), which leads to a 
-complexity in $\tilde O (N n + n^2)$. Our approach is then interesting
-when $n$ is large compared to $N$: under this hypothesis, it saves
-roughly a factor $n$.
-
-%\section{Conclusions}
 
 \begin{thebibliography}{10}
 
@@ -1159,6 +1521,10 @@ roughly a factor $n$.
   \emph{Linear Algebra over Zp[[u]] and related rings,} 
   to appear at LMS J. Comp. and Math. 
 
+\bibitem{Fomin-Zelevinsky}
+  S.~Fomin, A.~Zelevinsky
+  \emph{The Laurent phenomenon,}   Advances in Applied Mathematics 28: 119–144 (2002).
+  
 \bibitem{Gaudry}
   P.~Gaudry, T.~Houtmann, A.~Weng, C.~Ritzenthaler, D.~Kohel,
   \emph{The $2$-adic CM method for genus $2$}, 
