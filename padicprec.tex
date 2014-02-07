@@ -1269,13 +1269,13 @@ precision. Let us illustrate this with an exemple. Consider the monic
 polynomial $P(X) = X^2 + O(p^{2N}) X + O(p^{2N})$ (where $N$ is some 
 large integer) and assume that we are asking a softwate to compute one 
 of its roots. What is the right answer? We remark that, if $\alpha$ is 
-any $p$-adic number divisible by $p^n$, then $P(X)$ can be $X^2 - 
+any $p$-adic number divisible by $p^N$, then $P(X)$ can be $X^2 - 
 \alpha^2$ whose roots are $\pm \alpha$. Conversely, we can prove that 
-the two roots of $P$ are necessarily divisible by $p^n$. Hence, the
+the two roots of $P$ are necessarily divisible by $p^N$. Hence, the
 right answer is certainly $O(p^N)$. Nevertheless, if we know in addition 
 that $P$ has a double root, say $\alpha$, we can write $P(X) = (X - 
 \alpha)^2$ and identifying the coefficient in $X$, we get $\alpha =
-O(p^{2N})$ (or $O(p^{2N-1})$ if $p=2$). 
+O(p^{2N})$ if $p > 2$ and $\alpha = O(p^{2N-1})$ if $p=2$.
 This is exactly the result we get by applying Lemma \ref{lem:main} and
 using Eq.~\eqref{eq:dalphamult} to simplify the differential.
 
