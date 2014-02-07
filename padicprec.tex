@@ -1092,13 +1092,37 @@ space of dimension $d+1$. The affine space $X^d + K_{< d}[X]$ is then
 the set of monic polynomials over $K$ of degree $d$. We denote it by 
 $K_d[X]$.
 
+\subsubsection*{Evaluation and interpolation}
+
+Beyond sums and products (which can be treated as before), two basic 
+operations involving polynomials are evaluation and interpolation.
+Evaluation is modelised by the function $(P,x) \mapsto P(x)$ where
+$P$ is some polynomial and $x$ some element in $K$. Differentiating
+it can be done by computing
+\begin{equation}
+\label{eq:diffeval}
+(P + dP)(x + dx) = P(x + dx) + dP(x + dx) = P(x) + P'(x) dx + dP(x)
+\end{equation}
+by neglecting terms of order $2$. Here $P'$ denotes the derivative of 
+$P$. The differential at $P$ is then the linear map $(dP, dx) \mapsto 
+P'(x) dx + dP(x)$.
+
+As for interpolation, we consider a positive integer $d$ and the partial 
+function $f : K^{2d} \to K_{< d}[X]$ which maps the tuple $(x_1, y_1, 
+\ldots, x_d, y_d)$ to the polynomial $P$ of degree less than $d$ such 
+that $P(x_i) = y_i$ for all $i$. The polynomial $P$ exists and is unique 
+as soon as the $x_i$'s are pairwise distinct; the above function $f$ is 
+then defined on this open set. Furthermore, if $(x_1, y_1, \ldots, x_d, 
+y_d)$ is a point in it and $P$ denotes the corresponding interpolation 
+polynomial, Eq.~\eqref{eq:diffeval} shows that $d y_i = P'(x_i) dx_i + 
+dP(x_i)$ for all $i$. For this, we can compute $dP(x_i)$ from $d x_i$ 
+and $d y_i$ and finally recover $dP$ by performing a new interpolation.
+
 \subsubsection*{Euclidean division}
 
-Beyond sums and products (which can be treated as before), a basic 
-operation involving polynomials is Euclidean division. Let us compute 
-the differential of it. We start with two polynomials $A$ and $B$ with 
-$B \neq 0$. The Euclidean division of $A$ by $B$ is written $A = BQ + R$ 
-with $\deg R < \deg B$. Differentiating the above equality we find: 
+Let $A$ and $B$ be two polynomials $B \neq 0$. The Euclidean division of 
+$A$ by $B$ is written $A = BQ + R$ with $\deg R < \deg B$. 
+Differentiating the above equality we find:
 $dA - dB \cdot Q = B \cdot dQ + dR$,
 which implies that $dQ$ and $dR$ are respectively obtained as the 
 quotient and the remainder of the Euclidean division of $dA - dB \cdot 
