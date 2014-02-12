@@ -102,30 +102,44 @@ homomorphism, given unknown elements in two such balls we can
 locate the balls in which their sum and product lie.  Working on a computer
 we must find a way to write elements using only a finite amount of data.
 By lumping elements together into these balls of radius $p^{-n}$, we may
-model arithmetic in $\Zp$ using the finite ring $\Z / p^n \Z$.  In Sage
-this method for approximating elements is known as ``fixed modulus''.
+model arithmetic in $\Zp$ using the finite ring $\Z / p^n \Z$.  In this representation,
+all $p$-adic elements in have constant \emph{absolute precision} $n$.
 
 The second source draws upon parallels between $\Qp$ and $\R$.  Both
-occur as completions of $\Q$, and both have dense subrings:
-the localizations $\Z[\frac1p] \subset \Qp$ and $\Z[\frac12] \subset \R$.
+occur as completions of $\Q$ and we represent elements in both in terms
+of a set of distinguished rational numbers.
 In $\R$, floating point arithmetic provides approximate operations $\oplus$ and $\odot$ on a
-subset $S \subset \Z[\frac12]$ that model $+$ and $\cdot$ in $\R$ up to a given relative precision $h$:
+subset $S_{\infty,h} \subset \Z[\frac12]$ that model $+$ and $\cdot$ in $\R$ up to a given relative precision $h$:
 \[
-\frac{x \circledast y}{x \ast y} - 1 \le 2^{-h}
+\lvert \frac{x \circledast y}{x \ast y} - 1 \rvert \le 2^{-h}
 \]
-for all $x, y \in S$ and $\ast \in \{+, \cdot\}$.  Interval arithmetic in the reals
-is unwieldy, since arithmetic operations always increase the lengths of the inputs.
+for $\ast \in \{+, \cdot\}$ and all $x, y \in S_{\infty,h}$ with $x \ast y \ne 0$.  The $p$-adic analogue
+defines floating point operations on $S_{p,h} \subset \Z[\frac1p]$ with
+\[
+\lvert \frac{x \circledast y}{x \ast y} - 1 \rvert_p \le p^{-h}.
+\]
+When using floating point arithmetic, elements are represented with a constant \emph{relative precision} $h$.
+
+Neither of these models allows a user to track the precision of an individual element.
+Over the reals, interval arithmetic is unwieldy, since arithmetic operations always increase the lengths of the inputs.
 As a consequence, most computations in the real numbers rely on
 statistical cancelation and external estimates of precision loss, rather than
 attempting to track known precision at each step.  This tendency is strengthened
 by the ubiquity of floating point arithmetic in scientific applications, where Gaussian
 distributions are more common than intervals anyway.
 
-In the $p$-adic world, these features are reversed.
+In the $p$-adic world, precision tracking using intervals is much more feasible.
+Even a long sequence of operations may not sacrifice any precision.
+The Gaussian distributions of measurement error over $\R$ have no direct analogue in
+$\Qp$.  Instead, number theorists focus on provably determining
+a result within a $p$-adic interval.  As a consequence, interval arithmetic is ubiquitous
+in implementations of $p$-adic numbers.  % Add citations to Sage, Magma and PARI.
 
-\todofor{David}{Add a general introduction to this section.}
 
-\subsection{Separate precision and approximation}
+
+\subsection{Separating precision from approximation}
+
+
 
 \todofor{David}{
 Explain here why it might be useful to work separately with 
