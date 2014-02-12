@@ -508,12 +508,19 @@ Indeed, when $f$ is a locally analytic function, we prove that we can recover $\
 We refer to Schneider \cite{Schneider}, \S 6, for a definition of a 
 locally analytic function.
 
+\begin{deftn}\label{deftn:analyticNP}
+Let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ be locally analytic map $E \rightarrow F$.  Let $x \in E$, and let $f(x+h)=f(x)+\sum_{k \geq 0}^{+\infty} L_k \cdot (h,\dots,h)$ be the power series development of $f$ at $x$.
+Let $F(t) = \sum_{k\geq 0}^{+\infty} \interleave L^{k+1}(x) \interleave  t^k \in \mathbb{R}[[t]].$
+
+We define $NP(f,x)$ to be the function defined by its Newton polygon, the lower convex hull of the $(k,\log ( \interleave L^{k+1}(x) \interleave)),$ with $k \geq 0.$
+\end{deftn}
+
+We now prove that the knowledge of $NP(f,x)$ is enough to recover $\delta$.
 
 \begin{prop}\label{prop:locanalytic}
-Let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ be locally analytic map $E \rightarrow F$.  Let $x \in E$, and let $f(x+h)=f(x)+\sum_{k \geq 0}^{+\infty} L_k \cdot (h,\dots,h)$ be the power series development of $f$ at $x$. We assume $L_1$ is surjective. 
+Let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ and the $L_k$'s be as in definition \ref{deftn:analyticNP}. We assume $L_1$ is surjective. 
 Let $C$ be given by the Banach-Schauder theorem for $L_1$, $\varepsilon = \frac{1}{C}$. 
-Let $F(t) = \sum_{k\geq 0}^{+\infty} \interleave L^{k+1}(0) \interleave  t^k \in \mathbb{R}[[t]]$, let $NP_F$ be its Newton polygon.
-Let $\mu$ be the slope of the line passing by $(0, \log_p \varepsilon)$ and tangent to $NP_F$.
+Let $\mu$ be the slope of the line passing by $(0, \log_p \varepsilon)$ and tangent to $NP(f,x)$.
 Then $r$ such that $\mu=\log_p r$ is enough for lemma \ref{lem:main}.
 \end{prop}
 \begin{proof}
