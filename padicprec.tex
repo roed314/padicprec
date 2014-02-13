@@ -26,6 +26,7 @@
 \newcommand{\Zp}{\Z_p}
 \newcommand{\Q}{\mathbb Q}
 \newcommand{\Qp}{\Q_p}
+\newcommand{\Fp}{\mathbb{F}_p}
 \newcommand{\R}{\mathbb R}
 \renewcommand{\O}{\mathcal O}
 \newcommand{\XX}{\mathbf X}
@@ -60,39 +61,17 @@ stable computation of the SOMOS 4 sequence.
 
 \section{Introduction}
 
-During the last two decades, $p$-adic methods have become a tremendous tool in computer algebra, since it allows computation not feasible on finite fields, can control the growth of the size of the coefficients when dealing with rationnal numbers, or is needed when performing algorithm of $p$-adic nature.
-
-Yet, $p$-adic algorithms are necessarily numeric or symbolic-numeric: one can not avoid working with finite precision, and thus, keeping track of loss in precision during the computation.
-
-Here are some examples of algorithm that rely on $p$-adic computations:
+The last two decades have seen a rise in the popularity of $p$-adic methods in
+computational algebra.  For example,
 \begin{itemize}
-\item Bostan \cite{Bostan}, on how polynomials in $\mathbb{F}_p$ can be computed from theirs Newton series lifted in $\mathbb{Z}_p$;
-\item Gaudry \cite{Gaudry}, on generation of genus $2$ curves via $p$-adic lifting;
-\item Kedlaya \cite{Kedlaya}, on point counting on hyperelliptic curves using Monsky--Washnitzer cohomology;
-\item Lercier \cite{Lercier}, on computing isogenies between elliptic curves using $p$-adic differential equations.
+\item Bostan et al. \cite{Bostan} use Newton sums for polynomials over $\Zp$ to compute composed products for polynomials over $\Fp$;
+\item Gaudry et al. \cite{Gaudry} use $p$-adic lifting methods to generate genus 2 CM hyperelliptic curves;
+\item Kedlaya \cite{Kedlaya} uses $p$-adic cohomology to count points on hyperelliptic curves over finite fields;
+\item Lercier and Survent \cite{Lercier} compute isogenies between elliptic curves using $p$-adic differential equations.
 \end{itemize}
-
-Many usual softwares (\emph{e.g.} {\tt magma} and {\tt sage}) include 
-primitives to handle $p$-adic numbers. Since $p$-adic numbers are by 
-nature infinite, one needs to truncate them up to some finite level (we 
-generally say \emph{finite precision}) in order to manipulate them on a 
-computer. The usual technics to achieve this are inspired from case of 
-real numbers: the computer works with ``truncated $p$-adic numbers'' 
-represented as $x + O(p^n)$ and performs all basic operations (addition, 
-product) on this representation. For instance, it computes: 
-$$(x + O(p^n)) + (y + O(p^m)) = (x+y) + O(p^{\min(n,m)}).$$
-However, in many important cases (\emph{e.g.} those discussed just 
-above), this approach is too naive since it creates artificially 
-important losses of precision (see \S\ref{ssec:stepbystep}). 
-It is the so-called \emph{numerical instability} issue.
-
-The aim of the current paper is to provide a systematical theorical 
-study of $p$-adic precision (and more generally nonarchimedian 
-precision) and to derive from this study new methods to handle 
-precision, that turns out to give nearly optimal results in a quite 
-large setting.
-
-\section{Motivations and aims}
+Like real numbers, most $p$-adic numbers cannot be represented exactly, but instead must be
+stored with some finite precision.  In this paper we focus on methods for handling $p$-adic precision
+that apply across many different algorithms.
 
 Two sources of inspiration arise when studying $p$-adic algorithms.
 The first relates $\Zp$ to its quotients $\Z/p^n\Z$.  The preimage in
@@ -106,7 +85,7 @@ model arithmetic in $\Zp$ using the finite ring $\Z / p^n \Z$.  In this represen
 all $p$-adic elements in have constant \emph{absolute precision} $n$.
 
 The second source draws upon parallels between $\Qp$ and $\R$.  Both
-occur as completions of $\Q$ and we represent elements in both in terms
+occur as completions of $\Q$ and we represent elements of both in terms
 of a set of distinguished rational numbers.
 In $\R$, floating point arithmetic provides approximate operations $\oplus$ and $\odot$ on a
 subset $S_{\infty,h} \subset \Z[\frac12]$ that model $+$ and $\cdot$ in $\R$ up to a given relative precision $h$:
@@ -129,11 +108,33 @@ by the ubiquity of floating point arithmetic in scientific applications, where G
 distributions are more common than intervals anyway.
 
 In the $p$-adic world, precision tracking using intervals is much more feasible.
-Even a long sequence of operations may not sacrifice any precision.
-The Gaussian distributions of measurement error over $\R$ have no direct analogue in
-$\Qp$.  Instead, number theorists focus on provably determining
-a result within a $p$-adic interval.  As a consequence, interval arithmetic is ubiquitous
+Even a long sequence of operations may not sacrifice any precision.  Intervals
+allow number theorists to provably determine a result modulo a given power of $p$,
+and the Gaussian distributions of measurement error over $\R$ have no direct analogue
+over $\Qp$ anyway.  As a consequence, interval arithmetic is ubiquitous
 in implementations of $p$-adic numbers.  % Add citations to Sage, Magma and PARI.
+
+Many usual softwares (\emph{e.g.} {\tt magma} and {\tt sage}) include 
+primitives to handle $p$-adic numbers. Since $p$-adic numbers are by 
+nature infinite, one needs to truncate them up to some finite level (we 
+generally say \emph{finite precision}) in order to manipulate them on a 
+computer. The usual technics to achieve this are inspired from case of 
+real numbers: the computer works with ``truncated $p$-adic numbers'' 
+represented as $x + O(p^n)$ and performs all basic operations (addition, 
+product) on this representation. For instance, it computes: 
+$$(x + O(p^n)) + (y + O(p^m)) = (x+y) + O(p^{\min(n,m)}).$$
+However, in many important cases (\emph{e.g.} those discussed just 
+above), this approach is too naive since it creates artificially 
+important losses of precision (see \S\ref{ssec:stepbystep}). 
+It is the so-called \emph{numerical instability} issue.
+
+The aim of the current paper is to provide a systematical theorical 
+study of $p$-adic precision (and more generally nonarchimedian 
+precision) and to derive from this study new methods to handle 
+precision, that turns out to give nearly optimal results in a quite 
+large setting.
+
+\section{Motivations and aims}
 
 
 
