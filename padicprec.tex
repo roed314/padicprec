@@ -452,13 +452,14 @@ Then, there exists a positive real number $\delta$ such that, for all $r
 \in (0, \delta)$, the equality
 \begin{equation}
 \label{eq:main}
-f(v_0 + H) = f(v_0) + f'(v_0) \cdot H.
+f(v_0 + H) = f(v_0) + f'(v_0) (H).
 \end{equation}
 holds for each lattice $H$ such that $B^-_E(r) \subset H \subset
 B_E(r)$.
 \end{lem}
 
 \begin{rmk}
+\label{rmk:mainlemma}
 Given a lattice $H_0$ in $E$, the equality \eqref{eq:main} holds for $H 
 = \lambda H_0$ with $\lambda$ small enough. To prove this, it is enough 
 to apply Lemma \ref{lem:main} to the map $f \circ \iota_{H_0}$ where 
@@ -476,15 +477,15 @@ B_E(\delta)$ for some $\delta >0$.
 
 Let $r \in (0, \delta)$. Let $B^-_E(r) \subset H \subset
 B_E(r).$
-Let us show that $f$ maps surjectively $H$ onto $f'(0) \cdot H$.
+Let us show that $f$ maps surjectively $H$ onto $f'(0) (H)$.
 
-We first prove that $f(H) \subset f'(0) \cdot H$.
+We first prove that $f(H) \subset f'(0) (H)$.
 Let $x \in H$. By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq 
 \varepsilon \Vert x \Vert $. Therefore, if $y=f(x)-f'(0) \cdot x,$ then $\Vert y \Vert \leq \varepsilon r$. As a consequence of the open mapping Theorem, $B_F(\varepsilon r) \subset 
-\varepsilon C  f'(0) \cdot B_E(r),$ and there exists $x_1 \in \varepsilon C  \cdot B_E(r)$ such that $f'(0) \cdot x_1 =y.$ Since $\varepsilon C <1,$  $x_1 \in B^-_E(r) \subset H.$ and finally, $f(x)= f'(0) \cdot (x-x_1) \in f'(0) \cdot H$.
+\varepsilon C  f'(0) \cdot B_E(r),$ and there exists $x_1 \in \varepsilon C  \cdot B_E(r)$ such that $f'(0) \cdot x_1 =y.$ Since $\varepsilon C <1,$  $x_1 \in B^-_E(r) \subset H.$ and finally, $f(x)= f'(0) \cdot (x-x_1) \in f'(0) (H)$.
 
-We shall now prove surjectivity. Let $y \in f'(0) \cdot H$. 
-Let $x_0 \in H$ be such that $y = f'(0) \cdot x_0$. Since $f(x_0) \in f'(0) \cdot H,$ we can define $z_0 \in E$ to be such that $f'(0) \cdot z_0 = y - f(x_0)$ and $\Vert z_0 \Vert \leq C \cdot \Vert y - f(x_0) \Vert$.
+We shall now prove surjectivity. Let $y \in f'(0) (H)$.
+Let $x_0 \in H$ be such that $y = f'(0) \cdot x_0$. Since $f(x_0) \in f'(0) (H)$, we can define $z_0 \in E$ to be such that $f'(0) \cdot z_0 = y - f(x_0)$ and $\Vert z_0 \Vert \leq C \cdot \Vert y - f(x_0) \Vert$.
 We then define by induction two sequences $(x_n)$ and $(z_n)$ by
 \begin{itemize}
 \item $x_{n+1}=x_n+z_n$ and 
@@ -510,7 +511,26 @@ O(a^n)$ and $\Vert z_n \Vert = O(a^n)$ with $a = \varepsilon C < 1$.
 This shows that $(x_n)$ is a Cauchy sequence and, since $E$ is complete, it converges. Because $H$ is closed, if $x$ denotes the limit of $(x_n)$, we have $x \in H.$ Yet, as a consequence of the differentiability, $f$ is continuous over $U_\varepsilon.$ Therefore, since $x \in H \subset U_\varepsilon,$ then  $y=f(x)$. The result is proven.
 \end{proof}
 
-\todofor{Tristan}{Improve the end of this Subsection}
+We introduce the following definition:
+
+\begin{deftn}
+\label{def:firstorder}
+Let $E$ and $F$ be two $K$-Banach and $f : U \rightarrow F$ be a 
+function defined on an open subset $U$ of $E$. Let also $v_0$ be a 
+point in $U$.
+A lattice $H$ in $E$ is called a \emph{first order lattice} for $f$ at 
+$v_0$ if
+$$f(v_0 + H) = f(v_0) + f'(v_0) (H).$$
+\end{deftn}
+
+By Lemma \ref{lem:main} and Remark \ref{rmk:mainlemma}, if $f$ is 
+differentiable at $v_0$ and $f'(v_0)$ is surjective, then for all 
+lattice $H$ in $E$, there exists a constant $\delta$ such that $aH$ 
+is a first order lattice for $f$ at $v_0$ for all $a \in B_E(r)$.
+
+\subsection{The case of locally analytic functions}
+
+\todofor{Tristan}{Improve this Subsection}
 
 Before discussing applications of Lemma \ref{lem:main} to ultrametric 
 precision, we would like to describe a little bit more restrictive 
@@ -586,6 +606,31 @@ The result follows \textit{mutatis mutandis}.
 
 \todo{Explain how Newton polygons considered above behave under
 usual operations (sum, multiplication and composition of functions).}
+
+Using Lemma \ref{lem:reductionball}, one can extend Proposition 
+\ref{prop:locanalytic} to arbitrary lattices $H$ as follows. Given $H$
+a lattice in some $K$-Banach space $E$, we first define the two
+following quantities:
+\begin{itemize}
+\item $\max(H)$ is the smallest $r$ such that $H \subset B_E(r)$, and
+\item $\min(H)$ is the greatest $r$ such that $B_E(r) \subset H$.
+\end{itemize}
+
+\begin{cor}
+Let $U$ are $V$ be open subsets in $K$-Banach spaces $E$ and $F$ 
+respectively and $f : U \to V$ be a locally analytic function. Let 
+also $v_0$ be a point in $U$ such that $f'(v_0)$ is surjective. 
+Then a lattice $H$ in $E$ is a first order lattice for $f$ at $v_0$ as 
+soon as $\max(H)^2 < C_{f, v_0} \cdot \min(H)$ where $C_{f, v_0}$ is a 
+constant depending only on $f$ and $v_0$ which can be determined 
+explicitely from the Newton polygon of $f$ at $v_0$.
+\end{cor}
+
+\begin{proof}
+We apply Proposition \ref{prop:locanalytic} to the composite $f \circ 
+\iota_H$ where $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
+\Vert)$ is induced by identity map.
+\end{proof}
 
 \section{Tracking precision using differentials}
 \label{sec:tracking}
@@ -949,11 +994,12 @@ nonempty, the composite map
 V_{ij} \stackrel{\varphi_j}{\longrightarrow} \varphi_j(V_{ij})
 \quad \text{(with } V_{ij} = V_i \cap V_j \text{)}
 \end{equation}
-is  differentiable at all points in its domain. We recall that
-the mappings $\varphi_i$ above are the so-called \emph{charts} and that
-their collection defines an \emph{atlas} of $V$. In the sequel, we shall
-assume further that the open covering $V = \bigcup_{i \in I} V_i$ is
-locally finite, which means that every point $x \in V$ lies only in a
+is differentiable at all points in its domain. We recall that
+the mappings $\varphi_i$ above are the so-called \emph{charts}. The
+$\psi_{ij}$'s are the transition maps. The collection of $\varphi_i$'s
+and $\psi_{ij}$'s is called an \emph{atlas} of $V$. In the sequel, we 
+shall assume further that the open covering $V = \bigcup_{i \in I} V_i$ 
+is locally finite, which means that every point $x \in V$ lies only in a 
 finite number of $V_i$'s. Trivial examples of $K$-manifolds are 
 $K$-Banach themselves.
 
@@ -975,8 +1021,6 @@ $x$.
 
 \subsection{Precision data}
 
-\todofor{David/Xavier}{Complete this Subsection}
-
 Going back to our problem of precision, given $V$ a $K$-manifold as 
 above, we would like to be able to deal with ``approximations up to some 
 precision'' of elements in $V$, \emph{i.e.} expressions of the form $x + 
@@ -988,73 +1032,81 @@ For now, we fix a $K$-manifold $V$ and we use freely the notations $I$,
 $V_i$, $\varphi_i$, \emph{etc.} introduced in \S \ref{ssec:manifold}.
 
 \begin{deftn}
-Let $x \in V$. 
+Let $x \in V$.
 A \emph{precision datum} at $x$ is a lattice in the tangent space 
-$T_x V$.
+$T_x V$ such that for all indices $i$ and $j$ with $x \in U_i \cap
+U_j$, the image of $T_x V$ in $E_i$ is a first order lattice for
+$\psi_{ij}$ at $\varphi_i(x)$ (\emph{cf} Definition \ref{def:firstorder}.
 \end{deftn}
 
-\begin{deftn}
-Let $x \in V$ and $H$ be a precision datum at $x$.
-For all $i \in I$ such that $x \in V_i$, we set:
-$$x + O_i(H) = \varphi_i^{-1}\big(\varphi_i(x) + \varphi_i'(x)(H)\big) 
-\subset V.$$
-\end{deftn}
-
-We emphasize that if $x$ belongs to $V_i$ and $V_j$ at the same time,
-the subsets $x + O_i(H)$ and $x + O_j(H)$ differ in general. It is 
-however not the case if $H$ is small enough.
+\begin{rmk}
+The definition of a precision datum at $x$ depends not only on $x$
+and the manifold $V$ where it lies but also on the chosen atlas that
+defines $V$.
+\end{rmk}
 
 \begin{prop}
 \label{prop:independence}
-Let $x \in V$ and $H$ be a precision data at $x$.
-If $H$ is ``small enough'' \todo{(precise!)}, the subset $x + 
-O_i(H)$ does not depend on $i$.
+Let $x \in V$ and $H$ be a precision datum at $x$.
+The subset:
+$$\varphi_i^{-1}\big(\varphi_i(x) + \varphi_i'(x)(H)\big) 
+\subset V$$
+does not depend on the index $i$ such that $x \in V_i$.
 \end{prop}
 
 \begin{proof}
 Let $i$ and $j$ be two indices such that $x$ belongs to $V_i$ and $V_j$. 
-Set $x_i = \varphi_i(x) \in E_i$ and $H_i = \varphi'_i(x)(H)$. Going 
-back to the definitions, we see that the equality $x + O_i(H) = x + 
-O_j(H)$ is equivalent to:
-$$\psi_{ij}(x_i + H_i) = \psi_{ij}(x_i) + \psi'_{ij}(x_i)(H_i)$$ 
-where we recall that $\psi_{ij}$ is defined by Eq.~\eqref{eq:psiij}.
-\todo{Complete the proof and write the correct condition on $H$!}
+Set $x_i = \varphi_i(x) \in E_i$ and $H_i = \varphi'_i(x)(H)$. The 
+equality 
+$$\varphi_i^{-1}\big(\varphi_i(x) + \varphi_i'(x)(H)\big) 
+\subset V = \varphi_j^{-1}\big(\varphi_j(x) + \varphi_j'(x)(H)\big) 
+\subset V$$
+is clearly equivalent to
+$\psi_{ij}(x_i + H_i) = \psi_{ij}(x_i) + \psi'_{ij}(x_i)(H_i)$.
+and the latter holds because $H_i$ is a first order lattice
+of $\psi_{ij}$ at the point $x_i$ by definition.
 \end{proof}
 
-Under the assumption of Proposition \ref{prop:independence}, we define
-$x + O(H)$ as $x + O_i(H)$ for some (equivalently all) $i$ such that
-$x \in V_i$.
+We are now in position to define $x + O(H)$.
+
+\begin{deftn}
+Let $x \in V$ and $H$ be a precision datum at $x$. We set:
+$$x + O(H) = \varphi_i^{-1}\big(\varphi_i(x) + \varphi_i'(x)(H)\big)
+\subset V$$
+for some (equivalenty, all) $i$ such that $x \in V_i$.
+\end{deftn}
 
 \subsubsection*{Change of base point}
 
 In order to restrict ourselves to elements $x$ lying in a dense 
 computable subset, we need to compare $x_0 + O(H_0)$ with varying $x + 
-O(H)$ when $x$ and $x_0$ are close enough.
-Let us first examine the situation in a fixed given chart: we fix some 
-index $i \in I$ and pick two elements $x_0$ and $x$ in $V_i$. We consider 
-in addition a precision datum $H_0$ at $x_0$ and we want to produce a 
-precision datum $H$ at $x$ such that $x_0 + O_i(H_0) = x + O_i(H)$. 
-We remark that the tangent spaces $T_{x_0} V$ and $T_x V$ are both 
-isomorphic to $E_i$ via the maps $\varphi'_i(x_0)$ and 
-$\varphi'_i(x)$ respectively. A natural candidate for $H$ is then:
+O(H)$ when $x$ and $x_0$ are close enough. Let us first examine the 
+situation in a fixed given chart: we fix some index $i \in I$ and pick 
+two elements $x_0$ and $x$ in $V_i$. We consider in addition a lattice 
+$\tilde H_0$ in $E_i$ --- which should be think as $\varphi'_i(x_0) 
+(H_0)$ --- and we want to produce a lattice $\tilde H$ such that 
+$\varphi_i(x_0) + \tilde H_0 = \varphi_i(x) + \tilde H$. Of course 
+$\tilde H = \tilde H_0$ does the job as soon as 
+$\varphi_i(x) - \varphi_i(x_0) \in \tilde H_0$. 
+Now, we remark that the tangent spaces $T_{x_0} V$ and $T_x V$ are both 
+isomorphic to $E_i$ via the maps $\varphi'_i(x_0)$ and $\varphi'_i(x)$ 
+respectively. A natural candidate for $H$ is then:
 \begin{equation}
 \label{eq:Hprime}
 H = \left(\varphi'_i(x)^{-1} \circ \varphi'_i(x_0)\right) (H_0).
 \end{equation}
-And indeed, one can check that $x + O(H)$ is indeed equal to $x_0 + 
-O(H_0)$ as soon as $x$ and $x_0$ are close enough in the following sense: 
-the difference $\varphi_i(x) - \varphi_i(x_0)$ lies in the lattice $H_i = 
-\varphi'_i(x_0)(H_0)$. We furthermore have a property of independence on 
-$i$.
+With this choice, $x + O(H) = x_0 + O(H_0)$ as soon as $x$ and $x_0$ are 
+close enough in the following sense: the difference $\varphi_i(x) - 
+\varphi_i(x_0)$ lies in the lattice $\varphi'_i(x_0)(H_0)$. We 
+furthermore have a property of independence on $i$.
 
 \begin{prop}
-We assume that $H_0$ is ``small enough'' \todo{(precise!)} and that $x$ is close 
-enough to $x_0$. Then
+Let $x_0 \in V$ and $H_0$ be a precision datum at $x_0$.
+Then, for all $x$ sufficiently close to $x_0$,
 \begin{enumerate}[(i)]
 \item the lattice $H$ defined by \eqref{eq:Hprime} does not depend 
-on $i$,
-\item the pairs $(x,H)$ and $(x_0, H_0)$ satisfy the assumptions of
-Proposition \ref{prop:independence} and we have $x + O(H) = x_0 + O(H_0)$.
+on $i$ and is a precision datum at $x$, and
+\item we have $x + O(H) = x_0 + O(H_0)$.
 \end{enumerate}
 \end{prop}
 
@@ -1069,14 +1121,19 @@ $f_j(H_0)$ if $x$ and $x_0$ are close enough. Now, pick $w \in f_j(H_0)$ and
 write it $w = f_j(v)$ with $v \in H_0$. Then $w$ is equal to $f_i(v) + 
 (f_j - f_i)(v)$ and then belongs to $f_i(H_0)$ because each summand does. 
 Therefore $f_j(H_0) \subset f_i(H_0)$. The inverse inclusion can be proved 
-in the same way.
-
-We now prove (ii). \todo{Write the proof.}
+in the same way. The fact that $H$ is a precision datum at $x$ is easy
+and left to the reader.
+Finally, if $x$ is close enough to $x_0$, we can check (ii) in the 
+charts but this was already done.
 \end{proof}
 
 \subsection{Generalization of the main Lemma}
 
-\todofor{David/Xavier}{Extend Lemma \ref{lem:main} to manifolds.}
+\todofor{Xavier}{Extend Lemma \ref{lem:main} to manifolds.}
+
+\subsection{Examples}
+
+\todofor{David}{Elliptic curves and grassmannians}
 
 \section{Differential of usual operations}
 \label{ssec:differentials}
