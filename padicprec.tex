@@ -586,68 +586,108 @@ computed explicitly.
 
 Indeed, when $f$ is a locally analytic function, we prove that we can recover $\delta$ from a Newton polygon defined with the Taylor series expansion of $f.$
 
-We refer to Schneider \cite{Schneider}, \S 6, for a definition of a 
-locally analytic function.
+We refer to Schneider \cite{Schneider}, \S 6, for a definition of a locally analytic function.
 
-\begin{deftn}\label{deftn:analyticNP}
-Let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ be locally analytic map $E \rightarrow F$.  Let $x \in E$, and let $f(x+h)=f(x)+\sum_{k \geq 0}^{+\infty} L_k \cdot (h,\dots,h)$ be the power series development of $f$ at $x$.
-Let $F(t) = \sum_{k\geq 0}^{+\infty} \interleave L^{k+1}(x) \interleave  t^k \in \mathbb{R}[[t]].$
+\begin{deftn} \label{deftn :  serie and norm}
+Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie over $E,$ a complete normed $K$-vector space. We assume that for any $\lambda  \in K,$ $x \in E,$ $n \in \mathbb{N},$ $\vert f_n(\lambda x) \vert = \vert \lambda \vert \vert f_n (x) \vert.$ 
+We define $\vert f_n \vert = \sup_{x \in B_E(0,1)} \vert f_n(x) \vert,$ and we assume that all the $\vert f_n \vert $ are finite. We define $R((f_n)_n)$ to be the radius of convergence of the serie.
 
-We define $NP(f,x)$ to be the function defined by its Newton polygon, the lower convex hull of the $(k,\log ( \interleave L^{k+1}(x) \interleave)),$ with $k \geq 0.$
+We also define : \[\Lambda((f_n)_n) (v) = \log \sup_{x \in B(0,e^v)} \vert f(x) \vert.\]
+We define  $NP((f_n)_n)$ to be the Newton polygon of $f$, that is to say, the lower convex hull in $\mathbb{R}^2$ of the $(k, - \log \vert f_k \vert ),$ $k\geq 0.$ 
 \end{deftn}
 
-We now prove that the knowledge of $NP(f,x)$ is enough to recover $\delta$.
+The following proposition is a classical consequence of convex analysis.
 
-\begin{prop}\label{prop:locanalytic}
-Let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ and the $L_k$'s be as in definition \ref{deftn:analyticNP}. We assume $L_1$ is surjective. 
-Let $C$ be given by the Banach-Schauder theorem for $L_1$, $\varepsilon = \frac{1}{C}$. 
-Let $\mu$ be the slope of the line passing by $(0, \log_p \varepsilon)$ and tangent to $NP(f,x)$.
-Then $r$ such that $\mu=\log_p r$ is enough for lemma \ref{lem:main}.
+\begin{prop} \label{prop : conjugate Newton}
+We define $v_\infty \in \mathbb{R} \cup \left\lbrace \infty \right\rbrace$ to be the limit of the slopes of $NP((f_n)_n).$
+We denote by $NP((f_n)_n)^*$ the convex conjugate of $NP((f_n)_n).$ $NP((f_n)_n)^*$ is defined over $\left] -\infty,v_{\infty} \right[$ (at least)
+\end{prop}
+
+$\Lambda((f_n)_n)$ and $NP((f_n)_n)$ are connected :
+
+\begin{prop} \label{prop : connexion sup Newton}
+We have $R((f_n)_n) = e^{v_{\infty}}.$
+Moreover, for any $v < \log \left( R((f_n)_n) \right),$ \[ \Lambda ((f_n)_n) (v) = NP((f_n)_n)^*(v).\]
 \end{prop}
 \begin{proof}
-Let us assume that $x=0$, $f(0)=0$, and for $r>0$, $f(x)=L_1 \cdot x +\sum_{n \geq 2} L_n \cdot (x, \dots,x)$ is the Taylor serie expansion of $f$ at $0$, coinciding on $B_E (0,r)$.
+Let $v \in \left] -\infty,v_{\infty} \right[,$ and let us assume that $v$ is not a slope of $NP((f_n)_n).$
+Let $u = NP((f_n)_n)^*(v).$ Then the intersection of the line defined by $y=vx-u$ and $NP((f_n)_n)$ is an extreme point of $NP((f_n)_n),$ say $(n, - \log ( \vert f_n \vert ))$ for some $n \geq 0,$ and $u = vn + \log \vert f_n \vert.$
 
-We shall now find $l$ such that if $x \in B_{K^n}(0,l)$, then $\Vert \sum_{n \geq 2} L_n \cdot (x,\dots,x) \Vert \leq \varepsilon \vert x \vert $.
+$v$ is not a slope of $NP((f_n)_n)$ and by convexity of $NP((f_n)_n)$, its difference quotients at $n$ are increasing, therefore, there exists some $c>0$ such that for any $m\geq 0,$ $vm-u \leq - \log \vert f_m \vert - c \vert n-m \vert.$ Since $vm-u=vm-vn-log \vert f_n \vert,$ we get $-vn-\log \vert f_n \vert + c \vert n-m \vert  \leq -vm-\log \vert f_m \vert .$
 
-By continuity and ultrametricity, it is enough for $l$ to be such that, if $x \in B_{K^n}(0,l)$, then  \[ \sup_{n \geq 2} \interleave L_n \interleave \Vert x \Vert^n \leq \varepsilon \Vert x \Vert .\] 
+Now, let $x \in  B(0,e^v),$ and $m \geq 0.$ Definition of $\vert f_m$ yields $ \vert f_m (x) \vert \leq \vert f_m \vert e^{vm}.$ Therefore \[\vert f_m (x) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn}< \vert f_n \vert e^{vn}.\]
+Therefore, the serie converges and by ultrametricity $ \vert f(x) \vert \leq \vert f_n \vert e^{vn},$ and $\Lambda ((f_l)_l)(v) \leq \log \left( \vert f_n \vert e^{vn} \right).$ Furthermore,  $R((f_n)_n)  \geq e^v.$
+ 
 
-Therefore, \[ \sup_{n \geq 2} \interleave L_n \interleave l^{n-1}  \leq \varepsilon . \] 
+Now, definition of $\vert f_n \vert$  provides $(x_i)_{i\geq 0}$ in $B(0,e^v)$ such that $\lim \vert f_n (x_i)= \vert f_n \vert e^{vn}.$ 
 
-In other words, $\forall n \geq 2$, $\interleave L_n \interleave \l^{n-1}  \leq \varepsilon.$
+Since for any $i,$ $\vert f_m (x) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn},$ then for $i$ large enough, $\vert f_m (x) \vert < \vert f_n (x) \vert $ and $\vert f(x) \vert = \vert f_n (x) \vert.$
 
-By passing to logarithm, we get for all $n \geq 2$ : \[ \log_p (\interleave L_n \interleave )-(n-1) \log_p l \geq - \log_p \varepsilon.\]
+As a consequence, $\lim \vert f(x_i) \vert = \vert f_n \vert e^{vn},$ and  $\Lambda ((f_l)_l)(v) = \log ( \vert f_n \vert e^{vn}) = u= NP((f_n)_n)^*(v).$
 
-If we denote by $NP_F$ the Newton polygon of the power series 
-\[
-F(t) = \sum_{k\geq 0}^{+\infty} \interleave L_{k+1} \interleave  t^k
-\]
-then it is enough that:
-\[
-\sup_{ x \in \mathbb{R}_+} \left( NP_F(x) -x  \log_p l \right) \geq - \log_p \varepsilon.
-\]
+Therefore, for any $v \in \left] -\infty,v_{\infty} \right[,$ with $v$ not a slope of $NP((f_n)_n),$ we get $\Lambda ((f_l)_l)(v) =NP((f_n)_n)^*(v).$
+Since both $\Lambda ((f_l)_l)$ is increasing and $NP((f_n)_n)^*$ is continuous (since it is convex), we deduce that $R((f_n)_n) \geq  e^{v_{\infty}}$ and both functions coincide on $v \in \left] -\infty,v_{\infty} \right[,$
 
-If $NP_F^*$ is the Legendre-Fanchel transform of $NP_F$, then it is enough that :
-\[ NP_F^* \left( \log_p l  \right) \leq \log_p \varepsilon.\]
-
-Therefore, by definition of the Legendre-Fanchel transform, it is enough to :
-\begin{itemize}
-\item take $M=(0,\log_p \varepsilon)$,
-\item draw the line passing by $M$ tangent to the graph of $NP_F$ (it could be tangent at infinity),
-\item if we denote by $\mu$ the slope of this line, then take $l$ such that $\mu=\log_p l$.
-\end{itemize}
+One can show similarily that $R((f_n)_n) \leq  e^{v_{\infty}}.$
 \end{proof}
 
-We remark that when considering finite-dimensional applications over $p$-adic fields, a more refined proposition is available.
+\begin{cor} Let $f(x)= \sum_{n \geq 0} f_n (x)$ and $g(x)= \sum_{n \geq 0} g_n (x)$ be two series as in definition \ref{deftn :  serie and norm}. Let $f(x)g(x)=\sum_{n \geq 0} \mu_n (x) $ and $f \circ g(x)=\sum_{n \geq 0} \tau_n (x) .$ Then :
+$\Lambda((f_n+g_n)_n) \leq \max (\Lambda((f_n)_n),\Lambda((g_n)_n))$
+$\Lambda((\mu_n)_n) \leq \Lambda((f_n)_n)+\Lambda((g_n)_n)$
+$\Lambda((\tau_n)_n) \leq \Lambda((f_n)_n) \circ \Lambda((g_n)_n)$
+\end{cor}
 
-\begin{prop} \label{prop:locanalyticfinitedim}
-If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : Let $\mu$ be the slope of the line passing by $(0, \log_p \varepsilon)$ and tangent to $NP_F$.
-Then $r$ such that $\mu+\frac{1}{p-1}=\log_p r$ is enough for lemma \ref{lem:main}. 
+\begin{prop} \label{prop : legendre transform}
+If $f$ and $g$ are two real convex functions such that $f \geq g,$ then $f^* \leq g^*.$
+Furthermore, slopes of $f^*$ corresponds to extreme points of $f$.
+\end{prop}
+
+\begin{cor} \label{cor : trunc series}
+Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie as in definition \ref{deftn :  serie and norm}, $n_0 \geq 0$ and $g(x)= \sum_{n \geq n_0} f_n (x).$ Then $\Lambda((g_n)_n) \leq \Lambda((f_n)_n)$ and the slopes of $\Lambda((g_n)_n)$ are bigger than $n_0$. 
+As a consequence, a minoration of $\Lambda((g_n)_n)$ can be obtain by extending $\Lambda((f_n)_n)(v)$ with a slope $n_0$ for $v \leq n_0$.
+\end{cor}
+
+
+Now, let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ and the $L_k$'s be as in definition \ref{deftn:analyticNP}. We assume $L_1$ is surjective. We define, for any $n \geq 1$, $f_n(x)=L_n(x,\dots,x)$ for any $x \in E.$ 
+Let $C$ be given by the Banach-Schauder theorem for $L_1$, $\varepsilon = \frac{1}{C}$. We provide three methods to find a sufficient $r$ for \ref{lem:main}.
+
+For the first one, we assume that we have know a function that majorates $\Lambda((f_n)_{n \geq 1})$.
+
+\begin{prop} \label{prop : maj Lambda}
+If $m_1$ is a real convex function above $\Lambda((f_n)_{n \geq 1})$.
+We define $m_2$ by extending $m_1$ with slope $2$.
+Let $r$ be the abscissa of the intersection of $m_2$ and the line defined by $y=-\log \varepsilon+ x.$ Then $e^r$ is enough for \ref{lem:main}.
 \end{prop}
 \begin{proof}
-In comparison with the previous proposition, $L_n=\frac{f^{(n)}(0)}{n!}$. Therefore, by Legendre formula, it would be enough that for all $n \geq 2$ :
-\[\log_p (\interleave f^{(n)}(0) \interleave )-(n-1) (\log_p l-(n-1)) \geq - \log_p \varepsilon,\]
-and therefore, \[ NP_F^* \left( \log_p l - \frac{1}{p-1} \right) \leq \log_p \varepsilon.\]
-The result follows \textit{mutatis mutandis}.
+$r$ is well-defined thanks to corollary \ref{cor : trunc series}, and $m_2 \geq \Lambda((f_n)_{n \geq 2}).$
+
+One only has to prove that for all $x \in B(0,e^r),$ $\vert \sum_{n\geq 2} f_n(x) \vert \leq \varepsilon \vert x \vert.$
+
+If $x \in B(0,e^r),$ $u = \log \vert x \vert,$ then $\Lambda((f_n)_{n \geq 2})(u) \geq -\log \varepsilon+ u.$
+With proposition \ref{prop : connexion sup Newton}, for any $m \geq 2,$ $-\log \vert f_m \vert +m u \geq -\log \varepsilon+ u.$
+
+Therefore, for any $m \geq 2,$ $\vert f_m \vert  \vert x \vert^m \leq \varepsilon \vert x \vert.$
+By ultrametricity,   $\vert \sum_{n\geq 2} f_n(x) \vert \leq \varepsilon \vert x \vert,$ which concludes the proof.
+\end{proof}
+
+For the second one, we only assume that we have majorations on the $\vert f_n \vert.$
+
+\begin{prop}
+Let $(M_n)_{n \geq 2}$ be real numbers such that for all $n \geq 2$, $\vert f_n \vert \leq M_n.$
+
+If we denote by $NP((M_{n+1})_{n \geq 1})$ the lower convex hull of the $(n, -\log M_{n+1})$ for $n \geq 1$, then $r$ such that $-\log \varepsilon=NP((M_n)_{n \geq 2})^*(r)$ is enough.
+\end{prop}
+\begin{proof}
+Same idea as proposition \ref{prop : maj Lambda}. One can define $g_n$ with $g_n (x) =\frac{f_n(x)}{\vert x \vert}$ and $g_n(0)=0$ and work with $\Lambda ((g_n)_n).$
+\end{proof}
+
+We finally provide a simple method when working with finite dimension and $p$-adic fields.
+
+\begin{prop} \label{prop : locanalyticfinitedim}
+If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : let $r$ be such that $NP_F^* \left( \log_p r - \frac{1}{p-1} \right) \leq \log_p \varepsilon.$ Then $r$ is enough for lemma \ref{lem:main}. 
+\end{prop}
+\begin{proof}
+Same as before, with $L_n=\frac{f^{(n)}(0)}{n!}$ and Legendre formula. The result follows \textit{mutatis mutandis}.
 \end{proof}
 
 \todo{Explain how Newton polygons considered above behave under
