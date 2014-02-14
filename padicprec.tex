@@ -36,6 +36,7 @@
 \newcommand{\GL}{\text{\rm GL}}
 
 \newcommand{\val}{\text{\rm val}}
+\newcommand{\pr}{\text{\rm pr}}
 \newcommand{\tr}{\text{\rm Tr}}
 \newcommand{\com}{\text{\rm Com}}
 \newcommand{\Grass}{\text{\rm Grass}}
@@ -391,72 +392,69 @@ tracking precision step-by-step.
 \section{The main Lemma}
 \label{sec:mainlemma}
 
-The theory of $p$-adic precision we want to develop is mainly based 
-on a single lemma of $p$-adic analysis. The aim of this Section is
-to state and prove this lemma. Consequences will be discussed after
-in Section \ref{sec:tracking}.
+The theory of $p$-adic precision we want to develop is mainly based on a 
+single lemma (Lemma \ref{lem:main}) of $p$-adic analysis. The aim of 
+this Section is to state and prove this lemma. Consequences will be 
+discussed after in Section \ref{sec:tracking}.
 
 From now, we generalize a bit the setting and work over a general 
 ultrametric complete field (see definition below). This includes 
 $p$-adic fields and Laurent series fields.
 
-\subsection{Ultrametric analysis}
-\label{ssec:ultrametric}
+\subsection{Lattices}
 
-
-
-The following Lemma shows that the notion of lattices behaves rather 
-well under linear\footnote{We shall see in the sequel (\emph{cf} Lemma 
-\ref{lem:main}) that, under some extra hypothesis, the linearity 
-assumption can be drastically relaxed.} transformations.
-
-\begin{lem}
-\label{lem:morlat}
-Let $E$ and $F$ be two $K$-Banach and $f : 
-E \to F$ be a continuous \emph{surjective} linear map.
-If $H$ is a lattice in $E$, then $f(H)$ is a lattice in $F$.
-\end{lem}
-
-\begin{proof}
-It is clear that $f(H)$ is a module over $B_K(1)$ which is bounded.
-The fact that it is open is a direct consequence of the open mapping
-Theorem.
-\end{proof}
-
-To each lattice $H$ in $E$, one can attach a norm $\Vert \cdot \Vert_H$ 
-on $E$ defined as follows. We pick $x \in E$, $x \neq 0$. We introduce
-the set $I_x$ consisting of scalars $\lambda \in K$ such that $\lambda x 
-\in H$. It follows from the fact that $H$ is open and bounded in $E$
-that $I_x$ is nonempty and bounded in $K$. Therefore, the image $|I_x|$ 
-of $I_x$ under the absolute value map is bounded and contains a positive
-element. We can then define:
-$$\Vert x \Vert_H = (\sup |I_x|)^{-1}.$$
-It is an exercise to check that $\Vert \cdot \Vert_H$ is a norm over 
-$E$.
-
-\begin{lem} \label{lem:reductionball}
-\begin{enumerate}
-\item The norms $\Vert \cdot \Vert_H$ and $\Vert \cdot \Vert$ are 
-equivalent.
-\item Let $B^-_{E,H}(1)$ (resp. by $B_{E,H}(1)$) the set of elements $x 
-\in E$ such that $\Vert x \Vert_H < 1$ (resp. $\Vert x \Vert_H \leq 1$).
-Then:
-$$B^-_{E,H}(1) \subset H \subset B_{E,H}(1)$$
-and the last inclusion is an equality if the absolute value on $K$ is
-discrete.
-\end{enumerate}
-\end{lem}
-
-\begin{proof}
-Left to the reader.
-\end{proof}
-
-The first part of Lemma \ref{lem:reductionball} asserts that the 
-identity map $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
-\Vert)$ is an homeomorphism. Furthermore, by the second of the Lemma, 
-$H$ is the image under $\iota_H$ of a lattice satisfying an extra 
-assumption: it is ``between the open unit ball and the closed unit 
-ball''.
+%The following Lemma shows that the notion of lattices behaves rather 
+%well under linear\footnote{We shall see in the sequel (\emph{cf} Lemma 
+%\ref{lem:main}) that, under some extra hypothesis, the linearity 
+%assumption can be drastically relaxed.} transformations.
+%
+%\begin{lem}
+%\label{lem:morlat}
+%Let $E$ and $F$ be two $K$-Banach and $f : 
+%E \to F$ be a continuous \emph{surjective} linear map.
+%If $H$ is a lattice in $E$, then $f(H)$ is a lattice in $F$.
+%\end{lem}
+%
+%\begin{proof}
+%It is clear that $f(H)$ is a module over $B_K(1)$ which is bounded.
+%The fact that it is open is a direct consequence of the open mapping
+%Theorem.
+%\end{proof}
+%
+%To each lattice $H$ in $E$, one can attach a norm $\Vert \cdot \Vert_H$ 
+%on $E$ defined as follows. We pick $x \in E$, $x \neq 0$. We introduce
+%the set $I_x$ consisting of scalars $\lambda \in K$ such that $\lambda x 
+%\in H$. It follows from the fact that $H$ is open and bounded in $E$
+%that $I_x$ is nonempty and bounded in $K$. Therefore, the image $|I_x|$ 
+%of $I_x$ under the absolute value map is bounded and contains a positive
+%element. We can then define:
+%$$\Vert x \Vert_H = (\sup |I_x|)^{-1}.$$
+%It is an exercise to check that $\Vert \cdot \Vert_H$ is a norm over 
+%$E$.
+%
+%\begin{lem} \label{lem:reductionball}
+%\begin{enumerate}
+%\item The norms $\Vert \cdot \Vert_H$ and $\Vert \cdot \Vert$ are 
+%equivalent.
+%\item Let $B^-_{E,H}(1)$ (resp. by $B_{E,H}(1)$) the set of elements $x 
+%\in E$ such that $\Vert x \Vert_H < 1$ (resp. $\Vert x \Vert_H \leq 1$).
+%Then:
+%$$B^-_{E,H}(1) \subset H \subset B_{E,H}(1)$$
+%and the last inclusion is an equality if the absolute value on $K$ is
+%discrete.
+%\end{enumerate}
+%\end{lem}
+%
+%\begin{proof}
+%Left to the reader.
+%\end{proof}
+%
+%The first part of Lemma \ref{lem:reductionball} asserts that the 
+%identity map $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
+%\Vert)$ is an homeomorphism. Furthermore, by the second of the Lemma, 
+%$H$ is the image under $\iota_H$ of a lattice satisfying an extra 
+%assumption: it is ``between the open unit ball and the closed unit 
+%ball''.
 
 \subsubsection*{Lattices and computers}
 
@@ -489,89 +487,112 @@ Laurent series with coefficients in a finite field.
 
 \subsection{Images of lattices under differentiable functions}
 
-\begin{lem} \label{lem:main}
-Let $E$ and $F$ be two $K$-Banach and $f : U 
-\rightarrow F$ be a function defined on an open subset $U$ of $E$.
-We assume that $f$ is differentiable at some point $v_0 \subset 
-U$ and that the differential $f'(v_0)$ is surjective. 
-
-Then, there exists a positive real number $\delta$ such that, for all $r 
-\in (0, \delta)$, the equality
-\begin{equation}
-\label{eq:main}
-f(v_0 + H) = f(v_0) + f'(v_0) (H).
-\end{equation}
-holds for each lattice $H$ such that $B^-_E(r) \subset H \subset
-B_E(r)$.
-\end{lem}
-
-\begin{rmk}
-\label{rmk:mainlemma}
-Given a lattice $H_0$ in $E$, the equality \eqref{eq:main} holds for $H 
-= \lambda H_0$ with $\lambda$ small enough. To prove this, it is enough 
-to apply Lemma \ref{lem:main} to the map $f \circ \iota_{H_0}$ where 
-$\iota_{H_0} : (E, \Vert \cdot \Vert_{H_0}) \to (E, \Vert \cdot \Vert)$ 
-is the ``identity map'' (which is an homeomorphism by Lemma 
-\ref{lem:reductionball}).
-\end{rmk}
-
-\begin{proof}
-We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, by 
-the open mapping Theorem, there exists $C>0$ such that $B_F(1) \subset 
-C  f'(0) \cdot B_E(1)$. Let $\varepsilon>0$ be such that 
-$\varepsilon C < 1$. Let $U_\varepsilon \subset E$ be given by by definition \ref{deftn : diff} and the fact that $f$ is differentiable at $0$. We may assume $U_\varepsilon = 
-B_E(\delta)$ for some $\delta >0$.
-
-Let $r \in (0, \delta)$. Let $B^-_E(r) \subset H \subset
-B_E(r).$
-Let us show that $f$ maps surjectively $H$ onto $f'(0) (H)$.
-
-We first prove that $f(H) \subset f'(0) (H)$.
-Let $x \in H$. By differentiability at $0$, $\Vert f(x)-f'(0) \cdot x \Vert \leq 
-\varepsilon \Vert x \Vert $. Therefore, if $y=f(x)-f'(0) \cdot x,$ then $\Vert y \Vert \leq \varepsilon r$. As a consequence of the open mapping Theorem, $B_F(\varepsilon r) \subset 
-\varepsilon C  f'(0) \cdot B_E(r),$ and there exists $x_1 \in \varepsilon C  \cdot B_E(r)$ such that $f'(0) \cdot x_1 =y.$ Since $\varepsilon C <1,$  $x_1 \in B^-_E(r) \subset H.$ and finally, $f(x)= f'(0) \cdot (x-x_1) \in f'(0) (H)$.
-
-We shall now prove surjectivity. Let $y \in f'(0) (H)$.
-Let $x_0 \in H$ be such that $y = f'(0) \cdot x_0$. Since $f(x_0) \in f'(0) (H)$, we can define $z_0 \in E$ to be such that $f'(0) \cdot z_0 = y - f(x_0)$ and $\Vert z_0 \Vert \leq C \cdot \Vert y - f(x_0) \Vert$.
-We then define by induction two sequences $(x_n)$ and $(z_n)$ by
-\begin{itemize}
-\item $x_{n+1}=x_n+z_n$ and 
-\item $z_n \in E$ is such that
-$f'(0) \cdot z_n = y - f(x_n)$ and
-$\Vert z_n \Vert \leq C \cdot \Vert y - f(x_n) \Vert$.
-\end{itemize}
-By definition, $\Vert z_0 \Vert < C \Vert y_0\Vert$ and $y 
-= -f(x_0)+f'(0) \cdot x_0$. Therefore, $\Vert y \Vert < \varepsilon 
-\Vert x_0 \Vert \leq \varepsilon r$. Thus $\Vert z_0 \Vert \leq 
-\varepsilon C \cdot r < r$. Thus, $z_0$ and $x_1=x_0+z_0$  lie in $B^-_E(r) 
-\subset H$. An easy induction involving an analoguous computation
-shows that the sequences $(x_n)$ and $(z_n)$ are well defined and
-take their values in $H$.
-
-We notice that $y - f(x_{n+1}) = f(x_n) - f(x_{n+1}) + f'(0) \cdot z_n$.
-Since $z_n=x_{n+1}-x_n,$, if we use differentiability, we get:
-$$\Vert y  - f(x_{n+1}) \Vert 
-\leq \varepsilon \Vert z_n \Vert \leq \varepsilon C \cdot \Vert 
-y - f(x_n) \Vert,$$
-from what we deduce that $\Vert y - f(x_{n+1}) \Vert = 
-O(a^n)$ and $\Vert z_n \Vert = O(a^n)$ with $a = \varepsilon C < 1$.
-This shows that $(x_n)$ is a Cauchy sequence and, since $E$ is complete, it converges. Because $H$ is closed, if $x$ denotes the limit of $(x_n)$, we have $x \in H.$ Yet, as a consequence of the differentiability, $f$ is continuous over $U_\varepsilon.$ Therefore, since $x \in H \subset U_\varepsilon,$ then  $y=f(x)$. The result is proven.
-\end{proof}
-
 \begin{deftn}
 \label{def:firstorder}
 Let $E$ and $F$ be two $K$-Banach and $f : U \rightarrow F$ be a 
 function defined on an open subset $U$ of $E$. Let also $v_0$ be a 
 point in $U$.
 A lattice $H$ in $E$ is called a \emph{first order lattice} for $f$ at 
-$v_0$ if
-$$f(v_0 + H) = f(v_0) + f'(v_0) (H).$$
+$v_0$ if the equality
+$$f(v_0 + H) = f(v_0) + f'(v_0) (H)$$
+holds.
 \end{deftn}
 
-By Lemma \ref{lem:main} and Remark \ref{rmk:mainlemma}, if $f$ is 
-differentiable at $v_0$ and $f'(v_0)$ is surjective, then for all 
-lattice $H$ in $E$, there exists a constant $\delta$ such that $aH$ 
-is a first order lattice for $f$ at $v_0$ for all $a \in B_E(r)$.
+\begin{lem} \label{lem:main}
+Let $E$ and $F$ be two $K$-Banach and $f : U 
+\rightarrow F$ be a function defined on an open subset $U$ of $E$.
+We assume that $f$ is differentiable at some point $v_0 \subset 
+U$ and that the differential $f'(v_0)$ is surjective. 
+
+Then, for all $\rho \in (0, 1]$, there exists a positive real 
+number $\delta$ such that, for all $r \in (0, \delta)$, any lattice
+$H$ such that $B^-_E(\rho r) \subset H \subset B_E(r)$ is a first
+order lattice for $f$ at $v_0$.
+\end{lem}
+
+\begin{proof}
+We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, by 
+the open mapping Theorem, there exists $C>0$ such that $B_F(1) \subset 
+C  f'(0)(B_E(1))$. Let $\varepsilon>0$ be such that 
+$\varepsilon C < \rho$. Let $U_\varepsilon \subset E$ given by Definition 
+\ref{deftn : diff} and the fact that $f$ is differentiable at $0$. We 
+may assume $U_\varepsilon = B_E(\delta)$ for some $\delta >0$.
+
+Let $r \in (0, \delta)$. Let $B^-_E(r) \subset H \subset B_E(r).$ Let us 
+show that $f$ maps surjectively $H$ onto $f'(0) (H)$. We first prove 
+that $f(H) \subset f'(0) (H)$. Let $x \in H$. By differentiability at 
+$0$, $\Vert f(x)-f'(0)(x) \Vert \leq \varepsilon \Vert x \Vert $. 
+Therefore, if $y=f(x)-f'(0)(x)$, then $\Vert y \Vert \leq 
+\varepsilon r$. By definition of $C$, we have $B_F(\varepsilon r) 
+\subset \varepsilon C f'(0) (B_E(r))$. Thus there exists $x_1 \in 
+\varepsilon C \cdot B_E(r)$ such that $f'(0) (x_1) =y$. Since 
+$\varepsilon C < \rho$, we get $x_1 \in B^-_E(\rho r) \subset H$ and 
+then $f(x)= f'(0) (x-x_1) \in f'(0) (H)$.
+
+We shall now prove surjectivity. Let $y \in f'(0) (H)$. Let $x_0 \in H$ 
+be such that $y = f'(0) (x_0)$. We define inductively two sequences 
+$(x_n)$ and $(z_n)$ as follows:
+\begin{itemize}
+\item $z_n$ is an element of $E$ satisfying $f'(0)(z_n) = y - 
+f(x_n)$ and $\Vert z_n \Vert \leq C \cdot \Vert y - f(x_n) \Vert$ (such 
+an element exists by definition of $C$), and
+\item $x_{n+1}=x_n+z_n$.
+\end{itemize}
+For convenience, let us also define $x_{-1} = 0$. We claim that the 
+sequences $(x_n)$ and $(z_n)$ are well defined and take their values in 
+$H$. To establish this, it is enough to prove that, assuming that 
+$x_{n-1}$ and $x_n$ belongs to $H$, so do $z_n$ and $x_{n+1}$. Noticing
+that 
+\begin{equation}
+\label{eq:mainlemma}
+y - f(x_n) 
+= f(x_{n-1}) + f'(0)(z_{n-1}) - f(x_n)
+= f(x_{n-1}) - f(x_n) - f'(0)(x_{n-1} - x_n)
+\end{equation}
+we deduce using differentiability that
+$\Vert y - f(x_n) \Vert \leq \varepsilon \cdot \Vert x_n - x_{n-1}
+\Vert$.
+Since we are assuming that $x_{n-1}$ and $x_n$ lie in $H \subset
+B_E(r)$, we find $\Vert y - f(x_n) \Vert \leq \varepsilon r$. Thus
+$\Vert z_n \Vert \leq C \cdot \varepsilon r < \rho r$ and then
+$z_n \in H$. From the relation $x_{n+1} = x_n + z_n$, we finally
+deduce $x_{n+1} \in H$.
+
+Now using again Eq.~\eqref{eq:mainlemma} and differentiability at $0$,
+we get, for all positive integer $n$,
+$$\Vert y  - f(x_n) \Vert 
+\leq \varepsilon \cdot \Vert z_{n-1} \Vert \leq \varepsilon C \cdot \Vert 
+y - f(x_{n-1}) \Vert,$$
+from what we deduce that $\Vert y - f(x_n) \Vert = O(a^n)$ and 
+$\Vert z_n \Vert = O(a^n)$ with $a = \varepsilon C < \rho \leq 1$. 
+This shows that $(x_n)$ is a Cauchy sequence and, since $E$ is complete, 
+it converges. Because $H$ is closed, if $x$ denotes the limit of 
+$(x_n)$, we have $x \in H$. Moreover, as a consequence of the 
+differentiability, $f$ is continuous over $U_\varepsilon$. Therefore, 
+since $x \in H \subset U_\varepsilon$, we get $y=f(x)$ and we are done.
+\end{proof}
+
+Let us conclude this paragraph by a remark on the assumption made in 
+Lemma \ref{lem:main} about the surjectivity of $f'(v_0)$. First let us 
+emphasize that this hypothesis is definitely necessary. Indeed, it would 
+implies otherwise that the image of $f$ is locally contained in a proper 
+sub vector space around each point where the differential of $f$ is not 
+surjective, which is certainly not true! Nevertheless, one can get 
+around this issue in many situations. Indeed, consider the situation of 
+Lemma \ref{lem:main} without assuming that $f'(v_0)$ is surjective. Now, 
+we pick a closed sub vector space $K$ of $F$ such that $K + f'(v_0)(E) = 
+F$. Then, denoting by $\pr_K$ the canonical projection of $F$ onto 
+$F/K$, the composite $\pr_K \circ f$ is certainly differentiable at 
+$v_0$ at its differential is surjective. Hence Lemma \ref{lem:main}
+applies and shows that
+\begin{equation}
+\label{eq:notsurjective}
+f(v_0 + H) \subset f(v_0) + f'(v_0)(H) + K
+\end{equation}
+for all lattices $H$ satisfying a certain condition. Now we can take
+the intersection of the right hand side of \eqref{eq:notsurjective} 
+over all possible $K$ and hope that we get this way a sharp affine upper 
+bound of $f(v_0 + H)$.
 
 \subsection{The case of locally analytic functions}
 \label{ssec:locanalytic}
@@ -653,30 +674,30 @@ The result follows \textit{mutatis mutandis}.
 \todo{Explain how Newton polygons considered above behave under
 usual operations (sum, multiplication and composition of functions).}
 
-Using Lemma \ref{lem:reductionball}, one can extend Proposition 
-\ref{prop:locanalytic} to arbitrary lattices $H$ as follows. Given $H$
-a lattice in some $K$-Banach space $E$, we first define the two
-following quantities:
-\begin{itemize}
-\item $\max(H)$ is the smallest $r$ such that $H \subset B_E(r)$, and
-\item $\min(H)$ is the greatest $r$ such that $B_E(r) \subset H$.
-\end{itemize}
-
-\begin{cor}
-Let $U$ are $V$ be open subsets in $K$-Banach spaces $E$ and $F$ 
-respectively and $f : U \to V$ be a locally analytic function. Let 
-also $v_0$ be a point in $U$ such that $f'(v_0)$ is surjective. 
-Then a lattice $H$ in $E$ is a first order lattice for $f$ at $v_0$ as 
-soon as $\max(H)^2 < C_{f, v_0} \cdot \min(H)$ where $C_{f, v_0}$ is a 
-constant depending only on $f$ and $v_0$ which can be determined 
-explicitely from the Newton polygon of $f$ at $v_0$.
-\end{cor}
-
-\begin{proof}
-We apply Proposition \ref{prop:locanalytic} to the composite $f \circ 
-\iota_H$ where $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
-\Vert)$ is induced by identity map.
-\end{proof}
+%Using Lemma \ref{lem:reductionball}, one can extend Proposition 
+%\ref{prop:locanalytic} to arbitrary lattices $H$ as follows. Given $H$
+%a lattice in some $K$-Banach space $E$, we first define the two
+%following quantities:
+%\begin{itemize}
+%\item $\max(H)$ is the smallest $r$ such that $H \subset B_E(r)$, and
+%\item $\min(H)$ is the greatest $r$ such that $B_E(r) \subset H$.
+%\end{itemize}
+%
+%\begin{cor}
+%Let $U$ are $V$ be open subsets in $K$-Banach spaces $E$ and $F$ 
+%respectively and $f : U \to V$ be a locally analytic function. Let 
+%also $v_0$ be a point in $U$ such that $f'(v_0)$ is surjective. 
+%Then a lattice $H$ in $E$ is a first order lattice for $f$ at $v_0$ as 
+%soon as $\max(H)^2 < C_{f, v_0} \cdot \min(H)$ where $C_{f, v_0}$ is a 
+%constant depending only on $f$ and $v_0$ which can be determined 
+%explicitely from the Newton polygon of $f$ at $v_0$.
+%\end{cor}
+%
+%\begin{proof}
+%We apply Proposition \ref{prop:locanalytic} to the composite $f \circ 
+%\iota_H$ where $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
+%\Vert)$ is induced by identity map.
+%\end{proof}
 
 \section{Tracking precision using differentials}
 \label{sec:tracking}
@@ -1154,17 +1175,31 @@ charts but this was already done.
 \subsection{Generalization of the main Lemma}
 
 With above definitions, Lemma \ref{lem:main} extends readily to 
-manifolds.
+manifolds. To state it the context of manifolds, we first need to define 
+a norm on the tangent space $T_x V$ (where $V$ is some $K$-variety and 
+$x$ is a point in $V$). There is actually in general no canonical choice 
+for this. Indeed, let us consider a $K$-manifold $V$ covered by charts 
+$U_i$'s ($i \in I$) which are open subset of $K$-Banach $E_i$'s. If $x$ 
+is a point in $V$, the tangent space $T_x V$ is by definition isomorphic 
+to $E_i$ for each index $i$ such that $x \in V_i$. A natural norm on 
+$T_x V$ is then the one obtained by pulling back the norm on $E_i$. 
+However, since the transition maps are not required to be isometries, 
+this norm do depend on the choice on $i$. They are nevertheless all
+equivalent because the transition maps are required to be continuous.
+
+In the next Lemma, we choose to endow $T_x V$ by one of the above norms.
 
 \begin{lem}
 Let $V$ and $W$ be two $K$-manifolds. 
 Suppose that we are given a differentiable function $f : V \to W$, 
 together with a point $x \in V$ such that $f'(x) : T_x V \to T_{f(x)} W$ 
-is surjective. Let $H$ be a precision datum at $x$. Then, there exists
-a positive real number $\delta$ such that, for all $\lambda \in 
-B_K(\delta)$, the equality
-$$f(x + \lambda H) = f(x) + \lambda \cdot f'(x)(H)$$
-holds.
+is surjective. 
+
+Then for all $\rho \in (0,1]$, there exists $\delta \in (0,1)$ such 
+that for all $r \in (0, \delta)$, the equality
+$$f(x + O(H)) = f(x) + O(f'(x)(H))$$
+holds for all lattices $H$ in $T_x V$ such that $B^{\phantom -}_{T_x V}(\rho r)
+\subset H \subset B^-_{T_x V}(r)$.
 \end{lem}
 
 \begin{proof}
@@ -1172,10 +1207,12 @@ Apply Lemma \ref{lem:main} in charts.
 \end{proof}
 
 \begin{rmk}
-If $V$ and $W$ are locally analytic $K$-manifolds and the mapping $f$ is 
-locally analytic as well, then one can explicitely determine, using the 
-method of \S \ref{ssec:locanalytic}, a value $\delta$ for which the 
-above Lemma works.
+The constant $\delta$ that appears in the above Lemma depends (up to
+some multiplicative constant) on the norm that we have chosen on $T_x V$. 
+However, once this norm is fixed, and assuming further that $V$ and $W$ 
+are locally analytic $K$-manifolds and the mapping $f$ is locally 
+analytic as well, the constant $\delta$ can be made explicit using the 
+method of \S \ref{ssec:locanalytic}.
 \end{rmk}
 
 \subsection{Examples}
