@@ -554,8 +554,6 @@ O(a^n)$ and $\Vert z_n \Vert = O(a^n)$ with $a = \varepsilon C < 1$.
 This shows that $(x_n)$ is a Cauchy sequence and, since $E$ is complete, it converges. Because $H$ is closed, if $x$ denotes the limit of $(x_n)$, we have $x \in H.$ Yet, as a consequence of the differentiability, $f$ is continuous over $U_\varepsilon.$ Therefore, since $x \in H \subset U_\varepsilon,$ then  $y=f(x)$. The result is proven.
 \end{proof}
 
-We introduce the following definition:
-
 \begin{deftn}
 \label{def:firstorder}
 Let $E$ and $F$ be two $K$-Banach and $f : U \rightarrow F$ be a 
@@ -572,6 +570,7 @@ lattice $H$ in $E$, there exists a constant $\delta$ such that $aH$
 is a first order lattice for $f$ at $v_0$ for all $a \in B_E(r)$.
 
 \subsection{The case of locally analytic functions}
+\label{ssec:locanalytic}
 
 \todofor{Tristan}{Improve this Subsection}
 
@@ -695,14 +694,14 @@ $f(x+H) \subset x' + H'$. We say that {\tt f} does not generate
 artificial loss of precision if the above inclusion is an equality; it is 
 often not the case as shown in \S \ref{ssec:stepbystep}.
 
-Let us assume now that $f$ is locally analytic on $U$ and that $x$ and 
-$H$ are chosen so that Lemma \ref{lem:main} applies. Then $f(x+H) = f(x) 
-+ f'(x)(H)$ and the smallest possible $H'$ is $f'(x)(H)$. In other 
-words, the function {\tt f} generates artificial loss of precision if 
-the precision $H'$ it outputs is strictly larger that $f'(x)(H)$.
-The aim of this section is to explain how, under the above hypothesis, 
-one can implement the function {\tt f} so that it always outputs the
-optimal precision $O(H')$ with $H' = f'(x)(H)$.
+Let us assume now that $f$ is locally analytic on $U$ and $H$ is a first 
+order lattice for $f$ at $x$. Then $f(x+H) = f(x) + f'(x)(H)$ and the 
+smallest possible $H'$ is $f'(x)(H)$. In other words, the function {\tt 
+f} generates artificial loss of precision if the precision $H'$ it 
+outputs is strictly larger that $f'(x)(H)$. The aim of this section is 
+to explain how, under the above hypothesis, one can implement the 
+function {\tt f} so that it always outputs the optimal precision $O(H')$ 
+with $H' = f'(x)(H)$.
 
 \subsubsection*{Forward computation}
 
@@ -733,18 +732,17 @@ the ``current'' lattice $H_i$.
 
 There is nevertheless an important issue with this approach: in order to 
 be sure that Lemma \ref{lem:main} applies, we need \emph{a priori} to 
-compute the exact values of all $x_i$'s, which is of course not possible! 
-Assuming that $g'_i(x)$ is surjective for all $i$, we can fix it as 
-follows. For each $i$, we fix a lattice $\tilde H_i \subset H$ such that 
-Lemma \ref{lem:main} applies to $g_i$, $x$ and $\tilde H_i$. Under our 
-assumption, such lattices always exist and can be computed dynamically 
-using Proposition \ref{prop:locanalytic}. Now, the equality $g_i(x + 
-\tilde H_i) = x_i + g'_i(x)(\tilde H_i)$ means that any perturbation of 
-$x_i$ by an element in $g'_i(x) (\tilde H_i)$ is induced by a 
-perturbation of $x$ by an element in $\tilde H_i \subset H$. Hence, we 
-can freely compute $x_i$ modulo $g'_i(x) (\tilde H_i)$ without changing 
-the final result. Since $g'_i(x)(\tilde H_i)$ is a lattice in $E_i$, this 
-remark makes possible the computation of $x_i$.
+compute the exact values of all $x_i$'s, which is of course not 
+possible! Assuming that $g'_i(x)$ is surjective for all $i$, we can fix 
+it as follows. For each $i$, we fix a first order lattice $\tilde H_i$ 
+for $g_i$ at $x$. Under our assumption, such lattices always exist and 
+can be computed dynamically using Proposition \ref{prop:locanalytic}. 
+Now, the equality $g_i(x + \tilde H_i) = x_i + g'_i(x)(\tilde H_i)$ 
+means that any perturbation of $x_i$ by an element in $g'_i(x) (\tilde 
+H_i)$ is induced by a perturbation of $x$ by an element in $\tilde H_i 
+\subset H$. Hence, we can freely compute $x_i$ modulo $g'_i(x) (\tilde 
+H_i)$ without changing the final result. Since $g'_i(x)(\tilde H_i)$ is 
+a lattice in $E_i$, this remark makes possible the computation of $x_i$.
 
 \begin{rmk}
 In some cases, it is actually possible to determine suitable lattices 
@@ -775,11 +773,10 @@ be a lattice in $E_i$ such that:
 $H'_i$ is contained in $H_i + \ker h'_i(x_i) = h'_i(x_i)^{-1}
 \big(f'(x)(H)\big)$;
 \item \label{item:Hi2}
-Lemma \ref{lem:main} applies with the function $h_i$, the point
-$x_i$ and the lattice $H'_i$.
+$H'_i$ is a first order lattice for $h_i$ at $x_i$.
 \end{enumerate}
-Applying Lemma \ref{lem:main}, we then get:
-$$h_i(x_i + H'_i) = x_n + h'_i(x_i)(H'_i) \subset x_n + f'(x)(H).$$
+By definition, we have
+$h_i(x_i + H'_i) = x_n + h'_i(x_i)(H'_i) \subset x_n + f'(x)(H)$.
 Therefore, if after the $i$-th step of the execution of the function
 {\tt f}, we modify the intermediate value $x_i$ by an element of
 $H'_i$, the final result remains unchanged. In other words, it is
@@ -1152,7 +1149,30 @@ charts but this was already done.
 
 \subsection{Generalization of the main Lemma}
 
-\todofor{Xavier}{Extend Lemma \ref{lem:main} to manifolds.}
+With above definitions, Lemma \ref{lem:main} extends readily to 
+manifolds.
+
+\begin{lem}
+Let $V$ and $W$ be two $K$-manifolds. 
+Suppose that we are given a differentiable function $f : V \to W$, 
+together with a point $x \in V$ such that $f'(x) : T_x V \to T_{f(x)} W$ 
+is surjective. Let $H$ be a precision datum at $x$. Then, there exists
+a positive real number $\delta$ such that, for all $\lambda \in 
+B_K(\delta)$, the equality
+$$f(x + \lambda H) = f(x) + \lambda \cdot f'(x)(H)$$
+holds.
+\end{lem}
+
+\begin{proof}
+Apply Lemma \ref{lem:main} in charts.
+\end{proof}
+
+\begin{rmk}
+If $V$ and $W$ are locally analytic $K$-manifolds and the mapping $f$ is 
+locally analytic as well, then one can explicitely determine, using the 
+method of \S \ref{ssec:locanalytic}, a value $\delta$ for which the 
+above Lemma works.
+\end{rmk}
 
 \subsection{Examples}
 
