@@ -136,12 +136,132 @@ proposal for how to represent the precision of an element of a vector space.
 
 \todofor{David}{Finish summarizing sections}
 
-While we have used $\Qp$ throughout this paper for concreteness, all of our results
-and suggestions apply to arbitrary complete discrete valuation rings.
-
 \section{Tracking Precision} \label{sec:prec-proposal}
 
+We recall some standard definitions from ultrametric analysis, referring to
+Schneider \cite{Schneider} for a complete exposition.
 
+Let $K$ be a non-Archimedean local field with absolute value
+$|\cdot| : K \to \R_+$ and value group $p^\Z$.   For example, we may take $K = \Qp$ with the
+$p$-adic absolute value or $K = \Fp\lb t \rb$ with the $t$-adic absolute value.
+Write $\OK$ for the ring of integers of $K$ and choose a dense subring $R \subset K$
+consisting of elements that can be represented exactly.  For $K = \Qp$ we may
+choose $R = \Z[\frac1p]$ or $R = \Q$; for $K = \Fp\lb t \rb$ we may choose
+$R = \Fp[t, t^{-1}]$ or $R = \Fp(t)$.  Choose a collection of subsets $S_h \subset R$
+indexed by positive integers $h$ so that
+\begin{enumerate}
+\item $S_h \subset S_{h+1}$,
+\item $\{B_K(x, p^{-h}) : x \in S_h\}$ disjointly covers $K$.
+\end{enumerate}
+The choice of the $S_h$ is possible since $K$ is non-Archimedean and locally compact.
+
+
+An \emph{absolute value} on a field $K$ is a multiplicative map $|\cdot| 
+: K \to \R_+$ satisfying the triangle inequality and sending every 
+nonzero element of $K$ to a strictly positive real number. It is said 
+\emph{ultrametric} if it satisfies the following strong from of the 
+triangle inequality:
+$$|x+y| \leq \max(|x|, |y|).$$
+Given an absolute value $|\cdot|$ on $K$, we note that $|K^\times|$ is a 
+multiplicative subgroup of $\R_+^\times$. It is then either discrete or 
+dense. We shall say that $|\cdot|$ is \emph{discrete} if $|K^\times|$ is
+discrete. The valued field $(K, |\cdot|)$ is said \emph{complete} if all 
+Cauchy sequences (with respect to the distance $d$ defined by $d(x,y) = 
+|x-y|$) converge.
+
+The formula $|x| = p^{-\val(x)}$ defines an ultrametric absolute value on 
+the field $\Qp$ for which it is complete. More generally, the $p$-adic 
+absolute value extends uniquely to any finite extension $K$ of $\Qp$ and 
+turns $K$ into a complete ultrametric field. Another classical example of 
+complete ultrametric field is the field of Laurent series over a finite
+field, the absolute value being defined from the valuation of a series.
+
+From now, we fix a field $K$ equipped with an ultrametric absolute value 
+denoted by $|\cdot|$ and we assume that $K$ is complete. Given $v$ a 
+$K$-vector space (of possibly infinite dimension), an \emph{ultrametric 
+norm} on $V$ is a map $\Vert\cdot\Vert : V \to \R^+$ satisfying:
+\begin{enumerate}[(i)]
+\item $\Vert x\Vert = 0$ if and only if $x = 0$;
+\item $\Vert \lambda x\Vert = |\lambda| \cdot \Vert x\Vert$;
+\item $\Vert x+y\Vert \leq \max(\Vert x\Vert, \Vert y\Vert)$.
+\end{enumerate}
+A norm gives rise to a distance and a normed $K$-vector space $V$ is 
+said \emph{complete} when any Cauchy sequence with values in $V$ 
+converges. A normed $K$-vector space which is complete is called a 
+\emph{$K$-Banach}.
+
+Similarly to the real case, any finite dimensional normed $K$-vector 
+space is complete and all norms over such a space are equivalent 
+(\emph{i.e.} they define the same topology). Many usual Theorems 
+concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
+Theorem) remain true in the ultrametric setting.
+
+\begin{deftn} \label{deftn : diff}
+Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
+subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
+\emph{differentiable} at $v_0 \in U$ if there exists a 
+continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
+$\varepsilon >0$, there exists an open neighborhood $U_\varepsilon 
+\subset U$ containing $v_0$ with:
+\[ 
+\forall v, w \in U_\varepsilon, \quad
+\Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
+\leq \varepsilon \Vert v-w \Vert. 
+\]
+The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
+\end{deftn}
+
+One can derive all usual properties of the differential from this 
+definition: unicity, chain rules, \emph{etc}.
+
+\subsection{Lattices}
+
+Let $E$ be a $K$-normed vector space. Given $r \in \R^+$, 
+we denote by $B^-_E(r)$ (resp. by $B_E(r)$) the set of elements $x 
+\in E$ such that $\Vert x \Vert < r$ (resp. $\Vert x \Vert \leq r$). 
+We insist on the following maybe unusual fact: $B^-_E(r)$ and 
+$B_E(r)$ are both open and closed for the norm topology on $E$.
+Clearly, $B_K(0,1)$ is stable under multiplication. Moreover, the 
+ultrametric triangle inequality ensures that $B_K(1)$ is stable under 
+addition as well. Thus, $B_K(1)$ is a subring of $K$: it is often 
+called the \emph{integer ring} of $K$.
+
+\begin{deftn}
+Let $E$ be a $K$-Banach.
+A \emph{lattice} in $E$ is an open bounded sub-$B_K(1)$-module of $E$.
+\end{deftn}
+
+\begin{rmk}
+Any lattice $H$ in $E$ is also closed since its complement is the
+union of all cosets $a + H$ (with $a \not\in H$) which are all open.
+\end{rmk}
+
+
+
+
+
+
+Let us recall first 
+that a datum involving elements of a complete ultrametric field $K$ 
+(\emph{e.g.} $p$-adic numbers or power series) cannot be stored entirely 
+on a computed because they basically convey an infinite amount of 
+informations. That is why, instead of this datum itself, we generally 
+work with neighborhoods of it.
+
+In what follows, we shall consider neighborhoods of the form $x + H$ 
+where $x$ is some element lying in a $K$-Banach $E$ and $H$ is a lattice 
+in $E$. A very basic example is the approximate $p$-adic number $1 + 
+O(p^N)$ which corresponds to the neighborhood of $1$ in $\Z_p$, which is 
+the set of all $p$-adic numbers congruent to $1$ modulo $p^N$. We 
+nevertheless emphasize that our definition is quite flexible and allows 
+many neighborhoods that we do not consider in general. For instance, an 
+``admissible'' neighborhood around a monic polynomial $P_0 \in \Q_p[X]$ 
+of degree $d$ may be defined by congruences of the form $P(a_i) \equiv 
+P_0(a_i) \pmod {p^{n_i}}$ ($1 \leq i \leq d$) for some fixed elements 
+$a_i \in \Q_p$ and relative integers $n_i$.
+
+In the context of computer science, we will often use the notation $x + 
+O(H)$ to refer to $x + H$.
 
 \subsection{Separating precision from approximation}
 
@@ -279,89 +399,7 @@ $p$-adic fields and Laurent series fields.
 \subsection{Ultrametric analysis}
 \label{ssec:ultrametric}
 
-We recall usual definitions and properties related to ultrametric 
-analysis. We refer to Schneider \cite{Schneider} for a complete 
-exposition.
 
-An \emph{absolute value} on a field $K$ is a multiplicative map $|\cdot| 
-: K \to \R_+$ satisfying the triangle inequality and sending every 
-nonzero element of $K$ to a strictly positive real number. It is said 
-\emph{ultrametric} if it satisfies the following strong from of the 
-triangle inequality:
-$$|x+y| \leq \max(|x|, |y|).$$
-Given an absolute value $|\cdot|$ on $K$, we note that $|K^\times|$ is a 
-multiplicative subgroup of $\R_+^\times$. It is then either discrete or 
-dense. We shall say that $|\cdot|$ is \emph{discrete} if $|K^\times|$ is
-discrete. The valued field $(K, |\cdot|)$ is said \emph{complete} if all 
-Cauchy sequences (with respect to the distance $d$ defined by $d(x,y) = 
-|x-y|$) converge.
-
-The formula $|x| = p^{-\val(x)}$ defines an ultrametric absolute value on 
-the field $\Qp$ for which it is complete. More generally, the $p$-adic 
-absolute value extends uniquely to any finite extension $K$ of $\Qp$ and 
-turns $K$ into a complete ultrametric field. Another classical example of 
-complete ultrametric field is the field of Laurent series over a finite
-field, the absolute value being defined from the valuation of a series.
-
-From now, we fix a field $K$ equipped with an ultrametric absolute value 
-denoted by $|\cdot|$ and we assume that $K$ is complete. Given $v$ a 
-$K$-vector space (of possibly infinite dimension), an \emph{ultrametric 
-norm} on $V$ is a map $\Vert\cdot\Vert : V \to \R^+$ satisfying:
-\begin{enumerate}[(i)]
-\item $\Vert x\Vert = 0$ if and only if $x = 0$;
-\item $\Vert \lambda x\Vert = |\lambda| \cdot \Vert x\Vert$;
-\item $\Vert x+y\Vert \leq \max(\Vert x\Vert, \Vert y\Vert)$.
-\end{enumerate}
-A norm gives rise to a distance and a normed $K$-vector space $V$ is 
-said \emph{complete} when any Cauchy sequence with values in $V$ 
-converges. A normed $K$-vector space which is complete is called a 
-\emph{$K$-Banach}.
-
-Similarly to the real case, any finite dimensional normed $K$-vector 
-space is complete and all norms over such a space are equivalent 
-(\emph{i.e.} they define the same topology). Many usual Theorems 
-concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
-Theorem) remain true in the ultrametric setting.
-
-\begin{deftn} \label{deftn : diff}
-Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
-subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
-\emph{differentiable} at $v_0 \in U$ if there exists a 
-continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
-$\varepsilon >0$, there exists an open neighborhood $U_\varepsilon 
-\subset U$ containing $v_0$ with:
-\[ 
-\forall v, w \in U_\varepsilon, \quad
-\Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
-\leq \varepsilon \Vert v-w \Vert. 
-\]
-The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
-\end{deftn}
-
-One can derive all usual properties of the differential from this 
-definition: unicity, chain rules, \emph{etc}.
-
-\subsection{Lattices}
-
-Let $E$ be a $K$-normed vector space. Given $r \in \R^+$, 
-we denote by $B^-_E(r)$ (resp. by $B_E(r)$) the set of elements $x 
-\in E$ such that $\Vert x \Vert < r$ (resp. $\Vert x \Vert \leq r$). 
-We insist on the following maybe unusual fact: $B^-_E(r)$ and 
-$B_E(r)$ are both open and closed for the norm topology on $E$.
-Clearly, $B_K(0,1)$ is stable under multiplication. Moreover, the 
-ultrametric triangle inequality ensures that $B_K(1)$ is stable under 
-addition as well. Thus, $B_K(1)$ is a subring of $K$: it is often 
-called the \emph{integer ring} of $K$.
-
-\begin{deftn}
-Let $E$ be a $K$-Banach.
-A \emph{lattice} in $E$ is an open bounded sub-$B_K(1)$-module of $E$.
-\end{deftn}
-
-\begin{rmk}
-Any lattice $H$ in $E$ is also closed since its complement is the
-union of all cosets $a + H$ (with $a \not\in H$) which are all open.
-\end{rmk}
 
 The following Lemma shows that the notion of lattices behaves rather 
 well under linear\footnote{We shall see in the sequel (\emph{cf} Lemma 
@@ -642,27 +680,7 @@ We apply Proposition \ref{prop:locanalytic} to the composite $f \circ
 
 Lemma \ref{lem:main} and Proposition \ref{prop:locanalytic} have 
 important applications to effective computations with $p$-adic numbers 
-or power series, that we discuss in this Section. Let us recall first 
-that a datum involving elements of a complete ultrametric field $K$ 
-(\emph{e.g.} $p$-adic numbers or power series) cannot be stored entirely 
-on a computed because they basically convey an infinite amount of 
-informations. That is why, instead of this datum itself, we generally 
-work with neighborhoods of it.
-
-In what follows, we shall consider neighborhoods of the form $x + H$ 
-where $x$ is some element lying in a $K$-Banach $E$ and $H$ is a lattice 
-in $E$. A very basic example is the approximate $p$-adic number $1 + 
-O(p^N)$ which corresponds to the neighborhood of $1$ in $\Z_p$, which is 
-the set of all $p$-adic numbers congruent to $1$ modulo $p^N$. We 
-nevertheless emphasize that our definition is quite flexible and allows 
-many neighborhoods that we do not consider in general. For instance, an 
-``admissible'' neighborhood around a monic polynomial $P_0 \in \Q_p[X]$ 
-of degree $d$ may be defined by congruences of the form $P(a_i) \equiv 
-P_0(a_i) \pmod {p^{n_i}}$ ($1 \leq i \leq d$) for some fixed elements 
-$a_i \in \Q_p$ and relative integers $n_i$.
-
-In the context of computer science, we will often use the notation $x + 
-O(H)$ to refer to $x + H$.
+or power series, that we discuss in this Section. 
 
 \subsection{Automatic sharp track of precision}
 
