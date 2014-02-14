@@ -64,10 +64,10 @@ stable computation of the SOMOS 4 sequence.
 The last two decades have seen a rise in the popularity of $p$-adic methods in
 computational algebra.  For example,
 \begin{itemize}
-\item Bostan et al. \cite{Bostan} use Newton sums for polynomials over $\Zp$ to compute composed products for polynomials over $\Fp$;
-\item Gaudry et al. \cite{Gaudry} use $p$-adic lifting methods to generate genus 2 CM hyperelliptic curves;
-\item Kedlaya \cite{Kedlaya} uses $p$-adic cohomology to count points on hyperelliptic curves over finite fields;
-\item Lercier and Survent \cite{Lercier} compute isogenies between elliptic curves using $p$-adic differential equations.
+\item Bostan et al. \cite{Bostan} used Newton sums for polynomials over $\Zp$ to compute composed products for polynomials over $\Fp$;
+\item Gaudry et al. \cite{Gaudry} used $p$-adic lifting methods to generate genus 2 CM hyperelliptic curves;
+\item Kedlaya \cite{Kedlaya} used $p$-adic cohomology to count points on hyperelliptic curves over finite fields;
+\item Lercier and Survent \cite{Lercier} computed isogenies between elliptic curves using $p$-adic differential equations.
 \end{itemize}
 Like real numbers, most $p$-adic numbers cannot be represented exactly, but instead must be
 stored with some finite precision.  In this paper we focus on methods for handling $p$-adic precision
@@ -108,33 +108,38 @@ by the ubiquity of floating point arithmetic in scientific applications, where G
 distributions are more common than intervals anyway.
 
 In the $p$-adic world, precision tracking using intervals is much more feasible.
-Even a long sequence of operations may not sacrifice any precision.  Intervals
+Even a long sequence of operations with such elements may not sacrifice any precision.  Intervals
 allow number theorists to provably determine a result modulo a given power of $p$,
 and the Gaussian distributions of measurement error over $\R$ have no direct analogue
 over $\Qp$ anyway.  As a consequence, interval arithmetic is ubiquitous
-in implementations of $p$-adic numbers.  % Add citations to Sage, Magma and PARI.
+in implementations of $p$-adic numbers.  The mathematical software packages
+Sage \cite{sage}, PARI \cite{pari} and Magma \cite{magma} all include $p$-adic elements
+that track precision in this way.
 
-Many usual softwares (\emph{e.g.} {\tt magma} and {\tt sage}) include 
-primitives to handle $p$-adic numbers. Since $p$-adic numbers are by 
-nature infinite, one needs to truncate them up to some finite level (we 
-generally say \emph{finite precision}) in order to manipulate them on a 
-computer. The usual technics to achieve this are inspired from case of 
-real numbers: the computer works with ``truncated $p$-adic numbers'' 
-represented as $x + O(p^n)$ and performs all basic operations (addition, 
-product) on this representation. For instance, it computes: 
-$$(x + O(p^n)) + (y + O(p^m)) = (x+y) + O(p^{\min(n,m)}).$$
-However, in many important cases (\emph{e.g.} those discussed just 
-above), this approach is too naive since it creates artificially 
-important losses of precision (see \S\ref{ssec:stepbystep}). 
-It is the so-called \emph{numerical instability} issue.
+The approach of propagating precision with each arithmetic operation works well, but does
+sometimes underestimate the known precision of a result, as we will discuss in Section
+\ref{ssec:stepbystep}.  Moreover, elements of $\Qp$ provide building blocks for generic
+implementations of polynomials, vector spaces, matrices and power series.  The practice
+of storing the precision within each entry is not flexible enough for all applications.
+Sometimes only a rough accounting of precision is needed, in which case storing
+and computing the precision of each entry in a large matrix needlessly consumes
+space and time.  Conversely, recording the precision of each entry does not allow
+a constraint such as specifying the precision of $f(0)$, $f(1)$ and $f(2)$ for a
+quadratic polynomial $f$.
 
-The aim of the current paper is to provide a systematical theorical 
-study of $p$-adic precision (and more generally nonarchimedian 
-precision) and to derive from this study new methods to handle 
-precision, that turns out to give nearly optimal results in a quite 
-large setting.
+For a vector space $V$ over $\Qp$, we propose that the fundamental object used to
+store the precision of an element should be a $\Zp$-lattice $H \subset V$.  By using
+general lattices one can eliminate needless loss of precision.  Moreover, specifying
+the precision of each entry or recording a fixed precision for all entries can both
+be interpreted in terms of lattices.  In Section \ref{sec:prec-proposal} we detail our
+proposal for how to represent the precision of an element of a vector space.
 
-\section{Motivations and aims}
+\todofor{David}{Finish summarizing sections}
+
+While we have used $\Qp$ throughout this paper for concreteness, all of our results
+and suggestions apply to arbitrary complete discrete valuation rings.
+
+\section{Tracking Precision} \label{sec:prec-proposal}
 
 
 
