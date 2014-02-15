@@ -43,6 +43,8 @@
 
 \newcommand{\lb}{\ensuremath{\llbracket}}
 \newcommand{\rb}{\ensuremath{\rrbracket}}
+\newcommand{\lp}{(\!(}
+\newcommand{\rp}{)\!)}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
@@ -142,106 +144,89 @@ proposal for how to represent the precision of an element of a vector space.
 
 \section{Tracking Precision} \label{sec:prec-proposal}
 
+\subsection{Lattices}
+
 We recall some standard definitions from ultrametric analysis, referring to
 Schneider \cite{Schneider} for a complete exposition.
 
-Let $K$ be a non-Archimedean local field with absolute value
-$|\cdot| : K \to \R_+$ and value group $p^\Z$.   For example, we may take $K = \Qp$ with the
-$p$-adic absolute value or $K = \Fp\lb t \rb$ with the $t$-adic absolute value.
-Write $\OK$ for the ring of integers of $K$ and choose a dense subring $R \subset K$
-consisting of elements that can be represented exactly.  For $K = \Qp$ we may
-choose $R = \Z[\frac1p]$ or $R = \Q$; for $K = \Fp\lb t \rb$ we may choose
-$R = \Fp[t, t^{-1}]$ or $R = \Fp(t)$.  Choose a collection of subsets $S_h \subset R$
-indexed by positive integers $h$ so that
-\begin{enumerate}
-\item $S_h \subset S_{h+1}$,
-\item $\{B_K(x, p^{-h}) : x \in S_h\}$ disjointly covers $K$.
-\end{enumerate}
-The choice of the $S_h$ is possible since $K$ is non-Archimedean and locally compact.
+Let $K$ be a field with absolute value $|\cdot| : K \to \R_{\ge 0}$. 
+We assume that the induced metric is an ultrametric -- 
+\[ \lvert x + y \rvert \leq \max(\lvert x \rvert, \lvert y \rvert) \]
+-- and that $K$ is complete with respect to it.
+For example, we may take $K = \Qp$ with the
+$p$-adic absolute value or $K = k\lp t \rp$ with the $t$-adic absolute value.
+Write $\OK$ for the ring $\{x \in K : \lvert x \rvert \le 1\}$ and assume
+that $K$ contains a dense subring $R \subset K$
+consisting of elements that can be represented with a finite amount of space.
+For $K = \Qp$ we may choose $R = \Z[\frac1p]$ or $R = \Q$;
+for $K = \Fp\lb t \rb$ we may choose $R = \Fp[t, t^{-1}]$ or $R = \Fp(t)$.
 
-
-An \emph{absolute value} on a field $K$ is a multiplicative map $|\cdot| 
-: K \to \R_+$ satisfying the triangle inequality and sending every 
-nonzero element of $K$ to a strictly positive real number. It is said 
-\emph{ultrametric} if it satisfies the following strong from of the 
-triangle inequality:
-$$|x+y| \leq \max(|x|, |y|).$$
-Given an absolute value $|\cdot|$ on $K$, we note that $|K^\times|$ is a 
-multiplicative subgroup of $\R_+^\times$. It is then either discrete or 
-dense. We shall say that $|\cdot|$ is \emph{discrete} if $|K^\times|$ is
-discrete. The valued field $(K, |\cdot|)$ is said \emph{complete} if all 
-Cauchy sequences (with respect to the distance $d$ defined by $d(x,y) = 
-|x-y|$) converge.
-
-The formula $|x| = p^{-\val(x)}$ defines an ultrametric absolute value on 
-the field $\Qp$ for which it is complete. More generally, the $p$-adic 
-absolute value extends uniquely to any finite extension $K$ of $\Qp$ and 
-turns $K$ into a complete ultrametric field. Another classical example of 
-complete ultrametric field is the field of Laurent series over a finite
-field, the absolute value being defined from the valuation of a series.
-
-From now, we fix a field $K$ equipped with an ultrametric absolute value 
-denoted by $|\cdot|$ and we assume that $K$ is complete. Given $v$ a 
-$K$-vector space (of possibly infinite dimension), an \emph{ultrametric 
-norm} on $V$ is a map $\Vert\cdot\Vert : V \to \R^+$ satisfying:
+If $E$ is a $K$-vector space, possibly of infinite dimension, then an
+\emph{ultrametric norm} on $E$ is a map $\Vert\cdot\Vert : E \to \R^+$ satisfying:
 \begin{enumerate}[(i)]
 \item $\Vert x\Vert = 0$ if and only if $x = 0$;
 \item $\Vert \lambda x\Vert = |\lambda| \cdot \Vert x\Vert$;
 \item $\Vert x+y\Vert \leq \max(\Vert x\Vert, \Vert y\Vert)$.
 \end{enumerate}
-A norm gives rise to a distance and a normed $K$-vector space $V$ is 
-said \emph{complete} when any Cauchy sequence with values in $V$ 
-converges. A normed $K$-vector space which is complete is called a 
-\emph{$K$-Banach}.
+A \emph{$K$-Banach space} is a complete normed $K$-vector space.
 
-Similarly to the real case, any finite dimensional normed $K$-vector 
-space is complete and all norms over such a space are equivalent 
-(\emph{i.e.} they define the same topology). Many usual Theorems 
-concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
-Theorem) remain true in the ultrametric setting.
-
-\begin{deftn} \label{deftn : diff}
-Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
-subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
-\emph{differentiable} at $v_0 \in U$ if there exists a 
-continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
-$\varepsilon >0$, there exists an open neighborhood $U_\varepsilon 
-\subset U$ containing $v_0$ with:
-\[ 
-\forall v, w \in U_\varepsilon, \quad
-\Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
-\leq \varepsilon \Vert v-w \Vert. 
-\]
-The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
+\begin{deftn} % Separated definitions?
+Let $E$ be a $K$-Banach space.
+A \emph{lattice} in $E$ is an open bounded sub-$\OK$-module of $E$.
 \end{deftn}
 
-One can derive all usual properties of the differential from this 
-definition: unicity, chain rules, \emph{etc}.
-
-\subsection{Lattices}
-
-Let $E$ be a $K$-normed vector space. Given $r \in \R^+$, 
-we denote by $B^-_E(r)$ (resp. by $B_E(r)$) the set of elements $x 
-\in E$ such that $\Vert x \Vert < r$ (resp. $\Vert x \Vert \leq r$). 
-We insist on the following maybe unusual fact: $B^-_E(r)$ and 
-$B_E(r)$ are both open and closed for the norm topology on $E$.
-Clearly, $B_K(0,1)$ is stable under multiplication. Moreover, the 
-ultrametric triangle inequality ensures that $B_K(1)$ is stable under 
-addition as well. Thus, $B_K(1)$ is a subring of $K$: it is often 
-called the \emph{integer ring} of $K$.
+For a $K$-Banach space $E$ and $r \in \R_{\ge 0}$, write
+\begin{align*}
+B_E(r) &= \{ x \in E : \Vert x \Vert \le r \}, \\
+B^-_E(r) &= \{ x \in E : \Vert x \Vert < r\}.
+\end{align*}
+Note that $B_E(r)$ and $B^-_E(r)$ are both lattices.
 
 \begin{deftn}
-Let $E$ be a $K$-Banach.
-A \emph{lattice} in $E$ is an open bounded sub-$B_K(1)$-module of $E$.
+Suppose $E$ is a $K$-Banach space and $I$ a set.
+A family $(x_i)_{i \in I} \subset E$ is a \emph{Banach basis} for $E$ if
+every element $x \in E$ can be written
+\[
+x = \sum_{i \in I} \alpha_i x_i
+\]
+for scalars $\alpha_i \in K$ with $\alpha_i \to 0$, and $\Vert x \Vert = \sup_{i \in I} \lvert \alpha_i \rvert$.
 \end{deftn}
+Note that if $E$ is finite dimensional then the condition $\alpha_i \to 0$ is vacuous.
+% Lattice from Banach basis
 
-\begin{rmk}
-Any lattice $H$ in $E$ is also closed since its complement is the
-union of all cosets $a + H$ (with $a \not\in H$) which are all open.
-\end{rmk}
+\subsection{Approximate elements}
 
+Suppose that $E$ is a $K$-Banach space with basis $(x_i)_{i \in I}$.  We say that an element
+$x \in E$ is \emph{exact} if there is a finite subset $J \subseteq I$ and scalars $\alpha_j \in R$ with
+\begin{equation} \label{eq:exact_elt}
+x = \sum_{j \in J} \alpha_j x_j.
+\end{equation}
+The set of exact elements is dense in $E$.
 
+An approximate element is a pair $(x, H)$ where $x \in E$ is an exact element
+and $H$ is a lattice in $E$.  Such a pair represents an undetermined element of the coset
+$x + H$.  We will frequently write $x + O(H)$ to emphasize the fact that $H$ represents
+the uncertainty in the value of the approximate element.  In the special case that $E = K = \Qp$,
+we recover the standard notation $a + O(p^n)$ for an approximate $p$-adic element.
 
+Note that using an arbitrary lattice to represent the precision of an approximate element
+can reduce precision loss when compared to storing the precision of each coefficient
+$\alpha_i$ in \eqref{eq:exact_elt} separately.  Consider the function 
+$f : \Qp^2 \to \Qp^2$ mapping $(x,y)$ to $(x+y, x-y)$ and the problem of computing
+$f \circ f(a + O(p^n), b + O(p^m))$.
+
+Two approaches are possible. The first one consists in doing the 
+computation step-by-step: we first compute $(z,t) = f(x,y)$ and we 
+compute then $f(z,t)$ which gives the result. Proceeding this way, we 
+see that $z$ and $t$ are both known up to precision $O(p^{\min(n,m)})$ 
+are consequently the same holds for the coordinates of the result.
+The second approach consists in remarking that $f \circ f$ maps
+$(x,y)$ to $(2x, 2y)$. Computing $f \circ f(x,y)$ using the latter
+formula, it is clear that the result we get is known up to precision
+$(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p = 2$.
+As a conclusion, the second approach yields a more accurate result.
+In other words, computing step-by-step creates ``artificial'' losses 
+of precision.
 
 
 
@@ -285,24 +270,7 @@ instability.
 
 \subsubsection*{A first stupid example}
 
-Let $f : \Qp^2 \to \Qp^2$ be the function mapping $(x,y)$ to $(x+y, 
-x-y)$. We consider in addition two $p$-adic numbers $x$ and $y$, 
-which are known up to precision $O(p^n)$ and $O(p^m)$ respectively.
-The question we would like to address in this example is the
-computation of $f \circ f(x,y)$.
-
-Two approaches are possible. The first one consists in doing the 
-computation step-by-step: we first compute $(z,t) = f(x,y)$ and we 
-compute then $f(z,t)$ which gives the result. Proceeding this way, we 
-see that $z$ and $t$ are both known up to precision $O(p^{\min(n,m)})$ 
-are consequently the same holds for the coordinates of the result.
-The second approach consists in remarking that $f \circ f$ maps
-$(x,y)$ to $(2x, 2y)$. Computing $f \circ f(x,y)$ using the latter
-formula, it is clear that the result we get is known up to precision
-$(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p = 2$.
-As a conclusion, the second approach yields a more accurate result.
-In other words, computing step-by-step creates ``artificial'' losses 
-of precision.
+Let 
 
 \subsubsection*{The SOMOS 4 sequence}
 
@@ -402,6 +370,32 @@ $p$-adic fields and Laurent series fields.
 
 \subsection{Ultrametric analysis}
 \label{ssec:ultrametric}
+
+
+
+Similarly to the real case, any finite dimensional normed $K$-vector 
+space is complete and all norms over such a space are equivalent 
+(\emph{i.e.} they define the same topology). Many usual Theorems 
+concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
+Theorem) remain true in the ultrametric setting.
+
+\begin{deftn} \label{deftn : diff}
+Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
+subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
+\emph{differentiable} at $v_0 \in U$ if there exists a 
+continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
+$\varepsilon >0$, there exists an open neighborhood $U_\varepsilon 
+\subset U$ containing $v_0$ with:
+\[ 
+\forall v, w \in U_\varepsilon, \quad
+\Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
+\leq \varepsilon \Vert v-w \Vert. 
+\]
+The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
+\end{deftn}
+
+One can derive all usual properties of the differential from this 
+definition: unicity, chain rules, \emph{etc}.
 
 
 
