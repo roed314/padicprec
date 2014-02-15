@@ -3,11 +3,14 @@
 \usepackage[utf8]{inputenc}
 
 \usepackage{amsmath,amssymb}
+\usepackage{amsrefs}
 \usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{color}
 \usepackage{stmaryrd}
 \usepackage{enumerate}
 \usepackage[algoruled,vlined,french,linesnumbered]{algorithm2e}
+
+\newcommand{\noopsort}[1]{}
 
 \begin{document}
 
@@ -71,10 +74,10 @@ stable computation of the SOMOS 4 sequence.
 The last two decades have seen a rise in the popularity of $p$-adic methods in
 computational algebra.  For example,
 \begin{itemize}
-\item Bostan et al. \cite{Bostan} used Newton sums for polynomials over $\Zp$ to compute composed products for polynomials over $\Fp$;
-\item Gaudry et al. \cite{Gaudry} used $p$-adic lifting methods to generate genus 2 CM hyperelliptic curves;
-\item Kedlaya \cite{Kedlaya} used $p$-adic cohomology to count points on hyperelliptic curves over finite fields;
-\item Lercier and Survent \cite{Lercier} computed isogenies between elliptic curves over finite fields using $p$-adic differential equations.
+\item Bostan et al. \cite{boston-gonzalez-perdry-schost:05a} used Newton sums for polynomials over $\Zp$ to compute composed products for polynomials over $\Fp$;
+\item Gaudry et al. \cite{gaudry-houtmann-weng-ritzenthaler-kohel:06a} used $p$-adic lifting methods to generate genus 2 CM hyperelliptic curves;
+\item Kedlaya \cite{kedlaya:01a} used $p$-adic cohomology to count points on hyperelliptic curves over finite fields;
+\item Lercier and Survent \cite{lercier-sirvent:08a} computed isogenies between elliptic curves over finite fields using $p$-adic differential equations.
 \end{itemize}
 Like real numbers, most $p$-adic numbers cannot be represented exactly, but instead must be
 stored with some finite precision.  In this paper we focus on methods for handling $p$-adic precision
@@ -148,7 +151,7 @@ proposal for how to represent the precision of an element of a vector space.
 \subsection{Lattices}
 
 We recall some standard definitions from ultrametric analysis, referring to
-Schneider \cite{Schneider} for a complete exposition.
+Schneider \cite{schneider:11a} for a complete exposition.
 
 Let $K$ be a field with absolute value $|\cdot| : K \to \R_{\ge 0}$. 
 We assume that the induced metric is an ultrametric -- 
@@ -297,7 +300,7 @@ v_n = \val(u_0) + \cdots + \val(u_{n-4}).
 However, on the other hand, one can prove that the SOMOS 4 sequence 
 exhibits the \emph{Laurent phenomenon}. This means that, for all integer 
 $n$, there exists a polynomial $P_n$ in $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 
-1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$ (see \cite{Fomin-Zelevinsky}).
+1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$ (see \cite{fomin-zelevinsky:02a}).
 From the latter formula, it follows directly that if $u_0$, $u_1$,
 $u_2$ and $u_3$ are known up to precision $O(p^N)$ then all $u_n$'s
 are also known with the same precision. Thus, the term $v_n$ that 
@@ -336,11 +339,11 @@ unipotent (\emph{i.e.} all diagonal entries equal $1$). Let us write
 $L(M) U(M)$ the LU factorization of $M$ satisfying the above extra
 condition (when it exists). There exists Cramer-type formulas that
 gives each individual entries of $L(M)$and $U(M)$ in a closed form
-(see \cite{Caruso}).
+(see \cite{caruso:12a	}).
 
 If $M$ is random square matrix over $\Zp$ of side $d$ whose every
 coefficient is known up to precision $O(p^N)$, the two following
-results are proved in \cite{Caruso}:
+results are proved in \cite{caruso:12a}:
 \begin{itemize}
 \item using usual Gauss elimination and tracking $p$-adic precision 
 step-by-step, the smallest precision on an entry of $L(M)$ is about
@@ -630,7 +633,7 @@ computed explicitly.
 
 Indeed, when $f$ is a locally analytic function, we prove that we can recover $\delta$ from a Newton polygon defined with the Taylor series expansion of $f.$
 
-We refer to Schneider \cite{Schneider}, \S 6, for a definition of a locally analytic function.
+We refer to Schneider \cite{schneider:11a}, \S 6, for a definition of a locally analytic function.
 
 \begin{deftn} \label{deftn :  serie and norm}
 Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie over $E,$ a complete normed $K$-vector space. We assume that for any $\lambda  \in K,$ $x \in E,$ $n \in \mathbb{N},$ $\vert f_n(\lambda x) \vert = \vert \lambda \vert \vert f_n (x) \vert.$ 
@@ -982,7 +985,7 @@ four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4}
 Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
 u_2, u_3$ are some indeterminates, that each $u_n$ is a Laurent 
 polynomial with coefficients in $\Z$ in these indeterminates
-(see \cite{Fomin-Zelevinsky}).
+(see \cite{fomin-zelevinsky:02a}).
 
 From now, we will always consider SOMOS sequences with values in $\Q_p$ 
 (for some prime number $p$) and assume that $u_0, u_1, u_2, u_3$ are 
@@ -1130,7 +1133,7 @@ denoted by $|\cdot|$.
 \label{ssec:manifold}
 
 The theory of finite dimensional $K$-manifolds is presented for example 
-in \cite{Schneider}, parts 8 and 9. In this Section, we shall work with
+in \cite{schneider:11a}*{Ch. 8-9}. In this Section, we shall work with
 a slightly different notion of manifolds which allows also Banach vector 
 spaces of infinite dimension.
 More precisely, for us, a \emph{ differentiable $K$-manifold} 
@@ -1415,7 +1418,7 @@ which implies that $dQ$ and $dR$ are respectively obtained as the
 quotient and the remainder of the Euclidean division of $dA - dB \cdot 
 Q$ by $B$. This gives the differential. We note that the discussion 
 above extends readily to convergent series (see also 
-\cite{Caruso-Lubicz}).
+\cite{caruso-lubicz:14a}).
 
 \subsubsection*{Greatest common divisors and B\'ezout coefficients}
 
@@ -1594,16 +1597,16 @@ Recall that any
 ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We can 
 then consider the map sending a family $(f_1, \ldots, f_s)$ of 
 \emph{homogeneous}\footnote{This restriction will be convenient for us 
-mainly because we are using the article \cite{Vaccon}, which deals only 
+mainly because we are using the article \cite{vaccon:14a}, which deals only 
 with homogeneous polynomials. It is however probably not essential.} 
 polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
-\ldots, g_t)$. It follows from Theorem 1.1 of \cite{Vaccon} that this 
+\ldots, g_t)$. It follows from Theorem 1.1 of \cite{vaccon:14a} that this 
 map is continuous at $(f_1, \ldots, f_s)$ provided that:
 \begin{itemize}
 \item the sequence $(f_1, \ldots, f_s)$ is regular
 \item for all $i \in \{1, \ldots, s\}$, the ideal generated by
 $f_1, \ldots, f_i$ is wearly-$w$ where $w$ denotes the fixed monomial
-order (\emph{cf} \cite{Vaccon} for more precisions).
+order (\emph{cf} \cite{vaccon:14a} for more precisions).
 \end{itemize}
 A similar argument proves that it is actually differentiable at such
 points. We are now going to compute the differential. For this we
@@ -1773,51 +1776,7 @@ computed similarly to what we have done before.
 Finally, we note that similar results hold for images of matrices and,
 consequently, sums of subspaces.
 
-\begin{thebibliography}{10}
-
-\bibitem{Bostan}
-  A.~Bostan, L.~Gonz\'alez-Vega, H.~Perdry, \'E.~Schost,
-  \emph{From Newton sums to coefficients: complexity issues in characteristic $p$},
-  Proceedings MEGA'05 (2005).
-
-\bibitem{Caruso}
-  X.~Caruso,
-  \emph{Random matrices over a DVR and LU factorization},
-  preprint (2012)
-  
-\bibitem{Caruso-Lubicz}
-  X.~Caruso, D.~Lubicz
-  \emph{Linear Algebra over Zp[[u]] and related rings,} 
-  to appear at LMS J. Comp. and Math. 
-
-\bibitem{Fomin-Zelevinsky}
-  S.~Fomin, A.~Zelevinsky
-  \emph{The Laurent phenomenon,}   Advances in Applied Mathematics 28: 119–144 (2002).
-  
-\bibitem{Gaudry}
-  P.~Gaudry, T.~Houtmann, A.~Weng, C.~Ritzenthaler, D.~Kohel,
-  \emph{The $2$-adic CM method for genus $2$}, 
-  Asiacrypt 2006, vol. 4284 of Lecture Notes in Comput. Sci. (2006), 114--129
-
-\bibitem{Kedlaya}
-  K.~Kedlaya,
-  \emph{Counting points on hyperelliptic curves using Monsky--Washnitzer cohomology}, 
-  J. Ramanujan Math. Soc. {\bf 16} (2001)
-
-\bibitem{Lercier}
-  R.~Lercier, T.~Sirvent,
-  \emph{On Elkies subgroups of $\ell$-torsion points in elliptic curves defined over a finite field},
-  J. Th\'eorie des Nombres de Bordeaux {\bf 20} (2008), 783--797
-
-\bibitem{Schneider}
-  P.~Schneider,
-  \emph{$p$-adic Lie Groups}, Springer (2011)
-
-\bibitem{Vaccon}
-  T.~Vaccon,
-  \emph{Matrix-F5 algorithms over finite-precision complete discrete 
-  valuation fields},
-  preprint (2014)
-\end{thebibliography}
+\bibliographystyle{plain}
+\bibliography{roebib/Biblio}
 
 \end{document}
