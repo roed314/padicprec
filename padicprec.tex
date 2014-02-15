@@ -74,7 +74,7 @@ computational algebra.  For example,
 \item Bostan et al. \cite{Bostan} used Newton sums for polynomials over $\Zp$ to compute composed products for polynomials over $\Fp$;
 \item Gaudry et al. \cite{Gaudry} used $p$-adic lifting methods to generate genus 2 CM hyperelliptic curves;
 \item Kedlaya \cite{Kedlaya} used $p$-adic cohomology to count points on hyperelliptic curves over finite fields;
-\item Lercier and Survent \cite{Lercier} computed isogenies between elliptic curves using $p$-adic differential equations.
+\item Lercier and Survent \cite{Lercier} computed isogenies between elliptic curves over finite fields using $p$-adic differential equations.
 \end{itemize}
 Like real numbers, most $p$-adic numbers cannot be represented exactly, but instead must be
 stored with some finite precision.  In this paper we focus on methods for handling $p$-adic precision
@@ -170,11 +170,7 @@ If $E$ is a $K$-vector space, possibly of infinite dimension, then an
 \item $\Vert x+y\Vert \leq \max(\Vert x\Vert, \Vert y\Vert)$.
 \end{enumerate}
 A \emph{$K$-Banach space} is a complete normed $K$-vector space.
-
-\begin{deftn} % Separated definitions?
-Let $E$ be a $K$-Banach space.
-A \emph{lattice} in $E$ is an open bounded sub-$\OK$-module of $E$.
-\end{deftn}
+A \emph{lattice} in a $K$-Banach space $E$ is an open bounded sub-$\OK$-module of $E$.
 
 For a $K$-Banach space $E$ and $r \in \R_{\ge 0}$, write
 \begin{align*}
@@ -183,7 +179,6 @@ B^-_E(r) &= \{ x \in E : \Vert x \Vert < r\}.
 \end{align*}
 Note that $B_E(r)$ and $B^-_E(r)$ are both lattices.
 
-\begin{deftn}
 Suppose $E$ is a $K$-Banach space and $I$ a set.
 A family $(x_i)_{i \in I} \subset E$ is a \emph{Banach basis} for $E$ if
 every element $x \in E$ can be written
@@ -191,71 +186,79 @@ every element $x \in E$ can be written
 x = \sum_{i \in I} \alpha_i x_i
 \]
 for scalars $\alpha_i \in K$ with $\alpha_i \to 0$, and $\Vert x \Vert = \sup_{i \in I} \lvert \alpha_i \rvert$.
-\end{deftn}
 Note that if $E$ is finite dimensional then the condition $\alpha_i \to 0$ is vacuous.
-% Lattice from Banach basis
+
+Given a basis $(x_i)_{i \in I}$ and a sequence $(r_i)_{i \in I}$ with $r_i \in \R_{>0}$, the sets
+\begin{align*}
+B_E((x_i),(r_i)) &= \Big\{ \sum_{i \in I} \alpha_i x_i : \lvert \alpha_i \rvert \le r_i \Big\}, \\
+B^-_E((x_i),(r_i)) &= \Big\{ \sum_{i \in I} \alpha_i x_i : \lvert \alpha_i \rvert < r_i \Big\}
+\end{align*}
+are lattices precisely when the $r_i$ are bounded.  If we have equipped $E$ with a distinguished basis
+then we may drop $(x_i)$ from the notation for $B^{(-)}_E((x_i),(r_i))$.
+% Is every lattice of this shape for some Banach basis?
+
+\subsubsection*{Lattices and computers.}
+
+Suppose that $E \simeq K^d$ is finite dimesional.  Then if $H \subset E$
+is a lattice then there exist $a, b \in \Q_{>0}$ with
+\begin{equation}
+\label{eq:incllattice}
+B_K(a)^d \subset H \subset B_K(b)^d.
+\end{equation}
+Set $r = \frac a b$ and $R_r = \OK/B_K(r)$.  
+Then a lattice $H$ satisfying \eqref{eq:incllattice} is uniquely 
+determined by its image in the quotient $B_K(b)^d / B_K(a)^d \simeq 
+R_r^d$.  Since $R \cap \OK$ is dense in $\OK$, elements of $R_r$ may be
+represented exactly.  Thus $H$ may be encoded as a 
+$(d \times d)$ matrix with coefficients in $R_r$.  For example, when
+$K = \Qp$ the ring $R_r$ is just $(\Z / p^n\Z)$ for $n = \lfloor - \log_p r \rfloor$.
 
 \subsection{Approximate elements}
 
-Suppose that $E$ is a $K$-Banach space with basis $(x_i)_{i \in I}$.  We say that an element
-$x \in E$ is \emph{exact} if there is a finite subset $J \subseteq I$ and scalars $\alpha_j \in R$ with
+Suppose that $E$ is a $K$-Banach space with basis $(x_i)_{i \in I}$.
+\begin{deftn}
+\begin{itemize}
+\item An element $x \in E$ is \emph{exact} if there is a finite subset $J \subseteq I$ and scalars $\alpha_j \in R$ with
 \begin{equation} \label{eq:exact_elt}
 x = \sum_{j \in J} \alpha_j x_j.
 \end{equation}
-The set of exact elements is dense in $E$.
 
-An approximate element is a pair $(x, H)$ where $x \in E$ is an exact element
-and $H$ is a lattice in $E$.  Such a pair represents an undetermined element of the coset
+\item An \emph{approximate element} is a pair $(x, H)$ where $x \in E$ is an exact element
+and $H$ is a lattice in $E$.
+\end{itemize}
+\end{deftn}
+
+The pair $(x, H)$ represents an undetermined element of the coset
 $x + H$.  We will frequently write $x + O(H)$ to emphasize the fact that $H$ represents
 the uncertainty in the value of the approximate element.  In the special case that $E = K = \Qp$,
 we recover the standard notation $a + O(p^n)$ for an approximate $p$-adic element.
+Note that the set of exact elements is dense in $E$, so every element of $E$ can be approximated.
 
-Note that using an arbitrary lattice to represent the precision of an approximate element
+This definition encapsulates the main practical suggestion of the paper with regards to representing
+vector spaces, matrices, polynomials and power series over $K$: one should \textbf{separate} the
+approximation from the precision.  In the rest of this section we discuss some of the benefits made
+possible by such a separation.
+
+Note first that using an arbitrary lattice to represent the precision of an approximate element
 can reduce precision loss when compared to storing the precision of each coefficient
 $\alpha_i$ in \eqref{eq:exact_elt} separately.  Consider the function 
 $f : \Qp^2 \to \Qp^2$ mapping $(x,y)$ to $(x+y, x-y)$ and the problem of computing
 $f \circ f(a + O(p^n), b + O(p^m))$.
 
-Two approaches are possible. The first one consists in doing the 
-computation step-by-step: we first compute $(z,t) = f(x,y)$ and we 
-compute then $f(z,t)$ which gives the result. Proceeding this way, we 
-see that $z$ and $t$ are both known up to precision $O(p^{\min(n,m)})$ 
-are consequently the same holds for the coordinates of the result.
-The second approach consists in remarking that $f \circ f$ maps
-$(x,y)$ to $(2x, 2y)$. Computing $f \circ f(x,y)$ using the latter
-formula, it is clear that the result we get is known up to precision
-$(O(p^n), O(p^m))$ --- and even $(O(p^{n+1}), O(p^{m+1}))$ if $p = 2$.
-As a conclusion, the second approach yields a more accurate result.
-In other words, computing step-by-step creates ``artificial'' losses 
-of precision.
-
-
-
-Let us recall first 
-that a datum involving elements of a complete ultrametric field $K$ 
-(\emph{e.g.} $p$-adic numbers or power series) cannot be stored entirely 
-on a computed because they basically convey an infinite amount of 
-informations. That is why, instead of this datum itself, we generally 
-work with neighborhoods of it.
-
-In what follows, we shall consider neighborhoods of the form $x + H$ 
-where $x$ is some element lying in a $K$-Banach $E$ and $H$ is a lattice 
-in $E$. A very basic example is the approximate $p$-adic number $1 + 
-O(p^N)$ which corresponds to the neighborhood of $1$ in $\Z_p$, which is 
-the set of all $p$-adic numbers congruent to $1$ modulo $p^N$. We 
-nevertheless emphasize that our definition is quite flexible and allows 
-many neighborhoods that we do not consider in general. For instance, an 
-``admissible'' neighborhood around a monic polynomial $P_0 \in \Q_p[X]$ 
-of degree $d$ may be defined by congruences of the form $P(a_i) \equiv 
-P_0(a_i) \pmod {p^{n_i}}$ ($1 \leq i \leq d$) for some fixed elements 
-$a_i \in \Q_p$ and relative integers $n_i$.
-
-In the context of computer science, we will often use the notation $x + 
-O(H)$ to refer to $x + H$.
+Write $(e_1, e_2)$ for the standard basis of $E=\Qp^2$.  Since $f$ is linear, the image of
+the approximation $\bigl((a,b), B_E\bigl((e_1,e_2),(p^{-n}, p^{-m})\bigr)\bigr)$ is
+$\bigl((a+b, a-b), B_E\bigl((e_1+e_2, e_1-e_2), (p^{-n}, p^{-m})\bigr)\bigr)$.
+For $p \ne 2$, applying $f$ again yields $\bigl((2a, 2b), B_E\bigl((e_1, e_2), (p^{-n}, p^{-m})\bigr)\bigr)$.
+Storing precisions on each coordinate of a vector amounts to only allowing precisions of the form
+$B_E((r_i))$ with respect to the standard basis.  One would be forced to truncate the intermediate precision
+to $B_E(p^{-\min(m, n)})$, yielding an artificial loss of precision in the final result.
 
 \subsection{Separating precision from approximation}
 
-
+In addition to allowing for a more flexible representation of the precision of an element,
+the separation of precision from approximation has other benefits as well.  If the precision
+is encoded with the approximation, certain algorithms become unusable because of their
+numerical instability.  For example, the Karatsuba algorithm for polynomial multiplication
 
 \todofor{David}{
 Explain here why it might be useful to work separately with 
@@ -268,10 +271,6 @@ approximation on the one hand and precision on the other hand.
 In this subsection, we illustrate by some examples that tracking
 $p$-adic precision step by step may lead to important numerical
 instability.
-
-\subsubsection*{A first stupid example}
-
-Let 
 
 \subsubsection*{The SOMOS 4 sequence}
 
@@ -500,35 +499,6 @@ $p$-adic fields and Laurent series fields.
 %$H$ is the image under $\iota_H$ of a lattice satisfying an extra 
 %assumption: it is ``between the open unit ball and the closed unit 
 %ball''.
-
-\subsubsection*{Lattices and computers}
-
-Although elements of $K$ are not representable in thein entirety on a 
-computer, lattices in finite dimensional $K$-vector spaces are as soon 
-as the elements of the quotient $B_K(1)/B_K(r)$ are for all $r \in 
-(0,1)$. Indeed, given a lattice $L$ in $K^d$, there exists by definition 
-two positive rational numbers $a$ and $b$ such that 
-\begin{equation}
-\label{eq:incllattice}
-B_K(a)^d \subset L \subset B_K(b)^d.
-\end{equation}
-Moreover, a lattice $L$ satisfying \eqref{eq:incllattice} is uniquely 
-determined by its image in the quotient $B_K(b)^d / B_K(a)^d \simeq 
-(B_K(1)/B_K(r))^d$ with $r = \frac a b$. Therefore, the data of $L$ can 
-be encoded by a $(d \times d)$ matrix with coefficients in $B_K(1)/
-B_K(r)$. Thus, if elements in the latter ring are representable on a 
-computer, so are the lattices $L$ for which Eq.~\eqref{eq:incllattice} 
-holds. Finally, an arbitrary lattice $L$ in $K^d$ can be represented
-by a triple $(a,b,M)$ where $a$ and $b$ satisfies \eqref{eq:incllattice}
-and $M$ is a $(d \times d)$ matrix over $B_K(1)/B_K(\frac a b)$ 
-representing the image of $L$ in $B_K(b)^d / B_K(a)^d$.
-
-We furthermore remark that if $K = \Q_p$ (for some prime number $p$), 
-the quotient $B_K(1)/B_K(r)$ is isomorphism to some $\Z/p^n\Z$ (with $n 
-= \lfloor - \log_p r \rfloor$) are therefore is representable on a 
-computer. Thus, the above discussion applies when $K = \Q_p$. Similarly 
-it also applies when $K$ is a finite extension of $\Q_p$ or a field of
-Laurent series with coefficients in a finite field.
 
 \subsection{Images of lattices under differentiable functions}
 
