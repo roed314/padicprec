@@ -369,34 +369,34 @@ From now, we generalize a bit the setting and work over a general
 ultrametric complete field (see definition below). This includes 
 $p$-adic fields and Laurent series fields.
 
-%\subsection{Ultrametric analysis}
-%\label{ssec:ultrametric}
+\subsection{Ultrametric analysis}
+\label{ssec:ultrametric}
 
 
 
-%Similarly to the real case, any finite dimensional normed $K$-vector 
-%space is complete and all norms over such a space are equivalent 
-%(\emph{i.e.} they define the same topology). Many usual Theorems 
-%concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
-%Theorem) remain true in the ultrametric setting.
+Similarly to the real case, any finite dimensional normed $K$-vector 
+space is complete and all norms over such a space are equivalent 
+(\emph{i.e.} they define the same topology). Many usual Theorems 
+concerning Banach spaces (\emph{e.g.} open mapping Theorem, closed graph 
+Theorem) remain true in the ultrametric setting.
 
-%\begin{deftn} \label{deftn : diff}
-%Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
-%subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
-%\emph{differentiable} at $v_0 \in U$ if there exists a 
-%continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
-%$\varepsilon >0$, there exists an open neighborhood $U_\varepsilon 
-%\subset U$ containing $v_0$ with:
-%\[ 
-%\forall v, w \in U_\varepsilon, \quad
-%\Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
-%\leq \varepsilon \Vert v-w \Vert. 
-%\]
-%The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
-%\end{deftn}
+\begin{deftn} \label{deftn : diff}
+Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
+subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
+\emph{differentiable} at $v_0 \in U$ if there exists a 
+continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
+$\varepsilon >0$, there exists an open neighborhood $U_\varepsilon 
+\subset U$ containing $v_0$ with:
+\[ 
+\forall v, w \in U_\varepsilon, \quad
+\Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
+\leq \varepsilon \Vert v-w \Vert. 
+\]
+The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
+\end{deftn}
 
-%One can derive all usual properties of the differential from this 
-%definition: unicity, chain rules, \emph{etc}.
+One can derive all usual properties of the differential from this 
+definition: unicity, chain rules, \emph{etc}.
 
 
 
@@ -446,7 +446,7 @@ $p$-adic fields and Laurent series fields.
 %Left to the reader.
 %\end{proof}
 
-\subsection{Lattices}
+\subsubsection*{Lattices}
 
 %The following Lemma shows that the notion of lattices behaves rather 
 %well under linear\footnote{We shall see in the sequel (\emph{cf} Lemma 
@@ -727,7 +727,7 @@ Let $C$ be given by the Banach-Schauder theorem for $L_1$, $\varepsilon = \frac{
 
 For the first one, we assume that we have know a function that majorates $\Lambda((f_n)_{n \geq 1})$.
 
-\begin{prop} \label{prop : maj Lambda}
+\begin{prop} \label{prop : maj Lambda} \label{prop:locanalytic}
 If $m_1$ is a real convex function above $\Lambda((f_n)_{n \geq 1})$.
 We define $m_2$ by extending $m_1$ with slope $2$.
 Let $r$ be the abscissa of the intersection of $m_2$ and the line defined by $y=-\log \varepsilon+ x.$ Then $e^r$ is enough for \ref{lem:main}.
