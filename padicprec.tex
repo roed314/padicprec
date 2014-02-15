@@ -539,9 +539,17 @@ function defined on an open subset $U$ of $E$. Let also $v_0$ be a
 point in $U$.
 A lattice $H$ in $E$ is called a \emph{first order lattice} for $f$ at 
 $v_0$ if the equality
-$$f(v_0 + H) = f(v_0) + f'(v_0) (H)$$
+\begin{equation}
+\label{eq:firstorder}
+f(v_0 + H) = f(v_0) + f'(v_0) (H)
+\end{equation}
 holds.
 \end{deftn}
+
+We emphasize that we require an equality in Eq.~\eqref{eq:firstorder}, 
+and not just an inclusion! It will be very important for the 
+applications we have in mind.
+Here comes our main Lemma.
 
 \begin{lem} \label{lem:main}
 Let $E$ and $F$ be two $K$-Banach and $f : U 
@@ -804,14 +812,17 @@ $f(x+H) \subset x' + H'$. We say that {\tt f} does not generate
 artificial loss of precision if the above inclusion is an equality; it is 
 often not the case as shown in \S \ref{ssec:stepbystep}.
 
-Let us assume now that $f$ is locally analytic on $U$ and $H$ is a first 
-order lattice for $f$ at $x$. Then $f(x+H) = f(x) + f'(x)(H)$ and the 
-smallest possible $H'$ is $f'(x)(H)$. In other words, the function {\tt 
-f} generates artificial loss of precision if the precision $H'$ it 
-outputs is strictly larger that $f'(x)(H)$. The aim of this section is 
-to explain how, under the above hypothesis, one can implement the 
-function {\tt f} so that it always outputs the optimal precision $O(H')$ 
-with $H' = f'(x)(H)$.
+Let us assume now that $f$ is locally analytic on $U$ and in addition 
+that $f'(x)$ is surjective. Proposition \ref{prop:locanalytic} then 
+yields a rather simple sufficient condition to decide if a given lattice 
+$H$ is a first order lattice for $f$ at $x$. For such a lattice, by 
+definition, we have $f(x+H) = f(x) + f'(x)(H)$. Thus the smallest 
+possible $H'$ is $f'(x)(H)$. In other words, the function {\tt f} 
+generates artificial loss of precision if the precision $H'$ it outputs 
+is strictly larger that $f'(x)(H)$. The aim of this section is to 
+explain how, under the above hypothesis, one can implement the function 
+{\tt f} so that it always outputs the optimal precision $O(H')$ with $H' 
+= f'(x)(H)$.
 
 \subsubsection*{Forward computation}
 
@@ -931,9 +942,51 @@ and then runs over this skeleton in the reverse direction in order to
 determine (an upper bound of) the needed precision at each step. The 
 similarity with our approach is noticeably strong.
 
-\subsubsection*{Quick comparison with floating point arithmetics}
+\subsubsection*{Additional remarks}
 
-It worths remarking that the two strategy designed above share many 
+From the beggining, we have assumed that $f'(x)$ is surjective. Let us 
+discuss shortly what happens when this assumption is relaxed. As it is 
+explained after the proof of Lemma \ref{lem:main}, the first thing we 
+can do is to project the result onto different quotients, \emph{i.e.} to 
+work with the composites $\pr_K \circ f$ for a sufficiently large family 
+of closed sub vector spaces $K \subset F$ such that $K + f'(x)(E) = F$. 
+(We recall that here $\pr_K$ denotes the canonical projection to $F$ 
+onto the quotient $F/K$.) If $F$ has a natural system of coordinates 
+(which is the case in almost all settings), we can generally take the 
+$\pr_K$'s as the projections on each coordinate. Doing this, we end up 
+with a precision on each individual coordinate. Furthermore, we have the 
+guarantee that all these precisions are sharp (even if the lattice build
+from them is not).
+Let us illustrate the above discussion by an example: suppose that we 
+want to compute the function $f : (K^n)^n \to M_n(K)$ that takes a 
+family of $n$ vectors to its Graam matrix. The differential of $f$ is
+clearly never surjective because $f$ takes its values in the subspace
+consisting of symmetric matrices. Nevertheless for all couple $(i,j)
+\in \{1, \ldots, n\}^2$, one can consider the composite $f_{ij} = 
+\pr_{ij} \circ f$ where $\pr_{ij} : M_n(K) \to K$ that takes a matrix 
+$M$ to its $(i,j)$-th entry. The maps $f_{ij}$'s are differentiable and 
+their differentials generally are surjective (\emph{i.e.} they do not 
+vanish). Let $M$ be a matrix known at some finite precision such that 
+$f'_{ij} (M) \neq 0$ for all $(i,j)$. We can then apply the forward 
+and/or the backward computation and get $f_{ij}(M)$ together with its 
+precision. Putting this together, we get the whole matrix $f(M)$ 
+together with a sharp precision datum on each entry.
+
+The study of the this example actually suggests another solution to 
+tackle the issue of non-surjectivity. Indeed, remark that our $f$ above 
+had not a surjective differential simply because its codomain was too 
+large: if we had replaced $f : (K^n)^n \to M_n(K)$ by $g : (K^n)^n \to 
+S_n(K)$ (where $S_n(K)$ denotes the $K$-vector space of symmetric matrix 
+over $K$ of size $n$) defined in the same way, our problem would 
+disappear. Of course the image of a general $f$ is rarely a sub vector 
+space of $F$ but it is often a sub-$K$-manifold of $F$. 
+% Using the results of Appendix 
+
+
+\medskip
+
+We conclude this Section by remarking that the two strategies designed 
+above (\emph{i.e.} forward and backward computations) share some 
 similarities with usual floating point arithmetics over the reals. 
 Indeed, roughly speaking, in each setting, we begin by choosing a large 
 precision, we do all our computations up to this precision understood 
