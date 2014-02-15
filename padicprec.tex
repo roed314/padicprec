@@ -957,6 +957,7 @@ $\pr_K$'s as the projections on each coordinate. Doing this, we end up
 with a precision on each individual coordinate. Furthermore, we have the 
 guarantee that all these precisions are sharp (even if the lattice build
 from them is not).
+
 Let us illustrate the above discussion by an example: suppose that we 
 want to compute the function $f : (K^n)^n \to M_n(K)$ that takes a 
 family of $n$ vectors to its Graam matrix. The differential of $f$ is
@@ -977,15 +978,16 @@ tackle the issue of non-surjectivity. Indeed, remark that our $f$ above
 had not a surjective differential simply because its codomain was too 
 large: if we had replaced $f : (K^n)^n \to M_n(K)$ by $g : (K^n)^n \to 
 S_n(K)$ (where $S_n(K)$ denotes the $K$-vector space of symmetric matrix 
-over $K$ of size $n$) defined in the same way, our problem would 
-disappear. Of course the image of a general $f$ is rarely a sub vector 
-space of $F$ but it is often a sub-$K$-manifold of $F$. 
-% Using the results of Appendix 
-
+over $K$ of size $n$) defined in the same way, our problem would have 
+disappeared. Of course the image of a general $f$ is rarely a sub vector 
+space of $F$ but it is often a sub-$K$-manifold of $F$. We can then use 
+the results of Appendix \ref{sec:manifold} to study $f$ viewed as a 
+function whose codomain is $f(U)$, understood that the differential of 
+it has now good probability to be surjective.
 
 \medskip
 
-We conclude this Section by remarking that the two strategies designed 
+We conclude this Section by briefly remarking that the two strategies designed 
 above (\emph{i.e.} forward and backward computations) share some 
 similarities with usual floating point arithmetics over the reals. 
 Indeed, roughly speaking, in each setting, we begin by choosing a large 
