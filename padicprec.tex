@@ -1333,8 +1333,115 @@ method of \S \ref{ssec:locanalytic}.
 \end{rmk}
 
 \subsection{Examples}
+\label{ssec:exmanifold}
 
-\todofor{David}{Elliptic curves and grassmannians}
+We illustrate the theory developped above by some classical examples,
+namely elliptic curves and grassmannians.
+
+\subsubsection*{Elliptic curves}
+
+In this example, we assume for simplicity that $K$ has not caracteristic 
+$2$. Let $a$ and $b$ be two elements of $K$ such that $4 a^3 + 27 b^2 
+\neq 0$ and let $E$ be the subset of $K^2$ consisting of the couples 
+$(x,y)$ satisfying the usual equation $y^2 = x^3 + a x + b$.
+Let also $\pr_x : E \to K$ (resp. $\pr_y : E \to K$) denote the map that 
+takes a couple $(x,y)$ to $x$ (resp. to $y$).
+
+\medskip
+
+We first assume that $a$ and $b$ are exactly known; typically the field 
+$K$ is $\Q_p$ and $a$ and $b$ are actual integers. For each point $P_0 = 
+(x_0, y_0)$ on $E$ except possibly a finite number of them, the map 
+$\pr_x$ define a diffeomorphism from an open subset containing $P_0$ to 
+an open subset of $K$. The same is true for $\pr_y$. Moreover around all 
+$P_0 \in E$, one of these projections satisfy the above condition and
+they both do generically. Hence the maps $\pr_x$ and $\pr_y$ defined an 
+various open subsets define together an atlas of $E$. This turns $E$ into 
+a $K$-manifold.
+
+Let $P_0$ be a point in $E$ around which $\pr_x$ and $\pr_y$ both define 
+charts. Proposition \ref{prop:independance} then tells us that a 
+precision datum on $x$ determined a precision datum on $y$ and \emph{vice 
+versa}. Indeed around $P_0$, we can write $y = \sqrt{x^3 + a x + b}$ 
+(with the correct determination of the square root) and find the 
+precision on $y$ from those on $x$ using Lemma \ref{lem:main}. We can go 
+in the other direction as well by writing $x$ locally as a function of 
+$y$. A precision datum at $P_0$ is then nothing but a precision datum
+on the coordinate $x$ or on the coordinate $y$, keeping in mind that 
+each of them determines the other. Viewing a precision datum at $P_0$ as 
+a lattice in the tangent space is a nice way to make it canonical but in 
+practice we can just particularize one coordinate and handle precision
+only on this coordinate.
+
+We conclude this example by showing a simple method to transform a
+precision datum on $x$ to a precision datum on $y$ and \emph{vice versa}.
+Differentiating the equation of the elliptic curve, we get:
+\begin{equation}
+\label{eq:diffec}
+2 y \cdot dy = (3 x^2 + a) \cdot dx.
+\end{equation}
+In the above $dx$ and $dy$ should be thought as a little perturbation of 
+$x$ and $y$ respectively. Eq.~\eqref{eq:diffec} then gives a linear 
+relation between the precision on $x$ (which is represented by $dx$) and 
+those on $y$ (which is represented by $dy$). This relation turns out to
+correspond exactly to the one which is given by Lemma \ref{lem:main}.
+
+\medskip
+
+Let us address now the case where $a$ and $b$ are themselves given with 
+finite precision. The elliptic curve $E$ is then not fully determined. So 
+we cannot consider it as a $K$-manifold and the above discussion does not 
+apply readily. Nevertheless, we can always consider the submanifold of 
+$K^4$ consisting of all tuples $(a,b,x,y)$ satisfying $y^2 = x^3 + a x + 
+b$. The projections on the hyperplanes $a = 0$, $b = 0$, $x = 0$ and $y = 
+0$ respectively define charts of this $K$-manifold. From this, we see 
+that a precision datum on a point of the ``not well determined'' elliptic 
+curve $E$ is a precision datum on a tuple of three variables among $a$, 
+$b$, $x$ and $y$.
+
+\subsubsection*{Grassmannians}
+
+Let $d$ and $n$ be two nonnegative integers such that $d \leq n$. The 
+Grassmannian $\Grass(d,n)$ is the set of all sub-vector spaces of $K^n$ 
+of dimension $d$. It defines an algebraic variety over $K$ and hence
+\emph{a fortiori} a $K$-manifold.
+Concretely, a vector space $V \subset K^n$ of dimension $d$ is given by 
+a rectangular matrix $M \in M_{d,n}(K)$ whose rows form a basis of $V$ 
+and two such matrices $M$ and $M'$ define the same vector space if there 
+exists $P \in \GL_d(K)$ such that $M = P M'$. Performing row echelon, we 
+find that we can always choose the above matrix $M$ in the particular
+shape:
+\begin{equation}
+\label{eq:grass}
+M = \begin{pmatrix} I_d & N \end{pmatrix} \cdot P
+\end{equation}
+where $I_d$ denotes the $(d \times d)$ identity matrix, $N \in M_{d, 
+n-d}(K)$ and $P$ is a permutation matrix of size $n$. Moreover two 
+such writings with the same $P$ necessarily coincide. Hence each 
+permutation matrix $P$ defines a chart $U_P \subset \Grass(d,n)$ which
+is canonically diffeomorphism to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
+
+In other words, if $V$ is a subspace of $K^n$ of dimension $d$, we 
+represent it as a matrix $M$ of the shape \eqref{eq:grass} (using row 
+echelon) and a precision datum at $V$ is nothing but a precision datum on 
+the matrix $N$. If we choose another permutation matrix to represent $V$, 
+say $P'$, we end up with another matrix $N'$; the matrices $N$ and $N'$ 
+are then related by a simple relation. Differentiating it, we find a 
+formula for translating the precision datum expressed in the chart $U_P$ 
+to the same precision datum expressed in the chart $U_{P'}$.
+Of course, in practice, when we are doing computations on subspaces of
+$K^n$ (like sum or intersection), we represent the spaces in charts as
+above and perform all the calculations in these charts.
+
+\subsubsection*{Conclusion}
+
+The theory developped in this Appendix is nice because it provides an 
+abstract framework to deal with ultrametric precision in a quite general 
+setting.
+Nevertheless, as we have seen in the above examples, in practice we
+generally carry out all calculations in charts and do not really care
+about the ``real'' nature of the precision data, \emph{i.e.} lattices
+in tangent spaces.
 
 \section{Differential of usual operations}
 \label{ssec:differentials}
@@ -1342,11 +1449,15 @@ method of \S \ref{ssec:locanalytic}.
 We continue to work over a fixed ultrametric field $K$, whose absolute 
 value is denoted by $|\cdot|$. We recall that usual examples of such $K$ 
 are the field of $p$-adic numbers $\Q_p$ and the field of Laurent series 
-$k((X))$ over a base field $k$. The aim of this appendix is to compute 
-the differential of many usual operations on numbers, polynomials and 
-matrices. Surprisingly, we observe that all differentials we will 
-consider are rather easy to compute even if the underlying operation is 
-quite involved (\emph{e.g.} Gr\"obner basis).
+$k((X))$ over a base field $k$.
+
+We saw in the core of the article that the differential of an operation 
+encodes the intrinsic loss/gain of precision when performing this 
+operation. The aim of this appendix is to compute the differential of 
+many usual operations on numbers, polynomials and matrices. Surprisingly, 
+we observe that all differentials we will consider are rather easy to 
+compute even if the underlying operation is quite involved (\emph{e.g.} 
+Gr\"obner basis).
 
 In what follows, we use freely the ``method of physicists'' to compute 
 differentials: given a function $f$ differentiable at some point $x$, we 
@@ -1694,8 +1805,8 @@ would like to emphasize at this point that the orthogonality condition
 defines a sub-manifold of $M_n(K)$ which is a apparently \emph{not} a
 vector space (it is defined by equations of degree $2$). The codomain
 of $f$ is then also a manifold; this example then fits to the setting
-of \S \ref{sec:manifold} but not to those of \S \ref{sec:mainlemma}. 
-The generalization made in \S \ref{sec:manifold} is then needed.
+of Appendix \ref{sec:manifold} but not to those of Section \ref{sec:mainlemma}. 
+The generalization made in Appendix \ref{sec:manifold} is then needed.
 Anyway, we can differentiate $f$ by following the method we used for LU 
 factorization: differentiating the relation $M = QR$, we obtain:
 \begin{equation}
@@ -1713,25 +1824,16 @@ and $dM$.
 
 \subsection{Vector spaces}
 
-Let $d$ and $n$ be two nonnegative integers such that $d \leq n$. The 
-Grassmannian $\Grass(d,n)$ is the set of all sub-vector spaces of $K^n$ 
-of dimension $d$. It defines an algebraic variety over $K$ and hence
-\emph{a fortiori} a $K$-manifold in the sense of \S \ref{ssec:manifold}.
-Concretely, a vector space $V \subset K^n$ of dimension $d$ is given by 
-a rectangular matrix $M \in M_{d,n}(K)$ whose rows form a basis of $V$ 
-and two such matrices $M$ and $M'$ define the same vector space if there 
-exists $P \in \GL_d(K)$ such that $M = P M'$. Performing row echelon, we 
-find that we can always choose the above matrix $M$ in the particular
-shape:
-$$M = \begin{pmatrix} I_d & M' \end{pmatrix} \cdot P$$
-where $I_d$ denotes the $(d \times d)$ identity matrix, $M' \in M_{d, 
-n-d}(K)$ and $P$ is a permutation matrix of size $n$. Moreover two 
-such writings with the same $P$ necessarily coincide. Hence each 
-permutation matrix $P$ defines a chart $U_P \subset \Grass(d,n)$ which
-is canonically diffeomorphism to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
+In computer science, vector spaces are generally represented as subspaces 
+of $K^n$ for some $n$. Hence they naturally appear as points on some 
+grassmannian $\Grass(n,d)$. These grassmannians are $K$-manifolds in the 
+sense of Appendix \ref{sec:manifold} as it is discussed in \S 
+\ref{ssec:exmanifold}. In what sequel, we use freely the formalism 
+introduced there.
 
 \subsubsection*{Left kernels}
 
+Let $d$ and $n$ be two nonnegative integers such that $d \leq n$.
 We consider the open subset $\mathcal V_{n-d}$ of $M_{n,n-d}(K)$ 
 consisting of matrices of full rank, \emph{i.e.} rank $n-d$. The left 
 kernel defines a mapping $\text{LK} : M_{n,n-d}(K) \to \Grass(d,n)$. Let 
