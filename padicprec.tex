@@ -128,7 +128,7 @@ that track precision in this way.
 
 The approach of propagating precision with each arithmetic operation works well, but does
 sometimes underestimate the known precision of a result, as we will discuss in Section
-\ref{ssec:stepbystep}.  Moreover, elements of $\Qp$ provide building blocks for generic
+\ref{ssec:separation}.  Moreover, elements of $\Qp$ provide building blocks for generic
 implementations of polynomials, vector spaces, matrices and power series.  The practice
 of storing the precision within each entry is not flexible enough for all applications.
 Sometimes only a rough accounting of precision is needed, in which case storing
@@ -257,11 +257,17 @@ $B_E((r_i))$ with respect to the standard basis.  One would be forced to truncat
 to $B_E(p^{-\min(m, n)})$, yielding an artificial loss of precision in the final result.
 
 \subsection{Separating precision from approximation}
+\label{ssec:separation}
 
 In addition to allowing for a more flexible representation of the precision of an element,
 the separation of precision from approximation has other benefits as well.  If the precision
 is encoded with the approximation, certain algorithms become unusable because of their
-numerical instability.  For example, the Karatsuba algorithm for polynomial multiplication
+numerical instability.  For example, the Karatsuba algorithm for polynomial multiplication \cite{karatsuba-ofman:62a}
+can needlessly lose precision when operating on polynomials with inexact coefficients.
+However, it works perfectly well on exact approximations, leaving the question of the precision of
+the product to be solved separately.  By separating the precision, more algorithms become available.
+
+There are also 
 
 \todofor{David}{
 Explain here why it might be useful to work separately with 
@@ -269,7 +275,7 @@ approximation on the one hand and precision on the other hand.
 }
 
 \subsection{Step-by-step tracking is not sharp}
-\label{ssec:stepbystep}
+
 
 In this subsection, we illustrate by some examples that tracking
 $p$-adic precision step by step may lead to important numerical
@@ -356,8 +362,6 @@ If $d$ is large compared to $p$, the second precision is much more
 accurate than the first one. This shows once again that ``artifical''
 losses of precision appear when one performs Gauss elimination by
 tracking precision step-by-step.
-
-%\subsubsection*{Algorithms \emph{\`a la} Kedlaya}
 
 \section{The main Lemma}
 \label{sec:mainlemma}
@@ -783,7 +787,7 @@ mathematical function $f : U \to V$. The relation is the following: when
 {\tt f} is called on the input $x + O(H)$, it outputs $x' + O(H')$ with 
 $f(x+H) \subset x' + H'$. We say that {\tt f} does not generate 
 artificial loss of precision if the above inclusion is an equality; it is 
-often not the case as shown in \S \ref{ssec:stepbystep}.
+often not the case as shown in \S \ref{ssec:separation}.
 
 Let us assume now that $f$ is locally analytic on $U$ and in addition 
 that $f'(x)$ is surjective. Proposition \ref{prop:locanalytic} then 
@@ -975,11 +979,11 @@ sure that the final result is correct up to the required precision.
 We illustrate the theory developed in this paper by giving a simple 
 toy application. Other applications will be discussed in subsequent 
 articles. More precisely, we study the SOMOS 4 sequence introduced in \S 
-\ref{ssec:stepbystep}. Making a crucial use of Lemma \ref{lem:main} and 
+\ref{ssec:separation}. Making a crucial use of Lemma \ref{lem:main} and 
 Proposition \ref{prop:locanalytic}, we design a \emph{stable} algorithm 
 for computing it.
 
-Recall (\emph{cf} \S \ref{ssec:stepbystep}) that a SOMOS 4 sequence is a 
+Recall (\emph{cf} \S \ref{ssec:separation}) that a SOMOS 4 sequence is a 
 four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
 + u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
 Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
