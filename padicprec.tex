@@ -153,7 +153,7 @@ proposal for how to represent the precision of an element of a vector space.
 We recall some standard definitions from ultrametric analysis, referring to
 Schneider \cite{schneider:11a} for a complete exposition.
 
-Let $K$ be a field with absolute value $|\cdot| : K \to \R_{\ge 0}$. 
+Let $K$ be a field with absolute value $|\cdot| : K \to \R_{\ge 0}$.
 We assume that the induced metric is an ultrametric -- 
 \[ \lvert x + y \rvert \leq \max(\lvert x \rvert, \lvert y \rvert) \]
 -- and that $K$ is complete with respect to it.
@@ -267,35 +267,22 @@ can needlessly lose precision when operating on polynomials with inexact coeffic
 However, it works perfectly well on exact approximations, leaving the question of the precision of
 the product to be solved separately.  By separating the precision, more algorithms become available.
 
-There are also 
+In addition to allowing for more efficient computation of precision, storing the precision separately from the
+approximation makes it easier to determine the precision of the result when step-by-step precision tracking
+does not reflect the actual precision of the result.
 
-\todofor{David}{
-Explain here why it might be useful to work separately with 
-approximation on the one hand and precision on the other hand.
-}
+The SOMOS 4 sequence \cite{somos:89a} is defined by the recurrence
+\[
+u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}.
+\]
+We shall consider the case where the initial
+terms $u_0$, $u_1$, $u_2$ and $u_3$ lie in $\Zp^\times$ and have precision $O(p^N)$.
 
-\subsection{Step-by-step tracking is not sharp}
-
-
-In this subsection, we illustrate by some examples that tracking
-$p$-adic precision step by step may lead to important numerical
-instability.
-
-\subsubsection*{The SOMOS 4 sequence}
-
-The SOMOS 4 sequence is a four-term inductive sequence satisfying:
-$$u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}.$$
-In this example, we shall consider the situation where the initial
-terms $u_0$, $u_1$, $u_2$ and $u_3$ are \emph{invertible} $p$-adic 
-integers, \emph{i.e.} lie in $\Zp^\times$.
-
-Let us first examine what happens (regarding to the precision) when
-we are computing the sequence $(u_n)$ naively. The computation of
-$u_{n+4}$ involves a division by $u_n$ and hence, roughly speaking,
-decreases the precision by a factor $p^{\val(u_n)}$ where $\val$
-stands for the $p$-adic valuation. Hence, if we assume that $u_0$,
-$u_1$, $u_2$ and $u_3$ are given with precision $O(p^N)$ then the
-naive computation returns the value of $u_n$ with precision
+Let us first examine how the absolute precision of $u_n$ varies with $n$
+if it is computed from the precision of $u_{n-4}, \ldots, u_{n-1}$ using the recurrence.
+The computation of $u_{n+4}$ involves a division by $u_n$ and hence, roughly speaking,
+decreases the precision by a factor $p^{\val(u_n)}$.  Hence the
+step-by-step computation returns the value of $u_n$ with precision
 \begin{equation}
 \label{eq:SOMOS}
 O(p^{N-v_n})
@@ -303,30 +290,29 @@ O(p^{N-v_n})
 v_n = \val(u_0) + \cdots + \val(u_{n-4}).
 \end{equation}
 
-However, on the other hand, one can prove that the SOMOS 4 sequence 
-exhibits the \emph{Laurent phenomenon}. This means that, for all integer 
+On the other hand, one can prove that the SOMOS 4 sequence 
+exhibits the \emph{Laurent phenomenon} \cite{fomin-zelevinsky:02a}. This means that, for all integer 
 $n$, there exists a polynomial $P_n$ in $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 
-1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$ (see \cite{fomin-zelevinsky:02a}).
+1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$.
 From the latter formula, it follows directly that if $u_0$, $u_1$,
 $u_2$ and $u_3$ are known up to precision $O(p^N)$ then all $u_n$'s
 are also known with the same precision. Thus, the term $v_n$ that 
 appears in \eqref{eq:SOMOS} does not reflect an intrinsic loss of
-precision but some numerical instability related to the algorithm ---
-which includes the model precision --- we used to compute to SOMOS 
-sequence.
+precision but some numerical instability related to the algorithm used to compute $u_n$.
 
 \begin{rmk}
 From the above discussion, one can easily derive a numerically stable 
-algorithm that computes the SOMOS 4 sequence: (1)~we compute the 
-Laurent polynomials $P_n$ using the induction formula (and working in 
-the ring $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 1}, T^{\pm 1}]$) and (2)~we 
-evaluate $P_n$ at the point $(u_0, u_1, u_2, u_3)$.
-However this algorithm is not efficient at all since computing the 
-$P_n$'s is very time-consuming for two reasons: first, it requires 
-division in a polynomial ring with $4$ variables and, second, the
+algorithm that computes the SOMOS 4 sequence: 
+\begin{enumerate}
+\item compute the Laurent polynomials $P_n$ using the induction formula (and working in 
+the ring $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 1}, T^{\pm 1}]$)
+\item evaluate $P_n$ at the point $(u_0, u_1, u_2, u_3)$.
+\end{itemize}
+However, computing the $P_n$'s is very time-consuming since it requires 
+division in a polynomial ring with $4$ variables and the
 size of the coefficients of $P_n$ explodes as $n$ grows.
 
-In \S \ref{ssec:SOMOS-solution}, we shall design an algorithm computing 
+In Section \ref{ssec:SOMOS-solution}, we shall design an algorithm computing 
 the SOMOS 4 sequence which turns out to be, at the same time, efficient 
 and numerically stable.
 \end{rmk}
