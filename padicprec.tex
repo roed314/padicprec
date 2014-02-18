@@ -55,7 +55,7 @@
 \def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
 
 \title{$p$-adic precision}
-\author{Xavier Caruso, David Roe \& Tristan Vaccon}
+%\author{Xavier Caruso, David Roe \& Tristan Vaccon}
 \date\today
 
 \maketitle
@@ -534,7 +534,7 @@ $\varepsilon C < \rho$. Let $U_\varepsilon \subset E$ given by Definition
 \ref{deftn : diff} and the fact that $f$ is differentiable at $0$. We 
 may assume $U_\varepsilon = B_E(\delta)$ for some $\delta >0$.
 
-Let $r \in (0, \delta)$. Let $B^-_E(r) \subset H \subset B_E(r).$ Let us 
+Let $r \in (0, \delta)$. Let $B^-_E(\rho r) \subset H \subset B_E(r).$ Let us 
 show that $f$ maps surjectively $H$ onto $f'(0) (H)$. We first prove 
 that $f(H) \subset f'(0) (H)$. Let $x \in H$. By differentiability at 
 $0$, $\Vert f(x)-f'(0)(x) \Vert \leq \varepsilon \Vert x \Vert $. 
@@ -554,7 +554,7 @@ f(x_n)$ and $\Vert z_n \Vert \leq C \cdot \Vert y - f(x_n) \Vert$ (such
 an element exists by definition of $C$), and
 \item $x_{n+1}=x_n+z_n$.
 \end{itemize}
-For convenience, let us also define $x_{-1} = 0$. We claim that the 
+For convenience, let us also define $x_{-1} = 0$ and $z_{-1}=x_0.$ We claim that the 
 sequences $(x_n)$ and $(z_n)$ are well defined and take their values in 
 $H$. To establish this, it is enough to prove that, assuming that 
 $x_{n-1}$ and $x_n$ belongs to $H$, so do $z_n$ and $x_{n+1}$. Noticing
@@ -623,56 +623,61 @@ computed explicitly.
 
 Indeed, when $f$ is a locally analytic function, we prove that we can recover $\delta$ from a Newton polygon defined with the Taylor series expansion of $f.$
 
-We refer to Schneider \cite{schneider:11a}, \S 6, for a definition of a locally analytic function.
+We refer to Schneider \cite{schneider:11a}, \S 6, for a definition of a locally analytic function, and we extend it to any complete $K$ vector space :
+
+\begin{deftn} \label{deftn:analyticNP}
+Let $E$ and $F$ be two complete ultrametric $K$-Banach spaces. Let $U \subset E$ be an open set.
+A function $f \: : \: U \rightarrow F$ is said to be locally analytic if for any $x \in U,$ there exists some open subset $U_x$ of $E$ and some $n$-linear mappings $L_n \: : \: E^n \rightarrow F$ for any $n \geq 1,$ such that : for any $y \in U_x,$ the sum $\sum_{n \geq 1} L_n(y,\dots,y)$ converges in F, and $f(x+y)=f(x)+\sum_{n \geq 1} L_n(y,\dots,y).$
+\end{deftn}
+
+We then mostly study such a serie defined at $x$.
 
 \begin{deftn} \label{deftn :  serie and norm}
-Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie over $E,$ a complete normed $K$-vector space. We assume that for any $\lambda  \in K,$ $x \in E,$ $n \in \mathbb{N},$ $\vert f_n(\lambda x) \vert = \vert \lambda \vert \vert f_n (x) \vert.$ 
-We define $\vert f_n \vert = \sup_{x \in B_E(0,1)} \vert f_n(x) \vert,$ and we assume that all the $\vert f_n \vert $ are finite. We define $R((f_n)_n)$ to be the radius of convergence of the serie.
-
-We also define : \[\Lambda((f_n)_n) (v) = \log \sup_{x \in B(0,e^v)} \vert f(x) \vert.\]
-We define  $NP((f_n)_n)$ to be the Newton polygon of $f$, that is to say, the lower convex hull in $\mathbb{R}^2$ of the $(k, - \log \vert f_k \vert ),$ $k\geq 0.$ 
+Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie over mappings $E \rightarrow F,$ where $E$ and $F$ are complete normed $\overline{K}$-vector space. We assume that for any $\lambda  \in \overline{K},$ $x \in E,$ $n \in \mathbb{N},$ $\vert f_n(\lambda x) \vert = \vert \lambda \vert \vert f_n (x) \vert.$ 
+We define $\vert f_n \vert = \sup_{x \in B_E(0,1)} \vert f_n(x) \vert,$ and we assume that all the $\vert f_n \vert $ are finite. 
+We also define, for any $v \in \mathbb{R}$ such that this $\sup$ is finite : \[\Lambda(f) (v) = \log \sup_{x \in B_E(0,e^v)} \vert f(x) \vert,\]
+and $\Lambda(f) (v) =+\infty$ otherwise.
+We define  $NP(f)$ to be the Newton polygon of $f$, that is to say, the lower convex hull in $\mathbb{R}^2$ of the $(k, - \log \vert f_k \vert ),$ $k\geq 0.$ 
 \end{deftn}
 
 The following proposition is a classical consequence of convex analysis.
 
 \begin{prop} \label{prop : conjugate Newton}
-We define $v_\infty \in \mathbb{R} \cup \left\lbrace \infty \right\rbrace$ to be the limit of the slopes of $NP((f_n)_n).$
-We denote by $NP((f_n)_n)^*$ the convex conjugate of $NP((f_n)_n).$ $NP((f_n)_n)^*$ is defined over $\left] -\infty,v_{\infty} \right[$ (at least)
+We define $v_\infty \in \mathbb{R} \cup \left\lbrace \infty \right\rbrace$ to be the limit of the slopes of $NP(f).$
+We denote by $NP(f)^*$ the convex conjugate of $NP(f).$ $NP(f)^*$ is defined over $\left] -\infty,v_{\infty} \right[$ (at least)
 \end{prop}
 
-$\Lambda((f_n)_n)$ and $NP((f_n)_n)$ are connected :
+Then, $\Lambda(f)$ and $NP(f)$ are connected :
 
 \begin{prop} \label{prop : connexion sup Newton}
-We have $R((f_n)_n) = e^{v_{\infty}}.$
-Moreover, for any $v < \log \left( R((f_n)_n) \right),$ \[ \Lambda ((f_n)_n) (v) = NP((f_n)_n)^*(v).\]
+For any $v \in \left]-\infty, v_\infty \right[,$ \[ \Lambda (f) (v) = NP(f)^*(v).\]
 \end{prop}
 \begin{proof}
-Let $v \in \left] -\infty,v_{\infty} \right[,$ and let us assume that $v$ is not a slope of $NP((f_n)_n).$
-Let $u = NP((f_n)_n)^*(v).$ Then the intersection of the line defined by $y=vx-u$ and $NP((f_n)_n)$ is an extreme point of $NP((f_n)_n),$ say $(n, - \log ( \vert f_n \vert ))$ for some $n \geq 0,$ and $u = vn + \log \vert f_n \vert.$
+Let $v \in \left] -\infty,v_{\infty} \right[,$ and let us assume that $v$ is not a slope of $NP(f).$
+Let $u = NP(f)^*(v).$ Then the intersection of the line defined by $y=vx-u$ and $NP(f)$ is an extreme point of $NP(f),$ say $(n, - \log ( \vert f_n \vert ))$ for some $n \geq 0,$ and $u = vn + \log \vert f_n \vert.$
 
-$v$ is not a slope of $NP((f_n)_n)$ and by convexity of $NP((f_n)_n)$, its difference quotients at $n$ are increasing, therefore, there exists some $c>0$ such that for any $m\geq 0,$ $vm-u \leq - \log \vert f_m \vert - c \vert n-m \vert.$ Since $vm-u=vm-vn-log \vert f_n \vert,$ we get $-vn-\log \vert f_n \vert + c \vert n-m \vert  \leq -vm-\log \vert f_m \vert .$
+$v$ is not a slope of $NP(f)$ and by convexity of $NP(f)$, its difference quotients at $n$ are increasing, therefore, there exists some $c>0$ such that for any $m\geq 0,$ $vm-u \leq - \log \vert f_m \vert - c \vert n-m \vert.$ Since $vm-u=vm-vn-log \vert f_n \vert,$ we get $-vn-\log \vert f_n \vert + c \vert n-m \vert  \leq -vm-\log \vert f_m \vert .$
 
-Now, let $x \in  B(0,e^v),$ and $m \geq 0.$ Definition of $\vert f_m$ yields $ \vert f_m (x) \vert \leq \vert f_m \vert e^{vm}.$ Therefore \[\vert f_m (x) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn}< \vert f_n \vert e^{vn}.\]
-Therefore, the serie converges and by ultrametricity $ \vert f(x) \vert \leq \vert f_n \vert e^{vn},$ and $\Lambda ((f_l)_l)(v) \leq \log \left( \vert f_n \vert e^{vn} \right).$ Furthermore,  $R((f_n)_n)  \geq e^v.$
- 
+Now, let $x \in  B_E(0,e^v),$ and $m \geq 0.$ Definition of $\vert f_m \vert$ yields $ \vert f_m (x) \vert \leq \vert f_m \vert e^{vm}.$ Therefore \[\vert f_m (x) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn}< \vert f_n \vert e^{vn}.\]
+Thus, the serie converges and by ultrametricity $ \vert f(x) \vert \leq \vert f_n \vert e^{vn},$ and $\Lambda (f)(v) \leq \log \left( \vert f_n \vert e^{vn} \right).$  
 
-Now, definition of $\vert f_n \vert$  provides $(x_i)_{i\geq 0}$ in $B(0,e^v)$ such that $\lim \vert f_n (x_i)= \vert f_n \vert e^{vn}.$ 
+Now, definition of $\vert f_n \vert$  provides $(x_i)_{i\geq 0}$ in $B_E(0,e^v)$ such that $\lim \vert f_n (x_i) \vert= \vert f_n \vert e^{vn}.$ 
 
-Since for any $i,$ $\vert f_m (x) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn},$ then for $i$ large enough, $\vert f_m (x) \vert < \vert f_n (x) \vert $ and $\vert f(x) \vert = \vert f_n (x) \vert.$
+Since for any $i,$ $\vert f_m (x_i) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn},$ then for $i$ large enough, $\vert f_m (x_i) \vert < \vert f_n (x_i) \vert $ and $\vert f(x_i) \vert = \vert f_n (x_i) \vert.$
 
-As a consequence, $\lim \vert f(x_i) \vert = \vert f_n \vert e^{vn},$ and  $\Lambda ((f_l)_l)(v) = \log ( \vert f_n \vert e^{vn}) = u= NP((f_n)_n)^*(v).$
+As a consequence, $\lim_i \vert f(x_i) \vert = \vert f_n \vert e^{vn},$ and  $\Lambda (f)(v) = \log ( \vert f_n \vert e^{vn}) = u= NP(f)^*(v).$
 
-Therefore, for any $v \in \left] -\infty,v_{\infty} \right[,$ with $v$ not a slope of $NP((f_n)_n),$ we get $\Lambda ((f_l)_l)(v) =NP((f_n)_n)^*(v).$
-Since both $\Lambda ((f_l)_l)$ is increasing and $NP((f_n)_n)^*$ is continuous (since it is convex), we deduce that $R((f_n)_n) \geq  e^{v_{\infty}}$ and both functions coincide on $v \in \left] -\infty,v_{\infty} \right[,$
-
-One can show similarily that $R((f_n)_n) \leq  e^{v_{\infty}}.$
+Therefore, for any $v \in \left] -\infty,v_{\infty} \right[,$ with $v$ not a slope of $NP(f),$ we get $\Lambda (f)(v) =NP(f)^*(v).$
+Since $\Lambda (f)$ is increasing, $NP(f)^*$ is continuous (since it is convex), and $NP(f)$ has only finitely many slopes smaller than $v_\infty-\epsilon$, for any $\epsilon >0$, we deduce that both functions coincide on $v \in \left] -\infty,v_{\infty} \right[,$
 \end{proof}
 
-\begin{cor} Let $f(x)= \sum_{n \geq 0} f_n (x)$ and $g(x)= \sum_{n \geq 0} g_n (x)$ be two series as in definition \ref{deftn :  serie and norm}. Let $f(x)g(x)=\sum_{n \geq 0} \mu_n (x) $ and $f \circ g(x)=\sum_{n \geq 0} \tau_n (x) .$ Then :
-$\Lambda((f_n+g_n)_n) \leq \max (\Lambda((f_n)_n),\Lambda((g_n)_n))$
-$\Lambda((\mu_n)_n) \leq \Lambda((f_n)_n)+\Lambda((g_n)_n)$
-$\Lambda((\tau_n)_n) \leq \Lambda((f_n)_n) \circ \Lambda((g_n)_n)$
-\end{cor}
+\begin{lem} Let $f(x)= \sum_{n \geq 0} f_n (x)$ and $g(x)= \sum_{n \geq 0} g_n (x)$ be two series as in definition \ref{deftn :  serie and norm}. Then :
+\[\Lambda(f+g) \leq \max (\Lambda(f),\Lambda(g))\]
+\[\Lambda(f \times g) \leq \Lambda(f)+\Lambda(g)\]
+\[\Lambda(f \circ g) \leq \Lambda(f) \circ \Lambda(g)\]
+\end{lem}
+
+The following proposition will reveal crucial in order to minorate or majorate $NP(f),$  $NP(f)^*$ or $\Lambda(f),$ and is classical in convex analysis.
 
 \begin{prop} \label{prop : legendre transform}
 If $f$ and $g$ are two real convex functions such that $f \geq g,$ then $f^* \leq g^*.$
@@ -680,27 +685,27 @@ Furthermore, slopes of $f^*$ corresponds to extreme points of $f$.
 \end{prop}
 
 \begin{cor} \label{cor : trunc series}
-Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie as in definition \ref{deftn :  serie and norm}, $n_0 \geq 0$ and $g(x)= \sum_{n \geq n_0} f_n (x).$ Then $\Lambda((g_n)_n) \leq \Lambda((f_n)_n)$ and the slopes of $\Lambda((g_n)_n)$ are bigger than $n_0$. 
-As a consequence, a minoration of $\Lambda((g_n)_n)$ can be obtain by extending $\Lambda((f_n)_n)(v)$ with a slope $n_0$ for $v \leq n_0$.
+Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie as in definition \ref{deftn :  serie and norm}, $n_0 \geq 0$ and $g(x)= \sum_{n \geq n_0} f_n (x).$ Then $\Lambda(g) \leq \Lambda(f)$ and the slopes of $\Lambda(g)$ are bigger than $n_0$. 
+As a consequence, a minoration of $\Lambda(g)$ can be obtain by extending $\Lambda(f)(v)$ with a slope $n_0$ for $v \leq n_0$.
 \end{cor}
 
 
-Now, let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ and the $L_k$'s be as in definition \ref{deftn:analyticNP}. We assume $L_1$ is surjective. We define, for any $n \geq 1$, $f_n(x)=L_n(x,\dots,x)$ for any $x \in E.$ 
-Let $C$ be given by the Banach-Schauder theorem for $L_1$, $\varepsilon = \frac{1}{C}$. We provide three methods to find a sufficient $r$ for \ref{lem:main}.
+Now, let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ and the $L_k$'s be as in definition \ref{deftn:analyticNP}. We assume $L_1$ is surjective. We define, the $\overline{L_k},$ $\overline{E}$ and $\overline{F}$ by extending scalars to $\overline{K}.$ We define for any $n \geq 1$, $f_n(x)=\overline{L_n}(x,\dots,x)$ for any $x \in \overline{E}.$ 
+Let $C$ be given by the open mapping theorem for $L_1$, $\rho \in (0, 1]$ and $\varepsilon < \frac{\rho}{C}$. We provide three methods to find a sufficient $\delta$ to define first order lattice as in lemma \ref{lem:main}.
 
-For the first one, we assume that we have know a function that majorates $\Lambda((f_n)_{n \geq 1})$.
+For the first one, we assume that we have know a function that majorates $\Lambda(\sum_{n \geq 1}f_n)$.
 
 \begin{prop} \label{prop : maj Lambda} \label{prop:locanalytic}
-If $m_1$ is a real convex function above $\Lambda((f_n)_{n \geq 1})$.
+If $m_1$ is a real convex function above $\Lambda(\sum_{n \geq 1}f_n)$.
 We define $m_2$ by extending $m_1$ with slope $2$.
-Let $r$ be the abscissa of the intersection of $m_2$ and the line defined by $y=-\log \varepsilon+ x.$ Then $e^r$ is enough for \ref{lem:main}.
+Let $\delta$ be the abscissa of the intersection of $m_2$ and the line defined by $y=-\log \varepsilon+ x.$ Then $e^\delta$ is enough to define first order lattices as in lemma  \ref{lem:main}.
 \end{prop}
 \begin{proof}
-$r$ is well-defined thanks to corollary \ref{cor : trunc series}, and $m_2 \geq \Lambda((f_n)_{n \geq 2}).$
+$\delta$ is well-defined thanks to corollary \ref{cor : trunc series}, and $m_2 \geq \Lambda(\sum_{n \geq 2}f_n).$
 
-One only has to prove that for all $x \in B(0,e^r),$ $\vert \sum_{n\geq 2} f_n(x) \vert \leq \varepsilon \vert x \vert.$
+It is sufficient to prove that for all $x \in B_{\overline{E}}(0,e^\delta),$ $\vert \sum_{n\geq 2} f_n(x) \vert \leq \varepsilon \vert x \vert.$
 
-If $x \in B(0,e^r),$ $u = \log \vert x \vert,$ then $\Lambda((f_n)_{n \geq 2})(u) \geq -\log \varepsilon+ u.$
+If $x \in B_{\overline{E}}(0,e^\delta),$ $u = \log \vert x \vert,$ then $\Lambda( \sum_{n \geq 2}f_n)(u) \geq -\log \varepsilon+ u.$
 With proposition \ref{prop : connexion sup Newton}, for any $m \geq 2,$ $-\log \vert f_m \vert +m u \geq -\log \varepsilon+ u.$
 
 Therefore, for any $m \geq 2,$ $\vert f_m \vert  \vert x \vert^m \leq \varepsilon \vert x \vert.$
@@ -712,16 +717,16 @@ For the second one, we only assume that we have majorations on the $\vert f_n \v
 \begin{prop}
 Let $(M_n)_{n \geq 2}$ be real numbers such that for all $n \geq 2$, $\vert f_n \vert \leq M_n.$
 
-If we denote by $NP((M_{n+1})_{n \geq 1})$ the lower convex hull of the $(n, -\log M_{n+1})$ for $n \geq 1$, then $r$ such that $-\log \varepsilon=NP((M_n)_{n \geq 2})^*(r)$ is enough.
+If we denote by $NP((M_{n+1})_{n \geq 1})$ the lower convex hull of the $(n, -\log M_{n+1})$ for $n \geq 1$, then $\delta$ such that $-\log \varepsilon=NP((M_n)_{n \geq 2})^*(r)$ is enough to define first order lattices as in lemma  \ref{lem:main}.
 \end{prop}
 \begin{proof}
-Same idea as proposition \ref{prop : maj Lambda}. One can define $g_n$ with $g_n (x) =\frac{f_n(x)}{\vert x \vert}$ and $g_n(0)=0$ and work with $\Lambda ((g_n)_n).$
+Same idea as proposition \ref{prop : maj Lambda}. One can define $g_n$ with $g_n (x) =\frac{f_n(x)}{\vert x \vert}$ and $g_n(0)=0$ and work with $\Lambda ( \sum g_n).$
 \end{proof}
 
-We finally provide a simple method when working with finite dimension and $p$-adic fields.
+We finally provide a simple method when working with finite-dimensional vector spaces over $p$-adic fields.
 
 \begin{prop} \label{prop : locanalyticfinitedim}
-If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : let $r$ be such that $NP_F^* \left( \log_p r - \frac{1}{p-1} \right) \leq \log_p \varepsilon.$ Then $r$ is enough for lemma \ref{lem:main}. 
+If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C,$ $\rho$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : let $r$ be such that $NP_F^* \left( \log_p r - \frac{1}{p-1} \right) \leq \log_p \varepsilon.$ Then $r$ is enough for lemma \ref{lem:main}. 
 \end{prop}
 \begin{proof}
 Same as before, with $L_n=\frac{f^{(n)}(0)}{n!}$ and Legendre formula. The result follows \textit{mutatis mutandis}.
@@ -1110,7 +1115,7 @@ Many natural $p$-adic objects do not lie in vector spaces:
 points in projective spaces or elliptic curves,
 subspaces of a fixed vector space (which lie in Grassmannians),
 classes of isomorphism of certain curves (which lie in various moduli spaces),
-\emph{etc.}  In this section we extend the formalism 
+\emph{etc.}  In this appendix we extend the formalism 
 developed in Section \ref{sec:mainlemma} to a more general setting:
 we consider the quite general case of 
 differentiable manifolds locally modeled on ultrametric Banach spaces.
@@ -1319,8 +1324,115 @@ method of \S \ref{ssec:locanalytic}.
 \end{rmk}
 
 \subsection{Examples}
+\label{ssec:exmanifold}
 
-\todofor{David}{Elliptic curves and grassmannians}
+We illustrate the theory developped above by some classical examples,
+namely elliptic curves and grassmannians.
+
+\subsubsection*{Elliptic curves}
+
+In this example, we assume for simplicity that $K$ has not caracteristic 
+$2$. Let $a$ and $b$ be two elements of $K$ such that $4 a^3 + 27 b^2 
+\neq 0$ and let $E$ be the subset of $K^2$ consisting of the couples 
+$(x,y)$ satisfying the usual equation $y^2 = x^3 + a x + b$.
+Let also $\pr_x : E \to K$ (resp. $\pr_y : E \to K$) denote the map that 
+takes a couple $(x,y)$ to $x$ (resp. to $y$).
+
+\medskip
+
+We first assume that $a$ and $b$ are exactly known; typically the field 
+$K$ is $\Q_p$ and $a$ and $b$ are actual integers. For each point $P_0 = 
+(x_0, y_0)$ on $E$ except possibly a finite number of them, the map 
+$\pr_x$ define a diffeomorphism from an open subset containing $P_0$ to 
+an open subset of $K$. The same is true for $\pr_y$. Moreover around all 
+$P_0 \in E$, one of these projections satisfy the above condition and
+they both do generically. Hence the maps $\pr_x$ and $\pr_y$ defined an 
+various open subsets define together an atlas of $E$. This turns $E$ into 
+a $K$-manifold.
+
+Let $P_0$ be a point in $E$ around which $\pr_x$ and $\pr_y$ both define 
+charts. Proposition \ref{prop:independance} then tells us that a 
+precision datum on $x$ determined a precision datum on $y$ and \emph{vice 
+versa}. Indeed around $P_0$, we can write $y = \sqrt{x^3 + a x + b}$ 
+(with the correct determination of the square root) and find the 
+precision on $y$ from those on $x$ using Lemma \ref{lem:main}. We can go 
+in the other direction as well by writing $x$ locally as a function of 
+$y$. A precision datum at $P_0$ is then nothing but a precision datum
+on the coordinate $x$ or on the coordinate $y$, keeping in mind that 
+each of them determines the other. Viewing a precision datum at $P_0$ as 
+a lattice in the tangent space is a nice way to make it canonical but in 
+practice we can just particularize one coordinate and handle precision
+only on this coordinate.
+
+We conclude this example by showing a simple method to transform a
+precision datum on $x$ to a precision datum on $y$ and \emph{vice versa}.
+Differentiating the equation of the elliptic curve, we get:
+\begin{equation}
+\label{eq:diffec}
+2 y \cdot dy = (3 x^2 + a) \cdot dx.
+\end{equation}
+In the above $dx$ and $dy$ should be thought as a little perturbation of 
+$x$ and $y$ respectively. Eq.~\eqref{eq:diffec} then gives a linear 
+relation between the precision on $x$ (which is represented by $dx$) and 
+those on $y$ (which is represented by $dy$). This relation turns out to
+correspond exactly to the one which is given by Lemma \ref{lem:main}.
+
+\medskip
+
+Let us address now the case where $a$ and $b$ are themselves given with 
+finite precision. The elliptic curve $E$ is then not fully determined. So 
+we cannot consider it as a $K$-manifold and the above discussion does not 
+apply readily. Nevertheless, we can always consider the submanifold of 
+$K^4$ consisting of all tuples $(a,b,x,y)$ satisfying $y^2 = x^3 + a x + 
+b$. The projections on the hyperplanes $a = 0$, $b = 0$, $x = 0$ and $y = 
+0$ respectively define charts of this $K$-manifold. From this, we see 
+that a precision datum on a point of the ``not well determined'' elliptic 
+curve $E$ is a precision datum on a tuple of three variables among $a$, 
+$b$, $x$ and $y$.
+
+\subsubsection*{Grassmannians}
+
+Let $d$ and $n$ be two nonnegative integers such that $d \leq n$. The 
+Grassmannian $\Grass(d,n)$ is the set of all sub-vector spaces of $K^n$ 
+of dimension $d$. It defines an algebraic variety over $K$ and hence
+\emph{a fortiori} a $K$-manifold.
+Concretely, a vector space $V \subset K^n$ of dimension $d$ is given by 
+a rectangular matrix $M \in M_{d,n}(K)$ whose rows form a basis of $V$ 
+and two such matrices $M$ and $M'$ define the same vector space if there 
+exists $P \in \GL_d(K)$ such that $M = P M'$. Performing row echelon, we 
+find that we can always choose the above matrix $M$ in the particular
+shape:
+\begin{equation}
+\label{eq:grass}
+M = \begin{pmatrix} I_d & N \end{pmatrix} \cdot P
+\end{equation}
+where $I_d$ denotes the $(d \times d)$ identity matrix, $N \in M_{d, 
+n-d}(K)$ and $P$ is a permutation matrix of size $n$. Moreover two 
+such writings with the same $P$ necessarily coincide. Hence each 
+permutation matrix $P$ defines a chart $U_P \subset \Grass(d,n)$ which
+is canonically diffeomorphism to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
+
+In other words, if $V$ is a subspace of $K^n$ of dimension $d$, we 
+represent it as a matrix $M$ of the shape \eqref{eq:grass} (using row 
+echelon) and a precision datum at $V$ is nothing but a precision datum on 
+the matrix $N$. If we choose another permutation matrix to represent $V$, 
+say $P'$, we end up with another matrix $N'$; the matrices $N$ and $N'$ 
+are then related by a simple relation. Differentiating it, we find a 
+formula for translating the precision datum expressed in the chart $U_P$ 
+to the same precision datum expressed in the chart $U_{P'}$.
+Of course, in practice, when we are doing computations on subspaces of
+$K^n$ (like sum or intersection), we represent the spaces in charts as
+above and perform all the calculations in these charts.
+
+\subsubsection*{Conclusion}
+
+The theory developped in this Appendix is nice because it provides an 
+abstract framework to deal with ultrametric precision in a quite general 
+setting.
+Nevertheless, as we have seen in the above examples, in practice we
+generally carry out all calculations in charts and do not really care
+about the ``real'' nature of the precision data, \emph{i.e.} lattices
+in tangent spaces.
 
 \section{Differential of usual operations}
 \label{ssec:differentials}
@@ -1328,11 +1440,15 @@ method of \S \ref{ssec:locanalytic}.
 We continue to work over a fixed ultrametric field $K$, whose absolute 
 value is denoted by $|\cdot|$. We recall that usual examples of such $K$ 
 are the field of $p$-adic numbers $\Q_p$ and the field of Laurent series 
-$k((X))$ over a base field $k$. The aim of this appendix is to compute 
-the differential of many usual operations on numbers, polynomials and 
-matrices. Surprisingly, we observe that all differentials we will 
-consider are rather easy to compute even if the underlying operation is 
-quite involved (\emph{e.g.} Gr\"obner basis).
+$k((X))$ over a base field $k$.
+
+We saw in the core of the article that the differential of an operation 
+encodes the intrinsic loss/gain of precision when performing this 
+operation. The aim of this appendix is to compute the differential of 
+many usual operations on numbers, polynomials and matrices. Surprisingly, 
+we observe that all differentials we will consider are rather easy to 
+compute even if the underlying operation is quite involved (\emph{e.g.} 
+Gr\"obner basis).
 
 In what follows, we use freely the ``method of physicists'' to compute 
 differentials: given a function $f$ differentiable at some point $x$, we 
@@ -1680,8 +1796,8 @@ would like to emphasize at this point that the orthogonality condition
 defines a sub-manifold of $M_n(K)$ which is a apparently \emph{not} a
 vector space (it is defined by equations of degree $2$). The codomain
 of $f$ is then also a manifold; this example then fits to the setting
-of \S \ref{sec:manifold} but not to those of \S \ref{sec:mainlemma}. 
-The generalization made in \S \ref{sec:manifold} is then needed.
+of Appendix \ref{sec:manifold} but not to those of Section \ref{sec:mainlemma}. 
+The generalization made in Appendix \ref{sec:manifold} is then needed.
 Anyway, we can differentiate $f$ by following the method we used for LU 
 factorization: differentiating the relation $M = QR$, we obtain:
 \begin{equation}
@@ -1699,25 +1815,16 @@ and $dM$.
 
 \subsection{Vector spaces}
 
-Let $d$ and $n$ be two nonnegative integers such that $d \leq n$. The 
-Grassmannian $\Grass(d,n)$ is the set of all sub-vector spaces of $K^n$ 
-of dimension $d$. It defines an algebraic variety over $K$ and hence
-\emph{a fortiori} a $K$-manifold in the sense of \S \ref{ssec:manifold}.
-Concretely, a vector space $V \subset K^n$ of dimension $d$ is given by 
-a rectangular matrix $M \in M_{d,n}(K)$ whose rows form a basis of $V$ 
-and two such matrices $M$ and $M'$ define the same vector space if there 
-exists $P \in \GL_d(K)$ such that $M = P M'$. Performing row echelon, we 
-find that we can always choose the above matrix $M$ in the particular
-shape:
-$$M = \begin{pmatrix} I_d & M' \end{pmatrix} \cdot P$$
-where $I_d$ denotes the $(d \times d)$ identity matrix, $M' \in M_{d, 
-n-d}(K)$ and $P$ is a permutation matrix of size $n$. Moreover two 
-such writings with the same $P$ necessarily coincide. Hence each 
-permutation matrix $P$ defines a chart $U_P \subset \Grass(d,n)$ which
-is canonically diffeomorphism to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
+In computer science, vector spaces are generally represented as subspaces 
+of $K^n$ for some $n$. Hence they naturally appear as points on some 
+grassmannian $\Grass(n,d)$. These grassmannians are $K$-manifolds in the 
+sense of Appendix \ref{sec:manifold} as it is discussed in \S 
+\ref{ssec:exmanifold}. In what sequel, we use freely the formalism 
+introduced there.
 
 \subsubsection*{Left kernels}
 
+Let $d$ and $n$ be two nonnegative integers such that $d \leq n$.
 We consider the open subset $\mathcal V_{n-d}$ of $M_{n,n-d}(K)$ 
 consisting of matrices of full rank, \emph{i.e.} rank $n-d$. The left 
 kernel defines a mapping $\text{LK} : M_{n,n-d}(K) \to \Grass(d,n)$. Let 
