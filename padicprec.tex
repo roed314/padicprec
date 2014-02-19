@@ -694,8 +694,7 @@ Since $\Lambda (f)$ is increasing, $NP(f)^*$ is continuous (since it is convex),
 The following proposition will reveal crucial in order to minorate or majorate $NP(f),$  $NP(f)^*$ or $\Lambda(f),$ and is classical in convex analysis.
 
 \begin{prop} \label{prop : legendre transform}
-If $f$ and $g$ are two real convex functions such that $f \geq g,$ then $f^* \leq g^*.$
-Furthermore, slopes of $f^*$ corresponds to extreme points of $f$.
+Slopes of $f^*$ corresponds to extreme points of $f$.
 \end{prop}
 
 \begin{cor} \label{cor : trunc series}
@@ -712,14 +711,14 @@ For the first one, we assume that we have know a function that majorates $\Lambd
 \begin{prop} \label{prop : maj Lambda} \label{prop:locanalytic}
 If $m_1$ is a real convex function above $\Lambda(\sum_{n \geq 1}f_n)$.
 We define $m_2$ by extending $m_1$ with slope $2$.
-Let $\delta$ be the abscissa of the intersection of $m_2$ and the line defined by $y=-\log \varepsilon+ x.$ Then $e^\delta$ is enough to define first order lattices as in lemma  \ref{lem:main}.
+Let $\delta$ be the abscissa of the smallest intersection of $m_2$ and the line defined by $y=-\log \varepsilon+ x,$ or $v_\infty$ if there is no such intersection.  Then $e^\delta$ is enough to define first order lattices as in lemma  \ref{lem:main}.
 \end{prop}
 \begin{proof}
 $\delta$ is well-defined thanks to corollary \ref{cor : trunc series}, and $m_2 \geq \Lambda(\sum_{n \geq 2}f_n).$
 
 It is sufficient to prove that for all $x \in B_{\overline{E}}(0,e^\delta),$ $\vert \sum_{n\geq 2} f_n(x) \vert \leq \varepsilon \vert x \vert.$
 
-If $x \in B_{\overline{E}}(0,e^\delta),$ $u = \log \vert x \vert,$ then $\Lambda( \sum_{n \geq 2}f_n)(u) \geq -\log \varepsilon+ u.$
+By comparing slopes, if $x \in B_{\overline{E}}(0,e^\delta),$ $u = \log \vert x \vert,$  $\Lambda( \sum_{n \geq 2}f_n)(u) \geq -\log \varepsilon+ u.$
 With proposition \ref{prop : connexion sup Newton}, for any $m \geq 2,$ $-\log \vert f_m \vert +m u \geq -\log \varepsilon+ u.$
 
 Therefore, for any $m \geq 2,$ $\vert f_m \vert  \vert x \vert^m \leq \varepsilon \vert x \vert.$
@@ -740,7 +739,7 @@ Same idea as proposition \ref{prop : maj Lambda}. One can define $g_n$ with $g_n
 We finally provide a simple method when working with finite-dimensional vector spaces over $p$-adic fields.
 
 \begin{prop} \label{prop : locanalyticfinitedim}
-If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C,$ $\rho$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : let $r$ be such that $NP_F^* \left( \log_p r - \frac{1}{p-1} \right) \leq \log_p \varepsilon.$ Then $r$ is enough for lemma \ref{lem:main}. 
+If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C,$ $\rho$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : let $\delta$ be such that $NP_F^* \left( \log_p \delta - \frac{1}{p-1} \right) \leq \log_p \varepsilon.$ Then $\delta$ is enough for lemma \ref{lem:main}. 
 \end{prop}
 \begin{proof}
 Same as before, with $L_n=\frac{f^{(n)}(0)}{n!}$ and Legendre formula. The result follows \textit{mutatis mutandis}.
