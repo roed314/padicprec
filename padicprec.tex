@@ -563,61 +563,82 @@ His definition extends easily to $K$-Banach spaces:
 
 \begin{deftn} \label{deftn:analyticNP}
 Let $E$ and $F$ be $K$-Banach spaces, and let $U \subset E$ be an open set.
-A function $f \col U \rightarrow F$ is said to be \emph{locally analytic} if for any $x \in U,$ there exists some open subset $U_x$ of $E$ and some $n$-linear mappings $L_n \: : \: E^n \rightarrow F$ for any $n \geq 1,$ such that : for any $y \in U_x,$ the sum $\sum_{n \geq 1} L_n(y,\dots,y)$ converges in F, and $f(x+y)=f(x)+\sum_{n \geq 1} L_n(y,\dots,y).$
+A function $f \col U \rightarrow F$ is said to be \emph{locally analytic} if one may find
+an open set $U_x \subset E$ for each $x \in U$ satisfying the following condition.
+For each $n \ge 1$ there exists an $n$-linear mapping
+$L_n \col E^n \rightarrow F$ so that 
+\begin{enumerate}
+\item the sum $\sum_{n \geq 1} L_n(y,\ldots,y)$ converges in F for every $y \in U_x,$ 
+\item $f(x+y)=f(x)+\sum_{n \geq 1} L_n(y,\dots,y).$
+\end{enumerate}
 \end{deftn}
 
 We then mostly study such a serie defined at $x$.
 
 \begin{deftn} \label{deftn :  serie and norm}
-Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie over mappings $E \rightarrow F,$ where $E$ and $F$ are complete normed $\overline{K}$-vector space. We assume that for any $\lambda  \in \overline{K},$ $x \in E,$ $n \in \mathbb{N},$ $\vert f_n(\lambda x) \vert = \vert \lambda \vert \vert f_n (x) \vert.$ 
-We define $\vert f_n \vert = \sup_{x \in B_E(0,1)} \vert f_n(x) \vert,$ and we assume that all the $\vert f_n \vert $ are finite. 
-We also define, for any $v \in \mathbb{R}$ such that this $\sup$ is finite : \[\Lambda(f) (v) = \log \sup_{x \in B_E(0,e^v)} \vert f(x) \vert,\]
-and $\Lambda(f) (v) =+\infty$ otherwise.
-We define  $\NP(f)$ to be the Newton polygon of $f$, that is to say, the lower convex hull in $\mathbb{R}^2$ of the $(k, - \log \vert f_k \vert ),$ $k\geq 0.$ 
+Suppose that $E$ and $F$ are $\overline{K}$-Banach spaces and $f_n \col E \to F$ are maps satisfying
+$\lvert f_n(\lambda x) \rvert = \lvert \lambda \rvert \cdot \lvert f_n (x) \rvert$ for all $\lambda \in \overline{K}$ and $x \in E$.
+We define $\lVert f_n \rVert = \sup_{x \in B_E(1)} \vert f_n(x) \vert$ and further assume that all the $\lVert f_n \rVert$ are finite.
+Write $f = \sum_n f_n$ and define $\Lambda(f)(v) \in \R \cup \{\infty\}$ for each $v \in \R$ by
+\[
+\Lambda(f)(v) = \log \sup_{x \in B_E(e^v)} \vert f(x) \vert.
+\]
+Finally, we define the Newton polygon $\NP(f)$ of $f$ to be the lower convex hull in $\mathbb{R}^2$
+of the points $(k, - \log \lVert f_k \rVert )$ for $k \in \Z_{\ge 0}.$ 
 \end{deftn}
 
-The following proposition is a classical consequence of convex analysis.
+We define $v_\infty \in \mathbb{R} \cup \left\lbrace \infty \right\rbrace$ to be the limit of the slopes of $\NP(f)$, and
+denote by $\NP(f)^*$ the convex conjugate of $\NP(f)$.  The following proposition is a classical consequence of convex analysis.
 
 \begin{prop} \label{prop : conjugate Newton}
-We define $v_\infty \in \mathbb{R} \cup \left\lbrace \infty \right\rbrace$ to be the limit of the slopes of $\NP(f).$
-We denote by $\NP(f)^*$ the convex conjugate of $\NP(f).$ $\NP(f)^*$ is defined over $\left] -\infty,v_{\infty} \right[$ (at least)
+Considered as a function on $\R$, $\NP(f)^*$ is defined over $\left] -\infty,v_{\infty} \right[$, though it may be defined for larger values.
 \end{prop}
 
-Then, $\Lambda(f)$ and $\NP(f)$ are connected :
+We can interpret the function $\Lambda(f)$ in terms of the conjugate Newton polygon:
 
 \begin{prop} \label{prop : connexion sup Newton}
 For any $v \in \left]-\infty, v_\infty \right[,$ \[ \Lambda (f) (v) = \NP(f)^*(v).\]
 \end{prop}
 \begin{proof}
-Let $v \in \left] -\infty,v_{\infty} \right[,$ and let us assume that $v$ is not a slope of $\NP(f).$
-Let $u = \NP(f)^*(v).$ Then the intersection of the line defined by $y=vx-u$ and $\NP(f)$ is an extreme point of $\NP(f),$ say $(n, - \log ( \vert f_n \vert ))$ for some $n \geq 0,$ and $u = vn + \log \vert f_n \vert.$
+We prove the equality first for $v$ that are not slopes of $\NP(f)$.  Assume that $v < v_\infty$ is such a slope and set $u = \NP(f)^*(v)$.
+Then the intersection of $\NP(f)$ with the line defined by $y=vx-u$ is a vertex of $\NP(f),$ say
+$(n, - \log \lVert f_n \rVert )$ for some $n \geq 0$ with $u = vn + \log \lVert f_n \rVert.$
 
-$v$ is not a slope of $\NP(f)$ and by convexity of $\NP(f)$, its difference quotients at $n$ are increasing, therefore, there exists some $c>0$ such that for any $m\geq 0,$ $vm-u \leq - \log \vert f_m \vert - c \vert n-m \vert.$ Since $vm-u=vm-vn-log \vert f_n \vert,$ we get $-vn-\log \vert f_n \vert + c \vert n-m \vert  \leq -vm-\log \vert f_m \vert .$
+Since $v$ is not a slope of $\NP(f)$, the difference quotients of $\NP(f)$ at $n$ are increasing.  Therefore, we may find a $c>0$ so that $vm-u \leq - \log \lVert f_m \rVert - c \vert n-m \vert$ for any $m\geq 0$.  Since $vm-u=vm-vn-\log \lVert f_n \rVert,$ we get $-vn-\log \lVert f_n \rVert + c \vert n-m \vert  \leq -vm-\log \lVert f_m \rVert .$
 
-Now, let $x \in  B_E(0,e^v),$ and $m \geq 0.$ Definition of $\vert f_m \vert$ yields $ \vert f_m (x) \vert \leq \vert f_m \vert e^{vm}.$ Therefore \[\vert f_m (x) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn}< \vert f_n \vert e^{vn}.\]
-Thus, the serie converges and by ultrametricity $ \vert f(x) \vert \leq \vert f_n \vert e^{vn},$ and $\Lambda (f)(v) \leq \log \left( \vert f_n \vert e^{vn} \right).$  
+For any $x \in  B_E(e^v)$ and $m \geq 0,$ we have
+\[
+\vert f_m (x) \vert \leq \lVert f_m \rVert e^{vm}
+\]
+by the definition of $\lVert f_m \rVert$. Therefore
+\[
+\vert f_m (x) \vert \leq e^{-c \vert n-m \vert } \lVert f_n \rVert  e^{vn}< \lVert f_n \rVert e^{vn}.
+\]
+Thus, the series converges and by ultrametricity $ \vert f(x) \vert \leq \vert f_n \vert e^{vn},$ and $\Lambda (f)(v) \leq \log \left( \vert f_n \vert e^{vn} \right).$  
 
-Now, definition of $\vert f_n \vert$  provides $(x_i)_{i\geq 0}$ in $B_E(0,e^v)$ such that $\lim \vert f_n (x_i) \vert= \vert f_n \vert e^{vn}.$ 
+Now, the definition of $\lVert f_n \rVert$ provides a sequence $(x_i)_{i\geq 0}$ in $B_E(e^v)$ such that $\lim \vert f_n (x_i) \vert= \lVert f_n \rVert e^{vn}.$ 
 
 Since for any $i,$ $\vert f_m (x_i) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn},$ then for $i$ large enough, $\vert f_m (x_i) \vert < \vert f_n (x_i) \vert $ and $\vert f(x_i) \vert = \vert f_n (x_i) \vert.$
 
-As a consequence, $\lim_i \vert f(x_i) \vert = \vert f_n \vert e^{vn},$ and  $\Lambda (f)(v) = \log ( \vert f_n \vert e^{vn}) = u= \NP(f)^*(v).$
+As a consequence, $\lim_i \vert f(x_i) \vert = \lVert f_n \rVert e^{vn},$ and  $\Lambda (f)(v) = \log ( \lVert f_n \rVert e^{vn}) = u= \NP(f)^*(v).$
 
 Therefore, for any $v \in \left] -\infty,v_{\infty} \right[,$ with $v$ not a slope of $\NP(f),$ we get $\Lambda (f)(v) =\NP(f)^*(v).$
 Since $\Lambda (f)$ is increasing, $\NP(f)^*$ is continuous (since it is convex), and $\NP(f)$ has only finitely many slopes smaller than $v_\infty-\epsilon$, for any $\epsilon >0$, we deduce that both functions coincide on $v \in \left] -\infty,v_{\infty} \right[,$
 \end{proof}
 
-\begin{lem} Let $f(x)= \sum_{n \geq 0} f_n (x)$ and $g(x)= \sum_{n \geq 0} g_n (x)$ be two series as in definition \ref{deftn :  serie and norm}. Then :
-\[\Lambda(f+g) \leq \max (\Lambda(f),\Lambda(g))\]
-\[\Lambda(f \times g) \leq \Lambda(f)+\Lambda(g)\]
-\[\Lambda(f \circ g) \leq \Lambda(f) \circ \Lambda(g)\]
+\begin{lem} Let $f(x)= \sum_{n \geq 0} f_n (x)$ and $g(x)= \sum_{n \geq 0} g_n (x)$ be two series as in definition \ref{deftn :  serie and norm}. Then
+\begin{align*}
+\Lambda(f+g) &\leq \max (\Lambda(f),\Lambda(g)) \\
+\Lambda(f \times g) &\leq \Lambda(f)+\Lambda(g) \\
+\Lambda(f \circ g) &\leq \Lambda(f) \circ \Lambda(g)
+\end{align*}
 \end{lem}
 
-The following proposition will reveal crucial in order to minorate or majorate $\NP(f),$  $\NP(f)^*$ or $\Lambda(f),$ and is classical in convex analysis.
+The following classical result from convex analysis will play a crucial role in bounding $\NP(f),$  $\NP(f)^*$ and $\Lambda(f)$.
 
 \begin{prop} \label{prop : legendre transform}
 If $f$ and $g$ are two real convex functions such that $f \geq g,$ then $f^* \leq g^*.$
-Furthermore, slopes of $f^*$ corresponds to extreme points of $f$.
+Furthermore, the slopes of $f^*$ corresponds to vertices of $f$.
 \end{prop}
 
 \begin{cor} \label{cor : trunc series}
