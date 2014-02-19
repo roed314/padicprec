@@ -146,7 +146,9 @@ the precision of each entry or recording a fixed precision for all entries can b
 be interpreted in terms of lattices.  In Section \ref{sec:prec-proposal} we detail our
 proposal for how to represent the precision of an element of a vector space.
 
-\todofor{David}{Finish summarizing sections}
+Section \ref{sec:mainlemma} centers on Lemma \ref{lem:main}, our main result.
+By describing how lattices transform under non-linear maps, it allows us to propogate
+precision using differentials.  In Section 
 
 \section{Tracking Precision} \label{sec:prec-proposal}
 
@@ -692,69 +694,41 @@ Same as before, with $L_n=\frac{f^{(n)}(0)}{n!}$ and Legendre formula. The resul
 \todo{Explain how Newton polygons considered above behave under
 usual operations (sum, multiplication and composition of functions).}
 
-%Using Lemma \ref{lem:reductionball}, one can extend Proposition 
-%\ref{prop:locanalytic} to arbitrary lattices $H$ as follows. Given $H$
-%a lattice in some $K$-Banach space $E$, we first define the two
-%following quantities:
-%\begin{itemize}
-%\item $\max(H)$ is the smallest $r$ such that $H \subset B_E(r)$, and
-%\item $\min(H)$ is the greatest $r$ such that $B_E(r) \subset H$.
-%\end{itemize}
-%
-%\begin{cor}
-%Let $U$ are $V$ be open subsets in $K$-Banach spaces $E$ and $F$ 
-%respectively and $f : U \to V$ be a locally analytic function. Let 
-%also $v_0$ be a point in $U$ such that $f'(v_0)$ is surjective. 
-%Then a lattice $H$ in $E$ is a first order lattice for $f$ at $v_0$ as 
-%soon as $\max(H)^2 < C_{f, v_0} \cdot \min(H)$ where $C_{f, v_0}$ is a 
-%constant depending only on $f$ and $v_0$ which can be determined 
-%explicitely from the Newton polygon of $f$ at $v_0$.
-%\end{cor}
-%
-%\begin{proof}
-%We apply Proposition \ref{prop:locanalytic} to the composite $f \circ 
-%\iota_H$ where $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
-%\Vert)$ is induced by identity map.
-%\end{proof}
-
 \section{Tracking precision using differentials}
 \label{sec:tracking}
 
-Lemma \ref{lem:main} and Proposition \ref{prop:locanalytic} have 
-important applications to effective computations with $p$-adic numbers 
-or power series, that we discuss in this Section. 
+In this section we discuss applications of Lemma \ref{lem:main} and Proposition \ref{prop:locanalytic}
+to effective computations with $p$-adic numbers and power series.
 
-\subsection{Automatic sharp track of precision}
+\subsection{Optimal precision tracking}
 
 We consider a function {\tt f} (in the sense of computer 
-science) that takes as input an (approximate) element lying in an open 
-subset $U$ of a $K$-Banach space $E$ and outputs another (approximate) 
-element lying in an open subset $V$ of another $K$-Banach space $F$. Of 
-course, this function can be modelised by a \emph{continuous} 
-mathematical function $f : U \to V$. The relation is the following: when 
+science) that takes as input an approximate element lying in an open 
+subset $U$ of a $K$-Banach space $E$ and outputs another approximate
+element lying in an open subset $V$ of another $K$-Banach space $F$.
+In applications, this function models a continuous
+mathematical function $f : U \to V$: when 
 {\tt f} is called on the input $x + O(H)$, it outputs $x' + O(H')$ with 
-$f(x+H) \subset x' + H'$. We say that {\tt f} does not generate 
-artificial loss of precision if the above inclusion is an equality; it is 
-often not the case as shown in \S \ref{ssec:separation}.
+$f(x+H) \subseteq x' + H'$. We say that {\tt f} \emph{preserves precision}
+if the above inclusion is an equality; it is 
+often not the case as shown in Section \ref{ssec:separation}.
 
-Let us assume now that $f$ is locally analytic on $U$ and in addition 
+Let us assume now that $f$ is locally analytic on $U$ and
 that $f'(x)$ is surjective. Proposition \ref{prop:locanalytic} then 
 yields a rather simple sufficient condition to decide if a given lattice 
 $H$ is a first order lattice for $f$ at $x$. For such a lattice, by 
-definition, we have $f(x+H) = f(x) + f'(x)(H)$. Thus the smallest 
-possible $H'$ is $f'(x)(H)$. In other words, the function {\tt f} 
-generates artificial loss of precision if the precision $H'$ it outputs 
-is strictly larger that $f'(x)(H)$. The aim of this section is to 
+definition, we have $f(x+H) = f(x) + f'(x)(H)$ and thus {\tt f}
+must output $f'(x)(H)$ if it preserves precision. In this section we
 explain how, under the above hypothesis, one can implement the function 
 {\tt f} so that it always outputs the optimal precision $O(H')$ with $H' 
 = f'(x)(H)$.
 
-\subsubsection*{Forward computation}
+\subsubsection*{One-pass computation}
 
 The execution of the function {\tt f} yields a factorization:
 $$f = f_n \circ f_{n-1} \circ \cdots \circ f_1$$
 where the $f_i$'s correspond to each individual basic step (like 
-addition, multiplication or affectation of variables); it is then a
+addition, multiplication or creation of variables); it is then a
 ``nice'' (in particular locally analytic) function. For all 
 $i$, let $U_i$ denote the codomain of $f_i$. Concretely, $U_i$ is the 
 set of all possible values of all variables which are defined in the 
@@ -799,7 +773,7 @@ lot. We shall present in \S \ref{ssec:SOMOS-solution} an example of
 this.
 \end{rmk}
 
-\subsubsection*{Backward computation}
+\subsubsection*{Two-pass computation}
 
 The previous approach works only if the $g'_i(x)$'s are all surjective. 
 Unfortunately, this assumption is in general not fulfilled. Indeed, 
@@ -828,7 +802,7 @@ Therefore, if after the $i$-th step of the execution of the function
 $H'_i$, the final result remains unchanged. In other words, it is
 enough to compute $x_i$ modulo $H'_i$.
 
-It is nevertheless not obvious to implement these ideas in practice
+It is nevertheless not obvious how to implement these ideas in practice
 because when we enter in the $i$-th step of the execution of {\tt f},
 we have not computed $h_i$ yet and hence are \emph{a priori} not able
 to determine a lattice $H'_i$ satisfying the axioms \eqref{item:Hi1}
@@ -855,7 +829,7 @@ we have just presented is then probably not much more expansive than the
 ``forward'' method, although it is certainly much more difficult to 
 implement. 
 
-We conclude this Section by remarking that the ``backward'' method seems 
+We conclude this section by remarking that the ``backward'' method seems 
 to be particularly well suited to computations with lazy $p$-adic. Indeed 
 in this setting, a target precision (\emph{i.e.} a precision on the 
 output) is fixed and the software determines automatically the precision 
@@ -867,32 +841,30 @@ and then runs over this skeleton in the reverse direction in order to
 determine (an upper bound of) the needed precision at each step. The 
 similarity with our approach is noticeably strong.
 
-\subsubsection*{Additional remarks}
+\subsubsection*{Non-surjectivity}
 
-From the beggining, we have assumed that $f'(x)$ is surjective. Let us 
+From the beginning, we have assumed that $f'(x)$ is surjective. Let us 
 discuss shortly what happens when this assumption is relaxed. As it is 
 explained after the proof of Lemma \ref{lem:main}, the first thing we 
 can do is to project the result onto different quotients, \emph{i.e.} to 
-work with the composites $\pr_K \circ f$ for a sufficiently large family 
-of closed sub vector spaces $K \subset F$ such that $K + f'(x)(E) = F$. 
-(We recall that here $\pr_K$ denotes the canonical projection to $F$ 
-onto the quotient $F/K$.) If $F$ has a natural system of coordinates 
-(which is the case in almost all settings), we can generally take the 
-$\pr_K$'s as the projections on each coordinate. Doing this, we end up 
+work with the composites $\pr_W \circ f$ for a sufficiently large family 
+of closed sub-vector-spaces $W \subset F$ such that $W + f'(x)(E) = F$. 
+If $F$ has a natural system of coordinates, we may generally take the 
+$\pr_W$'s as the projections on each coordinate. Doing this, we end up 
 with a precision on each individual coordinate. Furthermore, we have the 
-guarantee that all these precisions are sharp (even if the lattice build
-from them is not).
+guarantee that each coordinate-wise precision is sharp, even if the lattice built
+from them is not.
 
 Let us illustrate the above discussion by an example: suppose that we 
 want to compute the function $f : (K^n)^n \to M_n(K)$ that takes a 
-family of $n$ vectors to its Graam matrix. The differential of $f$ is
+family of $n$ vectors to its Gram matrix. The differential of $f$ is
 clearly never surjective because $f$ takes its values in the subspace
-consisting of symmetric matrices. Nevertheless for all couple $(i,j)
+consisting of symmetric matrices. Nevertheless, for all pairs $(i,j)
 \in \{1, \ldots, n\}^2$, one can consider the composite $f_{ij} = 
-\pr_{ij} \circ f$ where $\pr_{ij} : M_n(K) \to K$ that takes a matrix 
+\pr_{ij} \circ f$ where $\pr_{ij} : M_n(K) \to K$ takes a matrix 
 $M$ to its $(i,j)$-th entry. The maps $f_{ij}$'s are differentiable and 
-their differentials generally are surjective (\emph{i.e.} they do not 
-vanish). Let $M$ be a matrix known at some finite precision such that 
+their differentials are generically surjective. Let $M$ be a matrix known
+at some finite precision such that 
 $f'_{ij} (M) \neq 0$ for all $(i,j)$. We can then apply the forward 
 and/or the backward computation and get $f_{ij}(M)$ together with its 
 precision. Putting this together, we get the whole matrix $f(M)$ 
@@ -912,7 +884,7 @@ it has now good probability to be surjective.
 
 \medskip
 
-We conclude this Section by briefly remarking that the two strategies designed 
+We conclude this section by briefly remarking that the two strategies designed 
 above (\emph{i.e.} forward and backward computations) share some 
 similarities with usual floating point arithmetics over the reals. 
 Indeed, roughly speaking, in each setting, we begin by choosing a large 
@@ -1083,7 +1055,7 @@ aforementioned examples.
 \label{ssec:manifold}
 
 The theory of finite dimensional $K$-manifolds is presented for example 
-in \cite{schneider:11a}*{Ch. 8-9}. In this Section, we shall work with
+in \cite{schneider:11a}*{Ch. 8-9}. In this section, we shall work with
 a slightly different notion of manifolds which allows also Banach vector 
 spaces of infinite dimension.
 More precisely, for us, a \emph{ differentiable $K$-manifold} 
