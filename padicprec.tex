@@ -81,7 +81,7 @@ computational algebra.  For example,
 \item Bostan et al. \cite{boston-gonzalez-perdry-schost:05a} used Newton sums for polynomials over $\Zp$ to compute composed products for polynomials over $\Fp$;
 \item Gaudry et al. \cite{gaudry-houtmann-weng-ritzenthaler-kohel:06a} used $p$-adic lifting methods to generate genus 2 CM hyperelliptic curves;
 \item Kedlaya \cite{kedlaya:01a} used $p$-adic cohomology to count points on hyperelliptic curves over finite fields;
-\item Lercier and Survent \cite{lercier-sirvent:08a} computed isogenies between elliptic curves over finite fields using $p$-adic differential equations.
+\item Lercier and Sirvent \cite{lercier-sirvent:08a} computed isogenies between elliptic curves over finite fields using $p$-adic differential equations.
 \end{itemize}
 Like real numbers, most $p$-adic numbers cannot be represented exactly, but instead must be
 stored with some finite precision.  In this paper we focus on methods for handling $p$-adic precision
@@ -104,12 +104,12 @@ of a set of distinguished rational numbers.
 In $\R$, floating point arithmetic provides approximate operations $\oplus$ and $\odot$ on a
 subset $S_{\infty,h} \subset \Z[\frac12]$ that model $+$ and $\cdot$ in $\R$ up to a given relative precision $h$:
 \[
-\lvert \frac{x \circledast y}{x \ast y} - 1 \rvert \le 2^{-h}
+\Big\vert \frac{x \circledast y}{x \ast y} - 1 \Big\vert \le 2^{-h}
 \]
 for $\ast \in \{+, \cdot\}$ and all $x, y \in S_{\infty,h}$ with $x \ast y \ne 0$.  The $p$-adic analogue
 defines floating point operations on $S_{p,h} \subset \Z[\frac1p]$ with
 \[
-\lvert \frac{x \circledast y}{x \ast y} - 1 \rvert_p \le p^{-h}.
+\Big\vert \frac{x \circledast y}{x \ast y} - 1 \Big\vert_p \le p^{-h}.
 \]
 When using floating point arithmetic, elements are represented with a constant \emph{relative precision} $h$.
 
@@ -148,14 +148,14 @@ the precision of each entry or recording a fixed precision for all entries can b
 be interpreted in terms of lattices.  In Section \ref{sec:prec-proposal} we detail our
 proposal for how to represent the precision of an element of a vector space.
 
-Section \ref{sec:mainlemma} centers on Lemma \ref{lem:main}, our main result.
-By describing how lattices transform under non-linear maps, it allows us to propagate
+In Section \ref{sec:mainlemma}, we develop the mathematical background on which our proposal is based.
+The most notable result of this section is Lemma \ref{lem:main} which describes how lattices transform under non-linear maps and allows us to propagate
 precision using differentials.  More specifically, it describes a class of first order lattices,
-whose image under a map of Banach spaces is precisely described by applying the
+whose image under a map of Banach spaces is obtained by applying the
 differential of that map.  In Section \ref{ssec:locanalytic} we make the conditions
 of Lemma \ref{lem:main} more explicit in the case of locally analytic functions.
 
-In Section \ref{sec:tracking} we describe methods for tracking precision in practice.
+In Section \ref{sec:tracking} we propose methods for tracking precision in practice.
 Section \ref{ssec:opt-tracking} includes a discussion of two models of precision tracking:
 one-pass tracking, where the precision lattice is propagated at each step of the algorithm,
 and two-pass tracking, where an initial pass computing rough approximations is used
@@ -197,6 +197,9 @@ If $E$ is a $K$-vector space, possibly of infinite dimension, then an
 A \emph{$K$-Banach space} is a complete normed $K$-vector space.  Note that any finite-dimensional
 normed $K$-vector space is automatically complete and all norms over such a space are equivalent.
 A \emph{lattice} in a $K$-Banach space $E$ is an open bounded sub-$\OK$-module of $E$.
+We underline that any lattice $H$ in $E$ is also closed since its 
+complement is the union of all cosets $a + H$ (with $a \not\in H$) which 
+are all open.
 
 For a $K$-Banach space $E$ and $r \in \R_{\ge 0}$, write
 \begin{align*}
@@ -224,7 +227,7 @@ then we may drop $(x_i)$ from the notation for $B^{(-)}_E((x_i),(r_i))$.
 
 \subsubsection*{Lattices and computers.}
 
-Suppose that $E \simeq K^d$ is finite dimesional.  Then if $H \subset E$
+Suppose that $E \simeq K^d$ is finite dimensional.  Then if $H \subset E$
 is a lattice then there exist $a, b \in \Q_{>0}$ with
 \begin{equation}
 \label{eq:incllattice}
@@ -349,7 +352,6 @@ $L$ and $U$ is lower triangular and upper triangular respectively.
 The computation of a LU factorization appears as an important tool to 
 tackle many classical questions about matrices or linear systems, and is
 discussed further in Appendix \ref{ssec:matrices}.
-
 When computing the entries of $L$ and $U$ from a $d \times d$ matrix
 over $\Zp$ with entries of precision $O(p^N)$, one has a choice of algorithms:
 \begin{itemize}
@@ -361,20 +363,27 @@ result whose every entry is known up to precision $O(p^{N - 2 \log_p
 d})$ \cite{caruso:12a}.
 \end{itemize}
 If $d$ is large compared to $p$, the second precision is much more
-accurate than the first one.  The precision loss inherent in an algorithm
-is an important factor in analyzing its performance.  However,
-since this precision loss depends heavily on the details of the problem
-and the algorithm, we will not focus on such questions in this paper.
+accurate than the first one. On the other hand, the second algorithm
+is less efficient than the first one because evaluating Cramer-type
+formulae requires many computations. 
+%In \cite{caruso:12a}, the author designs a new algorithm which combines 
+%both advantages: efficiency and stability.
+%The precision loss inherent in an algorithm is an important factor in 
+%analyzing its performance.
+%However, since this precision loss depends heavily on the details of the 
+%problem and the algorithm, we will not focus on such questions in this 
+%paper.
 
 \subsection{Precision Types}
 
-Using an arbitrary lattice to record the precision of an approximate element
-has the benefit of allowing computations to proceed without unnecessary
-precision loss using Lemma \ref{lem:main}.  However, while recording a
-lattice exactly is possible it does require a lot of space.  For example,
-the space required to store a lattice precision for a single $n \times n$
-matrix with entries of size $O(p^N)$ is $O(Nn^4)$.  Conversely, the space
-needed to record that every entry has precision $O(p^N)$ is just $O(\log N)$.
+Using an arbitrary lattice to record the precision of an approximate 
+element has the benefit of allowing computations to proceed without 
+unnecessary precision loss using Lemma \ref{lem:main}.  However, while 
+recording a lattice exactly is possible it does require a lot of space.  
+For example, the space required to store a lattice precision for a 
+single $n \times n$ matrix with entries of size $O(p^N)$ is $O(Nn^4 
+\cdot \log p)$.  Conversely, the space needed to record that every entry 
+has precision $O(p^N)$ is just $O(\log N)$.
 
 \begin{deftn}
 Suppose that $E$ is a $K$-Banach space, and write $\Lat(E)$ for the set of lattices in $E$.
@@ -479,7 +488,7 @@ order lattice for $f$ at $v_0$.
 
 \begin{proof}
 We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, the open mapping theorem provides a $C>0$ such that 
-$$B_F(1) \subset f'(0)(B_E(C)).$$
+$B_F(1) \subset f'(0)(B_E(C))$.
 Let $\varepsilon>0$ be such that 
 $\varepsilon C < \rho$, and choose $U_\varepsilon \subset E$ as in Definition 
 \ref{deftn : diff}.  We may assume $U_\varepsilon = B_E(\delta)$ for some $\delta >0$.
@@ -487,12 +496,12 @@ $\varepsilon C < \rho$, and choose $U_\varepsilon \subset E$ as in Definition
 Let $r \in (0, \delta)$. We suppose that $H$ is a lattice with 
 $B^-_E(\rho r) \subset H \subset B_E(r).$
 We seek to show that $f$ maps $H$ surjectively onto $f'(0) (H)$. We first prove 
-that $f(H) \subset f'(0) (H)$. Suppose $x \in H$; we first show that $f(x) \in f'(0)(H)$.  By differentiability at 
+that $f(H) \subset f'(0) (H)$. Suppose $x \in H$. By differentiability at 
 $0$, $\Vert f(x)-f'(0)(x) \Vert \leq \varepsilon \Vert x \Vert $. 
 Setting $y=f(x)-f'(0)(x)$, we have $\Vert y \Vert \leq 
 \varepsilon r$. The definition of $C$ implies that $B_F(\varepsilon r) 
 \subset f'(0) (B_E(\varepsilon rC))$. Thus there exists $x' 
-\in \cdot B_E(\varepsilon r C)$ such that $f'(0) (x') =y$. Since 
+\in B_E(\varepsilon r C)$ such that $f'(0) (x') =y$. Since 
 $\varepsilon C < \rho$, we get $x' \in B^-_E(\rho r) \subset H$ and 
 then $f(x)= f'(0) (x-x') \in f'(0) (H)$.
 
@@ -543,7 +552,7 @@ Lemma \ref{lem:main}. First, let us
 emphasize that this hypothesis is definitely necessary. Indeed, the lemma would 
 otherwise imply that the image of $f$ is locally contained in a proper 
 sub-vector-space around each point where the differential of $f$ is not 
-surjective, which is certainly not true! Nevertheless, one can use lemma \ref{lem:main}
+surjective, which is certainly not true! Nevertheless, one can use Lemma \ref{lem:main}
 to prove a weaker result in the context that $f'(v_0)$ is not surjective.
 To do so, choose a closed sub-vector-space $W$ of $F$ such that $W + f'(v_0)(E) = 
 F$. Denoting by $\pr_W$ the canonical projection of $F$ onto 
@@ -565,7 +574,7 @@ Under this extra assumption, we make explicit the constant $\delta$
 which appears in Lemma \ref{lem:main}.
 Locally analytic functions over finite dimensional $K$-vector spaces are 
 defined in Schneider's book \cite {schneider:11a}, \S 6. His definition 
-extends readily to $K$-Banach spaces as follows:
+extends to $K$-Banach spaces as follows:
 
 \begin{deftn}
 \label{def:locanal}
@@ -642,7 +651,8 @@ for $v \in \R$.
 One can check that the map $\varphi \mapsto \varphi^\star$ is an
 involution (\emph{i.e.} $(\varphi^\star)^\star = \varphi$) and
 reverses the order (\emph{i.e.} if $\varphi \leq \psi$, then
-$\varphi^\star \geq \psi^\star$). 
+$\varphi^\star \geq \psi^\star$). We refer to \cite{Rockafellar:97}
+for a complete exposition on Legendre transforms.
 %Furthermore, if $\varphi$ is
 %piecewise affine (and convex), the slopes of $\varphi^\star$ are
 %exactly the points where $\varphi$ is not differentiable and \emph{vice
@@ -662,7 +672,7 @@ Keeping the above notation, we have $\Lambda (f) = \NP(f)^\star$.
 Let $v \in \R$. We assume first that $\NP(f)^\star(v) = +\infty$. Then, 
 using a multilinear version of Banach-Steinhaus Theorem, we can prove 
 that $\sum_{n \geq 0} f_n$ does not converge on $B_E^-(e^v)$ and 
-therefore that $\Lambda(f)(v) = +\infty$ as well.
+therefore that $\Lambda(f)(v) = +\infty$.
 
 We now suppose that $\NP(f)^\star(v)$ is finite. To begin with, we 
 assume in addition that $v$ is not a slope of $\NP(f)$. We set $u = 
@@ -696,7 +706,7 @@ Thus, the series $\sum_{m \geq 0} f_m(x)$ converges and $\Vert f(x)
 \end{equation}
 On the other hand, it follows from the definition of $\lVert f_n \rVert$ 
 that there exists a sequence $(x_i)_{i\geq 0}$ in $B^-_E(e^v)$ such that 
-$\lim \Vert f_n (x_i) \Vert= \lVert f_n \rVert \cdot e^{vn}$. Since 
+$\lim_{i \to \infty} \Vert f_n (x_i) \Vert= \lVert f_n \rVert \cdot e^{vn}$. Since 
 furthermore $\Vert f_m (x_i) \Vert \leq e^{-c \cdot \vert n-m \vert} 
 \Vert f_n \Vert \cdot e^{vn}$ for all $i$, we get $\Vert f_m (x_i) \Vert 
 < \Vert f_n (x_i) \Vert$ for $i$ large enough. For these $i$, we then 
@@ -727,7 +737,7 @@ On the other hand, given a convex function $\varphi : \R \to \R \cup
 \{+\infty\}$ and a real number $v$, we define $\varphi_{\geq v} : \R \to 
 \R \cup \{\pm \infty\}$ as the highest convex function such that 
 $\varphi_{\geq v} \leq \varphi$ and the function $x \mapsto 
-\varphi_{\geq v}(x) - v x$ is not decreasing. Concretely, we have:
+\varphi_{\geq v}(x) - v x$ is nondecreasing. Concretely, we have:
 $$\varphi_{\geq v}(x) = \inf_{y \geq 0} \, \big(\varphi(x + y) - v y 
 \big).$$
 When $v$ is fixed, the construction $\varphi \mapsto \varphi_{\geq v}$
@@ -744,6 +754,9 @@ It follows easily from Proposition \ref{prop:lambdaNP} and the fact that
 the slopes of the Legendre transform of a convex piecewise affine 
 function $f$ are exactly the points where $f$ is not differentiable.
 \end{proof}
+
+We are now ready to provide two sufficient conditions to recognize 
+effectively first order lattices.
 
 \begin{prop}
 \label{prop:locanalytic}
@@ -766,6 +779,14 @@ if $\rho$ is close enough to $0$, then one can take $\delta = e^\nu$ as a
 linear function of $\rho$.
 \end{rem}
 
+\begin{rem}
+In the statement of Proposition \ref{prop:locanalytic}, one can of 
+course replace the function $\Lambda(f)$ by any convex function 
+$\varphi$ with $\varphi \geq \Lambda(f)$. If $f$ is given by some
+formula or some algorithm, such a function $\varphi$ can be obtained
+using Remark \ref{rem:opLambda}.
+\end{rem}
+
 \begin{proof}
 Pick $\varepsilon$ in the interval $(e^{\Lambda(f)_{\geq 2} (\nu) - \nu}, 
 \frac \rho C)$. Going back to the proof of Lemma \ref{lem:main}, we 
@@ -775,8 +796,9 @@ observe that it is enough to prove that
 \Vert f_{\geq 2}(x) \Vert \leq \varepsilon \cdot \Vert x \Vert.
 \end{equation}
 for all $x \in B_E(\delta)$.
-This follows directly from Proposition \ref{prop:lambdaNP} and Proposition
-\ref{prop:trunc}.
+This follows from Proposition \ref{prop:lambdaNP} and Proposition
+\ref{prop:trunc} applied to the function $x \mapsto \frac {\Lambda_{\geq 
+2}(x)} x$.
 \end{proof}
 
 \begin{rem}
@@ -839,10 +861,9 @@ that $f'(x)$ is surjective. Proposition \ref{prop:locanalytic} then
 yields a rather simple sufficient condition to decide if a given lattice 
 $H$ is a first order lattice for $f$ at $x$. For such a lattice, by 
 definition, we have $f(x+H) = f(x) + f'(x)(H)$ and thus {\tt f}
-must output $f'(x)(H)$ if it preserves precision. In this section we
+must output $O(f'(x)(H))$ if it preserves precision. In this section we
 explain how, under the above hypothesis, one can implement the function 
-{\tt f} so that it always outputs the optimal precision $O(H')$ with $H' 
-= f'(x)(H)$.
+{\tt f} so that it always outputs the optimal precision.
 
 \subsubsection*{One-pass computation.}
 
@@ -851,9 +872,10 @@ $$f = f_n \circ f_{n-1} \circ \cdots \circ f_1$$
 where the $f_i$'s correspond to each individual basic step (like 
 addition, multiplication or creation of variables); it is then a
 ``nice'' (in particular locally analytic) function. For all 
-$i$, let $U_i$ denote the codomain of $f_i$. Concretely, $U_i$ is the 
-set of all possible values of all variables which are defined in the 
-program after the execution of $i$-th step. Mathematically, it is an 
+$i$, let $U_i$ denote the codomain of $f_i$. Of course $U_i$ must
+contains all possible values of all variables which are defined in the 
+program after the execution of $i$-th step. Mathematically, we assume
+that it is an 
 open subset in some $K$-Banach space $E_i$. We have $U_n = V$ and the 
 domain of $f_i$ is $U_{i-1}$ where, by convention, we have set $U_0 = 
 U$.
@@ -864,7 +886,7 @@ When we execute the function {\tt f} on the input $x + O(H)$, we apply
 first $f_1$ to this input obtaining this way a first result $x_1 + 
 O(H_1)$ and then go on with $f_2, \ldots, f_n$. At each step, we obtain 
 a new intermediate result that we denote by $x_i + O(H_i)$. A way to 
-guarantee that no artificial loss of precision are generated is then to 
+guarantee that precision is preserved is then to 
 ensure $H_i = f'_i(x)(H_{i-1}) = g_i'(x)(H)$ at each step. This can be 
 achieved by reimplementing all primitives (addition, multiplication, 
 \emph{etc.}) and make them compute at the same time the function $f_i$
@@ -908,7 +930,7 @@ surjectivity of $g'_i(x)$.
 For $i \in \{1, \ldots, n\}$, define $h_i = f_n \circ \cdots \circ 
 f_{i+1}$, so that we have $f = h_i \circ g_i$. On differentials, we 
 have $f'(x) = h_i'(x_i) \circ g'_i(x)$. Since $f'(x)$ is surjective (by 
-assumption), we deduce that all $h'_i(x_i)$ are surjective. Let $H'_i$ 
+assumption), we deduce that $h'_i(x_i)$ is surjective for all $i$. Let $H'_i$ 
 be a lattice in $E_i$ such that:
 \begin{enumerate}[(a)] 
 \item \label{item:Hi1}
@@ -924,7 +946,7 @@ Therefore, if after the $i$-th step of the execution of the function
 $H'_i$, the final result remains unchanged. In other words, it is
 enough to compute $x_i$ modulo $H'_i$.
 
-It is nevertheless not obvious how to implement these ideas in practice
+It is nevertheless not obvious to implement these ideas in practice
 because when we enter in the $i$-th step of the execution of {\tt f},
 we have not computed $h_i$ yet and hence are \emph{a priori} not able
 to determine a lattice $H'_i$ satisfying the axioms \eqref{item:Hi1}
@@ -997,7 +1019,8 @@ large: if we had replaced $f : (K^n)^n \to M_n(K)$ by $g : (K^n)^n \to
 S_n(K)$ (where $S_n(K)$ denotes the $K$-vector space of symmetric matrix 
 over $K$ of size $n$) defined in the same way, our problem would have 
 disappeared. Of course the image of a general $f$ is rarely a sub vector 
-space of $F$ but it is often a sub-$K$-manifold of $F$. We can then use 
+space of $F$ but it is often a sub-$K$-manifold of $F$ (see Appendix
+\ref{sec:manifold}). We can then use 
 the results of Appendix \ref{sec:manifold} to study $f$ viewed as a 
 function whose codomain is $f(U)$, understood that the differential of 
 it has now good probability to be surjective.
@@ -1018,7 +1041,7 @@ sure that the final result is correct up to the required precision.
 \subsection{Application to SOMOS sequence}
 \label{ssec:SOMOS-solution}
 
-We illustrate the theory developed in this paper by giving a simple 
+We illustrate the theory developed above by giving a simple 
 toy application. Other applications will be discussed in subsequent 
 articles. More precisely, we study the SOMOS 4 sequence introduced in \S 
 \ref{ssec:separation}. Making a crucial use of Lemma \ref{lem:main} and 
@@ -1028,15 +1051,13 @@ for computing it.
 Recall (\emph{cf} \S \ref{ssec:separation}) that a SOMOS 4 sequence is a 
 four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
 + u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
-Laurent phenomenon: its means that the four initial terms $u_0, u_1, 
-u_2, u_3$ are some indeterminates, that each $u_n$ is a Laurent 
+Laurent phenomenon: it means that, if the four initial terms $u_0, u_1, 
+u_2, u_3$ are some indeterminates, then each $u_n$ is a Laurent 
 polynomial with coefficients in $\Z$ in these indeterminates
 (see \cite{fomin-zelevinsky:02a}).
 
 From now, we will always consider SOMOS sequences with values in $\Q_p$ 
-(for some prime number $p$) and assume that $u_0, u_1, u_2, u_3$ are 
-chosen such that all terms $u_n$'s are determined (\emph{i.e.} there is 
-no division by zero). We assume also for simplicity that $u_0, u_1, u_2, 
+(for some prime number $p$). We assume for simplicity that $u_0, u_1, u_2, 
 u_3$ are all units in $\Z_p$. By the Laurent phenomenon, this implies 
 that all $u_n$'s lie in $\Z_p$, and that if $u_0, u_1, u_2, u_3$ 
 are known with finite precision $O(p^N)$ then all $u_n$ are 
@@ -1068,7 +1089,7 @@ $\prec$ $\leftarrow$ $N$\;
 
 We now prove that Algorithm \ref{algo:SOMOS} produces the correct result.
 We introduce the function $f : \Qp^\times \times \Q_p^3 \to \Q_p^4$ defined by 
-$f(a,b,c,d) = (b,c,d,\frac{bd+c^2}a)$, so that, for all $i$, we have 
+$f(a,b,c,d) = (b,c,d,\frac{bd+c^2}a)$. For all $i$, we have 
 $(u_i, u_{i+1}, u_{i+2}, u_{i+3}) = f_i(u_0, u_1, u_2, u_3)$ where $f_i
 = f \circ \cdots \circ f$ ($i$ times). Clearly, $f$ is  
 differentiable on $\Q_p^\times \times \Q_p^3$ and its differential in the 
@@ -1132,7 +1153,7 @@ our algorithm returns the correct value.
 
 \medskip
 
-Let us conclude this subsection by remarking that Algorithm 
+We conclude this section by remarking that Algorithm 
 \ref{algo:SOMOS} performs computations at precision at most $O(p^{N+v})$ 
 where $v$ is the sum of the valuations of five consequence terms among 
 the first $n$ terms of the SOMOS sequence we are considering. 
@@ -1144,9 +1165,9 @@ notation $\tilde O$ means that we hide logarithmic factors.
 
 We can compare this with the complexity of the more naive algorithm 
 consisting of lifting the initial terms $u_0, u_1, u_2, u_3$ to enough 
-precision and then do the computation using a naive step-by-step 
+precision and then doing the computation using a naive step-by-step 
 tracking of precision. In this setting, the required original precision 
-is $O(p^{N+2v'})$ where $v'$ is the sum of the valuation of the $u_i$'s 
+is $O(p^{N+v'})$ where $v'$ is the sum of the valuation of the $u_i$'s 
 for $i$ varying between $0$ and $n$. Experiments show that $v'$ is about 
 $c' \cdot n \log n$ (where $c'$ is a constant), which leads to a 
 complexity in $\tilde O (N n + n^2)$. Our approach is then interesting
@@ -1190,7 +1211,7 @@ nonempty, the composite map
 V_{ij} \stackrel{\varphi_j}{\longrightarrow} \varphi_j(V_{ij})
 \quad \text{(with } V_{ij} = V_i \cap V_j \text{)}
 \end{equation}
-is differentiable at all points in its domain. We recall that
+is differentiable. We recall that
 the mappings $\varphi_i$ above are the so-called \emph{charts}. The
 $\psi_{ij}$'s are the transition maps. The collection of $\varphi_i$'s
 and $\psi_{ij}$'s is called an \emph{atlas} of $V$. In the sequel, we 
@@ -1208,7 +1229,7 @@ in an obvious way. This implies that the definition of $T_x V$ given
 above does not depend (up to some canonical isomorphism) on the index 
 $i$ such that $x \in V_i$ and then makes sense.
 
-As usual, we can define the notion of strict differentiability (at some 
+As usual, we can define the notion of differentiability (at some 
 point) for a continuous mapping between two $K$-manifolds by viewing it 
 through the charts. A  differentiable map $f : V \to V'$ induces 
 a linear map on tangent spaces $f'(x) : T_x V \to T_{f(x)} V'$ for all 
@@ -1239,14 +1260,14 @@ and the manifold $V$ where it lies but also on the chosen atlas that
 defines $V$.
 \end{rmk}
 
-\begin{prop}
-\label{prop:independence}
+\begin{lem}
+\label{lem:independence}
 Let $x \in V$ and $H$ be a precision datum at $x$.
 The subset
 $$\varphi_i^{-1}\big(\varphi_i(x) + \varphi_i'(x)(H)\big) 
 \subset V$$
 does not depend on the index $i$ such that $x \in V_i$.
-\end{prop}
+\end{lem}
 
 \begin{proof}
 Let $i$ and $j$ be two indices such that $x$ belongs to $V_i$ and $V_j$. 
@@ -1290,8 +1311,8 @@ respectively. A natural candidate for $H$ is then:
 \label{eq:Hprime}
 H = \left(\varphi'_i(x)^{-1} \circ \varphi'_i(x_0)\right) (H_0).
 \end{equation}
-With this choice, $x + O(H) = x_0 + O(H_0)$ as soon as $x$ and $x_0$ are 
-close enough in the following sense: the difference $\varphi_i(x) - 
+With this choice, $x + O(H) = x_0 + O(H_0)$ provided that $x$ and $x_0$ 
+are close enough in the following sense: the difference $\varphi_i(x) - 
 \varphi_i(x_0)$ lies in the lattice $\varphi'_i(x_0)(H_0)$. We 
 furthermore have a property of independence on $i$.
 
@@ -1314,9 +1335,9 @@ $x_0$ (see Remark \ref{rem:differentiability}). Since $H_0$ is open in
 $T_{x_0} V$, this implies that $(f_j - f_i)(H_0)$ contains $f_i(H_0)$ 
 and $f_j(H_0)$ if $x$ and $x_0$ are close enough. Now, pick $w \in 
 f_j(H_0)$ and write it $w = f_j(v)$ with $v \in H_0$. Then $w$ is equal 
-to $f_i(v) + (f_j - f_i)(v)$ and then belongs to $f_i(H_0)$ because each 
+to $f_i(v) + (f_j - f_i)(v)$ and thus belongs to $f_i(H_0)$ because each 
 summand does. Therefore $f_j(H_0) \subset f_i(H_0)$. The inverse 
-inclusion can be proved in the same way. The fact that $H$ is a 
+inclusion is proved in the same way. The fact that $H$ is a 
 precision datum at $x$ is easy and left to the reader.
 Finally, if $x$ is close enough to $x_0$, we can check (ii) in the 
 charts but this was already done.
@@ -1324,8 +1345,8 @@ charts but this was already done.
 
 \subsection{Generalization of the main Lemma}
 
-With above definitions, Lemma \ref{lem:main} extends readily to 
-manifolds. To state it the context of manifolds, we first need to define 
+With above definitions, Lemma \ref{lem:main} extends to 
+manifolds. To do so, we first need to define 
 a norm on the tangent space $T_x V$ (where $V$ is some $K$-variety and 
 $x$ is a point in $V$). There is actually in general no canonical choice 
 for this. Indeed, let us consider a $K$-manifold $V$ covered by charts 
@@ -1388,7 +1409,7 @@ Hence the maps $\pr_x$ and $\pr_y$ define together an atlas of $E$, giving $E$ t
 a $K$-manifold.
 
 Let $P_0$ be a point in $E$ around which $\pr_x$ and $\pr_y$ both define 
-charts. Proposition \ref{prop:independence} then tells us that a 
+charts. Lemma \ref{lem:independence} then tells us that a 
 precision datum on $x$ determines a precision datum on $y$ and vice 
 versa. Indeed, in a neighborhood of $P_0$ we can write $y = \sqrt{x^3 + a x + b}$ 
 (for some choice of square root) and find the 
@@ -1517,7 +1538,7 @@ it can be done by computing
 \label{eq:diffeval}
 (P + dP)(x + dx) = P(x + dx) + dP(x + dx) = P(x) + P'(x) dx + dP(x)
 \end{equation}
-by neglecting terms of order $2$. Here $P'$ denotes the derivative of 
+and neglecting terms of order $2$. Here $P'$ denotes the derivative of 
 $P$. The differential at $P$ is then the linear map $(dP, dx) \mapsto 
 P'(x) dx + dP(x)$.
 
@@ -1651,7 +1672,7 @@ Since $\alpha_0$ is a simple root, $P_0'(\alpha_0)$
 does not vanish and we find:
 $$d \alpha = - \frac{dP(\alpha_0)}{P'_0(\alpha_0)}.$$
 
-We now address the case of a multiple roots. Let $P_0$ be a monic 
+We now address the case of a multiple root. Let $P_0$ be a monic 
 polynomial of degree $d$ and $\alpha_0 \in K$ be a root of $P_0$ having 
 multiplicity $m > 1$. Due to the multiplicity, it is no longer possible 
 to follow the root $\alpha_0$ in a neighborhood of $P_0$. But it is if we 
@@ -1664,7 +1685,7 @@ Moreover, the irreducible components of $\mathcal V_m$ that meet at
 $P_0$ are in bijection with the set of roots of $P_0$ of multiplicity 
 $\geq m$. In particular, $\alpha_0$ corresponds to one of these 
 irreducible components; let us denote it by $\mathcal V_{m,\alpha_0}$. 
-The algebraic variety $\mathcal V_{m,\alpha_0}$ is a \emph{a fortioti} 
+The algebraic variety $\mathcal V_{m,\alpha_0}$ is \emph{a fortioti} a
 $K$-manifold. Moreover there exists a differentiable function $f$ which 
 is defined on a neighborhood of $P_0$ in $\mathcal V_{m,\alpha_0}$ and 
 follows the root $\alpha_0$, \emph{i.e.} $f(P_0) = \alpha_0$ and for all 
@@ -1835,7 +1856,7 @@ factorization.  Differentiating the relation $M = QR$, we obtain
 where $\Delta = \trans Q \cdot Q$ is a diagonal matrix by definition.
 Moreover by differentiating $\trans Q \cdot Q = \Delta$, we find that
 $\trans Q \cdot dQ$ can be written as the sum of an antisymmetric 
-matrix and a diagonal one. Since moreove $dR \cdot R^{-1}$ is upper
+matrix and a diagonal one. Since moreover $dR \cdot R^{-1}$ is upper
 triangular with all diagonal entries equal to $0$, we see that 
 \eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
 and $dM$.
@@ -1903,6 +1924,7 @@ Finally, we note that similar results hold for images of matrices and,
 consequently, sums of subspaces.
 
 \bibliographystyle{plain}
-\bibliography{roebib/Biblio}
+%\bibliography{roebib/Biblio}
+\bibliography{Biblio}
 
 \end{document}
