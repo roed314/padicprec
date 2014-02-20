@@ -322,7 +322,7 @@ the SOMOS 4 sequence which turns out to be, at the same time, efficient
 and numerically stable.
 \end{rmk}
 
-\subsubsection*{LU factorization}
+\subsubsection*{LU factorization.}
 
 % Frame better
 
@@ -833,7 +833,7 @@ explain how, under the above hypothesis, one can implement the function
 {\tt f} so that it always outputs the optimal precision $O(H')$ with $H' 
 = f'(x)(H)$.
 
-\subsubsection*{One-pass computation}
+\subsubsection*{One-pass computation.}
 
 The execution of the function {\tt f} yields a factorization:
 $$f = f_n \circ f_{n-1} \circ \cdots \circ f_1$$
@@ -884,7 +884,7 @@ lot. We shall present in \S \ref{ssec:SOMOS-solution} an example of
 this.
 \end{rmk}
 
-\subsubsection*{Two-pass computation}
+\subsubsection*{Two-pass computation.}
 
 The previous approach works only if the $g'_i(x)$'s are all surjective. 
 Unfortunately, this assumption is in general not fulfilled. Indeed, 
@@ -952,7 +952,7 @@ and then runs over this skeleton in the reverse direction in order to
 determine (an upper bound of) the needed precision at each step. The 
 similarity with our approach is noticeably strong.
 
-\subsubsection*{Non-surjectivity}
+\subsubsection*{Non-surjectivity.}
 
 From the beginning, we have assumed that $f'(x)$ is surjective. Let us 
 discuss shortly what happens when this assumption is relaxed. As it is 
@@ -1264,7 +1264,7 @@ $$x + O(H) = \varphi_i^{-1}\big(\varphi_i(x) + \varphi_i'(x)(H)\big)
 for some (equivalenty, all) $i$ such that $x \in V_i$.
 \end{deftn}
 
-\subsubsection*{Change of base point}
+\subsubsection*{Change of base point.}
 
 In order to restrict ourselves to elements $x$ lying in a dense 
 computable subset, we need to compare $x_0 + O(H_0)$ with varying $x + 
@@ -1363,7 +1363,7 @@ method of Section \ref{ssec:locanalytic}.
 We illustrate the theory developped above by some classical examples,
 namely elliptic curves and grassmannians.
 
-\subsubsection*{Elliptic curves}
+\subsubsection*{Elliptic curves.}
 
 In this example, we assume for simplicity that $K$ does not have characteristic~$2$.
 Let $a$ and $b$ be two elements of $K$ such that $4 a^3 + 27 b^2 
@@ -1418,7 +1418,7 @@ that a precision datum on a point of the ``not well determined'' elliptic
 curve $E$ is a precision datum on a tuple of three variables among $a$, 
 $b$, $x$ and $y$.
 
-\subsubsection*{Grassmannians}
+\subsubsection*{Grassmannians.}
 
 Let $d$ and $n$ be two nonnegative integers such that $d \leq n$. The 
 Grassmannian $\Grass(d,n)$ is the set of all sub-vector spaces of $K^n$ 
@@ -1452,7 +1452,7 @@ Of course, in practice, when we are doing computations on subspaces of
 $K^n$ (like sum or intersection), we represent the spaces in charts as
 above and perform all the calculations in these charts.
 
-%\subsubsection*{Conclusion}
+%\subsubsection*{Conclusion.}
 %
 %The theory developped in this Appendix is nice because it provides an 
 %abstract framework to deal with ultrametric precision in a quite general 
@@ -1514,7 +1514,7 @@ space of dimension $d$. The affine space $X^d + K_{< d}[X]$ is then
 the set of monic polynomials over $K$ of degree $d$. We denote it by 
 $K_d[X]$.
 
-\subsubsection*{Evaluation and interpolation}
+\subsubsection*{Evaluation and interpolation.}
 
 Beyond sums and products (which can be treated as before), two basic 
 operations involving polynomials are evaluation and interpolation.
@@ -1540,7 +1540,7 @@ polynomial, Eq.~\eqref{eq:diffeval} shows that $d y_i = P'(x_i) dx_i +
 dP(x_i)$ for all $i$. For this, we can compute $dP(x_i)$ from $d x_i$ 
 and $d y_i$ and finally recover $dP$ by performing a new interpolation.
 
-\subsubsection*{Euclidean division}
+\subsubsection*{Euclidean division.}
 
 Let $A$ and $B$ be two polynomials with $B \neq 0$. The Euclidean division of 
 $A$ by $B$ is the problem of finding $Q$ and $R$ with $A = BQ + R$ and $\deg R < \deg B$. 
@@ -1554,7 +1554,7 @@ Q$ by $B$. This gives the differential. We note that the discussion
 above extends readily to convergent series (see also 
 \cite{caruso-lubicz:14a}).
 
-\subsubsection*{Greatest common divisors and B\'ezout coefficients}
+\subsubsection*{Greatest common divisors and B\'ezout coefficients.}
 
 We fix two positive integers $n$ and $m$ with $n \geq m$. We consider the 
 function $f : K_n[X] \times K_m[X] \to (K_{\leq n}[X])^3$ which sends a 
@@ -1622,7 +1622,7 @@ Note that with the above convention, the $\gcd$ of $A$ and $A$ is $A$
 itself although there exist pairs of coprime polynomials in any 
 neighborhood of $(A,A)$.
 
-\subsubsection*{Factorization}
+\subsubsection*{Factorization.}
 
 Suppose that we are given a polynomial $P_0 \in K_d[X]$ written as a 
 product $P_0 = A_0 B_0$, where $A_0$ and $B_0$ are monic and coprime. 
@@ -1643,7 +1643,7 @@ between $A_0$ and $B_0$, it follows from Eq.~\eqref{eq:difffactor} that
 $dA$ (resp. $dB$) is the remainder in the Euclidean division of $V_0
 {\cdot} dP$ by $A_0$ (resp. of $U_0 {\cdot} dP$ by $B_0$).
 
-\subsubsection*{Finding roots}
+\subsubsection*{Finding roots.}
 
 An important special case of the previous study occurs when $A_0$ has 
 degree $1$, that is $A_0(X) = X - \alpha_0$ with some $\alpha_0 \in K$. 
@@ -1718,7 +1718,7 @@ $N$).
 We consider the ring $K[\XX] = K[X_1, \ldots, X_n]$ of polynomials in $n$
 variables over $K$ and fix a monomial order on it. 
 
-\subsubsection*{Division}
+\subsubsection*{Division.}
 
 We then have a notion of division in $K[\XX]$: if $f, f_1, \ldots, f_s$ 
 are polynomials in $K[\XX]$, then one may decompose $f$ as
@@ -1735,7 +1735,7 @@ $(f, f_1, \ldots, f_s) \mapsto r$ is then well defined and we can compute its di
 finding that $dr$ is obtained as the remainder of the division of $f - (q_1 
 \cdot d f_1 + \cdots + q_s \cdot d f_s)$ by $(f_1, \ldots, f_s)$.
 
-\subsubsection*{Gr\"obner basis}
+\subsubsection*{Gr\"obner basis.}
 
 Recall that any 
 ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We may
@@ -1777,7 +1777,7 @@ Differentiating ring operations (sum, products, inverse) over matrices
 is again straightforward; we just need to be careful that matrix 
 algebras are (in general) noncommutative.
 
-\subsubsection*{Determinants and characteristic polynomials}
+\subsubsection*{Determinants and characteristic polynomials.}
 
 Let us first compute the differential of the function $\det : M_n(K) \to 
 K$. It is a standard computation. To begin with, we consider an 
@@ -1797,7 +1797,7 @@ $M$ to its monic characteristic polynomial $\det(X-M)$.
 Then $\chi$ is differentiable at each point $M \in M_n(K)$ and its 
 differential is given by $dM \mapsto \tr(\com(X{-}M) \cdot dM)$.
 
-\subsubsection*{LU factorization}
+\subsubsection*{LU factorization.}
 
 Let us agree to define a 
 LU factorization of a square matrix $M \in M_n(K)$ as a writing $M = LU$ 
@@ -1821,7 +1821,7 @@ factorization; the only difference is that LUP factorizations are not
 unique but they are on a small neighborhood of $M$ if we fix the matrix 
 $P$.
 
-\subsubsection*{QR factorization}
+\subsubsection*{QR factorization.}
 
 For us, a QR factorization of a square matrix $M \in M_n(K)$ will be
 a writing $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
@@ -1858,7 +1858,7 @@ sense of Appendix \ref{sec:manifold} as it is discussed in \S
 \ref{ssec:exmanifold}. In what sequel, we use freely the formalism 
 introduced there.
 
-\subsubsection*{Left kernels}
+\subsubsection*{Left kernels.}
 
 Let $d$ and $n$ be two nonnegative integers such that $d \leq n$.
 We consider the open subset $\mathcal V_{n-d}$ of $M_{n,n-d}(K)$ 
@@ -1890,7 +1890,7 @@ Zariski topology and hence defines a $K$-manifold. Furthermore, we have a
 mapping $\text{LK}_r : \mathcal M_r \to \Grass(n,n-r)$ which is 
 differentiable and whose differential can be computed as before.
 
-\subsubsection*{Intersections}
+\subsubsection*{Intersections.}
 
 We pick $n$, $d_1$ and 
 $d_2$ three nonnegative integers such that $d_1 \leq n$, $d_2 \leq n$ 
@@ -1906,7 +1906,7 @@ kernel of the canonical linear map $E_1 \oplus E_2 \to K^n$. We deduce
 for this that $f_d$ is differentiable and that its differential can be
 computed similarly to what we have done before.
 
-\subsubsection*{Sums and images}
+\subsubsection*{Sums and images.}
 
 Finally, we note that similar results hold for images of matrices and,
 consequently, sums of subspaces.
