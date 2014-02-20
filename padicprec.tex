@@ -333,13 +333,12 @@ The computation of a LU factorization appears as an important tool to
 tackle many classical questions about matrices or linear systems.
 
 We first note that a LU decomposition of a given matrix $M$ is unique
-if you require further that the $L$-part of this decomposition is
+if we require further that the $L$-part of this decomposition is
 unipotent (\emph{i.e.} all diagonal entries equal $1$). Let us write
 $L(M) U(M)$ the LU factorization of $M$ satisfying the above extra
-condition (when it exists). There exists Cramer-type formulas that
-gives each individual entries of $L(M)$and $U(M)$ in a closed form
-(see \cite{caruso:12a	}).
-
+condition (when it exists). There exists Cramer-type formulae that
+gives each individual entry of $L(M)$ and $U(M)$ in a closed form
+(see \cite{caruso:12a}).
 If $M$ is random square matrix over $\Zp$ of side $d$ whose every
 coefficient is known up to precision $O(p^N)$, the two following
 results are proved in \cite{caruso:12a}:
@@ -347,7 +346,7 @@ results are proved in \cite{caruso:12a}:
 \item using usual Gauss elimination and tracking $p$-adic precision 
 step-by-step, the smallest precision on an entry of $L(M)$ is about
 $O(p^{N - \frac{2d}{p-1}})$ on average;
-\item computing $L(M)$ by evaluating Cramer-type formulas yields a
+\item computing $L(M)$ by evaluating Cramer-type formulae yields a
 result whose every entry is known up to precision $O(p^{N - 2 \log_p 
 d})$.
 \end{itemize}
@@ -359,29 +358,39 @@ tracking precision step-by-step.
 \section{The main Lemma}
 \label{sec:mainlemma}
 
-Our theory of $p$-adic precision rests upon a 
-lemma in $p$-adic analysis: Lemma \ref{lem:main}.  In this section
-we develop the theory surrounding this result, and proceed to practical
-consequences in Section \ref{sec:tracking}.
+Our theory of $p$-adic precision rests upon a lemma in $p$-adic 
+analysis: Lemma \ref{lem:main}.  In this section we develop the theory 
+surrounding this result, and proceed to practical consequences in 
+Section \ref{sec:tracking}.
 
 \subsection{Images of lattices under differentiable functions}
 
-Our goal in this section is to relate the image of a lattice under a differentiable map
-to its image under the derivative.
+Our goal in this section is to relate the image of a lattice under a 
+differentiable map to its image under the derivative.
 
 \begin{deftn} \label{deftn : diff}
-Let $V, W$ be two normed $K$-vector spaces, let $U \subset V$ be an open 
-subset of $V$ and let $f : U \rightarrow W$ be a map. Then $f$ is called 
-\emph{differentiable} at $v_0 \in U$ if there exists a 
-continuous linear map $f'(v_0) : U \rightarrow W$ such that for any 
-$\varepsilon >0$, there exists an open neighborhood $U_\varepsilon 
-\subset U$ containing $v_0$ with
+Let $E$ and $F$ be two normed $K$-vector spaces, let $U$ be an open 
+subset of $E$ and let $f : U \rightarrow F$ be a map. Then $f$ is called 
+\emph{differentiable} at $v_0 \in U$ if there exists a continuous linear 
+map $f'(v_0) : U \rightarrow W$ such that for any $\varepsilon >0$, 
+there exists an open neighborhood $U_\varepsilon \subset U$ containing 
+$v_0$ with
 \[ 
 \Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
 \leq \varepsilon \Vert v-w \Vert. 
 \]
 for all $v, w \in U_\varepsilon$.  The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
 \end{deftn}
+
+\begin{rem}
+This notion of differentiability is stronger than the usual notion with 
+which we are familiar. It implies for instance the following: if $f$ is 
+differentiable on $U$, then the function $x \mapsto f'(x)$ defined on 
+$U$ is continuous. 
+It is sometimes called \emph{strict differentiability} but, for this
+article, we prefer a simplier terminology since we shall only use this
+notion of differentiability.
+\end{rem}
 
 One can derive all usual properties of the differential from this 
 definition: unicity, chain rules, \emph{etc}.
@@ -471,21 +480,20 @@ order lattice for $f$ at $v_0$.
 
 \begin{proof} % Call it the Banach-Schauder theorem?
 We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, the open mapping theorem provides a $C>0$ such that 
-\[
-B_F(1) \subset C  f'(0)(B_E(1)).
-\]
+$$B_F(1) \subset f'(0)(B_E(C)).$$
 Let $\varepsilon>0$ be such that 
 $\varepsilon C < \rho$, and choose $U_\varepsilon \subset E$ as in Definition 
 \ref{deftn : diff}.  We may assume $U_\varepsilon = B_E(\delta)$ for some $\delta >0$.
 
-Let $r \in (0, \delta)$ and suppose $H$ is a lattice with $B^-_E(\rho r) \subset H \subset B_E(r).$ 
+Let $r \in (0, \delta)$. We suppose that $H$ is a lattice with 
+$B^-_E(\rho r) \subset H \subset B_E(r).$
 We seek to show that $f$ maps $H$ surjectively onto $f'(0) (H)$. We first prove 
 that $f(H) \subset f'(0) (H)$. Suppose $x \in H$; we first show that $f(x) \in f'(0)(H)$.  By differentiability at 
 $0$, $\Vert f(x)-f'(0)(x) \Vert \leq \varepsilon \Vert x \Vert $. 
 Setting $y=f(x)-f'(0)(x)$, we have $\Vert y \Vert \leq 
 \varepsilon r$. The definition of $C$ implies that $B_F(\varepsilon r) 
-\subset \varepsilon C f'(0) (B_E(r))$. Thus there exists $x' \in 
-\varepsilon C \cdot B_E(r)$ such that $f'(0) (x') =y$. Since 
+\subset \varepsilon f'(0) (B_E(\varepsilon rC))$. Thus there exists $x' 
+\in \cdot B_E(\varepsilon r C)$ such that $f'(0) (x') =y$. Since 
 $\varepsilon C < \rho$, we get $x' \in B^-_E(\rho r) \subset H$ and 
 then $f(x)= f'(0) (x-x') \in f'(0) (H)$.
 
@@ -553,82 +561,54 @@ over all possible $W$ yields an upper bound on $f(v_0 + H)$.
 \subsection{The case of locally analytic functions}
 \label{ssec:locanalytic}
 
-\todofor{Tristan}{Improve this Subsection}
+We consider in this subsection the case where $f$ is locally analytic: 
+under this extra assumption, we make explicit the constant $\delta$ 
+which appears in Lemma \ref{lem:main}.
+Locally analytic functions over finite dimensional $K$-vector spaces are 
+defined in Schneider's book \cite {schneider:11a}, \S 6. His definition 
+extends readily to $K$-Banach spaces as follows:
 
-Before discussing applications of Lemma \ref{lem:main} to ultrametric 
-precision, we discuss the case that $f$ is locally analytic.  In this context
-we prove that we can recover the constant $\delta$ appearing in the lemma
-from the Newton polygon determined by the Taylor series expansion of $f$.
-
-Schneider \cite{schneider:11a}*{\S 6} defines locally analytic functions on finite dimensional vector spaces.
-His definition extends easily to $K$-Banach spaces:
-
-\begin{deftn} \label{deftn:analyticNP}
-Let $E$ and $F$ be $K$-Banach spaces, and let $U \subset E$ be an open set.
-A function $f \col U \rightarrow F$ is said to be \emph{locally analytic} if one may find
-an open set $U_x \subset E$ for each $x \in U$ satisfying the following condition.
-For each $n \ge 1$ there exists an $n$-linear mapping
-$L_n \col E^n \rightarrow F$ so that 
-\begin{enumerate}
-\item the sum $\sum_{n \geq 1} L_n(y,\ldots,y)$ converges in F for every $y \in U_x,$ 
-\item $f(x+y)=f(x)+\sum_{n \geq 1} L_n(y,\dots,y).$
-\end{enumerate}
+\begin{deftn}
+\label{def:locanal}
+Let $E$ and $F$ be $K$-Banach spaces. Let $U$ be an open subset of $E$
+and let $x \in U$.
+A function $f \col U \rightarrow F$ is said \emph{locally analytic} at 
+$x$ if there exist an open subset $U_x \subset E$ and, for all $n \ge 
+1$, a continuous $n$-linear map $L_n \col E^n \rightarrow F$ such that
+$$f(x+h) = f(x) + \sum_{n \geq 1} L_n(h,\ldots,h)$$
+for all $h$ with $x + h \in U_x$.
 \end{deftn}
 
-We then mostly study such a serie defined at $x$.
+\begin{rmk}
+A function $f$ which is locally analytic at $x$ is \emph{a fortiori} 
+differentiable at $x$. Furthermore, in that case, the linear map $L_1$ 
+appearing in the above definition is nothing but the derivative $f'(x)$.
+\end{rmk}
 
-\begin{deftn} \label{deftn :  serie and norm}
-Suppose that $E$ and $F$ are $\overline{K}$-Banach spaces and $f_n \col E \to F$ are maps satisfying
-$\lvert f_n(\lambda x) \rvert = \lvert \lambda \rvert \cdot \lvert f_n (x) \rvert$ for all $\lambda \in \overline{K}$ and $x \in E$.
-We define $\lVert f_n \rVert = \sup_{x \in B_E(1)} \vert f_n(x) \vert$ and further assume that all the $\lVert f_n \rVert$ are finite.
-Write $f = \sum_n f_n$ and define $\Lambda(f)(v) \in \R \cup \{\infty\}$ for each $v \in \R$ by
-\[
-\Lambda(f)(v) = \log \sup_{x \in B_E(e^v)} \vert f(x) \vert.
-\]
-Finally, we define the Newton polygon $\NP(f)$ of $f$ to be the lower convex hull in $\mathbb{R}^2$
-of the points $(k, - \log \lVert f_k \rVert )$ for $k \in \Z_{\ge 0}.$ 
-\end{deftn}
+From now, we assume that $K$ is algebraically closed. As in Definition 
+\ref{def:locanal}, we consider two $K$-Banach spaces $E$ and $F$ and a 
+family of continuous $n$-linear maps $L_n : E^n \to F$. For $n \ge 1$ 
+and $h \in E$, we set $f_n(h) = L_n(h, \ldots, h)$ and
+$$\Vert f_n \Vert = \sup_{h \in B_E(1)} \Vert f_n(h) \Vert.$$
+When the series $\sum_n f_n(h)$ converges, we denote by $f(h)$ its sum;
+we shall write $f = \sum_{n \geq 0} f_n$. We assume that $f$ is defined
+in a neighborhood of $0$. Under this assumption, the datum of $f$ 
+uniquely determines the $f_n$'s (it is a consequence of Propostion 
+\ref{prop:lambdaNP} below).
+To such a series $f$, we attach the function $\Lambda(f) : \R \to \R 
+\cup \{+\infty\}$ defined by:
+$$\begin{array}{rcll}
+\Lambda(f)(v) & = & 
+\log \big( \sup_{h \in B^-_E(e^v)} \Vert f(h) \Vert \big)
+& \text{if } f \text{ is defined on } B^-_E(e^v) \\
+& = & +\infty & \text{otherwise}
+\end{array}$$
+The following lemma is easy and left to the reader.
 
-We define $v_\infty \in \mathbb{R} \cup \left\lbrace \infty \right\rbrace$ to be the limit of the slopes of $\NP(f)$, and
-denote by $\NP(f)^*$ the convex conjugate of $\NP(f)$.  The following proposition is a classical consequence of convex analysis.
-
-\begin{prop} \label{prop : conjugate Newton}
-Considered as a function on $\R$, $\NP(f)^*$ is defined over $\left] -\infty,v_{\infty} \right[$, though it may be defined for larger values.
-\end{prop}
-
-We can interpret the function $\Lambda(f)$ in terms of the conjugate Newton polygon:
-
-\begin{prop} \label{prop : connexion sup Newton}
-For any $v \in \left]-\infty, v_\infty \right[,$ \[ \Lambda (f) (v) = \NP(f)^*(v).\]
-\end{prop}
-\begin{proof}
-We prove the equality first for $v$ that are not slopes of $\NP(f)$.  Assume that $v < v_\infty$ is such a slope and set $u = \NP(f)^*(v)$.
-Then the intersection of $\NP(f)$ with the line defined by $y=vx-u$ is a vertex of $\NP(f),$ say
-$(n, - \log \lVert f_n \rVert )$ for some $n \geq 0$ with $u = vn + \log \lVert f_n \rVert.$
-
-Since $v$ is not a slope of $\NP(f)$, the difference quotients of $\NP(f)$ at $n$ are increasing.  Therefore, we may find a $c>0$ so that $vm-u \leq - \log \lVert f_m \rVert - c \vert n-m \vert$ for any $m\geq 0$.  Since $vm-u=vm-vn-\log \lVert f_n \rVert,$ we get $-vn-\log \lVert f_n \rVert + c \vert n-m \vert  \leq -vm-\log \lVert f_m \rVert .$
-
-For any $x \in  B_E(e^v)$ and $m \geq 0,$ we have
-\[
-\vert f_m (x) \vert \leq \lVert f_m \rVert e^{vm}
-\]
-by the definition of $\lVert f_m \rVert$. Therefore
-\[
-\vert f_m (x) \vert \leq e^{-c \vert n-m \vert } \lVert f_n \rVert  e^{vn}< \lVert f_n \rVert e^{vn}.
-\]
-Thus, the series converges and by ultrametricity $ \vert f(x) \vert \leq \vert f_n \vert e^{vn},$ and $\Lambda (f)(v) \leq \log \left( \vert f_n \vert e^{vn} \right).$  
-
-Now, the definition of $\lVert f_n \rVert$ provides a sequence $(x_i)_{i\geq 0}$ in $B_E(e^v)$ such that $\lim \vert f_n (x_i) \vert= \lVert f_n \rVert e^{vn}.$ 
-
-Since for any $i,$ $\vert f_m (x_i) \vert \leq e^{-c \vert n-m \vert } \vert f_n \vert  e^{vn},$ then for $i$ large enough, $\vert f_m (x_i) \vert < \vert f_n (x_i) \vert $ and $\vert f(x_i) \vert = \vert f_n (x_i) \vert.$
-
-As a consequence, $\lim_i \vert f(x_i) \vert = \lVert f_n \rVert e^{vn},$ and  $\Lambda (f)(v) = \log ( \lVert f_n \rVert e^{vn}) = u= \NP(f)^*(v).$
-
-Therefore, for any $v \in \left] -\infty,v_{\infty} \right[,$ with $v$ not a slope of $\NP(f),$ we get $\Lambda (f)(v) =\NP(f)^*(v).$
-Since $\Lambda (f)$ is increasing, $\NP(f)^*$ is continuous (since it is convex), and $\NP(f)$ has only finitely many slopes smaller than $v_\infty-\epsilon$, for any $\epsilon >0$, we deduce that both functions coincide on $v \in \left] -\infty,v_{\infty} \right[,$
-\end{proof}
-
-\begin{lem} Let $f(x)= \sum_{n \geq 0} f_n (x)$ and $g(x)= \sum_{n \geq 0} g_n (x)$ be two series as in definition \ref{deftn :  serie and norm}. Then
+\begin{lem}
+\label{lem:opLambda}
+Let $f = \sum_{n \geq 0} f_n$ and $g = \sum_{n \geq 0} g_n$ be two 
+series as above. Then:
 \begin{align*}
 \Lambda(f+g) &\leq \max (\Lambda(f),\Lambda(g)) \\
 \Lambda(f \times g) &\leq \Lambda(f)+\Lambda(g) \\
@@ -636,62 +616,193 @@ Since $\Lambda (f)$ is increasing, $\NP(f)^*$ is continuous (since it is convex)
 \end{align*}
 \end{lem}
 
-The following classical result from convex analysis will play a crucial role in bounding $\NP(f),$  $\NP(f)^*$ and $\Lambda(f)$.
+\begin{rem}
+\label{rem:opLambda}
+Using Lemma \ref{lem:opLambda}, one can easily derive an upper 
+bound of $\Lambda(f)$ from a formula describing $f$.
+\end{rem}
 
-\begin{prop} \label{prop : legendre transform}
-Slopes of $f^*$ corresponds to extreme points of $f$.
+The function $\Lambda(f)$ we have just defined is actually closely 
+related to the Newton polygon of $f$. Recall that, by definition, the 
+Newton polygon of $f$ is the convex hull in $\R^2$ of the points of 
+coordinates $(n, - \log \lVert f_n \rVert )$ for $n \geq 0$ together 
+with the extra point $(0, +\infty)$. We denote by $\NP(f) : \R \to \R 
+\cup \{+\infty\}$ the convex function whose epigraph is the Newton 
+polygon of $f$.
+
+We recall that the Legendre transform of a \emph{convex} function 
+$\varphi : \R \to \R \cup \{+\infty\}$ is the function $\varphi^\star : 
+\R \to \R \cup \{+\infty\}$ defined by:
+$$\textstyle \varphi^\star(v) = \sup_{u \in \R} \:
+\big(uv - \varphi(u)\big), \qquad
+\forall v \in \R.$$
+One can check that the map $\varphi \mapsto \varphi^\star$ is an
+involution (\emph{i.e.} $(\varphi^\star)^\star = \varphi$) and
+reverses the order (\emph{i.e.} if $\varphi \leq \psi$, then
+$\varphi^\star \geq \psi^\star$). 
+%Furthermore, if $\varphi$ is
+%piecewise affine (and convex), the slopes of $\varphi^\star$ are
+%exactly the points where $\varphi$ is not differentiable and \emph{vice
+%versa}.
+
+%\begin{prop} \label{prop : conjugate Newton}
+%Considered as a function on $\R$, $\NP(f)^*$ is defined over $\left] -\infty,v_{\infty} \right[$, though it may be defined for larger values.
+%\end{prop}
+%
+%We can interpret the function $\Lambda(f)$ in terms of the conjugate Newton polygon:
+
+\begin{prop} \label{prop:lambdaNP}
+Keeping the above notation, we have $\Lambda (f) = \NP(f)^\star$.
 \end{prop}
 
-\begin{cor} \label{cor : trunc series}
-Let $f(x)= \sum_{n \geq 0} f_n (x)$ be a serie as in definition \ref{deftn :  serie and norm}, $n_0 \geq 0$ and $g(x)= \sum_{n \geq n_0} f_n (x).$ Then $\Lambda(g) \leq \Lambda(f)$ and the slopes of $\Lambda(g)$ are bigger than $n_0$. 
-As a consequence, a minoration of $\Lambda(g)$ can be obtain by extending $\Lambda(f)(v)$ with a slope $n_0$ for $v \leq n_0$.
-\end{cor}
-
-
-Now, let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ and the $L_k$'s be as in definition \ref{deftn:analyticNP}. We assume $L_1$ is surjective. We define, the $\overline{L_k},$ $\overline{E}$ and $\overline{F}$ by extending scalars to $\overline{K}.$ We define for any $n \geq 1$, $f_n(x)=\overline{L_n}(x,\dots,x)$ for any $x \in \overline{E}.$ 
-Let $C$ be given by the open mapping theorem for $L_1$, $\rho \in (0, 1]$ and $\varepsilon < \frac{\rho}{C}$. We provide three methods to find a sufficient $\delta$ to define first order lattice as in lemma \ref{lem:main}.
-
-For the first one, we assume that we have know a function that majorates $\Lambda(\sum_{n \geq 1}f_n)$.
-
-\begin{prop} \label{prop : maj Lambda} \label{prop:locanalytic}
-If $m_1$ is a real convex function above $\Lambda(\sum_{n \geq 1}f_n)$.
-We define $m_2$ by extending $m_1$ with slope $2$.
-Let $\delta$ be the abscissa of the smallest intersection of $m_2$ and the line defined by $y=-\log \varepsilon+ x,$ or $v_\infty$ if there is no such intersection.  Then $e^\delta$ is enough to define first order lattices as in lemma  \ref{lem:main}.
-\end{prop}
 \begin{proof}
-$\delta$ is well-defined thanks to corollary \ref{cor : trunc series}, and $m_2 \geq \Lambda(\sum_{n \geq 2}f_n).$
+Let $v \in \R$. We assume first that $\NP(f)^\star(v) = +\infty$. Then, 
+using a multilinear version of Banach-Steinhaus Theorem, we can prove 
+that $\sum_{n \geq 0} f_n$ does not converge on $B_E^-(e^v)$ and 
+therefore that $\Lambda(f)(v) = +\infty$ as well.
 
-It is sufficient to prove that for all $x \in B_{\overline{E}}(0,e^\delta),$ $\vert \sum_{n\geq 2} f_n(x) \vert \leq \varepsilon \vert x \vert.$
+We now suppose that $\NP(f)^\star(v)$ is finite. To begin with, we 
+assume in addition that $v$ is not a slope of $\NP(f)$. We set $u = 
+\NP(f)^*(v)$. The function $m \mapsto \NP(f)(m) - vm + u$ has the 
+following properties: (1)~it is piecewise affine and everywhere 
+nonnegative, (2)~it does not admit $0$ as a slope and (3)~it vanishes at 
+$x = n$ for some integer $n$ and $u = vn + \log \Vert f_n \Vert$.
+We deduce from this that there exists $c>0$ such that $vm-u \leq - \log 
+\lVert f_m \rVert - c \cdot \vert n-m \vert$ for any $m\geq 0$.
+Since $vm-u=vm-vn-\log \lVert f_n \rVert$, we get $-vn-\log \lVert 
+f_n \rVert + c \cdot \vert n-m \vert \leq -vm-\log \lVert f_m \rVert$.
+Therefore, for any $x \in  B_E(e^v)$ and $m \geq 0,$ we have
+$$\Vert f_m (x) \Vert \leq e^{-c \cdot \vert n-m \vert } \cdot
+\lVert f_n \rVert \cdot e^{vn}< \lVert f_n \rVert \cdot e^{vn}.$$
+Thus, the series $\sum_{m \geq 0} f_m(x)$ converges and $\Vert f(x) 
+\Vert \leq \Vert f_n \Vert \cdot e^{vn}$. We then get:
+\begin{equation}
+\label{eq:lowerLambda}
+\Lambda (f)(v) \leq \log \big( \Vert f_n \Vert e^{vn} \big)
+= vn + \log \Vert f_n \Vert = u.
+\end{equation}
+On the other hand, it follows from the definition of $\lVert f_n \rVert$ 
+that there exists a sequence $(x_i)_{i\geq 0}$ in $B^-_E(e^v)$ such that 
+$\lim \Vert f_n (x_i) \Vert= \lVert f_n \rVert \cdot e^{vn}$. Since 
+furthermore $\Vert f_m (x_i) \Vert \leq e^{-c \cdot \vert n-m \vert} 
+\Vert f_n \Vert \cdot e^{vn}$ for all $i$, we get $\Vert f_m (x_i) \Vert 
+< \Vert f_n (x_i) \Vert$ for $i$ large enough. For these $i$, we then 
+have $\Vert f(x_i) \Vert = \Vert f_n (x_i) \Vert$. Passing to the limit 
+on $i$, we find $\Lambda (f)(v) \geq u$. Comparing with 
+Eq.~\eqref{eq:lowerLambda}, we get $\Lambda (f)(v) = u = 
+\NP(f)^\star(v)$.
 
-By comparing slopes, if $x \in B_{\overline{E}}(0,e^\delta),$ $u = \log \vert x \vert,$  $\Lambda( \sum_{n \geq 2}f_n)(u) \geq -\log \varepsilon+ u.$
-With proposition \ref{prop : connexion sup Newton}, for any $m \geq 2,$ $-\log \vert f_m \vert +m u \geq -\log \varepsilon+ u.$
-
-Therefore, for any $m \geq 2,$ $\vert f_m \vert  \vert x \vert^m \leq \varepsilon \vert x \vert.$
-By ultrametricity,   $\vert \sum_{n\geq 2} f_n(x) \vert \leq \varepsilon \vert x \vert,$ which concludes the proof.
+We have then proved that the functions $\Lambda(f)$ and $\NP(f)^\star$ 
+coincide expect maybe on the set consisting of slopes of $\NP(f)$. But 
+we remark that this set is countable and that both functions $\Lambda 
+(f)$ and $\NP(f)^\star$ are left continuous. This is enough to ensure 
+that $\Lambda (f)$ and $\NP(f)^\star$ coincide everywhere.
 \end{proof}
 
-For the second one, we only assume that we have majorations on the $\vert f_n \vert.$
+\begin{rem}
+It follows from Proposition \ref{prop:lambdaNP} that $\Lambda(f)$ is a
+convex function (which was not clear at all \emph{a priori}).
+\end{rem}
+
+We now study the effect of truncation on series: given $f$ as above
+and a nonnegative integer $n_0$, we set:
+$$f_{\geq n_0} = \sum_{n \geq n_0} f_n = f - (f_0 + f_1 + \cdots +
+f_{n_0 - 1}).$$
+On the other hand, given a convex function $\varphi : \R \to \R \cup
+\{+\infty\}$ and a real number $v$, we define $\varphi_{\geq v} : \R \to 
+\R \cup \{\pm \infty\}$ as the highest convex function such that 
+$\varphi_{\geq v} \leq \varphi$ and the function $x \mapsto 
+\varphi_{\geq v}(x) - v x$ is not decreasing. Concretely, we have:
+$$\varphi_{\geq v}(x) = \inf_{y \geq 0} \, \big(\varphi(x + y) - v y 
+\big).$$
+When $v$ is fixed, the construction $\varphi \mapsto \varphi_{\geq v}$
+is nondecreasing: if $\varphi$ and $\psi$ are two convex functions such
+that $\varphi \leq \psi$, we deduce $\varphi_{\geq v} \leq \psi_{\geq v}$.
+
+\begin{prop} \label{prop:trunc}
+With the above notations, we have $\Lambda(f_{\geq n_0}) \leq
+\Lambda(f)_{\geq n_0}$ for all $n_0 \in \mathbb N$.
+\end{prop}
+
+\begin{proof}
+It follows easily from Proposition \ref{prop:lambdaNP} and the fact that 
+the slopes of the Legendre transform of a convex piecewise affine 
+function $f$ are exactly the points where $f$ is not differentiable.
+\end{proof}
+
+%Now, let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ and the $L_k$'s be as in definition \ref{deftn:analyticNP}. We assume $L_1$ is surjective. We define, the $\overline{L_k},$ $\overline{E}$ and $\overline{F}$ by extending scalars to $\overline{K}.$ We define for any $n \geq 1$, $f_n(x)=\overline{L_n}(x,\dots,x)$ for any $x \in \overline{E}.$ 
+%Let $C$ be given by the open mapping theorem for $L_1$, $\rho \in (0, 1]$ and $\varepsilon < \frac{\rho}{C}$. We provide three methods to find a sufficient $\delta$ to define first order lattice as in lemma \ref{lem:main}.
+%
+%For the first one, we assume that we have know a function that majorates $\Lambda(\sum_{n \geq 1}f_n)$.
 
 \begin{prop}
-Let $(M_n)_{n \geq 2}$ be real numbers such that for all $n \geq 2$, $\vert f_n \vert \leq M_n.$
-
-If we denote by $\NP((M_{n+1})_{n \geq 1})$ the lower convex hull of the $(n, -\log M_{n+1})$ for $n \geq 1$, then $\delta$ such that $-\log \varepsilon=\NP((M_n)_{n \geq 2})^*(r)$ is enough to define first order lattices as in lemma  \ref{lem:main}.
+\label{prop:locanalytic}
+Let $f = \sum_{n \geq 0} f_n$ be a function as above.
+Let $C$ be a positive real number satisfying 
+$B_F(1) \subset f_1(B_E(C))$.
+Let $\rho \in (0, 1]$ and $\nu$ be a real number such that 
+\begin{equation}
+\label{eq:locanalytic}
+\Lambda(f)_{\geq 2} (\nu) < \nu + \log \Big( \frac \rho C \Big).
+\end{equation}
+Then the conclusion of Lemma \ref{lem:main} holds with $\delta = e^\nu$.
 \end{prop}
+
+\begin{rem}
+On a neighborhood of $-\infty$, the function $x \mapsto \Lambda(f)_{\geq 
+2} (x) - x$ is affine of slope $1$. This implies that, for all $\rho \in
+(0,1]$, there exists $\nu$ satisfying \eqref{eq:locanalytic}. Moreover,
+if $\rho$ is close enough to $0$, then one can take $\delta = e^\nu$ as a 
+linear function of $\rho$.
+\end{rem}
+
 \begin{proof}
-Same idea as proposition \ref{prop : maj Lambda}. One can define $g_n$ with $g_n (x) =\frac{f_n(x)}{\vert x \vert}$ and $g_n(0)=0$ and work with $\Lambda ( \sum g_n).$
+Pick $\varepsilon$ in the interval $(e^{\Lambda(f)_{\geq 2} (\nu) - \nu}, 
+\frac \rho C)$. Going back to the proof of Lemma \ref{lem:main}, we 
+observe that it is enough to prove that
+\begin{equation}
+\label{eq:boundqueue} 
+\Vert f_{\geq 2}(x) \Vert \leq \varepsilon \cdot \Vert x \Vert.
+\end{equation}
+for all $x \in B_E(\delta)$.
+This follows directly from Proposition \ref{prop:lambdaNP} and Proposition
+\ref{prop:trunc}.
 \end{proof}
 
-We finally provide a simple method when working with finite-dimensional vector spaces over $p$-adic fields.
+\begin{rem}
+It follows from the proof that Proposition \ref{prop:locanalytic} is 
+still valid if $K$ is not assumed to be algebraically closed. Indeed, 
+the functions $f_n$ --- and then $f$ also --- extend to an algebraic
+closure $\bar K$ of $K$ and Eq.~\eqref{eq:boundqueue} holds over $\bar 
+K$, which is enough to conclude.
+\end{rem}
 
-\begin{prop} \label{prop : locanalyticfinitedim}
-If $f$ is a locally analytic map $K^n \rightarrow K^m$, with $K$ a $p$-adic field, if $C,$ $\rho$ and $\varepsilon$ are as above. It is enough to work with the Newton polygon $NP_F$ of $F(t) = \sum_{k\geq 0}^{+\infty} \interleave f^{(k+1)}(0) \interleave  t^k \in \mathbb{R}[[t]]$ : let $\delta$ be such that $NP_F^* \left( \log_p \delta - \frac{1}{p-1} \right) \leq \log_p \varepsilon.$ Then $\delta$ is enough for lemma \ref{lem:main}. 
-\end{prop}
-\begin{proof}
-Same as before, with $L_n=\frac{f^{(n)}(0)}{n!}$ and Legendre formula. The result follows \textit{mutatis mutandis}.
-\end{proof}
+\begin{cor}
+We keep the notations of Proposition \ref{prop:locanalytic} and consider 
+in addition a sequence $(M_n)_{n \geq 2}$ such that $\Vert f_n \Vert 
+\leq M_n$ for all $n \geq 2$. Let $\NP(M_n)$ denote the convex function
+whose epigraph is the convex hull in $\R^2$ of the points of coordinates
+$(n, -\log M_n)$ for $n \geq 2$ together with the extra point $(0,
++\infty)$.
 
-\todo{Explain how Newton polygons considered above behave under
-usual operations (sum, multiplication and composition of functions).}
+Let $\rho \in (0, 1]$ and $\nu$ be a real number such that 
+$$NP(M_n)^\star (\nu) < \nu + \log \Big( \frac \rho C \Big).$$
+Then the conclusion of Lemma \ref{lem:main} holds with $\delta = e^\nu$.
+\end{cor}
+
+\begin{rem}
+If $K$ has characteristic $0$ and the vector spaces $E$ and $F$ are
+finite dimensional, then the $M_n$'s defined by
+$$M_n = \frac 1 {|n!|} \cdot 
+\sup_{\substack{1 \leq i \leq \dim E \\ \vert \underline n
+\vert = n}} \,
+\Big\Vert \frac{\partial^n f_i}{\partial x^{\underline n}}(0) 
+\Big\Vert$$
+do the job. Here $f_i$ denotes the $i$-th coordinate of $f$, the
+notation $\underline n$ refers to a tuple of $(\dim F)$ nonnegative
+integers and $\vert \underline n \vert$ is the sum of the coordinates
+of $\underline n$.
+\end{rem}x
 
 \section{Tracking precision using differentials}
 \label{sec:tracking}
@@ -755,7 +866,8 @@ compute the exact values of all $x_i$'s, which is of course not
 possible! Assuming that $g'_i(x)$ is surjective for all $i$, we can fix 
 it as follows. For each $i$, we fix a first order lattice $\tilde H_i$ 
 for $g_i$ at $x$. Under our assumption, such lattices always exist and 
-can be computed dynamically using Proposition \ref{prop:locanalytic}. 
+can be computed dynamically using Proposition \ref{prop:locanalytic}
+and Lemma \ref{lem:opLambda} (see also Remark \ref{rem:opLambda}).
 Now, the equality $g_i(x + \tilde H_i) = x_i + g'_i(x)(\tilde H_i)$ 
 means that any perturbation of $x_i$ by an element in $g'_i(x) (\tilde 
 H_i)$ is induced by a perturbation of $x$ by an element in $\tilde H_i 
@@ -822,11 +934,11 @@ for $i$ going from $1$ to $n$, we recompute $x_i$ modulo $H'_i$
 and finally outputs $x_n + O\big(f'(x)(H)\big)$.
 \end{enumerate}
 Using relaxed algorithms for computing with elements in $K$ (\emph{cf} 
-\cite{}), we can reuse in Step~\eqref{item:finalcomp} the computations 
-already performed in Step~\eqref{item:smallprec}. The ``backward'' method 
-we have just presented is then probably not much more expansive than the 
-``forward'' method, although it is certainly much more difficult to 
-implement. 
+\cite{hoeven1, hoeven2, berthomieu}), we can reuse in 
+Step~\eqref{item:finalcomp} the computations already performed in 
+Step~\eqref{item:smallprec}. The ``backward'' method we have just 
+presented is then probably not much more expansive than the ``forward'' 
+method, although it is certainly much more difficult to implement.
 
 We conclude this section by remarking that the ``backward'' method seems 
 to be particularly well suited to computations with lazy $p$-adic. Indeed 
@@ -1273,7 +1385,7 @@ various open subsets define together an atlas of $E$. This turns $E$ into
 a $K$-manifold.
 
 Let $P_0$ be a point in $E$ around which $\pr_x$ and $\pr_y$ both define 
-charts. Proposition \ref{prop:independance} then tells us that a 
+charts. Proposition \ref{prop:independence} then tells us that a 
 precision datum on $x$ determined a precision datum on $y$ and \emph{vice 
 versa}. Indeed around $P_0$, we can write $y = \sqrt{x^3 + a x + b}$ 
 (with the correct determination of the square root) and find the 
@@ -1346,15 +1458,15 @@ Of course, in practice, when we are doing computations on subspaces of
 $K^n$ (like sum or intersection), we represent the spaces in charts as
 above and perform all the calculations in these charts.
 
-\subsubsection*{Conclusion}
-
-The theory developped in this Appendix is nice because it provides an 
-abstract framework to deal with ultrametric precision in a quite general 
-setting.
-Nevertheless, as we have seen in the above examples, in practice we
-generally carry out all calculations in charts and do not really care
-about the ``real'' nature of the precision data, \emph{i.e.} lattices
-in tangent spaces.
+%\subsubsection*{Conclusion}
+%
+%The theory developped in this Appendix is nice because it provides an 
+%abstract framework to deal with ultrametric precision in a quite general 
+%setting.
+%Nevertheless, as we have seen in the above examples, in practice we
+%generally carry out all calculations in charts and do not really care
+%about the ``real'' nature of the precision data, \emph{i.e.} lattices
+%in tangent spaces.
 
 \section{Differential of usual operations}
 \label{ssec:differentials}
@@ -1798,6 +1910,6 @@ Finally, we note that similar results hold for images of matrices and,
 consequently, sums of subspaces.
 
 \bibliographystyle{plain}
-\bibliography{roebib/Biblio}
+\bibliography{Biblio}
 
 \end{document}
