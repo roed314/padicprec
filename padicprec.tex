@@ -802,7 +802,7 @@ do the job. Here $f_i$ denotes the $i$-th coordinate of $f$, the
 notation $\underline n$ refers to a tuple of $(\dim F)$ nonnegative
 integers and $\vert \underline n \vert$ is the sum of the coordinates
 of $\underline n$.
-\end{rem}x
+\end{rem}
 
 \section{Tracking precision using differentials}
 \label{sec:tracking}
@@ -1349,12 +1349,12 @@ Apply Lemma \ref{lem:main} in charts.
 \end{proof}
 
 \begin{rmk}
-The constant $\delta$ that appears in the above Lemma depends (up to
+The constant $\delta$ that appears in the lemma depends (up to
 some multiplicative constant) on the norm that we have chosen on $T_x V$. 
 However, once this norm is fixed, and assuming further that $V$ and $W$ 
 are locally analytic $K$-manifolds and the mapping $f$ is locally 
 analytic as well, the constant $\delta$ can be made explicit using the 
-method of \S \ref{ssec:locanalytic}.
+method of Section \ref{ssec:locanalytic}.
 \end{rmk}
 
 \subsection{Examples}
@@ -1365,37 +1365,33 @@ namely elliptic curves and grassmannians.
 
 \subsubsection*{Elliptic curves}
 
-In this example, we assume for simplicity that $K$ has not caracteristic 
-$2$. Let $a$ and $b$ be two elements of $K$ such that $4 a^3 + 27 b^2 
-\neq 0$ and let $E$ be the subset of $K^2$ consisting of the couples 
+In this example, we assume for simplicity that $K$ does not have characteristic~$2$.
+Let $a$ and $b$ be two elements of $K$ such that $4 a^3 + 27 b^2 
+\neq 0$ and let $E$ be the subset of $K^2$ consisting of the pairs 
 $(x,y)$ satisfying the usual equation $y^2 = x^3 + a x + b$.
-Let also $\pr_x : E \to K$ (resp. $\pr_y : E \to K$) denote the map that 
-takes a couple $(x,y)$ to $x$ (resp. to $y$).
+Let $\pr_x : E \to K$ (resp. $\pr_y : E \to K$) denote the map that 
+takes a pair $(x,y)$ to $x$ (resp. to $y$).
 
-\medskip
-
-We first assume that $a$ and $b$ are exactly known; typically the field 
-$K$ is $\Q_p$ and $a$ and $b$ are actual integers. For each point $P_0 = 
+We first assume that $a$ and $b$ lie in the subring $R$ of exact elements. For each point $P_0 = 
 (x_0, y_0)$ on $E$ except possibly a finite number of them, the map 
 $\pr_x$ define a diffeomorphism from an open subset containing $P_0$ to 
-an open subset of $K$. The same is true for $\pr_y$. Moreover around all 
-$P_0 \in E$, one of these projections satisfy the above condition and
-they both do generically. Hence the maps $\pr_x$ and $\pr_y$ defined an 
-various open subsets define together an atlas of $E$. This turns $E$ into 
+an open subset of $K$; the same is true for $\pr_y$. Moreover, around each 
+$P_0 \in E$, at least one of these projections satisfies the above condition.
+Hence the maps $\pr_x$ and $\pr_y$ define together an atlas of $E$, giving $E$ the structure of 
 a $K$-manifold.
 
 Let $P_0$ be a point in $E$ around which $\pr_x$ and $\pr_y$ both define 
 charts. Proposition \ref{prop:independence} then tells us that a 
-precision datum on $x$ determined a precision datum on $y$ and \emph{vice 
-versa}. Indeed around $P_0$, we can write $y = \sqrt{x^3 + a x + b}$ 
-(with the correct determination of the square root) and find the 
-precision on $y$ from those on $x$ using Lemma \ref{lem:main}. We can go 
+precision datum on $x$ determines a precision datum on $y$ and vice 
+versa. Indeed, in a neighborhood of $P_0$ we can write $y = \sqrt{x^3 + a x + b}$ 
+(for some choice of square root) and find the 
+precision on $y$ from the precision on $x$ using Lemma \ref{lem:main}. We can go 
 in the other direction as well by writing $x$ locally as a function of 
 $y$. A precision datum at $P_0$ is then nothing but a precision datum
 on the coordinate $x$ or on the coordinate $y$, keeping in mind that 
 each of them determines the other. Viewing a precision datum at $P_0$ as 
 a lattice in the tangent space is a nice way to make it canonical but in 
-practice we can just particularize one coordinate and handle precision
+practice we can just choose one coordinate and track precision
 only on this coordinate.
 
 We conclude this example by showing a simple method to transform a
@@ -1411,10 +1407,8 @@ relation between the precision on $x$ (which is represented by $dx$) and
 those on $y$ (which is represented by $dy$). This relation turns out to
 correspond exactly to the one which is given by Lemma \ref{lem:main}.
 
-\medskip
-
-Let us address now the case where $a$ and $b$ are themselves given with 
-finite precision. The elliptic curve $E$ is then not fully determined. So 
+Finally, consider the case where $a$ and $b$ are themselves given with 
+finite precision and $E$ is not fully determined. So 
 we cannot consider it as a $K$-manifold and the above discussion does not 
 apply readily. Nevertheless, we can always consider the submanifold of 
 $K^4$ consisting of all tuples $(a,b,x,y)$ satisfying $y^2 = x^3 + a x + 
@@ -1442,9 +1436,9 @@ M = \begin{pmatrix} I_d & N \end{pmatrix} \cdot P
 \end{equation}
 where $I_d$ denotes the $(d \times d)$ identity matrix, $N \in M_{d, 
 n-d}(K)$ and $P$ is a permutation matrix of size $n$. Moreover two 
-such writings with the same $P$ necessarily coincide. Hence each 
+such expressions with the same $P$ necessarily coincide. Hence each 
 permutation matrix $P$ defines a chart $U_P \subset \Grass(d,n)$ which
-is canonically diffeomorphism to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
+is canonically diffeomorphic to $M_{d, n-d}(K) \simeq K^{d(n-d)}$.
 
 In other words, if $V$ is a subspace of $K^n$ of dimension $d$, we 
 represent it as a matrix $M$ of the shape \eqref{eq:grass} (using row 
@@ -1471,15 +1465,10 @@ above and perform all the calculations in these charts.
 \section{Differential of usual operations}
 \label{ssec:differentials}
 
-We continue to work over a fixed ultrametric field $K$, whose absolute 
-value is denoted by $|\cdot|$. We recall that usual examples of such $K$ 
-are the field of $p$-adic numbers $\Q_p$ and the field of Laurent series 
-$k((X))$ over a base field $k$.
-
 We saw in the core of the article that the differential of an operation 
 encodes the intrinsic loss/gain of precision when performing this 
 operation. The aim of this appendix is to compute the differential of 
-many usual operations on numbers, polynomials and matrices. Surprisingly, 
+many common operations on numbers, polynomials and matrices. Surprisingly, 
 we observe that all differentials we will consider are rather easy to 
 compute even if the underlying operation is quite involved (\emph{e.g.} 
 Gr\"obner basis).
@@ -1498,14 +1487,15 @@ compute: if $z = x + y$ (resp. $z = xy$, resp $z = \frac 1 x$), we have
 $dz = dx + dy$ (resp. $dz = x \cdot dy + dx \cdot y$, resp $dz = - 
 \frac{dx}{x^2}$).
 
-A little bit more interesting is the $n$-th power map $f$ from $K$ to 
-itself. Its differential $f'(x)$ is obtained by differentiate the 
-equality $y = x^n$: we obtain $dy = n x^{n-1} dx$.
-Hence $f'(x)$ maps to ball $B_K(r)$ (where $r$ is some positive real 
-number) to $B_K(|n|{\cdot} r)$. According to Lemma \ref{lem:main}, this 
-means that the behaviour of the precision depends on the absolute value 
-of $n$. By the ultrametric inegality, we always have $|n| \leq 1$ but 
-this inegality might be strict. It happens for instance if the 
+\todofor{David}{Change to account for valuation of $x$}
+
+Slightly more interesting is the $n$-th power map $f$ from $K$ to 
+itself. Its differential $f'(x)$ is found by differentiating the 
+equation $y = x^n$, obtaining $dy = n x^{n-1} dx$.
+Hence $f'(x)$ maps the ball $B_K(r)$ to $B_K(|n|{\cdot} r)$. According to Lemma \ref{lem:main}, this 
+means that the behavior of the precision depends on the absolute value 
+of $n$. By the ultrametric inequality, we always have $|n| \leq 1$ but 
+this inequality might be strict. It happens for instance if the 
 characteristic of $K$ is divisible by $p$, in which case $n$ vanishes in 
 $K$. In that case $f'(x)$ also vanishes and Lemma \ref{lem:main} does 
 not apply. 
@@ -1520,7 +1510,7 @@ by $k$ extra digits.
 
 For any integer $d$, let us denote by $K_{< d}[X]$ the set of 
 polynomials over $K$ of degree $< d$. It is a finite dimensional vector 
-space of dimension $d+1$. The affine space $X^d + K_{< d}[X]$ is then 
+space of dimension $d$. The affine space $X^d + K_{< d}[X]$ is then 
 the set of monic polynomials over $K$ of degree $d$. We denote it by 
 $K_d[X]$.
 
@@ -1528,8 +1518,8 @@ $K_d[X]$.
 
 Beyond sums and products (which can be treated as before), two basic 
 operations involving polynomials are evaluation and interpolation.
-Evaluation is modelised by the function $(P,x) \mapsto P(x)$ where
-$P$ is some polynomial and $x$ some element in $K$. Differentiating
+Evaluation models the function $(P,x) \mapsto P(x)$, where
+$P$ is some polynomial and $x \in K$. Differentiating
 it can be done by computing
 \begin{equation}
 \label{eq:diffeval}
@@ -1552,10 +1542,12 @@ and $d y_i$ and finally recover $dP$ by performing a new interpolation.
 
 \subsubsection*{Euclidean division}
 
-Let $A$ and $B$ be two polynomials $B \neq 0$. The Euclidean division of 
-$A$ by $B$ is written $A = BQ + R$ with $\deg R < \deg B$. 
-Differentiating the above equality we find:
-$dA - dB \cdot Q = B \cdot dQ + dR$,
+Let $A$ and $B$ be two polynomials with $B \neq 0$. The Euclidean division of 
+$A$ by $B$ is the problem of finding $Q$ and $R$ with $A = BQ + R$ and $\deg R < \deg B$. 
+Differentiating the above equality we find
+\[
+dA - dB \cdot Q = B \cdot dQ + dR,
+\]
 which implies that $dQ$ and $dR$ are respectively obtained as the 
 quotient and the remainder of the Euclidean division of $dA - dB \cdot 
 Q$ by $B$. This gives the differential. We note that the discussion 
@@ -1566,16 +1558,16 @@ above extends readily to convergent series (see also
 
 We fix two positive integers $n$ and $m$ with $n \geq m$. We consider the 
 function $f : K_n[X] \times K_m[X] \to (K_{\leq n}[X])^3$ which sends a 
-couple $(A,B)$ to the triple $(D, U, V)$ where $D$ is the \emph{monic} 
+pair $(A,B)$ to the triple $(D, U, V)$ where $D$ is the \emph{monic} 
 greatest common divisor of $A$ and $B$ and $U$ and $V$ are the B\'ezout 
-coefficients of minimal degrees (they are those computed by extended 
-Euclide algorithm).
+coefficients of minimal degrees, computed by the extended 
+Euclidean algorithm.
 The nonvanishing of the resultant of $A$ and $B$ defines a Zariski open 
 subset $\mathcal V_0$ where the function $\gcd$ takes the constant value 
 $1$. On the contrary, outside $\mathcal V_0$, $\gcd(A,B)$ is a polynomial 
-of positive degree. This implies that $f$ is not continuous outside 
-$\mathcal V_0$. On the contrary, on $\mathcal V_0$, the function $f$ is
-differentiable, and actually locally analytic.
+of positive degree.  Since $\mathcal V_0$ is dense, $f$ is not continuous outside 
+$\mathcal V_0$. Conversely, the function $f$ is differentiable, and even locally analytic,
+on $\mathcal V_0$.
 
 Of course, on $\mathcal V_0$, the first component $D$ is constant and 
 therefore $dD = 0$. To compute $dU$ and $dV$, one can simply 
@@ -1585,13 +1577,13 @@ from which we deduce that $dU$ (resp. $dV$) is obtained as the
 remainder in the Euclidean division of $U{\cdot}dX$ by $B$ (resp. of 
 $V{\cdot}dX$ by $A$) where $dX = - (dA \cdot U + dB \cdot V)$.
 
-In order to go further and differentiate $f$ outside $\mathcal V_0$, we 
-define, for all integer $i$, the subset $\mathcal V_i$ of $K_n[X] \times 
+In order to differentiate $f$ outside $\mathcal V_0$, we 
+define the subset $\mathcal V_i$ of $K_n[X] \times 
 K_m[X]$ as the locus where the $\gcd$ has degree $i$. The theory of 
 subresultants shows that $\mathcal V_i$ is locally closed with respect to 
 the Zariski topology. In particular, it defines a $K$-manifold in the 
-sense of Appendix \ref{sec:manifold}. This is interesting because the 
-restriction of $f$ to $\mathcal V_i$ is now differentiable. To compute
+sense of Appendix \ref{sec:manifold}, and the 
+restriction of $f$ to $\mathcal V_i$ is differentiable. To compute
 its differential, we proceed along the same lines as before: we 
 differentiate the relation $AU + BV = D$ and obtain this way
 $A \cdot dU + B \cdot dV - dD = dX$
@@ -1611,20 +1603,29 @@ The lesson we may retain from this study is the following. If we have to
 compute the greatest common divisor of two polynomials $A$ and $B$ known 
 with finite precision, we first need to determine what is its degree. 
 However, the degree function is not continuous --- it is only upper 
-semi-continuous --- and hence cannot be determined from sure from $A$ and 
-$B$ (expect if they are coprime). We then need to make an extra 
-hypothesis and the more natural one is arguably to assume that 
-$\gcd(A,B)$ has actually the maximal degree that it can have. Once this
-assumption is made, the computation is possible and one can apply Lemma 
+semi-continuous --- and hence cannot be determined with certainty from $A$ and 
+$B$, unless the approximation to $(A,B)$ lies entirely within $\mathcal V_0$.
+
+We therefore need to make an extra hypothesis.  The most natural hypothesis to make
+is that $\gcd(A, B)$ has the maximal possible degree.  The main reason for choosing
+this convention is that if the actual polynomials $A, B \in K[X]$ have a greatest common
+divisor of degree $i$ then there is some precision for which the maximal degree will be
+equal to $i$, whereas if they have a positive
+degree common divisor then no amount of increased precision will eliminate an intersection
+with $\mathcal V_0$.  A second justification is that any other choice would yield a result
+with no precision, since $A$ and $B$ appear to lie in $\mathcal V_i$ at the known precision.
+
+
+Once this assumption is made, the computation is possible and one can apply Lemma 
 \ref{lem:main} to determine the precision of the result.
 Note that with the above convention, the $\gcd$ of $A$ and $A$ is $A$ 
-itself although there exist pair of coprime polynomials in any 
+itself although there exist pairs of coprime polynomials in any 
 neighborhood of $(A,A)$.
 
 \subsubsection*{Factorization}
 
 Suppose that we are given a polynomial $P_0 \in K_d[X]$ written as a 
-product $P_0 = A_0 B_0$ where $A_0$ and $B_0$ are monic and coprime. 
+product $P_0 = A_0 B_0$, where $A_0$ and $B_0$ are monic and coprime. 
 Hensel's lemma implies that there exists a small neighborhood $\mathcal 
 U$ of $P_0$ in $K_d[X]$ such that any $P \in \mathcal U$ factors 
 uniquely as $P = A B$ with $A$ and $B$ monic and close enough to $A_0$ 
@@ -1648,26 +1649,28 @@ An important special case of the previous study occurs when $A_0$ has
 degree $1$, that is $A_0(X) = X - \alpha_0$ with some $\alpha_0 \in K$. 
 The map $P \mapsto A$ is then nothing but the mapping that 
 follows the simple root $\alpha_0$. Of course, its differential around 
-$P_0$ can be computed by the above method. Nevertheless there is a more 
-direct way to obtain it in this particular case: we write $(P_0 + 
-dP)(\alpha_0 + d\alpha) = 0$ and expand this. We obtain this way 
-$P_0'(\alpha_0) d\alpha + dP(\alpha_0) = 0$ where $P'$ denotes the 
-derivative of $P$. Since $\alpha_0$ is a simple root, $P_0'(\alpha_0)$ 
+$P_0$ can be computed by the above method. Nevertheless, we may
+obtain it more directly by expanding the equation $(P_0 + 
+dP)(\alpha_0 + d\alpha) = 0$, obtaining
+\[
+P_0'(\alpha_0) d\alpha + dP(\alpha_0) = 0.
+\]
+Since $\alpha_0$ is a simple root, $P_0'(\alpha_0)$ 
 does not vanish and we find:
 $$d \alpha = - \frac{dP(\alpha_0)}{P'_0(\alpha_0)}.$$
 
 We now address the case of a multiple roots. Let $P_0$ be a monic 
 polynomial of degree $d$ and $\alpha_0 \in K$ be a root of $P_0$ having 
 multiplicity $m > 1$. Due to the multiplicity, it is no longer possible 
-to follow to root $\alpha_0$ in a neighborhood of $P_0$. But it is if we 
+to follow the root $\alpha_0$ in a neighborhood of $P_0$. But it is if we 
 restrict ourselves to polynomials which have a root of multiplicity $m$ 
 close to $\alpha_0$. More precisely, let us consider the locus $\mathcal 
 V_m$ consisting of monic polynomials of degree $d$ having a root of 
-multiplicity at least $m$. It is a Zariski close subset of $K_d[X]$ and 
-it contains by assumption the polynomial $P_0$ we started with. 
+multiplicity at least $m$. It is a Zariski closed subset of $K_d[X]$ and
+contains by assumption the polynomial $P_0$. 
 Moreover, the irreducible components of $\mathcal V_m$ that meet at 
 $P_0$ are in bijection with the set of roots of $P_0$ of multiplicity 
-$\geq m$. In particular $\alpha_0$ correspond to one of these 
+$\geq m$. In particular, $\alpha_0$ corresponds to one of these 
 irreducible components; let us denote it by $\mathcal V_{m,\alpha_0}$. 
 The algebraic variety $\mathcal V_{m,\alpha_0}$ is a \emph{a fortioti} 
 $K$-manifold. Moreover there exists a differentiable function $f$ which 
@@ -1686,10 +1689,10 @@ of $P$. We find:
 d \alpha = - \frac{dP^{(m-1)}(\alpha_0)}{P_0^{(m)}(\alpha_0)}.
 \end{equation}
 
-The above computation has actually interesting consequences on $p$-adic 
-precision. Let us illustrate this with an exemple. Consider the monic 
+The above computation has interesting consequences for $p$-adic 
+precision. For example, consider the monic 
 polynomial $P(X) = X^2 + O(p^{2N}) X + O(p^{2N})$ (where $N$ is some 
-large integer) and assume that we are asking a softwate to compute one 
+large integer) and suppose that we are asking a computer to compute one 
 of its roots. What is the right answer? We remark that, if $\alpha$ is 
 any $p$-adic number divisible by $p^N$, then $P(X)$ can be $X^2 - 
 \alpha^2$ whose roots are $\pm \alpha$. Conversely, we can prove that 
@@ -1706,7 +1709,7 @@ some finite precision $O(p^N)$, a root $\alpha$ of $P$ having possibly
 multiplicity $m$ (\emph{i.e.} $P(\alpha), P'(\alpha), \ldots, P^{(m-1)} 
 (\alpha)$ vanish at the given precision) can be computed at precision 
 roughly $O(p^{N/m})$. However, if we know in advance that $\alpha$ has 
-indeed multiplicity $m$ then we can compute it at precision $O(p^{N-c})$ 
+multiplicity $m$ then we can compute it at precision $O(p^{N-c})$ 
 where $c$ is some constant (depending on $P$ and $\alpha$ but not on
 $N$).
 
@@ -1718,37 +1721,36 @@ variables over $K$ and fix a monomial order on it.
 \subsubsection*{Division}
 
 We then have a notion of division in $K[\XX]$: if $f, f_1, \ldots, f_s$ 
-are polynomials in $K[\XX]$, there exists a writing:
+are polynomials in $K[\XX]$, then one may decompose $f$ as
 $$f = q_1 f_1 + \cdots + q_s f_s + r$$
 where $q_1, \ldots, q_s, r \in K[\XX]$ and no term of $r$ is divisible
 by the leading term of some $f_i$ ($1 \leq i \leq s$). Moreover, assuming
-that $(f_1, \ldots, f_s)$ is a Gr\"obner basis\footnote{Without this
-assumption, there still exists a canonical choice of $r$. We do not know
-if the computation of the differential that follows extends to a more
-general setting.} (of the ideal generated by these polynomials), the 
+that $(f_1, \ldots, f_s)$ is a Gr\"obner basis\footnote{A canonical choice of $r$ exists even without this
+assumption. However, we do not know
+if the computation of the differential that follows extends to this more
+general setting.} of the ideal generated by these polynomials, the 
 polynomial $r$ is uniquely determined and called the \emph{remainder} of 
 the division of $f$ by the family $(f_1, \ldots, f_s)$. The map 
-$(f, f_1, \ldots, f_s) \mapsto r$ is then well defined and similarly to 
-the case of univariate polynomials, we can compute its differential: we 
-find that $dr$ is obtained as the remainder of the division of $f - (q_1 
+$(f, f_1, \ldots, f_s) \mapsto r$ is then well defined and we can compute its differential,
+finding that $dr$ is obtained as the remainder of the division of $f - (q_1 
 \cdot d f_1 + \cdots + q_s \cdot d f_s)$ by $(f_1, \ldots, f_s)$.
 
 \subsubsection*{Gr\"obner basis}
 
 Recall that any 
-ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We can 
-then consider the map sending a family $(f_1, \ldots, f_s)$ of 
+ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We may
+consider the map sending a family $(f_1, \ldots, f_s)$ of 
 \emph{homogeneous}\footnote{This restriction will be convenient for us 
 mainly because we are using the article \cite{vaccon:14a}, which deals only 
-with homogeneous polynomials. It is however probably not essential.} 
+with homogeneous polynomials. It is probably not essential.} 
 polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
-\ldots, g_t)$. It follows from Theorem 1.1 of \cite{vaccon:14a} that this 
+\ldots, g_t)$. It follows from \cite{vaccon:14a}*{Thm. 1.1} that this 
 map is continuous at $(f_1, \ldots, f_s)$ provided that:
 \begin{itemize}
 \item the sequence $(f_1, \ldots, f_s)$ is regular
 \item for all $i \in \{1, \ldots, s\}$, the ideal generated by
-$f_1, \ldots, f_i$ is wearly-$w$ where $w$ denotes the fixed monomial
-order (\emph{cf} \cite{vaccon:14a} for more precisions).
+$f_1, \ldots, f_i$ is weakly-$w$ where $w$ denotes the fixed monomial
+order (\emph{cf} \cite{vaccon:14a} for more detail).
 \end{itemize}
 A similar argument proves that it is actually differentiable at such
 points. We are now going to compute the differential. For this we
@@ -1758,15 +1760,15 @@ g_t)$ generate the same ideal, we have a relation:
 \label{eq:prodgrobner}
 (g_1, \ldots, g_t) = (f_1, \ldots, f_s) \cdot A
 \end{equation}
-where $A$ is a $(s \times t)$ matrix with coefficients in $K[\XX]$.
-Moreover following Vaccon's construction, we see that the entries of $A$ 
+where $A$ is an $(s \times t)$ matrix with coefficients in $K[\XX]$.
+Following Vaccon's construction, we see that the entries of $A$ 
 can be chosen in such a way that they define differentiable functions.
-Differentiating Eq.~\eqref{eq:prodgrobner}, we get:
+Differentiating \eqref{eq:prodgrobner}, we get
 $$(d g_1, \ldots, d g_t) =
 (d f_1, \ldots, d f_s) \cdot A + (f_1, \ldots, f_s) \cdot dA.$$
-Finally, using that we are working with \emph{reduced} Gr\"obner
+Finally, since $(g_1, \ldots, g_t)$ is a \emph{reduced} Gr\"obner
 basis, the above equality implies that $d g_i$ is the remainder in
-the division of the $i$-th coefficient of the product
+the division of the $i$-th entry of the product
 $(d f_1, \ldots, d f_s) \cdot A$ by the family $(g_1, \ldots, g_t)$.
 
 \subsection{Matrices}
