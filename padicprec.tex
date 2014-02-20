@@ -12,6 +12,14 @@
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\tr}{Tr}
+\DeclareMathOperator{\com}{Com}
+\DeclareMathOperator{\Grass}{Grass}
+\DeclareMathOperator{\Lat}{Lat}
+\DeclareMathOperator{\round}{round}
 
 \begin{document}
 
@@ -36,14 +44,8 @@
 \newcommand{\OK}{\mathcal{O}_K}
 \newcommand{\XX}{\mathbf X}
 \newcommand{\trans}{{}^{\text t}}
+\newcommand{\T}{\mathcal{T}}
 
-\newcommand{\GL}{\text{\rm GL}}
-
-\newcommand{\val}{\text{\rm val}}
-\newcommand{\pr}{\text{\rm pr}}
-\newcommand{\tr}{\text{\rm Tr}}
-\newcommand{\com}{\text{\rm Com}}
-\newcommand{\Grass}{\text{\rm Grass}}
 \renewcommand{\prec}{\text{\rm prec}}
 
 \newcommand{\lb}{\ensuremath{\llbracket}}
@@ -364,6 +366,46 @@ is an important factor in analyzing its performance.  However,
 since this precision loss depends heavily on the details of the problem
 and the algorithm, we will not focus on such questions in this paper.
 
+\subsection{Precision Types}
+
+Using an arbitrary lattice to record the precision of an approximate element
+has the benefit of allowing computations to proceed without unnecessary
+precision loss using Lemma \ref{lem:main}.  However, while recording a
+lattice exactly is possible it does require a lot of space.  For example,
+the space required to store a lattice precision for a single $n \times n$
+matrix with entries of size $O(p^N)$ is $O(Nn^4)$.  Conversely, the space
+needed to record that every entry has precision $O(p^N)$ is just $O(\log N)$.
+
+\begin{deftn}
+Suppose that $E$ is a $K$-Banach space, and write $\Lat(E)$ for the set of lattices in $E$.
+A \emph{precision type} for a $K$-Banach space $E$ is a set $\T \subseteq \Lat(E)$ together
+with a function $\round : \Lat(E) \to \T$ such that
+\begin{itemize}
+\item[$(\ast)$] For every lattice $H \in \Lat(E)$, the lattice $\round(H)$ is a least upper bound for $H$ under the inclusion order:
+$H \subseteq \round(H)$ and if $T \in \T$ satisfies $T \subset \round(H)$ then $H \not\subseteq T$.
+\end{itemize}
+\end{deftn}
+
+Different precision types are appropriate for different problems.  For example,
+the final step of Kedlaya's algorithm for computing zeta functions of hyperelliptic
+curves involves taking the characteristic polynomial of the matrix of Frobenius acting
+on a $p$-adic cohomology space.  Obtaining extra precision on the entries of the
+matrix requires a long computation, so it is advisable to work with a precision type
+that does not round too much.
+
+The following list gives examples of useful precision types.  A description of the $\round$ function has been omitted for brevity.
+\begin{itemize}
+\item The \emph{lattice} precision type has $\T = \Lat(E)$.
+\item In the \emph{jagged} precision type, $\T$ consists of lattices of the shape $B_E((e_i),(r_i))$ for a fixed Banach basis $(e_i)$ of $E$.
+\item In the \emph{flat} precision type, $\T$ consists of lattices $B_E(r)$.  The flat precision type is useful since it takes so little space to store and it easy to compute with.
+\item If $E = K_{<d}[X]$ is the space of polynomials of degree less than $d$, the \emph{Newton} precision type consists of lattices $B_E((X^i),(r_i))$ where $-\log r_i$ is a convex function of $i$.  The Newton precision type is sensible if one thinks of polynomials as functions $K \to K$, since extra precision above the Newton polygon never increases the precision of an evaluation.
+\item If $E = M_{m \times n}(K)$, the \emph{column} precision type consists of lattices with identical image under all projections $\pr_i : E \to K^m$ sending a matrix to its $i$th column.  It is appropriate when considering linear maps where the image of each basis vector has the same lattice precision.
+\item If $E = \Qp \lb X \rb$, the \emph{Pollack-Stevens} precision type consists of lattices $H_N := B_E((X^i),(p^{\min(i-N,0)}))$ \cite{pollack-stevens:11a}*{\S 1.5}.  It is important when working with overconvergent modular symbols since these lattices are stable under certain Hecke operators.
+\end{itemize}
+
+A final benefit of separating precision from approximation is that it makes
+it much easier to implement algorithms capable of processing different precision types.
+
 \section{The main Lemma}
 \label{sec:mainlemma}
 
@@ -405,59 +447,6 @@ notion of differentiability.
 One can derive all usual properties of the derivative from this 
 definition: unicity, chain rules, \emph{etc}.
 
-%The following Lemma shows that the notion of lattices behaves rather 
-%well under linear\footnote{We shall see in the sequel (\emph{cf} Lemma 
-%\ref{lem:main}) that, under some extra hypothesis, the linearity 
-%assumption can be drastically relaxed.} transformations.
-%
-%\begin{lem}
-%\label{lem:morlat}
-%Let $E$ and $F$ be two $K$-Banach and $f : 
-%E \to F$ be a continuous \emph{surjective} linear map.
-%If $H$ is a lattice in $E$, then $f(H)$ is a lattice in $F$.
-%\end{lem}
-%
-%\begin{proof}
-%It is clear that $f(H)$ is a module over $B_K(1)$ which is bounded.
-%The fact that it is open is a direct consequence of the open mapping
-%Theorem.
-%\end{proof}
-%
-%To each lattice $H$ in $E$, one can attach a norm $\Vert \cdot \Vert_H$ 
-%on $E$ defined as follows. We pick $x \in E$, $x \neq 0$. We introduce
-%the set $I_x$ consisting of scalars $\lambda \in K$ such that $\lambda x 
-%\in H$. It follows from the fact that $H$ is open and bounded in $E$
-%that $I_x$ is nonempty and bounded in $K$. Therefore, the image $|I_x|$ 
-%of $I_x$ under the absolute value map is bounded and contains a positive
-%element. We can then define:
-%$$\Vert x \Vert_H = (\sup |I_x|)^{-1}.$$
-%It is an exercise to check that $\Vert \cdot \Vert_H$ is a norm over 
-%$E$.
-%
-%\begin{lem} \label{lem:reductionball}
-%\begin{enumerate}
-%\item The norms $\Vert \cdot \Vert_H$ and $\Vert \cdot \Vert$ are 
-%equivalent.
-%\item Let $B^-_{E,H}(1)$ (resp. by $B_{E,H}(1)$) the set of elements $x 
-%\in E$ such that $\Vert x \Vert_H < 1$ (resp. $\Vert x \Vert_H \leq 1$).
-%Then:
-%$$B^-_{E,H}(1) \subset H \subset B_{E,H}(1)$$
-%and the last inclusion is an equality if the absolute value on $K$ is
-%discrete.
-%\end{enumerate}
-%\end{lem}
-%
-%\begin{proof}
-%Left to the reader.
-%\end{proof}
-%
-%The first part of Lemma \ref{lem:reductionball} asserts that the 
-%identity map $\iota_H : (E, \Vert \cdot \Vert_H) \to (E, \Vert \cdot 
-%\Vert)$ is an homeomorphism. Furthermore, by the second of the Lemma, 
-%$H$ is the image under $\iota_H$ of a lattice satisfying an extra 
-%assumption: it is ``between the open unit ball and the closed unit 
-%ball''.
-
 \begin{deftn}
 \label{def:firstorder}
 Let $E$ and $F$ be two $K$-Banach spaces, $f : U \rightarrow F$ be a 
@@ -488,7 +477,7 @@ $H$ such that $B^-_E(\rho r) \subset H \subset B_E(r)$ is a first
 order lattice for $f$ at $v_0$.
 \end{lem}
 
-\begin{proof} % Call it the Banach-Schauder theorem?
+\begin{proof}
 We may assume that $v_0=0$ and $f(0)=0$. Since $f'(0)$ is surjective, the open mapping theorem provides a $C>0$ such that 
 $$B_F(1) \subset f'(0)(B_E(C)).$$
 Let $\varepsilon>0$ be such that 
