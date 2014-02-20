@@ -147,8 +147,24 @@ be interpreted in terms of lattices.  In Section \ref{sec:prec-proposal} we deta
 proposal for how to represent the precision of an element of a vector space.
 
 Section \ref{sec:mainlemma} centers on Lemma \ref{lem:main}, our main result.
-By describing how lattices transform under non-linear maps, it allows us to propogate
-precision using differentials.  In Section 
+By describing how lattices transform under non-linear maps, it allows us to propagate
+precision using differentials.  More specifically, it describes a class of first order lattices,
+whose image under a map of Banach spaces is precisely described by applying the
+differential of that map.  In Section \ref{ssec:locanalytic} we make the conditions
+of Lemma \ref{lem:main} more explicit in the case of locally analytic functions.
+
+In Section \ref{sec:tracking} we describe methods for tracking precision in practice.
+Section \ref{ssec:opt-tracking} includes a discussion of two models of precision tracking:
+one-pass tracking, where the precision lattice is propagated at each step of the algorithm,
+and two-pass tracking, where an initial pass computing rough approximations is used
+in computing the precision lattices.  In Section \ref{ssec:SOMOS-solution}, we give
+an application of these ideas to an algorithm for computing terms of the SOMOS sequence.
+
+In Appendix \ref{sec:manifold}, we extend the results of Section \ref{sec:mainlemma}
+to $p$-adic manifolds, describing how to specify precisions for points on elliptic curves
+and Grassmannians.  Finally, Appendix \ref{sec:differentials} describes how to compute
+the derivative of many common operations on polynomials and matrices, with an eye
+toward applying Lemma \ref{lem:main}.
 
 \section{Tracking Precision} \label{sec:prec-proposal}
 
@@ -463,7 +479,7 @@ f(v_0 + H) = f(v_0) + f'(v_0) (H)
 holds.
 \end{deftn}
 
-We emphasize that we require an equality in Eq.~\eqref{eq:firstorder}, 
+We emphasize that we require an equality in \eqref{eq:firstorder}, 
 and not just an inclusion! 
 With this definition in hand, we are able to state our main lemma.
 
@@ -528,7 +544,7 @@ $\Vert z_n \Vert \leq C \cdot \varepsilon r < \rho r$ and then
 $z_n \in H$. From the relation $x_{n+1} = x_n + z_n$, we finally
 deduce $x_{n+1} \in H$.
 
-Using Eq.~\eqref{eq:mainlemma} and differentiability at $0$ once more,
+Using \eqref{eq:mainlemma} and differentiability at $0$ once more,
 we get
 $$\Vert y  - f(x_n) \Vert 
 \leq \varepsilon \cdot \Vert z_{n-1} \Vert \leq \varepsilon C \cdot \Vert 
@@ -690,7 +706,7 @@ furthermore $\Vert f_m (x_i) \Vert \leq e^{-c \cdot \vert n-m \vert}
 < \Vert f_n (x_i) \Vert$ for $i$ large enough. For these $i$, we then 
 have $\Vert f(x_i) \Vert = \Vert f_n (x_i) \Vert$. Passing to the limit 
 on $i$, we find $\Lambda (f)(v) \geq u$. Comparing with 
-Eq.~\eqref{eq:lowerLambda}, we get $\Lambda (f)(v) = u = 
+\eqref{eq:lowerLambda}, we get $\Lambda (f)(v) = u = 
 \NP(f)^\star(v)$.
 
 We have then proved that the functions $\Lambda(f)$ and $\NP(f)^\star$ 
@@ -774,7 +790,7 @@ This follows directly from Proposition \ref{prop:lambdaNP} and Proposition
 It follows from the proof that Proposition \ref{prop:locanalytic} is 
 still valid if $K$ is not assumed to be algebraically closed. Indeed, 
 the functions $f_n$ --- and then $f$ also --- extend to an algebraic
-closure $\bar K$ of $K$ and Eq.~\eqref{eq:boundqueue} holds over $\bar 
+closure $\bar K$ of $K$ and \eqref{eq:boundqueue} holds over $\bar 
 K$, which is enough to conclude.
 \end{rem}
 
@@ -812,6 +828,7 @@ In this section we discuss applications of Lemma \ref{lem:main} and Proposition 
 to effective computations with $p$-adic numbers and power series.
 
 \subsection{Optimal precision tracking}
+\label{ssec:opt-tracking}
 
 We consider a function {\tt f} (in the sense of computer 
 science) that takes as input an approximate element lying in an open 
@@ -923,15 +940,15 @@ A possible solution to tackle this problem is to proceed in several
 stages as follows: 
 \begin{enumerate}[(1)]
 \item \label{item:smallprec}
-for $i$ going from $1$ to $n$, we compute $x_i$, $f'_i(x_{i-1})$ 
+for $i$ from $1$ to $n$, we compute $x_i$, $f'_i(x_{i-1})$ 
 at small precision (but enough for the second step) together with an
 approximation of the Newton polygon of the higher order derivatives;
 \item \label{item:determineHi}
-for $i$ going from $n$ to $1$, we compute $h'_i(x_i)$ and
-determines a lattice $H'_i$ satisfying \eqref{item:Hi1} and 
+for $i$ from $n$ to $1$, we compute $h'_i(x_i)$ and
+determine a lattice $H'_i$ satisfying \eqref{item:Hi1} and 
 \eqref{item:Hi2};
 \item \label{item:finalcomp}
-for $i$ going from $1$ to $n$, we recompute $x_i$ modulo $H'_i$
+for $i$ from $1$ to $n$, we recompute $x_i$ modulo $H'_i$
 and finally outputs $x_n + O\big(f'(x)(H)\big)$.
 \end{enumerate}
 Using relaxed algorithms for computing with elements in $K$ (\emph{cf} 
@@ -1091,7 +1108,7 @@ The first point is easy. Indeed, from $D_i = D(u_{i-1}, u_i, u_{i+1},
 u_{i+2}) D_{i-1}$, we deduce $\det D_i = \det D_{i-1} \cdot 
 \frac{u_i}{u_{i-3}}$ and the assertion follows by taking determinants
 and using the induction hypothesis. 
-Let us now establish Eq.~\eqref{eq:congrSOMOS}. To avoid confusion, 
+Let us now establish \eqref{eq:congrSOMOS}. To avoid confusion, 
 let us agree to denote $a'$, $b'$, $c'$, $d'$ and $\prec'$ the values of 
 $a$, $b$, $c$, $d$ and $\prec$ respectively at the \emph{beginning} of 
 the $i$-th iteration of the loop. By induction hypothesis (or by 
@@ -1117,7 +1134,7 @@ conclude by remarking first that $(a,b,c,d) \equiv f(a',b',c',d') \pmod
 {p^\prec \Z_p^4}$ by construction and second that $p^\prec \Z_p^4 \subset
 p^N \varphi_i(\Z_p^4)$.
 
-Finally Eq.~\eqref{eq:congrSOMOS} applied with $i = n-3$ together with
+Finally \eqref{eq:congrSOMOS} applied with $i = n-3$ together with
 the fact that $\varphi_i$ stabilizes $\Z_p^4$ imply that, when we exit
 the loop, the value of $d$ is congruent to $u_n$ modulo $p^N$. Hence,
 our algorithm returns the correct value.
@@ -1403,7 +1420,7 @@ Differentiating the equation of the elliptic curve, we get:
 2 y \cdot dy = (3 x^2 + a) \cdot dx.
 \end{equation}
 In the above $dx$ and $dy$ should be thought as a little perturbation of 
-$x$ and $y$ respectively. Eq.~\eqref{eq:diffec} then gives a linear 
+$x$ and $y$ respectively. Equation \eqref{eq:diffec} then gives a linear 
 relation between the precision on $x$ (which is represented by $dx$) and 
 those on $y$ (which is represented by $dy$). This relation turns out to
 correspond exactly to the one which is given by Lemma \ref{lem:main}.
@@ -1464,7 +1481,7 @@ above and perform all the calculations in these charts.
 %in tangent spaces.
 
 \section{Differential of usual operations}
-\label{ssec:differentials}
+\label{sec:differentials}
 
 We saw in the core of the article that the differential of an operation 
 encodes the intrinsic loss/gain of precision when performing this 
@@ -1537,7 +1554,7 @@ that $P(x_i) = y_i$ for all $i$. The polynomial $P$ exists and is unique
 as soon as the $x_i$'s are pairwise distinct; the above function $f$ is 
 then defined on this open set. Furthermore, if $(x_1, y_1, \ldots, x_d, 
 y_d)$ is a point in it and $P$ denotes the corresponding interpolation 
-polynomial, Eq.~\eqref{eq:diffeval} shows that $d y_i = P'(x_i) dx_i + 
+polynomial, \eqref{eq:diffeval} shows that $d y_i = P'(x_i) dx_i + 
 dP(x_i)$ for all $i$. For this, we can compute $dP(x_i)$ from $d x_i$ 
 and $d y_i$ and finally recover $dP$ by performing a new interpolation.
 
@@ -1640,7 +1657,7 @@ dP = A_0 \cdot dB + B_0 \cdot dA.
 \end{equation}
 where $dP$, $dA$ and $dB$ have degree less than $\deg P$, $\deg A$ and 
 $\deg B$ respectively. If $A_0 U_0 + B_0 V_0 = 1$ is a Bezout relation
-between $A_0$ and $B_0$, it follows from Eq.~\eqref{eq:difffactor} that
+between $A_0$ and $B_0$, it follows from \eqref{eq:difffactor} that
 $dA$ (resp. $dB$) is the remainder in the Euclidean division of $V_0
 {\cdot} dP$ by $A_0$ (resp. of $U_0 {\cdot} dP$ by $B_0$).
 
@@ -1703,7 +1720,7 @@ that $P$ has a double root, say $\alpha$, we can write $P(X) = (X -
 \alpha)^2$ and identifying the coefficient in $X$, we get $\alpha =
 O(p^{2N})$ if $p > 2$ and $\alpha = O(p^{2N-1})$ if $p=2$.
 This is exactly the result we get by applying Lemma \ref{lem:main} and
-using Eq.~\eqref{eq:dalphamult} to simplify the differential.
+using \eqref{eq:dalphamult} to simplify the differential.
 
 This phenomenon is general: if $P$ is a polynomial over $\Q_p$ known at 
 some finite precision $O(p^N)$, a root $\alpha$ of $P$ having possibly 
@@ -1775,21 +1792,20 @@ $(d f_1, \ldots, d f_s) \cdot A$ by the family $(g_1, \ldots, g_t)$.
 \subsection{Matrices}
 
 Differentiating ring operations (sum, products, inverse) over matrices 
-is again straightforward; we just need to be careful that matrix 
-algebras are (in general) noncommutative.
+is again straightforward, keeping in mind that matrix algebras are not
+commutative.
 
 \subsubsection*{Determinants and characteristic polynomials.}
 
-Let us first compute the differential of the function $\det : M_n(K) \to 
-K$. It is a standard computation. To begin with, we consider an 
-invertible matrix $M$ and write:
-\begin{eqnarray*}
-\det(M + dM) &=& \det(M) \cdot \det(I + M^{-1} \cdot dM)  \\
-&=& \det(M) \cdot \big(1 + \tr(M^{-1} \cdot dM)\big) \\
-&=& \det(M) + \tr(\com(M) \cdot dM)
-\end{eqnarray*}
-where $\com(M)$ denotes the comatrix of $M$. The differential of 
-$\det$ at $M$ is then $dM \mapsto \tr(\com(M) \cdot dM)$. It turns
+We first outline the standard computation of the differential of the function
+$\det : M_n(K) \to K$. Suppose that $M \in \GL_n(K)$ and that $\com(M) = \det(M) M^{-1}$.
+Then
+\begin{align*}
+\det(M + dM) &= \det(M) \cdot \det(I + M^{-1} \cdot dM)  \\
+&= \det(M) \cdot \big(1 + \tr(M^{-1} \cdot dM)\big) \\
+&= \det(M) + \tr(\com(M) \cdot dM).
+\end{align*}
+The differential of $\det$ at $M$ is then $dM \mapsto \tr(\com(M) \cdot dM)$. It turns
 out that this formula is still valid when $M$ is not invertible.
 The same computation extends readily to characteristic polynomials,
 since they are defined as determinants. More precisely, let us 
@@ -1800,23 +1816,23 @@ differential is given by $dM \mapsto \tr(\com(X{-}M) \cdot dM)$.
 
 \subsubsection*{LU factorization.}
 
-Let us agree to define a 
-LU factorization of a square matrix $M \in M_n(K)$ as a writing $M = LU$ 
+Define the LU factorization of a square matrix $M \in M_n(K)$ as a decomposition $M = LU$ 
 where $L$ is lower triangular and unipotent and $U$ is upper triangular. 
-Such a writing exists and is unique provided that all principal minors 
-of $M$ do not vanish. We can then consider the mapping $M \mapsto (L,U)$ 
+Such a decomposition exists and is unique provided that no principal minor
+of $M$ vanishes. We can then consider the mapping $M \mapsto (L,U)$ 
 defined over the Zariski-open set of matrices satisfying the above 
 condition. In order to differentiate it, we differentiate the relation 
-$M = LU$ and rewrite the result as follows:
+$M = LU$ and rewrite the result as
 $$L^{-1} dM \: U^{-1} = L^{-1} \cdot dL + dU \cdot U^{-1}.$$
 We remark that in the right hand side of the above formula, the first
-summand is lower triangular and all its diagonal entries vanish whereas 
+summand is lower triangular with zero diagonal whereas 
 the second summand is upper triangular. Hence in order to compute $dL$
-and $dU$, one can proceed as follows: (1)~we compute the product $dX = 
-L^{-1} dM \: U^{-1}$, (2)~we separate the lower and upper part of $dX$
-obtaining this way $L^{-1} \cdot dL$ and $dU \cdot U^{-1}$ and (3)~we
-recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the 
-left and $U$ on the right respectively. 
+and $dU$, one can proceed as follows: 
+\begin{enumerate}
+\item compute the product $dX = L^{-1} dM \: U^{-1}$,
+\item separate the lower and upper part of $dX$ obtaining $L^{-1} \cdot dL$ and $dU \cdot U^{-1}$
+\item recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the left and $U$ on the right respectively.
+\end{enumerate}
 The above discussion extends almost \emph{verbatim} to LUP 
 factorization; the only difference is that LUP factorizations are not 
 unique but they are on a small neighborhood of $M$ if we fix the matrix 
@@ -1824,19 +1840,18 @@ $P$.
 
 \subsubsection*{QR factorization.}
 
-For us, a QR factorization of a square matrix $M \in M_n(K)$ will be
-a writing $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
+A QR factorization of a square matrix $M \in M_n(K)$ will be
+a decomposition $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
 orthogonal in the sense that $\trans Q \cdot Q$ is diagonal. As before, such 
-a writing exists and is unique on a Zariski-open subset of $M_n(K)$. The
+a decomposition exists and is unique on a Zariski-open subset of $M_n(K)$. The
 mapping $f : M \mapsto (Q,R)$ is then well defined on this subset. We 
 would like to emphasize at this point that the orthogonality condition
-defines a sub-manifold of $M_n(K)$ which is a apparently \emph{not} a
-vector space (it is defined by equations of degree $2$). The codomain
-of $f$ is then also a manifold; this example then fits to the setting
+defines a sub-manifold of $M_n(K)$ which is \emph{not} a
+vector space: it is defined by equations of degree $2$. The codomain
+of $f$ is then also a manifold; this example then fits into the setting
 of Appendix \ref{sec:manifold} but not to those of Section \ref{sec:mainlemma}. 
-The generalization made in Appendix \ref{sec:manifold} is then needed.
-Anyway, we can differentiate $f$ by following the method we used for LU 
-factorization: differentiating the relation $M = QR$, we obtain:
+We can differentiate $f$ by following the method used for LU 
+factorization.  Differentiating the relation $M = QR$, we obtain
 \begin{equation}
 \label{eq:diffQR}
 \trans Q \cdot dM \cdot R^{-1} = \trans Q \cdot dQ + \Delta \cdot dR 
@@ -1847,7 +1862,7 @@ Moreover by differentiating $\trans Q \cdot Q = \Delta$, we find that
 $\trans Q \cdot dQ$ can be written as the sum of an antisymmetric 
 matrix and a diagonal one. Since moreove $dR \cdot R^{-1}$ is upper
 triangular with all diagonal entries equal to $0$, we see that 
-Eq.~\eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
+\eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
 and $dM$.
 
 \subsection{Vector spaces}
@@ -1856,7 +1871,7 @@ In computer science, vector spaces are generally represented as subspaces
 of $K^n$ for some $n$. Hence they naturally appear as points on some 
 grassmannian $\Grass(n,d)$. These grassmannians are $K$-manifolds in the 
 sense of Appendix \ref{sec:manifold} as it is discussed in \S 
-\ref{ssec:exmanifold}. In what sequel, we use freely the formalism 
+\ref{ssec:exmanifold}. In the sequel, we use freely the formalism 
 introduced there.
 
 \subsubsection*{Left kernels.}
@@ -1903,9 +1918,9 @@ pairs $(E_1, E_2)$ such that $\dim (E_1 \cap E_2) = d$ and consider the
 function $f_d : \mathcal V_d \to \Grass(n, d)$ which sends $(E_1, E_2)$ 
 to $E_1 \cap E_2$. In charts, the function $f_d$ can be interpreted as
 the kernel of a matrix simply because $E_1 \cap E_2$ appears as the
-kernel of the canonical linear map $E_1 \oplus E_2 \to K^n$. We deduce
-for this that $f_d$ is differentiable and that its differential can be
-computed similarly to what we have done before.
+kernel of the canonical linear map $E_1 \oplus E_2 \to K^n$. We thus deduce
+that $f_d$ is differentiable and that its differential can be
+computed as above.
 
 \subsubsection*{Sums and images.}
 
