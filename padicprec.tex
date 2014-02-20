@@ -954,21 +954,19 @@ and finally outputs $x_n + O\big(f'(x)(H)\big)$.
 Using relaxed algorithms for computing with elements in $K$ (\emph{cf} 
 \cite{hoeven1, hoeven2, berthomieu}), we can reuse in 
 Step~\eqref{item:finalcomp} the computations already performed in 
-Step~\eqref{item:smallprec}. The ``backward'' method we have just 
-presented is then probably not much more expansive than the ``forward'' 
-method, although it is certainly much more difficult to implement.
+Step~\eqref{item:smallprec}. The two-pass method we have just 
+presented is then probably not much more expansive than the one-pass 
+method, although it is more difficult to implement.
 
-We conclude this section by remarking that the ``backward'' method seems 
-to be particularly well suited to computations with lazy $p$-adic. Indeed 
-in this setting, a target precision (\emph{i.e.} a precision on the 
-output) is fixed and the software determines automatically the precision 
-it needs on the input to perform the computation. To do this, it first 
+We conclude this section by remarking that the two-pass method seems 
+to be particularly well suited to computations with lazy $p$-adics.
+In this setting, a target precision is fixed and the software determines automatically the precision 
+it needs on the input to achieve this output precision. To do this, it first 
 builds the ``skeleton'' of the computation (\emph{i.e.} it determines the 
 functions $f_i$ and eventually computes the $x_i$ at small precision when 
 branching points occur and it needs to decide which branch it follows) 
 and then runs over this skeleton in the reverse direction in order to 
-determine (an upper bound of) the needed precision at each step. The 
-similarity with our approach is noticeably strong.
+determine (an upper bound of) the needed precision at each step.
 
 \subsubsection*{Non-surjectivity.}
 
@@ -994,8 +992,8 @@ consisting of symmetric matrices. Nevertheless, for all pairs $(i,j)
 $M$ to its $(i,j)$-th entry. The maps $f_{ij}$'s are differentiable and 
 their differentials are generically surjective. Let $M$ be a matrix known
 at some finite precision such that 
-$f'_{ij} (M) \neq 0$ for all $(i,j)$. We can then apply the forward 
-and/or the backward computation and get $f_{ij}(M)$ together with its 
+$f'_{ij} (M) \neq 0$ for all $(i,j)$. We can then apply a one- or two-pass 
+computation and get $f_{ij}(M)$ together with its 
 precision. Putting this together, we get the whole matrix $f(M)$ 
 together with a sharp precision datum on each entry.
 
@@ -1013,8 +1011,8 @@ it has now good probability to be surjective.
 
 \medskip
 
-We conclude this section by briefly remarking that the two strategies designed 
-above (\emph{i.e.} forward and backward computations) share some 
+We conclude this section by briefly remarking that the two strategies described 
+above share some 
 similarities with usual floating point arithmetics over the reals. 
 Indeed, roughly speaking, in each setting, we begin by choosing a large 
 precision, we do all our computations up to this precision understood 
