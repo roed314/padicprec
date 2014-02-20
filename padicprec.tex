@@ -219,7 +219,6 @@ B^-_E((x_i),(r_i)) &= \Big\{ \sum_{i \in I} \alpha_i x_i : \lvert \alpha_i \rver
 \end{align*}
 are lattices precisely when the $r_i$ are bounded.  If we have equipped $E$ with a distinguished basis
 then we may drop $(x_i)$ from the notation for $B^{(-)}_E((x_i),(r_i))$.
-% Is every lattice of this shape for some Banach basis?
 
 \subsubsection*{Lattices and computers.}
 
@@ -292,6 +291,8 @@ In addition to allowing for more efficient computation of precision, storing the
 approximation makes it easier to determine the precision of the result when step-by-step precision tracking
 does not reflect the actual precision of the result.
 
+\subsubsection*{SOMOS 4.}
+
 The SOMOS 4 sequence \cite{somos:89a} is defined by the recurrence
 \[
 u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}.
@@ -340,36 +341,28 @@ and numerically stable.
 
 \subsubsection*{LU factorization.}
 
-% Frame better
-
-Let us first recall that a square matrix $M$ with coefficients in $\Qp$ 
+Let us first recall that a square matrix $M$ with coefficients in $K$ 
 admits a LU factorization if it can be written as a product $LU$ where 
 $L$ and $U$ is lower triangular and upper triangular respectively. 
 The computation of a LU factorization appears as an important tool to 
-tackle many classical questions about matrices or linear systems.
+tackle many classical questions about matrices or linear systems, and is
+discussed further in Appendix \ref{ssec:matrices}.
 
-We first note that a LU decomposition of a given matrix $M$ is unique
-if we require further that the $L$-part of this decomposition is
-unipotent (\emph{i.e.} all diagonal entries equal $1$). Let us write
-$L(M) U(M)$ the LU factorization of $M$ satisfying the above extra
-condition (when it exists). There exists Cramer-type formulae that
-gives each individual entry of $L(M)$ and $U(M)$ in a closed form
-(see \cite{caruso:12a}).
-If $M$ is random square matrix over $\Zp$ of side $d$ whose every
-coefficient is known up to precision $O(p^N)$, the two following
-results are proved in \cite{caruso:12a}:
+When computing the entries of $L$ and $U$ from a $d \times d$ matrix
+over $\Zp$ with entries of precision $O(p^N)$, one has a choice of algorithms:
 \begin{itemize}
-\item using usual Gauss elimination and tracking $p$-adic precision 
+\item using usual Gaussian elimination and tracking $p$-adic precision 
 step-by-step, the smallest precision on an entry of $L(M)$ is about
 $O(p^{N - \frac{2d}{p-1}})$ on average;
 \item computing $L(M)$ by evaluating Cramer-type formulae yields a
 result whose every entry is known up to precision $O(p^{N - 2 \log_p 
-d})$.
+d})$ \cite{caruso:12a}.
 \end{itemize}
 If $d$ is large compared to $p$, the second precision is much more
-accurate than the first one. This shows once again that ``artifical''
-losses of precision appear when one performs Gauss elimination by
-tracking precision step-by-step.
+accurate than the first one.  The precision loss inherent in an algorithm
+is an important factor in analyzing its performance.  However,
+since this precision loss depends heavily on the details of the problem
+and the algorithm, we will not focus on such questions in this paper.
 
 \section{The main Lemma}
 \label{sec:mainlemma}
@@ -746,11 +739,6 @@ It follows easily from Proposition \ref{prop:lambdaNP} and the fact that
 the slopes of the Legendre transform of a convex piecewise affine 
 function $f$ are exactly the points where $f$ is not differentiable.
 \end{proof}
-
-%Now, let $E$ and $F$ be two complete normed $K$-vector spaces, and let $f$ and the $L_k$'s be as in definition \ref{deftn:analyticNP}. We assume $L_1$ is surjective. We define, the $\overline{L_k},$ $\overline{E}$ and $\overline{F}$ by extending scalars to $\overline{K}.$ We define for any $n \geq 1$, $f_n(x)=\overline{L_n}(x,\dots,x)$ for any $x \in \overline{E}.$ 
-%Let $C$ be given by the open mapping theorem for $L_1$, $\rho \in (0, 1]$ and $\varepsilon < \frac{\rho}{C}$. We provide three methods to find a sufficient $\delta$ to define first order lattice as in lemma \ref{lem:main}.
-%
-%For the first one, we assume that we have know a function that majorates $\Lambda(\sum_{n \geq 1}f_n)$.
 
 \begin{prop}
 \label{prop:locanalytic}
@@ -1160,8 +1148,6 @@ complexity in $\tilde O (N n + n^2)$. Our approach is then interesting
 when $n$ is large compared to $N$: under this hypothesis, it saves
 roughly a factor $n$.
 
-%\section{Conclusions}
-
 \appendix
 
 \section{Generalization to manifolds}
@@ -1468,16 +1454,6 @@ Of course, in practice, when we are doing computations on subspaces of
 $K^n$ (like sum or intersection), we represent the spaces in charts as
 above and perform all the calculations in these charts.
 
-%\subsubsection*{Conclusion.}
-%
-%The theory developped in this Appendix is nice because it provides an 
-%abstract framework to deal with ultrametric precision in a quite general 
-%setting.
-%Nevertheless, as we have seen in the above examples, in practice we
-%generally carry out all calculations in charts and do not really care
-%about the ``real'' nature of the precision data, \emph{i.e.} lattices
-%in tangent spaces.
-
 \section{Differential of usual operations}
 \label{sec:differentials}
 
@@ -1503,21 +1479,16 @@ compute: if $z = x + y$ (resp. $z = xy$, resp $z = \frac 1 x$), we have
 $dz = dx + dy$ (resp. $dz = x \cdot dy + dx \cdot y$, resp $dz = - 
 \frac{dx}{x^2}$).
 
-\todofor{David}{Change to account for valuation of $x$}
-
 Slightly more interesting is the $n$-th power map $f$ from $K$ to 
 itself. Its differential $f'(x)$ is found by differentiating the 
 equation $y = x^n$, obtaining $dy = n x^{n-1} dx$.
-Hence $f'(x)$ maps the ball $B_K(r)$ to $B_K(|n|{\cdot} r)$. According to Lemma \ref{lem:main}, this 
+Hence $f'(x)$ maps the ball $B_K(r)$ to $B_K(\lvert nx^{n-1} \rvert \cdot r)$. According to Lemma \ref{lem:main}, this 
 means that the behavior of the precision depends on the absolute value 
-of $n$. By the ultrametric inequality, we always have $|n| \leq 1$ but 
-this inequality might be strict. It happens for instance if the 
-characteristic of $K$ is divisible by $p$, in which case $n$ vanishes in 
-$K$. In that case $f'(x)$ also vanishes and Lemma \ref{lem:main} does 
-not apply. 
-Another situation (which is more interesting) is that of $p$-adic 
-numbers: let us take $K = \Q_p$ and $n = p^k$ for some integer $k$. Then
-$|n| = p^{-k}$ and Lemma \ref{lem:main} reflects the well-known fact that
+of $n$. By the ultrametric inequality, we always have $\lvert n \rvert \leq 1$ but 
+may have $\lvert n \rvert = 0$ if the characteristic of $K$ divides $n$ or 
+$\lvert n \rvert = p^{-k}$ if $K$ is $p$-adic with $\val(n) = k$.  In the first case,
+$f'(x)$ also vanishes and Lemma \ref{lem:main} does 
+not apply.  In the second, Lemma \ref{lem:main} reflects the well-known fact that
 raising a $p$-adic number to the $p^k$-th power increases the precision 
 by $k$ extra digits.
 
@@ -1788,6 +1759,7 @@ the division of the $i$-th entry of the product
 $(d f_1, \ldots, d f_s) \cdot A$ by the family $(g_1, \ldots, g_t)$.
 
 \subsection{Matrices}
+\label{ssec:matrices}
 
 Differentiating ring operations (sum, products, inverse) over matrices 
 is again straightforward, keeping in mind that matrix algebras are not
