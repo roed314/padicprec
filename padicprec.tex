@@ -381,6 +381,7 @@ for all $v, w \in U_\varepsilon$.  The linear map $f'(v_0)$ is called the \emph{
 \end{deftn}
 
 \begin{rem}
+\label{rem:differentiability}
 This notion of differentiability is stronger than the usual notion with 
 which we are familiar. It implies for instance the following: if $f$ is 
 differentiable on $U$, then the function $x \mapsto f'(x)$ defined on 
@@ -1228,7 +1229,7 @@ Let $x \in V$.
 A \emph{precision datum} at $x$ is a lattice in the tangent space 
 $T_x V$ such that for all indices $i$ and $j$ with $x \in U_i \cap
 U_j$, the image of $T_x V$ in $E_i$ is a first order lattice for
-$\psi_{ij}$ at $\varphi_i(x)$ (\emph{cf} Definition \ref{def:firstorder}.
+$\psi_{ij}$ at $\varphi_i(x)$ (\emph{cf} Definition \ref{def:firstorder}).
 \end{deftn}
 
 \begin{rmk}
@@ -1306,15 +1307,15 @@ on $i$ and is a precision datum at $x$, and
 We first prove (i). For an index $i$ such that $x, x_0 \in V_i$, let us 
 denote by $f_i : T_{x_0} V \to T_x V$ the composite $\varphi'_i(x)^{-1} 
 \circ \varphi'_i(x_0)$. Given an extra index $j$ satisfying the same
-assumption, we know by \todo{(find a reference)} that the difference
-$f_i - f_j$ goes to $0$ when $x$ converges to $x_0$. Since $H_0$ is open
-in $T_{x_0} V$, this implies that $(f_j - f_i)(H_0)$ contains $f_i(H_0)$ and 
-$f_j(H_0)$ if $x$ and $x_0$ are close enough. Now, pick $w \in f_j(H_0)$ and 
-write it $w = f_j(v)$ with $v \in H_0$. Then $w$ is equal to $f_i(v) + 
-(f_j - f_i)(v)$ and then belongs to $f_i(H_0)$ because each summand does. 
-Therefore $f_j(H_0) \subset f_i(H_0)$. The inverse inclusion can be proved 
-in the same way. The fact that $H$ is a precision datum at $x$ is easy
-and left to the reader.
+assumption, the difference $f_i - f_j$ goes to $0$ when $x$ converges to 
+$x_0$ (see Remark \ref{rem:differentiability}). Since $H_0$ is open in 
+$T_{x_0} V$, this implies that $(f_j - f_i)(H_0)$ contains $f_i(H_0)$ 
+and $f_j(H_0)$ if $x$ and $x_0$ are close enough. Now, pick $w \in 
+f_j(H_0)$ and write it $w = f_j(v)$ with $v \in H_0$. Then $w$ is equal 
+to $f_i(v) + (f_j - f_i)(v)$ and then belongs to $f_i(H_0)$ because each 
+summand does. Therefore $f_j(H_0) \subset f_i(H_0)$. The inverse 
+inclusion can be proved in the same way. The fact that $H$ is a 
+precision datum at $x$ is easy and left to the reader.
 Finally, if $x$ is close enough to $x_0$, we can check (ii) in the 
 charts but this was already done.
 \end{proof}
