@@ -34,6 +34,7 @@
 \newtheorem{deftn}[theo]{Definition}
 \newtheorem{rmk}[theo]{Remark}
 
+\newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
 \newcommand{\Zp}{\Z_p}
 \newcommand{\Q}{\mathbb Q}
@@ -669,15 +670,9 @@ Keeping the above notation, we have $\Lambda (f) = \NP(f)^\star$.
 \end{prop}
 
 \begin{proof}
-Let $v \in \R$. We assume first that $\NP(f)^\star(v) = +\infty$. Then, 
-using a multilinear version of Banach-Steinhaus Theorem, we can prove 
-that $\sum_{n \geq 0} f_n$ does not converge on $B_E^-(e^v)$ and 
-therefore that $\Lambda(f)(v) = +\infty$.
-
-We now suppose that $\NP(f)^\star(v)$ is finite. To begin with, we 
-assume in addition that $v$ is not a slope of $\NP(f)$. We set $u = 
-\NP(f)^*(v)$. The function $m \mapsto \NP(f)(m) - vm + u$ has the 
-following properties: 
+Let $v \in \R$. We assume first that $\NP(f)^\star(v)$ is finite and 
+that $v$ is not a slope of $\NP(f)$. We set $u = \NP(f)^*(v)$. The 
+function $m \mapsto \NP(f)(m) - vm + u$ has the following properties:
 \begin{enumerate}
 \item it is piecewise affine and everywhere nonnegative,
 \item it does not admit $0$ as a slope and
@@ -705,6 +700,8 @@ Thus, the series $\sum_{m \geq 0} f_m(x)$ converges and $\Vert f(x)
 = vn + \log \Vert f_n \Vert = u.
 \end{equation}
 On the other hand, it follows from the definition of $\lVert f_n \rVert$ 
+and the fact that $\vert K^\star \vert$ is dense in $\R$ (which holds
+because $K$ is algebraically closed)
 that there exists a sequence $(x_i)_{i\geq 0}$ in $B^-_E(e^v)$ such that 
 $\lim_{i \to \infty} \Vert f_n (x_i) \Vert= \lVert f_n \rVert \cdot e^{vn}$. Since 
 furthermore $\Vert f_m (x_i) \Vert \leq e^{-c \cdot \vert n-m \vert} 
@@ -714,6 +711,45 @@ have $\Vert f(x_i) \Vert = \Vert f_n (x_i) \Vert$. Passing to the limit
 on $i$, we find $\Lambda (f)(v) \geq u$. Comparing with 
 \eqref{eq:lowerLambda}, we get $\Lambda (f)(v) = u = 
 \NP(f)^\star(v)$.
+
+\smallskip
+
+We now assume that $\NP(f)^\star(v) = +\infty$. The function $x \mapsto 
+\NP(f)(x) - vx$ is then not bounded from below. Since it is convex, it 
+goes to $-\infty$ when $x$ goes to $+\infty$. Going back to the 
+definition of $\NP(f)$, this implies that $v n + \log \Vert f_n \Vert$
+goes to infinity when $n$ grows. It is then enough to establish the
+following claim:
+\begin{equation}
+\label{eq:claim}
+\forall n \in \N, \quad 
+\Lambda(f)(v) \geq v n + \log \Vert f_n \Vert - \log 2.
+\end{equation}
+Let $n$ be a fixed integer. If $\Vert f_n 
+\Vert = 0$, there is nothing to prove. Otherwise, let us consider an
+element $x_n \in B^-_E(e^v)$ such that $\Vert f_n(x_n) \Vert \geq \frac 
+1 2 \Vert f_n \Vert \cdot e^{vn}$. If the series $\sum_{m \geq 0} 
+f_m(x_n)$ diverges, then $\Lambda(f)(v) = +\infty$ by definition and 
+Eq.~\eqref{eq:claim} holds. On the other hand, if it converges, the
+sequence $\Vert f_m(x_n) \Vert$ goes to $0$ when $m$ goes to infinity.
+Hence it takes its maximum value $R$ a finite number of times; let us 
+denote by $I \subset \N$ the set of the corresponding indices. For any
+$\lambda \in B_K(1)$, the series defining $f(\lambda x_n)$ converges 
+and
+$$f(\lambda x_n) \in B_F(R)
+\quad \text{and} \quad
+f(\lambda x_n) \equiv \sum_{m \in I} \lambda^m f_m(x_n)
+\pmod {B^-_F(R)}.$$
+The quotient $B_F(R) / B^-_F(R)$ is a vector space over the residue
+field of $K$, that is the field $k$ defined by $k = B_K(1)/B^-_K(1)$.
+Hensel's lemma implies that $k$ is algebraically closed (because $K$ 
+is) and then infinite. Therefore, there must exist $\lambda \in 
+B_K(1)$ such that $\sum_{m \in I} \lambda^m f_m(x_n)$ does not vanish
+in $B_F(R) / B^-_F(R)$. For such an element $\lambda$, we have $\Vert 
+f(\lambda x_n) \Vert = R \geq \frac 1 2 \Vert f_n \Vert \cdot e^{vn}$. 
+The claim \eqref{eq:claim} follows.
+
+\smallskip
 
 We have then proved that the functions $\Lambda(f)$ and $\NP(f)^\star$ 
 coincide expect maybe on the set consisting of slopes of $\NP(f)$. But 
