@@ -169,12 +169,95 @@ and Grassmannians.  Finally, Appendix \ref{sec:differentials} describes how to c
 the derivative of many common operations on polynomials and matrices, with an eye
 toward applying Lemma \ref{lem:main}.
 
-\section{Tracking Precision} \label{sec:prec-proposal}
+\section{Problems in Precision} \label{sec:prec-proposal}
+
+We begin by offering two examples that illustrate key features of $p$-adic precision.
+Recall that an element $a + O(p^N)$ of $\Qp$ has \emph{absolute precision} $N$ if
+it is well defined up to adding an unknown element of $p^N\Zp$.
+
+\subsubsection*{SOMOS 4.}
+
+The SOMOS 4 sequence \cite{somos:89a} is defined by the recurrence
+\[
+u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}.
+\]
+We shall consider the case where the initial
+terms $u_0$, $u_1$, $u_2$ and $u_3$ lie in $\Zp^\times$ and have precision $O(p^N)$.
+
+Let us first examine how the absolute precision of $u_n$ varies with $n$
+if it is computed from the precision of $u_{n-4}, \ldots, u_{n-1}$ using the recurrence.
+The computation of $u_{n+4}$ involves a division by $u_n$ and hence, roughly speaking,
+decreases the precision by a factor $p^{\val(u_n)}$.  Hence the
+step-by-step computation returns the value of $u_n$ with precision
+\begin{equation}
+\label{eq:SOMOS}
+O(p^{N-v_n})
+\quad \text{with}\quad
+v_n = \val(u_0) + \cdots + \val(u_{n-4}).
+\end{equation}
+
+On the other hand, one can prove that the SOMOS 4 sequence 
+exhibits the \emph{Laurent phenomenon} \cite{fomin-zelevinsky:02a}: for all integer 
+$n$, there exists a polynomial $P_n$ in $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 
+1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$.
+From the latter formula, it follows directly that if $u_0$, $u_1$,
+$u_2$ and $u_3$ are known up to precision $O(p^N)$ then all $u_n$'s
+are also known with the same precision. Thus, the term $v_n$ that 
+appears in \eqref{eq:SOMOS} does not reflect an intrinsic loss of
+precision but some numerical instability related to the algorithm used to compute $u_n$.
+
+\begin{rmk}
+From the above discussion, one can easily derive a numerically stable 
+algorithm that computes the SOMOS 4 sequence: 
+\begin{enumerate}
+\item compute the Laurent polynomials $P_n$ using the recurrence in 
+the ring $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 1}, T^{\pm 1}]$
+\item evaluate $P_n$ at the point $(u_0, u_1, u_2, u_3)$.
+\end{enumerate}
+However, computing the $P_n$'s is very time-consuming since it requires 
+division in a polynomial ring with $4$ variables and the
+size of the coefficients of $P_n$ explodes as $n$ grows.
+
+In Section \ref{ssec:SOMOS-solution}, we shall design an algorithm computing 
+the SOMOS 4 sequence which turns out to be, at the same time, efficient 
+and numerically stable.
+\end{rmk}
+
+\subsubsection*{LU factorization.}
+
+Let us first recall that a square matrix $M$ with coefficients in $K$ 
+admits a LU factorization if it can be written as a product $LU$ where 
+$L$ and $U$ is lower triangular and upper triangular respectively. 
+The computation of a LU factorization appears as an important tool to 
+tackle many classical questions about matrices or linear systems, and is
+discussed further in Appendix \ref{ssec:matrices}.
+When computing the entries of $L$ and $U$ from a $d \times d$ matrix
+over $\Zp$ with entries of precision $O(p^N)$, one has a choice of algorithms:
+\begin{itemize}
+\item using usual Gaussian elimination and tracking $p$-adic precision 
+step-by-step, the smallest precision on an entry of $L(M)$ is about
+$O(p^{N - \frac{2d}{p-1}})$ on average;
+\item computing $L(M)$ by evaluating Cramer-type formulae yields a
+result whose every entry is known up to precision $O(p^{N - 2 \log_p 
+d})$ \cite{caruso:12a}.
+\end{itemize}
+If $d$ is large compared to $p$, the second precision is much more
+accurate than the first one. On the other hand, the second algorithm
+is less efficient than the first one because evaluating Cramer-type
+formulae requires many computations. 
+%In \cite{caruso:12a}, the author designs a new algorithm which combines 
+%both advantages: efficiency and stability.
+%The precision loss inherent in an algorithm is an important factor in 
+%analyzing its performance.
+%However, since this precision loss depends heavily on the details of the 
+%problem and the algorithm, we will not focus on such questions in this 
+%paper.
 
 \subsection{Lattices}
 
-We recall some standard definitions from ultrametric analysis, referring to
-Schneider \cite{schneider:11a} for a complete exposition.
+In order to make our proposals for tracking precision clear, we need
+some definitions from ultrametric analysis.  See 
+Schneider \cite{schneider:11a} for a more complete exposition.
 
 Let $K$ be a field with absolute value $|\cdot| : K \to \R_{\ge 0}$.
 We assume that the induced metric is an ultrametric -- 
@@ -263,10 +346,16 @@ the uncertainty in the value of the approximate element.  In the special case th
 we recover the standard notation $a + O(p^n)$ for an approximate $p$-adic element.
 Note that the set of exact elements is dense in $E$, so every element of $E$ can be approximated.
 
-This definition encapsulates the main practical suggestion of the paper with regards to representing
-vector spaces, matrices, polynomials and power series over $K$: one should \textbf{separate} the
-approximation from the precision.  In the rest of this section we discuss some of the benefits made
-possible by such a separation.
+\subsection{Separating precision from approximation}
+\label{ssec:separation}
+
+The definition of an approximate element encapsulates the two main practical suggestions of this paper
+with regards to representing vector spaces, matrices, polynomials and power series over $K$:
+\begin{enumerate}
+\item one should \textbf{separate} the approximation from the precision,
+\item the appropriate object to represent precision is a \textbf{lattice}.
+\end{enumerate}
+In the rest of this section we discuss some of the benefits made possible these choices.
 
 Note first that using an arbitrary lattice to represent the precision of an approximate element
 can reduce precision loss when compared to storing the precision of each coefficient
@@ -282,9 +371,6 @@ Storing precisions on each coordinate of a vector amounts to only allowing preci
 $B_E((r_i))$ with respect to the standard basis.  One would be forced to truncate the intermediate precision
 to $B_E(p^{-\min(m, n)})$, yielding an artificial loss of precision in the final result.
 
-\subsection{Separating precision from approximation}
-\label{ssec:separation}
-
 In addition to allowing for a more flexible representation of the precision of an element,
 the separation of precision from approximation has other benefits as well.  If the precision
 is encoded with the approximation, certain algorithms become unusable because of their
@@ -296,125 +382,6 @@ the product to be solved separately.  By separating the precision, more algorith
 In addition to allowing for more efficient computation of precision, storing the precision separately from the
 approximation makes it easier to determine the precision of the result when step-by-step precision tracking
 does not reflect the actual precision of the result.
-
-\subsubsection*{SOMOS 4.}
-
-The SOMOS 4 sequence \cite{somos:89a} is defined by the recurrence
-\[
-u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}.
-\]
-We shall consider the case where the initial
-terms $u_0$, $u_1$, $u_2$ and $u_3$ lie in $\Zp^\times$ and have precision $O(p^N)$.
-
-Let us first examine how the absolute precision of $u_n$ varies with $n$
-if it is computed from the precision of $u_{n-4}, \ldots, u_{n-1}$ using the recurrence.
-The computation of $u_{n+4}$ involves a division by $u_n$ and hence, roughly speaking,
-decreases the precision by a factor $p^{\val(u_n)}$.  Hence the
-step-by-step computation returns the value of $u_n$ with precision
-\begin{equation}
-\label{eq:SOMOS}
-O(p^{N-v_n})
-\quad \text{with}\quad
-v_n = \val(u_0) + \cdots + \val(u_{n-4}).
-\end{equation}
-
-On the other hand, one can prove that the SOMOS 4 sequence 
-exhibits the \emph{Laurent phenomenon} \cite{fomin-zelevinsky:02a}: for all integer 
-$n$, there exists a polynomial $P_n$ in $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 
-1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$.
-From the latter formula, it follows directly that if $u_0$, $u_1$,
-$u_2$ and $u_3$ are known up to precision $O(p^N)$ then all $u_n$'s
-are also known with the same precision. Thus, the term $v_n$ that 
-appears in \eqref{eq:SOMOS} does not reflect an intrinsic loss of
-precision but some numerical instability related to the algorithm used to compute $u_n$.
-
-\begin{rmk}
-From the above discussion, one can easily derive a numerically stable 
-algorithm that computes the SOMOS 4 sequence: 
-\begin{enumerate}
-\item compute the Laurent polynomials $P_n$ using the recurrence in 
-the ring $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 1}, T^{\pm 1}]$
-\item evaluate $P_n$ at the point $(u_0, u_1, u_2, u_3)$.
-\end{enumerate}
-However, computing the $P_n$'s is very time-consuming since it requires 
-division in a polynomial ring with $4$ variables and the
-size of the coefficients of $P_n$ explodes as $n$ grows.
-
-In Section \ref{ssec:SOMOS-solution}, we shall design an algorithm computing 
-the SOMOS 4 sequence which turns out to be, at the same time, efficient 
-and numerically stable.
-\end{rmk}
-
-\subsubsection*{LU factorization.}
-
-Let us first recall that a square matrix $M$ with coefficients in $K$ 
-admits a LU factorization if it can be written as a product $LU$ where 
-$L$ and $U$ is lower triangular and upper triangular respectively. 
-The computation of a LU factorization appears as an important tool to 
-tackle many classical questions about matrices or linear systems, and is
-discussed further in Appendix \ref{ssec:matrices}.
-When computing the entries of $L$ and $U$ from a $d \times d$ matrix
-over $\Zp$ with entries of precision $O(p^N)$, one has a choice of algorithms:
-\begin{itemize}
-\item using usual Gaussian elimination and tracking $p$-adic precision 
-step-by-step, the smallest precision on an entry of $L(M)$ is about
-$O(p^{N - \frac{2d}{p-1}})$ on average;
-\item computing $L(M)$ by evaluating Cramer-type formulae yields a
-result whose every entry is known up to precision $O(p^{N - 2 \log_p 
-d})$ \cite{caruso:12a}.
-\end{itemize}
-If $d$ is large compared to $p$, the second precision is much more
-accurate than the first one. On the other hand, the second algorithm
-is less efficient than the first one because evaluating Cramer-type
-formulae requires many computations. 
-%In \cite{caruso:12a}, the author designs a new algorithm which combines 
-%both advantages: efficiency and stability.
-%The precision loss inherent in an algorithm is an important factor in 
-%analyzing its performance.
-%However, since this precision loss depends heavily on the details of the 
-%problem and the algorithm, we will not focus on such questions in this 
-%paper.
-
-\subsection{Precision Types}
-
-Using an arbitrary lattice to record the precision of an approximate 
-element has the benefit of allowing computations to proceed without 
-unnecessary precision loss using Lemma \ref{lem:main}.  However, while 
-recording a lattice exactly is possible it does require a lot of space.  
-For example, the space required to store a lattice precision for a 
-single $n \times n$ matrix with entries of size $O(p^N)$ is $O(Nn^4 
-\cdot \log p)$.  Conversely, the space needed to record that every entry 
-has precision $O(p^N)$ is just $O(\log N)$.
-
-\begin{deftn}
-Suppose that $E$ is a $K$-Banach space, and write $\Lat(E)$ for the set of lattices in $E$.
-A \emph{precision type} for a $K$-Banach space $E$ is a set $\T \subseteq \Lat(E)$ together
-with a function $\round : \Lat(E) \to \T$ such that
-\begin{itemize}
-\item[$(\ast)$] For every lattice $H \in \Lat(E)$, the lattice $\round(H)$ is a least upper bound for $H$ under the inclusion order:
-$H \subseteq \round(H)$ and if $T \in \T$ satisfies $T \subset \round(H)$ then $H \not\subseteq T$.
-\end{itemize}
-\end{deftn}
-
-Different precision types are appropriate for different problems.  For example,
-the final step of Kedlaya's algorithm for computing zeta functions of hyperelliptic
-curves involves taking the characteristic polynomial of the matrix of Frobenius acting
-on a $p$-adic cohomology space.  Obtaining extra precision on the entries of the
-matrix requires a long computation, so it is advisable to work with a precision type
-that does not round too much.
-
-The following list gives examples of useful precision types.  A description of the $\round$ function has been omitted for brevity.
-\begin{itemize}
-\item The \emph{lattice} precision type has $\T = \Lat(E)$.
-\item In the \emph{jagged} precision type, $\T$ consists of lattices of the shape $B_E((e_i),(r_i))$ for a fixed Banach basis $(e_i)$ of $E$.
-\item In the \emph{flat} precision type, $\T$ consists of lattices $B_E(r)$.  The flat precision type is useful since it takes so little space to store and it easy to compute with.
-\item If $E = K_{<d}[X]$ is the space of polynomials of degree less than $d$, the \emph{Newton} precision type consists of lattices $B_E((X^i),(r_i))$ where $-\log r_i$ is a convex function of $i$.  The Newton precision type is sensible if one thinks of polynomials as functions $K \to K$, since extra precision above the Newton polygon never increases the precision of an evaluation.
-\item If $E = M_{m \times n}(K)$, the \emph{column} precision type consists of lattices with identical image under all projections $\pr_i : E \to K^m$ sending a matrix to its $i$th column.  It is appropriate when considering linear maps where the image of each basis vector has the same lattice precision.
-\item If $E = \Qp \lb X \rb$, the \emph{Pollack-Stevens} precision type consists of lattices $H_N := B_E((X^i),(p^{\min(i-N,0)}))$ \cite{pollack-stevens:11a}*{\S 1.5}.  It is important when working with overconvergent modular symbols since these lattices are stable under certain Hecke operators.
-\end{itemize}
-
-A final benefit of separating precision from approximation is that it makes
-it much easier to implement algorithms capable of processing different precision types.
 
 \section{The main Lemma}
 \label{sec:mainlemma}
@@ -1073,6 +1040,47 @@ or using good heuristics. The main difference is that, in the
 ultrametric setting, we are able (under some mild hypothesis) to 
 quantify the precision we need at each individual step in order to be 
 sure that the final result is correct up to the required precision.
+
+\subsection{Precision Types}
+
+Using an arbitrary lattice to record the precision of an approximate 
+element has the benefit of allowing computations to proceed without 
+unnecessary precision loss using Lemma \ref{lem:main}.  However, while 
+recording a lattice exactly is possible it does require a lot of space.  
+For example, the space required to store a lattice precision for a 
+single $n \times n$ matrix with entries of size $O(p^N)$ is $O(Nn^4 
+\cdot \log p)$.  Conversely, the space needed to record that every entry 
+has precision $O(p^N)$ is just $O(\log N)$.
+
+\begin{deftn}
+Suppose that $E$ is a $K$-Banach space, and write $\Lat(E)$ for the set of lattices in $E$.
+A \emph{precision type} for a $K$-Banach space $E$ is a set $\T \subseteq \Lat(E)$ together
+with a function $\round : \Lat(E) \to \T$ such that
+\begin{itemize}
+\item[$(\ast)$] For every lattice $H \in \Lat(E)$, the lattice $\round(H)$ is a least upper bound for $H$ under the inclusion order:
+$H \subseteq \round(H)$ and if $T \in \T$ satisfies $T \subset \round(H)$ then $H \not\subseteq T$.
+\end{itemize}
+\end{deftn}
+
+Different precision types are appropriate for different problems.  For example,
+the final step of Kedlaya's algorithm for computing zeta functions of hyperelliptic
+curves involves taking the characteristic polynomial of the matrix of Frobenius acting
+on a $p$-adic cohomology space.  Obtaining extra precision on the entries of the
+matrix requires a long computation, so it is advisable to work with a precision type
+that does not round too much.
+
+The following list gives examples of useful precision types.  A description of the $\round$ function has been omitted for brevity.
+\begin{itemize}
+\item The \emph{lattice} precision type has $\T = \Lat(E)$.
+\item In the \emph{jagged} precision type, $\T$ consists of lattices of the shape $B_E((e_i),(r_i))$ for a fixed Banach basis $(e_i)$ of $E$.
+\item In the \emph{flat} precision type, $\T$ consists of lattices $B_E(r)$.  The flat precision type is useful since it takes so little space to store and it easy to compute with.
+\item If $E = K_{<d}[X]$ is the space of polynomials of degree less than $d$, the \emph{Newton} precision type consists of lattices $B_E((X^i),(r_i))$ where $-\log r_i$ is a convex function of $i$.  The Newton precision type is sensible if one thinks of polynomials as functions $K \to K$, since extra precision above the Newton polygon never increases the precision of an evaluation.
+\item If $E = M_{m \times n}(K)$, the \emph{column} precision type consists of lattices with identical image under all projections $\pr_i : E \to K^m$ sending a matrix to its $i$th column.  It is appropriate when considering linear maps where the image of each basis vector has the same lattice precision.
+\item If $E = \Qp \lb X \rb$, the \emph{Pollack-Stevens} precision type consists of lattices $H_N := B_E((X^i),(p^{\min(i-N,0)}))$ \cite{pollack-stevens:11a}*{\S 1.5}.  It is important when working with overconvergent modular symbols since these lattices are stable under certain Hecke operators.
+\end{itemize}
+
+A final benefit of separating precision from approximation is that it makes
+it much easier to implement algorithms capable of processing different precision types.
 
 \subsection{Application to SOMOS sequence}
 \label{ssec:SOMOS-solution}
