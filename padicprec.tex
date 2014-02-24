@@ -169,11 +169,23 @@ and Grassmannians.  Finally, Appendix \ref{sec:differentials} describes how to c
 the derivative of many common operations on polynomials and matrices, with an eye
 toward applying Lemma \ref{lem:main}.
 
-\section{Problems in Precision} \label{sec:prec-proposal}
+\section{Precision proposals} \label{sec:prec-proposal}
+
+\subsection{Problems in precision}
 
 We begin by offering two examples that illustrate key features of $p$-adic precision.
 Recall that an element $a + O(p^N)$ of $\Qp$ has \emph{absolute precision} $N$ if
 it is well defined up to adding an unknown element of $p^N\Zp$.
+The following problems illustrate cases where step-by-step precision tracking
+does not yield optimal results.
+
+\subsubsection*{A linear map.}
+
+Consider the function $f : \Qp^2 \to \Qp^2$ mapping $(x,y)$ to $(x+y, x-y)$ and the problem
+of computing $f \circ f(a + O(p^n), b + O(p^m))$.  Applying $f$ twice, computing precision
+with each step, yields $\left(2a + O(p^{\min(m,n)}), 2b + O(p^{\min(m, n)})\right)$.
+On the other hand, $f \circ f(x,y) = (2x, 2y)$, so one may compute the result more
+accurately as $(2a + O(p^n), 2b + O(p^m))$, with even more precision when $p=2$.
 
 \subsubsection*{SOMOS 4.}
 
@@ -309,23 +321,7 @@ B^-_E((x_i),(r_i)) &= \Big\{ \sum_{i \in I} \alpha_i x_i : \lvert \alpha_i \rver
 are lattices precisely when the $r_i$ are bounded.  If we have equipped $E$ with a distinguished basis
 then we may drop $(x_i)$ from the notation for $B^{(-)}_E((x_i),(r_i))$.
 
-\subsubsection*{Lattices and computers.}
-
-Suppose that $E \simeq K^d$ is finite dimensional.  Then if $H \subset E$
-is a lattice then there exist $a, b \in \Q_{>0}$ with
-\begin{equation}
-\label{eq:incllattice}
-B_K(a)^d \subset H \subset B_K(b)^d.
-\end{equation}
-Set $r = \frac a b$ and $R_r = \OK/B_K(r)$.  
-Then a lattice $H$ satisfying \eqref{eq:incllattice} is uniquely 
-determined by its image in the quotient $B_K(b)^d / B_K(a)^d \simeq 
-R_r^d$.  Since $R \cap \OK$ is dense in $\OK$, elements of $R_r$ may be
-represented exactly.  Thus $H$ may be encoded as a 
-$(d \times d)$ matrix with coefficients in $R_r$.  For example, when
-$K = \Qp$ the ring $R_r$ is just $(\Z / p^n\Z)$ for $n = \lfloor - \log_p r \rfloor$.
-
-\subsection{Approximate elements}
+\subsubsection*{Approximate elements.}
 
 Suppose that $E$ is a $K$-Banach space with basis $(x_i)_{i \in I}$.
 \begin{deftn}
@@ -346,6 +342,22 @@ the uncertainty in the value of the approximate element.  In the special case th
 we recover the standard notation $a + O(p^n)$ for an approximate $p$-adic element.
 Note that the set of exact elements is dense in $E$, so every element of $E$ can be approximated.
 
+\subsubsection*{Lattices and computers.}
+
+Suppose that $E \simeq K^d$ is finite dimensional.  Then if $H \subset E$
+is a lattice then there exist $a, b \in \Q_{>0}$ with
+\begin{equation}
+\label{eq:incllattice}
+B_K(a)^d \subset H \subset B_K(b)^d.
+\end{equation}
+Set $r = \frac a b$ and $R_r = \OK/B_K(r)$.  
+Then a lattice $H$ satisfying \eqref{eq:incllattice} is uniquely 
+determined by its image in the quotient $B_K(b)^d / B_K(a)^d \simeq 
+R_r^d$.  Since $R \cap \OK$ is dense in $\OK$, elements of $R_r$ may be
+represented exactly.  Thus $H$ may be encoded as a 
+$(d \times d)$ matrix with coefficients in $R_r$.  For example, when
+$K = \Qp$ the ring $R_r$ is just $(\Z / p^n\Z)$ for $n = \lfloor - \log_p r \rfloor$.
+
 \subsection{Separating precision from approximation}
 \label{ssec:separation}
 
@@ -359,17 +371,13 @@ In the rest of this section we discuss some of the benefits made possible these 
 
 Note first that using an arbitrary lattice to represent the precision of an approximate element
 can reduce precision loss when compared to storing the precision of each coefficient
-$\alpha_i$ in \eqref{eq:exact_elt} separately.  Consider the function 
-$f : \Qp^2 \to \Qp^2$ mapping $(x,y)$ to $(x+y, x-y)$ and the problem of computing
-$f \circ f(a + O(p^n), b + O(p^m))$.
-
-Write $(e_1, e_2)$ for the standard basis of $E=\Qp^2$.  Since $f$ is linear, the image of
+$\alpha_i$ in \eqref{eq:exact_elt} separately.  Recall the map 
+$f : (x,y) \mapsto (x+y, x-y)$ from the beginning of the section, and write $(e_1, e_2)$
+for the standard basis of $E=\Qp^2$.  Since $f$ is linear, the image of
 the approximation $\bigl((a,b), B_E\bigl((e_1,e_2),(p^{-n}, p^{-m})\bigr)\bigr)$ is
 $\bigl((a+b, a-b), B_E\bigl((e_1+e_2, e_1-e_2), (p^{-n}, p^{-m})\bigr)\bigr)$.
 For $p \ne 2$, applying $f$ again yields $\bigl((2a, 2b), B_E\bigl((e_1, e_2), (p^{-n}, p^{-m})\bigr)\bigr)$.
-Storing precisions on each coordinate of a vector amounts to only allowing precisions of the form
-$B_E((r_i))$ with respect to the standard basis.  One would be forced to truncate the intermediate precision
-to $B_E(p^{-\min(m, n)})$, yielding an artificial loss of precision in the final result.
+By using lattices one eliminates the loss of precision seen previously.
 
 In addition to allowing for a more flexible representation of the precision of an element,
 the separation of precision from approximation has other benefits as well.  If the precision
@@ -379,11 +387,7 @@ can needlessly lose precision when operating on polynomials with inexact coeffic
 However, it works perfectly well on exact approximations, leaving the question of the precision of
 the product to be solved separately.  By separating the precision, more algorithms become available.
 
-In addition to allowing for more efficient computation of precision, storing the precision separately from the
-approximation makes it easier to determine the precision of the result when step-by-step precision tracking
-does not reflect the actual precision of the result.
-
-\section{The main Lemma}
+\section{Lattices and differentials}
 \label{sec:mainlemma}
 
 Our theory of $p$-adic precision rests upon a lemma in $p$-adic 
@@ -839,7 +843,7 @@ integers and $\vert \underline n \vert$ is the sum of the coordinates
 of $\underline n$.
 \end{rem}
 
-\section{Tracking precision using differentials}
+\section{Precision in practice}
 \label{sec:tracking}
 
 In this section we discuss applications of Lemma \ref{lem:main} and Proposition \ref{prop:locanalytic}
@@ -1079,8 +1083,14 @@ The following list gives examples of useful precision types.  A description of t
 \item If $E = \Qp \lb X \rb$, the \emph{Pollack-Stevens} precision type consists of lattices $H_N := B_E((X^i),(p^{\min(i-N,0)}))$ \cite{pollack-stevens:11a}*{\S 1.5}.  It is important when working with overconvergent modular symbols since these lattices are stable under certain Hecke operators.
 \end{itemize}
 
-A final benefit of separating precision from approximation is that it makes
-it much easier to implement algorithms capable of processing different precision types.
+Note that sometimes the precision of a final result can be computed
+a priori (using the methods of Section \ref{sec:differentials} for example).
+Taking advantage of such knowledge can minimize artificial precision loss
+even when using rougher precision types such as flat or jagged.
+Separating precision from approximation also makes
+it much easier to implement algorithms capable of processing different precision types,
+since one can implement the arithmetic of the approximation separately from the logic
+handling the precision.
 
 \subsection{Application to SOMOS sequence}
 \label{ssec:SOMOS-solution}
