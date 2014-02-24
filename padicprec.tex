@@ -133,7 +133,7 @@ that track precision in this way.
 
 The approach of propagating precision with each arithmetic operation works well, but does
 sometimes underestimate the known precision of a result, as we will discuss in Section
-\ref{ssec:separation}.  Moreover, elements of $\Qp$ provide building blocks for generic
+\ref{ssec:stepbystep}.  Moreover, elements of $\Qp$ provide building blocks for generic
 implementations of polynomials, vector spaces, matrices and power series.  The practice
 of storing the precision within each entry is not flexible enough for all applications.
 Sometimes only a rough accounting of precision is needed, in which case storing
@@ -172,12 +172,16 @@ toward applying Lemma \ref{lem:main}.
 \section{Precision proposals} \label{sec:prec-proposal}
 
 \subsection{Problems in precision}
+\label{ssec:stepbystep}
 
-We begin by offering two examples that illustrate key features of $p$-adic precision.
-Recall that an element $a + O(p^N)$ of $\Qp$ has \emph{absolute precision} $N$ if
-it is well defined up to adding an unknown element of $p^N\Zp$.
-The following problems illustrate cases where step-by-step precision tracking
-does not yield optimal results.
+The usual way to track $p$-adic precision consists in replacing $p$-adic 
+numbers by approximate elements of the form $a + O(p^N)$ and performing 
+all usual arithmetical operations on these approximations.
+%Recall that 
+%an element $a + O(p^N)$ of $\Qp$ has \emph{absolute precision} $N$ if it 
+%is well defined up to adding an unknown element of $p^N\Zp$.
+We offer below three examples that illustrate cases where this way to 
+track precision does not yield optimal results.
 
 \subsubsection*{A linear map.}
 
@@ -195,7 +199,6 @@ u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}.
 \]
 We shall consider the case where the initial
 terms $u_0$, $u_1$, $u_2$ and $u_3$ lie in $\Zp^\times$ and have precision $O(p^N)$.
-
 Let us first examine how the absolute precision of $u_n$ varies with $n$
 if it is computed from the precision of $u_{n-4}, \ldots, u_{n-1}$ using the recurrence.
 The computation of $u_{n+4}$ involves a division by $u_n$ and hence, roughly speaking,
@@ -272,9 +275,9 @@ some definitions from ultrametric analysis.  See
 Schneider \cite{schneider:11a} for a more complete exposition.
 
 Let $K$ be a field with absolute value $|\cdot| : K \to \R_{\ge 0}$.
-We assume that the induced metric is an ultrametric -- 
-\[ \lvert x + y \rvert \leq \max(\lvert x \rvert, \lvert y \rvert) \]
--- and that $K$ is complete with respect to it.
+We assume that the induced metric is an ultrametric (\emph{i.e.}
+$\lvert x + y \rvert \leq \max(\lvert x \rvert, \lvert y \rvert)$)
+and that $K$ is complete with respect to it.
 For example, we may take $K = \Qp$ with the
 $p$-adic absolute value or $K = k\lp t \rp$ with the $t$-adic absolute value.
 Write $\OK$ for the ring $\{x \in K : \lvert x \rvert \le 1\}$ and assume
@@ -296,20 +299,14 @@ A \emph{lattice} in a $K$-Banach space $E$ is an open bounded sub-$\OK$-module o
 We underline that any lattice $H$ in $E$ is also closed since its 
 complement is the union of all cosets $a + H$ (with $a \not\in H$) which 
 are all open.
-
 For a $K$-Banach space $E$ and $r \in \R_{\ge 0}$, write
-\begin{align*}
-B_E(r) &= \{ x \in E : \Vert x \Vert \le r \}, \\
-B^-_E(r) &= \{ x \in E : \Vert x \Vert < r\}.
-\end{align*}
+$$B_E(r) = \{ x \in E : \Vert x \Vert \le r \}, 
+\quad B^-_E(r) = \{ x \in E : \Vert x \Vert < r\}.$$
 Note that $B_E(r)$ and $B^-_E(r)$ are both lattices.
 
 Suppose $E$ is a $K$-Banach space and $I$ a set.
 A family $(x_i)_{i \in I} \subset E$ is a \emph{Banach basis} for $E$ if
-every element $x \in E$ can be written
-\[
-x = \sum_{i \in I} \alpha_i x_i
-\]
+every element $x \in E$ can be written $x = \sum_{i \in I} \alpha_i x_i$
 for scalars $\alpha_i \in K$ with $\alpha_i \to 0$, and $\Vert x \Vert = \sup_{i \in I} \lvert \alpha_i \rvert$.
 Note that if $E$ is finite dimensional then the condition $\alpha_i \to 0$ is vacuous.
 
@@ -325,6 +322,7 @@ then we may drop $(x_i)$ from the notation for $B^{(-)}_E((x_i),(r_i))$.
 
 Suppose that $E$ is a $K$-Banach space with basis $(x_i)_{i \in I}$.
 \begin{deftn}
+\label{def:approximate}
 \begin{itemize}
 \item An element $x \in E$ is \emph{exact} if there is a finite subset $J \subseteq I$ and scalars $\alpha_j \in R$ with
 \begin{equation} \label{eq:exact_elt}
@@ -361,7 +359,7 @@ $K = \Qp$ the ring $R_r$ is just $(\Z / p^n\Z)$ for $n = \lfloor - \log_p r \rfl
 \subsection{Separating precision from approximation}
 \label{ssec:separation}
 
-The definition of an approximate element encapsulates the two main practical suggestions of this paper
+Definition \ref{def:approximate} encapsulates the two main practical suggestions of this paper
 with regards to representing vector spaces, matrices, polynomials and power series over $K$:
 \begin{enumerate}
 \item one should \textbf{separate} the approximation from the precision,
@@ -378,6 +376,7 @@ the approximation $\bigl((a,b), B_E\bigl((e_1,e_2),(p^{-n}, p^{-m})\bigr)\bigr)$
 $\bigl((a+b, a-b), B_E\bigl((e_1+e_2, e_1-e_2), (p^{-n}, p^{-m})\bigr)\bigr)$.
 For $p \ne 2$, applying $f$ again yields $\bigl((2a, 2b), B_E\bigl((e_1, e_2), (p^{-n}, p^{-m})\bigr)\bigr)$.
 By using lattices one eliminates the loss of precision seen previously.
+We shall see in the next section that a similar phenomenon occurs for non-linear mappings as well.
 
 In addition to allowing for a more flexible representation of the precision of an element,
 the separation of precision from approximation has other benefits as well.  If the precision
@@ -401,7 +400,7 @@ Our goal in this section is to relate the image of a lattice under a
 differentiable map to its image under the derivative.
 
 \begin{deftn} \label{deftn : diff}
-Let $E$ and $F$ be two normed $K$-vector spaces, let $U$ be an open 
+Let $E$ and $F$ be two $K$-Banach spaces, let $U$ be an open 
 subset of $E$ and let $f : U \rightarrow F$ be a map. Then $f$ is called 
 \emph{differentiable} at $v_0 \in U$ if there exists a continuous linear 
 map $f'(v_0) : U \rightarrow W$ such that for any $\varepsilon >0$, 
@@ -425,8 +424,8 @@ article, we prefer a simpler terminology since we shall only use this
 notion of differentiability.
 \end{rem}
 
-One can derive all usual properties of the derivative from this 
-definition: unicity, chain rules, \emph{etc}.
+%One can derive all usual properties of the derivative from this 
+%definition: unicity, chain rules, \emph{etc}.
 
 \begin{deftn}
 \label{def:firstorder}
@@ -454,7 +453,7 @@ U$ and that the differential $f'(v_0)$ is surjective.
 
 Then, for all $\rho \in (0, 1]$, there exists a positive real 
 number $\delta$ such that, for all $r \in (0, \delta)$, any lattice
-$H$ such that $B^-_E(\rho r) \subset H \subset B_E(r)$ is a first
+$H$ such that $B^-_E(\rho r) \subset H \subset B^{\phantom -}_E(r)$ is a first
 order lattice for $f$ at $v_0$.
 \end{lem}
 
@@ -466,7 +465,7 @@ $\varepsilon C < \rho$, and choose $U_\varepsilon \subset E$ as in Definition
 \ref{deftn : diff}.  We may assume $U_\varepsilon = B_E(\delta)$ for some $\delta >0$.
 
 Let $r \in (0, \delta)$. We suppose that $H$ is a lattice with 
-$B^-_E(\rho r) \subset H \subset B_E(r).$
+$B^-_E(\rho r) \subset H \subset B^{\phantom -}_E(r).$
 We seek to show that $f$ maps $H$ surjectively onto $f'(0) (H)$. We first prove 
 that $f(H) \subset f'(0) (H)$. Suppose $x \in H$. By differentiability at 
 $0$, $\Vert f(x)-f'(0)(x) \Vert \leq \varepsilon \Vert x \Vert $. 
@@ -477,7 +476,7 @@ Setting $y=f(x)-f'(0)(x)$, we have $\Vert y \Vert \leq
 $\varepsilon C < \rho$, we get $x' \in B^-_E(\rho r) \subset H$ and 
 then $f(x)= f'(0) (x-x') \in f'(0) (H)$.
 
-We shall now prove surjectivity. Let $y \in f'(0) (H)$. Let $x_0 \in H$ 
+We now prove surjectivity. Let $y \in f'(0) (H)$. Let $x_0 \in H$ 
 be such that $y = f'(0) (x_0)$. We inductively define two sequences 
 $(x_n)$ and $(z_n)$ as follows:
 \begin{itemize}
@@ -576,7 +575,7 @@ When the series $\sum_n f_n(h)$ converges, we denote by $f(h)$ its sum;
 we shall write $f = \sum_{n \geq 0} f_n$. We assume that $f$ is defined
 in a neighborhood of $0$. Under this assumption, the datum of $f$ 
 uniquely determines the $f_n$'s (a consequence of Proposition 
-\ref{prop:lambdaNP}).
+\ref{prop:lambdaNP} below).
 To such a series $f$, we attach the function $\Lambda(f) : \R \to \R 
 \cup \{+\infty\}$ defined by:
 $$\begin{array}{rcll}
@@ -641,8 +640,15 @@ Keeping the above notation, we have $\Lambda (f) = \NP(f)^\star$.
 \end{prop}
 
 \begin{proof}
-Let $v \in \R$. We assume first that $\NP(f)^\star(v)$ is finite and 
-that $v$ is not a slope of $\NP(f)$. We set $u = \NP(f)^*(v)$. The 
+We first remark that the functions $\Lambda(f)$ and $\NP(f)^\star$ 
+are both left continuous. It is then enough to prove that they are
+equal on a dense subset of $\R$. We are going to prove that they
+coincide expect maybe on the set consisting of slopes of $\NP(f)$.
+
+\smallskip
+
+Let $v \in \R$ which is not a slope of $\NP(f)$. We assume first that 
+$\NP(f)^\star(v)$ is finite. We set $u = \NP(f)^*(v)$. The 
 function $m \mapsto \NP(f)(m) - vm + u$ has the following properties:
 \begin{enumerate}
 \item it is piecewise affine and everywhere nonnegative,
@@ -697,7 +703,7 @@ following claim:
 \Lambda(f)(v) \geq v n + \log \Vert f_n \Vert - \log 2.
 \end{equation}
 Let $n$ be a fixed integer. If $\Vert f_n 
-\Vert = 0$, there is nothing to prove. Otherwise, let us consider an
+\Vert = 0$, there is nothing to prove. Otherwise, we consider an
 element $x_n \in B^-_E(e^v)$ such that $\Vert f_n(x_n) \Vert \geq \frac 
 1 2 \Vert f_n \Vert \cdot e^{vn}$. If the series $\sum_{m \geq 0} 
 f_m(x_n)$ diverges, then $\Lambda(f)(v) = +\infty$ by definition and 
@@ -713,20 +719,12 @@ f(\lambda x_n) \equiv \sum_{m \in I} \lambda^m f_m(x_n)
 \pmod {B^-_F(R)}.$$
 The quotient $B_F(R) / B^-_F(R)$ is a vector space over the residue
 field of $K$, that is the field $k$ defined by $k = B_K(1)/B^-_K(1)$.
-Hensel's lemma implies that $k$ is algebraically closed (because $K$ 
+It is clearly algebraically closed (because $K$ 
 is) and then infinite. Therefore, there must exist $\lambda \in 
 B_K(1)$ such that $\sum_{m \in I} \lambda^m f_m(x_n)$ does not vanish
 in $B_F(R) / B^-_F(R)$. For such an element $\lambda$, we have $\Vert 
 f(\lambda x_n) \Vert = R \geq \frac 1 2 \Vert f_n \Vert \cdot e^{vn}$. 
 The claim \eqref{eq:claim} follows.
-
-\smallskip
-
-We have then proved that the functions $\Lambda(f)$ and $\NP(f)^\star$ 
-coincide expect maybe on the set consisting of slopes of $\NP(f)$. But 
-we remark that this set is countable and that both functions $\Lambda 
-(f)$ and $\NP(f)^\star$ are left continuous. This is enough to ensure 
-that $\Lambda (f)$ and $\NP(f)^\star$ coincide everywhere.
 \end{proof}
 
 \begin{rem}
@@ -780,8 +778,8 @@ Then the conclusion of Lemma \ref{lem:main} holds with $\delta = e^\nu$.
 
 \begin{rem}
 On a neighborhood of $-\infty$, the function $x \mapsto \Lambda(f)_{\geq 
-2} (x) - x$ is affine of slope $1$. This implies that, for all $\rho \in
-(0,1]$, there exists $\nu$ satisfying \eqref{eq:locanalytic}. Moreover,
+2} (x) - x$ is affine with slope $1$. This implies that, for all $\rho 
+\in (0,1]$, there exists $\nu$ satisfying \eqref{eq:locanalytic}. Moreover,
 if $\rho$ is close enough to $0$, then one can take $\delta = e^\nu$ as a 
 linear function of $\rho$.
 \end{rem}
@@ -861,7 +859,7 @@ mathematical function $f : U \to V$: when
 {\tt f} is called on the input $x + O(H)$, it outputs $x' + O(H')$ with 
 $f(x+H) \subseteq x' + H'$. We say that {\tt f} \emph{preserves precision}
 if the above inclusion is an equality; it is 
-often not the case as shown in Section \ref{ssec:separation}.
+often not the case as shown in Section \ref{ssec:stepbystep}.
 
 Let us assume now that $f$ is locally analytic on $U$ and
 that $f'(x)$ is surjective. Proposition \ref{prop:locanalytic} then 
@@ -877,8 +875,8 @@ explain how, under the above hypothesis, one can implement the function
 The execution of the function {\tt f} yields a factorization:
 $$f = f_n \circ f_{n-1} \circ \cdots \circ f_1$$
 where the $f_i$'s correspond to each individual basic step (like 
-addition, multiplication or creation of variables); it is then a
-``nice'' (in particular locally analytic) function. For all 
+addition, multiplication or creation of variables); they are then
+``nice'' (in particular locally analytic) functions. For all 
 $i$, let $U_i$ denote the codomain of $f_i$. Of course $U_i$ must
 contains all possible values of all variables which are defined in the 
 program after the execution of $i$-th step. Mathematically, we assume
@@ -964,7 +962,8 @@ stages as follows:
 \item \label{item:smallprec}
 for $i$ from $1$ to $n$, we compute $x_i$, $f'_i(x_{i-1})$ 
 at small precision (but enough for the second step) together with an
-approximation of the Newton polygon of the higher order derivatives;
+upper bound of the function $\Lambda(h \mapsto f_i(x_{i-1}+h) - 
+f_i(x_{i-1}))$;
 \item \label{item:determineHi}
 for $i$ from $n$ to $1$, we compute $h'_i(x_i)$ and
 determine a lattice $H'_i$ satisfying \eqref{item:Hi1} and 
@@ -1034,16 +1033,17 @@ it has now good probability to be surjective.
 
 \medskip
 
-We conclude this section by briefly remarking that the two strategies described 
-above share some 
-similarities with usual floating point arithmetics over the reals. 
-Indeed, roughly speaking, in each setting, we begin by choosing a large 
-precision, we do all our computations up to this precision understood 
-that when we are not sure about some digit, we choose it ``at random'' 
-or using good heuristics. The main difference is that, in the 
-ultrametric setting, we are able (under some mild hypothesis) to 
-quantify the precision we need at each individual step in order to be 
-sure that the final result is correct up to the required precision.
+\subsubsection*{Quick comparison with floating point arithmetics.}
+
+The two strategies described above share some similarities with usual 
+floating point arithmetics over the reals. Indeed, roughly speaking, in 
+each setting, we begin by choosing a large precision, we do all our 
+computations up to this precision understood that when we are not sure 
+about some digit, we choose it ``at random'' or using good heuristics. 
+The main difference is that, in the ultrametric setting, we are able 
+(under some mild hypothesis) to quantify the precision we need at each 
+individual step in order to be sure that the final result is correct up 
+to the required precision.
 
 \subsection{Precision Types}
 
@@ -1098,18 +1098,17 @@ handling the precision.
 We illustrate the theory developed above by giving a simple 
 toy application. Other applications will be discussed in subsequent 
 articles. More precisely, we study the SOMOS 4 sequence introduced in \S 
-\ref{ssec:separation}. Making a crucial use of Lemma \ref{lem:main} and 
+\ref{ssec:stepbystep}. Making a crucial use of Lemma \ref{lem:main} and 
 Proposition \ref{prop:locanalytic}, we design a \emph{stable} algorithm 
 for computing it.
 
-Recall (\emph{cf} \S \ref{ssec:separation}) that a SOMOS 4 sequence is a 
+Recall from \S \ref{ssec:stepbystep} that a SOMOS 4 sequence is a 
 four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
 + u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
 Laurent phenomenon: it means that, if the four initial terms $u_0, u_1, 
 u_2, u_3$ are some indeterminates, then each $u_n$ is a Laurent 
 polynomial with coefficients in $\Z$ in these indeterminates
 (see \cite{fomin-zelevinsky:02a}).
-
 From now, we will always consider SOMOS sequences with values in $\Q_p$ 
 (for some prime number $p$). We assume for simplicity that $u_0, u_1, u_2, 
 u_3$ are all units in $\Z_p$. By the Laurent phenomenon, this implies 
@@ -1141,7 +1140,7 @@ $\prec$ $\leftarrow$ $N$\;
 \caption{\sc SOMOS$(a, b, c, d, n, N)$}\label{algo:SOMOS}
 \end{algorithm}
 
-We now prove that Algorithm \ref{algo:SOMOS} produces the correct result.
+We now prove that it is correct.
 We introduce the function $f : \Qp^\times \times \Q_p^3 \to \Q_p^4$ defined by 
 $f(a,b,c,d) = (b,c,d,\frac{bd+c^2}a)$. For all $i$, we have 
 $(u_i, u_{i+1}, u_{i+2}, u_{i+3}) = f_i(u_0, u_1, u_2, u_3)$ where $f_i
@@ -1157,9 +1156,9 @@ $$D(a,b,c,d) = \begin{pmatrix}
 whose determinant is $\frac{bd+c^2}{a^2}$. Thus, if the $(i+4)$-th term 
 of the SOMOS sequence is defined, the mapping $f_i$ is differentiable
 at $(u_0, u_1, u_2, u_3)$ and its differential $\varphi_i = 
-f'_i(u_0, u_1, u_2, u_3)$ is given by the matrix:
-$$D_i = D(u_{i-1}, u_i, u_{i+1}, u_{i+2}) \cdots
-D(u_1, u_2, u_3, u_4) \cdot D(u_0, u_1, u_2, u_3).$$
+f'_i(u_0, u_1, u_2, u_3)$ is given by the matrix
+$D_i = D(u_{i-1}, u_i, u_{i+1}, u_{i+2}) \cdots
+D(u_1, u_2, u_3, u_4) \cdot D(u_0, u_1, u_2, u_3)$.
 Thanks to the Laurent phenomenon, we know that $D_i$ has
 integral coefficients, \emph{i.e.} $\varphi_i$ stabilizes the lattice
 $\Z_p^4$.
@@ -1175,7 +1174,7 @@ u_{i+2}) D_{i-1}$, we deduce $\det D_i = \det D_{i-1} \cdot
 \frac{u_i}{u_{i-3}}$ and the assertion follows by taking determinants
 and using the induction hypothesis. 
 Let us now establish \eqref{eq:congrSOMOS}. To avoid confusion, 
-let us agree to denote $a'$, $b'$, $c'$, $d'$ and $\prec'$ the values of 
+let us agree to denote by $a'$, $b'$, $c'$, $d'$ and $\prec'$ the values of 
 $a$, $b$, $c$, $d$ and $\prec$ respectively at the \emph{beginning} of 
 the $i$-th iteration of the loop. By induction hypothesis (or by 
 initialization if $i = 1$), we have:
@@ -1209,7 +1208,7 @@ our algorithm returns the correct value.
 
 We conclude this section by remarking that Algorithm 
 \ref{algo:SOMOS} performs computations at precision at most $O(p^{N+v})$ 
-where $v$ is the sum of the valuations of five consequence terms among 
+where $v$ is the maximum of the sum of the valuations of five consecutive terms among 
 the first $n$ terms of the SOMOS sequence we are considering. 
 Experiments show that the value of $v$ varies like $c \cdot \log n$ 
 where $c$ is some constant. Assuming that we are using a FFT-like 
@@ -1332,9 +1331,9 @@ equality
  = \varphi_j^{-1}\big(\varphi_j(x) + \varphi_j'(x)(H)\big)
  \]
 is clearly equivalent to
-$\psi_{ij}(x_i + H_i) = \psi_{ij}(x_i) + \psi'_{ij}(x_i)(H_i)$.
+$\psi_{ij}(x_i + H_i) = \psi_{ij}(x_i) + \psi'_{ij}(x_i)(H_i)$
 and the latter holds because $H_i$ is a first order lattice
-of $\psi_{ij}$ at the point $x_i$ by definition.
+for $\psi_{ij}$ at $x_i$.
 \end{proof}
 
 We are now in position to define $x + O(H)$.
@@ -1393,8 +1392,8 @@ to $f_i(v) + (f_j - f_i)(v)$ and thus belongs to $f_i(H_0)$ because each
 summand does. Therefore $f_j(H_0) \subset f_i(H_0)$. The inverse 
 inclusion is proved in the same way. The fact that $H$ is a 
 precision datum at $x$ is easy and left to the reader.
-Finally, if $x$ is close enough to $x_0$, we can check (ii) in the 
-charts but this was already done.
+Finally, if $x$ is close enough to $x_0$, it is enough to check (ii) in 
+the charts but this was already done.
 \end{proof}
 
 \subsection{Generalization of the main Lemma}
@@ -1422,7 +1421,8 @@ is surjective.
 
 Then, for all $\rho \in (0, 1]$, there exists a positive real 
 number $\delta$ such that, for all $r \in (0, \delta)$, any lattice
-$H$ in $T_x V$ such that $B^-_{T_x V}(\rho r) \subset H \subset B_{T_x V}(r)$ is a first
+$H$ in $T_x V$ such that $B^-_{T_x V}(\rho r) \subset H \subset 
+B^{\phantom -}_{T_x V}(r)$ is a first
 order lattice for $f$ at $x$.
 \end{lem}
 
@@ -1590,9 +1590,9 @@ $P$ is some polynomial and $x \in K$. Differentiating
 it can be done by computing
 \begin{equation}
 \label{eq:diffeval}
-(P + dP)(x + dx) = P(x + dx) + dP(x + dx) = P(x) + P'(x) dx + dP(x)
+(P + dP)(x + dx) = P(x + dx) + dP(x + dx) = P(x) + P'(x) dx + dP(x).
 \end{equation}
-and neglecting terms of order $2$. Here $P'$ denotes the derivative of 
+Here $P'$ denotes the derivative of 
 $P$. The differential at $P$ is then the linear map $(dP, dx) \mapsto 
 P'(x) dx + dP(x)$.
 
@@ -1633,7 +1633,7 @@ The nonvanishing of the resultant of $A$ and $B$ defines a Zariski open
 subset $\mathcal V_0$ where the function $\gcd$ takes the constant value 
 $1$. On the contrary, outside $\mathcal V_0$, $\gcd(A,B)$ is a polynomial 
 of positive degree.  Since $\mathcal V_0$ is dense, $f$ is not continuous outside 
-$\mathcal V_0$. Conversely, the function $f$ is differentiable, and even locally analytic,
+$\mathcal V_0$. On the contrary, the function $f$ is differentiable, and even locally analytic,
 on $\mathcal V_0$.
 
 Of course, on $\mathcal V_0$, the first component $D$ is constant and 
@@ -1681,8 +1681,6 @@ equal to $i$, whereas if they have a positive
 degree common divisor then no amount of increased precision will eliminate an intersection
 with $\mathcal V_0$.  A second justification is that any other choice would yield a result
 with no precision, since $A$ and $B$ appear to lie in $\mathcal V_i$ at the known precision.
-
-
 Once this assumption is made, the computation is possible and one can apply Lemma 
 \ref{lem:main} to determine the precision of the result.
 Note that with the above convention, the $\gcd$ of $A$ and $A$ is $A$ 
@@ -1719,9 +1717,7 @@ follows the simple root $\alpha_0$. Of course, its differential around
 $P_0$ can be computed by the above method. Nevertheless, we may
 obtain it more directly by expanding the equation $(P_0 + 
 dP)(\alpha_0 + d\alpha) = 0$, obtaining
-\[
-P_0'(\alpha_0) d\alpha + dP(\alpha_0) = 0.
-\]
+$P_0'(\alpha_0) d\alpha + dP(\alpha_0) = 0$.
 Since $\alpha_0$ is a simple root, $P_0'(\alpha_0)$ 
 does not vanish and we find:
 $$d \alpha = - \frac{dP(\alpha_0)}{P'_0(\alpha_0)}.$$
@@ -1809,7 +1805,7 @@ ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We may
 consider the map sending a family $(f_1, \ldots, f_s)$ of 
 \emph{homogeneous}\footnote{This restriction will be convenient for us 
 mainly because we are using the article \cite{vaccon:14a}, which deals only 
-with homogeneous polynomials. It is probably not essential.} 
+with homogeneous polynomials. It is however probably not essential.} 
 polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
 \ldots, g_t)$. It follows from \cite{vaccon:14a}*{Thm. 1.1} that this 
 map is continuous at $(f_1, \ldots, f_s)$ provided that:
