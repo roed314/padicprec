@@ -643,7 +643,7 @@ Keeping the above notation, we have $\Lambda (f) = \NP(f)^\star$.
 We first remark that the functions $\Lambda(f)$ and $\NP(f)^\star$ 
 are both left continuous. It is then enough to prove that they are
 equal on a dense subset of $\R$. We are going to prove that they
-coincide expect maybe on the set consisting of slopes of $\NP(f)$.
+coincide except maybe on the set consisting of slopes of $\NP(f)$.
 
 \smallskip
 
@@ -757,7 +757,8 @@ With the above notations, we have $\Lambda(f_{\geq n_0}) \leq
 \begin{proof}
 It follows easily from Proposition \ref{prop:lambdaNP} and the fact that 
 the slopes of the Legendre transform of a convex piecewise affine 
-function $f$ are exactly the points where $f$ is not differentiable.
+function $f$ are exactly the abscissae of the points where $f$ is not 
+differentiable.
 \end{proof}
 
 We are now ready to provide two sufficient conditions to recognize 
@@ -1084,7 +1085,7 @@ The following list gives examples of useful precision types.  A description of t
 \end{itemize}
 
 Note that sometimes the precision of a final result can be computed
-a priori (using the methods of Section \ref{sec:differentials} for example).
+a priori (using the methods of Appendix \ref{sec:differentials} for example).
 Taking advantage of such knowledge can minimize artificial precision loss
 even when using rougher precision types such as flat or jagged.
 Separating precision from approximation also makes
