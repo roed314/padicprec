@@ -98,7 +98,7 @@ locate the balls in which their sum and product lie.  Working on a computer
 we must find a way to write elements using only a finite amount of data.
 By lumping elements together into these balls of radius $p^{-n}$, we may
 model arithmetic in $\Zp$ using the finite ring $\Z / p^n \Z$.  In this representation,
-all $p$-adic elements in have constant \emph{absolute precision} $n$.
+all $p$-adic elements have constant \emph{absolute precision} $n$.
 
 The second source draws upon parallels between $\Qp$ and $\R$.  Both
 occur as completions of $\Q$ and we represent elements of both in terms
@@ -199,14 +199,14 @@ accurately as $(2a + O(p^n), 2b + O(p^m))$, with even more precision when $p=2$.
 
 The SOMOS 4 sequence \cite{somos:89a} is defined by the recurrence
 \[
-u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}.
+u_n = \frac{u_{n-3} u_{n-1} + u_{n-2}^2}{u_{n-4}}.
 \]
 We shall consider the case where the initial
 terms $u_0$, $u_1$, $u_2$ and $u_3$ lie in $\Zp^\times$ and have precision $O(p^N)$.
 Let us first examine how the absolute precision of $u_n$ varies with $n$
 if it is computed from the precision of $u_{n-4}, \ldots, u_{n-1}$ using the recurrence.
-The computation of $u_{n+4}$ involves a division by $u_n$ and hence, roughly speaking,
-decreases the precision by a factor $p^{\val(u_n)}$.  Hence the
+The computation of $u_n$ involves a division by $u_{n-4}$ and hence, roughly speaking,
+decreases the precision by a factor $p^{\val(u_{n-4})}$.  Hence the
 step-by-step computation returns the value of $u_n$ with precision
 \begin{equation}
 \label{eq:SOMOS}
@@ -244,9 +244,9 @@ and numerically stable.
 
 \subsubsection*{LU factorization.}
 
-Let us first recall that a square matrix $M$ with coefficients in $K$ 
+Let us first recall that a square matrix $M$
 admits a LU factorization if it can be written as a product $LU$ where 
-$L$ and $U$ is lower triangular and upper triangular respectively. 
+$L$ and $U$ are lower triangular and upper triangular respectively. 
 The computation of a LU factorization appears as an important tool to 
 tackle many classical questions about matrices or linear systems, and is
 discussed further in Appendix \ref{ssec:matrices}.
@@ -288,7 +288,7 @@ Write $\OK$ for the ring $\{x \in K : \lvert x \rvert \le 1\}$ and assume
 that $K$ contains a dense subring $R \subset K$
 consisting of elements that can be represented with a finite amount of space.
 For $K = \Qp$ we may choose $R = \Z[\frac1p]$ or $R = \Q$;
-for $K = \Fp\lb t \rb$ we may choose $R = \Fp[t, t^{-1}]$ or $R = \Fp(t)$.
+for $K = \Fp\lp t \rp$ we may choose $R = \Fp[t, t^{-1}]$ or $R = \Fp(t)$.
 
 If $E$ is a $K$-vector space, possibly of infinite dimension, then an
 \emph{ultrametric norm} on $E$ is a map $\Vert\cdot\Vert : E \to \R^+$ satisfying:
@@ -411,7 +411,7 @@ map $f'(v_0) : U \rightarrow W$ such that for any $\varepsilon >0$,
 there exists an open neighborhood $U_\varepsilon \subset U$ containing 
 $v_0$ with
 \[ 
-\Vert f(v)-f(w)-f'(v_0) \cdot \left( v-w \right) \Vert 
+\Vert f(v)-f(w)-f'(v_0) \left( v-w \right) \Vert 
 \leq \varepsilon \Vert v-w \Vert. 
 \]
 for all $v, w \in U_\varepsilon$.  The linear map $f'(v_0)$ is called the \emph{differential} of $f$ at $v_0$.
@@ -549,7 +549,7 @@ $K$-vector spaces \cite {schneider:11a}*{\S 6} to $K$-Banach spaces.
 \label{def:locanal}
 Let $E$ and $F$ be $K$-Banach spaces. Let $U$ be an open subset of $E$
 and let $x \in U$.
-A function $f \col U \rightarrow F$ is said \emph{locally analytic} at 
+A function $f \col U \rightarrow F$ is said to be \emph{locally analytic} at 
 $x$ if there exists an open subset $U_x \subset E$ and continuous $n$-linear
 maps $L_n \col E^n \rightarrow F$ for $n \ge 1$ such that
 \[
@@ -723,14 +723,15 @@ f_{n_0 - 1}).
 \]
 On the other hand, given a convex function $\varphi : \R \to \R \cup
 \{+\infty\}$ and a real number $v$, we define $\varphi_{\geq v} : \R \to 
-\R \cup \{\pm \infty\}$ as the highest convex function such that 
-$\varphi_{\geq v} \leq \varphi$ and the function $x \mapsto 
-\varphi_{\geq v}(x) - v x$ is nondecreasing. Concretely, we have:
-$$\varphi_{\geq v}(x) = \inf_{y \geq 0} \, \big(\varphi(x + y) - v y 
-\big).$$
+\R \cup \{\pm \infty\}$ by
+\[
+\varphi_{\geq v}(x) = \inf_{y \geq 0} \, \big(\varphi(x + y) - v y \big).
+\]
+The function $\varphi_{\geq v}$ is the maximum among all functions $\varphi'$
+with $\varphi' \leq \varphi$ and $x \mapsto \varphi'(x) - v x$ nondecreasing.
 When $v$ is fixed, the construction $\varphi \mapsto \varphi_{\geq v}$
 is nondecreasing: if $\varphi$ and $\psi$ are two convex functions such
-that $\varphi \leq \psi$, we deduce $\varphi_{\geq v} \leq \psi_{\geq v}$.
+that $\varphi \leq \psi$ then $\varphi_{\geq v} \leq \psi_{\geq v}$.
 
 \begin{prop} \label{prop:trunc}
 With the above notations, we have $\Lambda(f_{\geq n_0}) \leq
@@ -863,7 +864,7 @@ addition, multiplication or creation of variables); they are then
 ``nice'' (in particular locally analytic) functions. For all 
 $i$, let $U_i$ denote the codomain of $f_i$. Of course $U_i$ must
 contains all possible values of all variables which are defined in the 
-program after the execution of $i$-th step. Mathematically, we assume
+program after the execution of the $i$-th step. Mathematically, we assume
 that it is an 
 open subset in some $K$-Banach space $E_i$. We have $U_n = V$ and the 
 domain of $f_i$ is $U_{i-1}$ where, by convention, we have set $U_0 = 
@@ -911,7 +912,7 @@ this.
 The previous approach works only if the $g'_i(x)$'s are all surjective. 
 Unfortunately, this assumption is in general not fulfilled. Indeed, 
 remember that the dimension of $E_i$ is roughly the number of used 
-variables after the step $i$. It all $g_i'(x)$ were surjective, this 
+variables after the step $i$. If all $g_i'(x)$ were surjective, this 
 would mean that the function {\tt f} never initializes a new variable!
 In what follows, we propose another solution that does not assume the
 surjectivity of $g'_i(x)$.
@@ -932,7 +933,7 @@ By definition, we have
 $h_i(x_i + H'_i) = x_n + h'_i(x_i)(H'_i) \subset x_n + f'(x)(H)$.
 Therefore, modifying the intermediate value $x_i$ by an element
 of $H'_i$ after the $i$-th step of the execution of {\tt f} leaves
-the final result remains unchanged. In other words, it is
+the final result unchanged. In other words, it is
 enough to compute $x_i$ modulo $H'_i$.
 
 It is nevertheless not obvious to implement these ideas in practice
@@ -960,7 +961,7 @@ Using relaxed algorithms for computing with elements in $K$ (\emph{cf}
 \cites{hoeven:02a, hoeven:07a, berthomieu-hoeven-lecerf:11a}), we can reuse in 
 Step~\eqref{item:finalcomp} the computations already performed in 
 Step~\eqref{item:smallprec}. The two-pass method we have just 
-presented is then probably not much more expansive than the one-pass 
+presented is then probably not much more expensive than the one-pass 
 method, although it is more difficult to implement.
 
 We conclude this section by remarking that the two-pass method seems 
@@ -1002,32 +1003,27 @@ computation and get $f_{ij}(M)$ together with its
 precision. Putting this together, we get the whole matrix $f(M)$ 
 together with a sharp precision datum on each entry.
 
-The study of the this example actually suggests another solution to 
-tackle the issue of non-surjectivity. Indeed, remark that our $f$ above 
-had not a surjective differential simply because its codomain was too 
-large: if we had replaced $f : (K^n)^n \to M_n(K)$ by $g : (K^n)^n \to 
-S_n(K)$ (where $S_n(K)$ denotes the $K$-vector space of symmetric matrix 
-over $K$ of size $n$) defined in the same way, our problem would have 
-disappeared. Of course the image of a general $f$ is rarely a sub vector 
-space of $F$ but it is often a sub-$K$-manifold of $F$ (see Appendix
-\ref{sec:manifold}). We can then use 
-the results of Appendix \ref{sec:manifold} to study $f$ viewed as a 
-function whose codomain is $f(U)$, understood that the differential of 
-it has now good probability to be surjective.
+The study of this example actually suggests another solution to 
+tackle the issue of non-surjectivity. Indeed, we remark that our $f$ above 
+did not have a surjective differential simply because its codomain was too 
+large: replacing the codomain with the $K$-vector space $S_n(K)$
+of $n \times n$ symmetric matrices over $K$ makes the differential of $f$ surjective.
+While the image of a general $f$ is rarely a sub vector 
+space of $F$, it is often a sub-$K$-manifold of $F$. We can then use 
+the results of Appendix \ref{sec:manifold} to study $f : U \to f(U)$, which
+likely has surjective differential.
 
 \medskip
 
-\subsubsection*{Quick comparison with floating point arithmetics.}
+\subsubsection*{Quick comparison with floating point arithmetic.}
 
-The two strategies described above share some similarities with usual 
-floating point arithmetics over the reals. Indeed, roughly speaking, in 
-each setting, we begin by choosing a large precision, we do all our 
-computations up to this precision understood that when we are not sure 
-about some digit, we choose it ``at random'' or using good heuristics. 
-The main difference is that, in the ultrametric setting, we are able 
-(under some mild hypothesis) to quantify the precision we need at each 
-individual step in order to be sure that the final result is correct up 
-to the required precision.
+The two strategies described above share some similarities with standard 
+floating point arithmetic over the reals. In each setting, we begin
+by choosing a large precision for all computations, and when we
+encounter an unconstrained digit we choose it ``at random'' or using good heuristics. 
+However, in the ultrametric setting, mild hypotheses allow us
+to quantify the precision needed at each 
+individual step in order to ensure a specified final precision.
 
 \subsection{Precision Types}
 \label{ssec:types}
@@ -1088,16 +1084,11 @@ Proposition \ref{prop:locanalytic}, we design a \emph{stable} algorithm
 for computing it.
 
 Recall from \S \ref{ssec:stepbystep} that a SOMOS 4 sequence is a 
-four-term inductive sequence defined by $u_{n+4} = \frac{u_{n+2} u_{n+4} 
-+ u_{n+3}^3}{u_n}$. We recall also that SOMOS sequences exhibit the 
-Laurent phenomenon: it means that, if the four initial terms $u_0, u_1, 
-u_2, u_3$ are some indeterminates, then each $u_n$ is a Laurent 
-polynomial with coefficients in $\Z$ in these indeterminates
-(see \cite{fomin-zelevinsky:02a}).
-From now, we will always consider SOMOS sequences with values in $\Q_p$ 
-(for some prime number $p$). We assume for simplicity that $u_0, u_1, u_2, 
-u_3$ are all units in $\Z_p$. By the Laurent phenomenon, this implies 
-that all $u_n$'s lie in $\Z_p$, and that if $u_0, u_1, u_2, u_3$ 
+four-term inductive sequence defined by $u_n = \frac{u_{n-3} u_{n-1} 
++ u_{n-2}^2}{u_n}$ exhibiting the Laurent phenomenon.
+We will focus on SOMOS sequences with values in $\Q_p$, and 
+assume for simplicity that $u_0, u_1, u_2, u_3 \in \Z_p^\times$.
+By the Laurent phenomenon, $u_n \in \Z_p$ for all $n$, and if $u_0, u_1, u_2, u_3$ 
 are known with finite precision $O(p^N)$ then all $u_n$ are 
 known with the same absolute precision. Algorithm \ref{algo:SOMOS} presented on 
 page \pageref{algo:SOMOS} performs this computation.
