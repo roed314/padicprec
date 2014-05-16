@@ -219,9 +219,9 @@ On the other hand, one can prove that the SOMOS 4 sequence
 exhibits the \emph{Laurent phenomenon} \cite{fomin-zelevinsky:02a}: for all integer 
 $n$, there exists a polynomial $P_n$ in $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 
 1}, T^{\pm 1}]$ such that $u_n = P_n(u_0, u_1, u_2, u_3)$.
-From the latter formula, it follows directly that if $u_0$, $u_1$,
-$u_2$ and $u_3$ are known up to precision $O(p^N)$ then all $u_n$'s
-are also known with the same precision. Thus, the term $v_n$ that 
+From the latter formula and our assumption that $u_0$, $u_1$, 
+$u_2$ and $u_3$ are units known up to precision $O(p^N)$, it follows that all $u_n$'s
+are known with the same precision. Thus, the term $v_n$ that 
 appears in \eqref{eq:SOMOS} does not reflect an intrinsic loss of
 precision but some numerical instability related to the algorithm used to compute $u_n$.
 
@@ -261,9 +261,8 @@ result whose every entry is known up to precision $O(p^{N - 2 \log_p
 d})$ \cite{caruso:12a}.
 \end{itemize}
 If $d$ is large compared to $p$, the second precision is much more
-accurate than the first one. On the other hand, the second algorithm
-is less efficient than the first one because evaluating Cramer-type
-formulae requires many computations. 
+accurate than the first one. On the other hand, the Cramer-type formulae
+in the second algorithm yield a substantially longer running time than the first.
 %In \cite{caruso:12a}, the author designs a new algorithm which combines 
 %both advantages: efficiency and stability.
 %The precision loss inherent in an algorithm is an important factor in 
@@ -285,10 +284,9 @@ and that $K$ is complete with respect to it.
 For example, we may take $K = \Qp$ with the
 $p$-adic absolute value or $K = k\lp t \rp$ with the $t$-adic absolute value.
 Write $\OK$ for the ring $\{x \in K : \lvert x \rvert \le 1\}$ and assume
-that $K$ contains a dense subring $R \subset K$
-consisting of elements that can be represented with a finite amount of space.
-For $K = \Qp$ we may choose $R = \Z[\frac1p]$ or $R = \Q$;
-for $K = \Fp\lp t \rp$ we may choose $R = \Fp[t, t^{-1}]$ or $R = \Fp(t)$.
+that $K$ contains a computable dense subring $R \subset K$ \cite{rabin:60a}.
+This assumption holds for $K = \Qp$ and $K=\Fp\lp t \rp$ by setting $R = \Z[\frac1p]$ or $R = \Q$
+in the case of $\Qp$ and $R = \Fp[t, t^{-1}]$ or $R = \Fp(t)$ in the case of $\Fp\lp t \rp$.
 
 If $E$ is a $K$-vector space, possibly of infinite dimension, then an
 \emph{ultrametric norm} on $E$ is a map $\Vert\cdot\Vert : E \to \R^+$ satisfying:
@@ -306,12 +304,12 @@ are all open.
 For a $K$-Banach space $E$ and $r \in \R_{\ge 0}$, write
 $$B_E(r) = \{ x \in E : \Vert x \Vert \le r \}, 
 \quad B^-_E(r) = \{ x \in E : \Vert x \Vert < r\}.$$
-Note that $B_E(r)$ and $B^-_E(r)$ are both lattices.
+Note that $B_E(r)$ and $B^-_E(r)$ are both lattices.  We will also set $B_E(\infty) = B^-_E(\infty) = E$.
 
 Suppose $E$ is a $K$-Banach space and $I$ a set.
 A family $(x_i)_{i \in I} \subset E$ is a \emph{Banach basis} for $E$ if
 every element $x \in E$ can be written $x = \sum_{i \in I} \alpha_i x_i$
-for scalars $\alpha_i \in K$ with $\alpha_i \to 0$, and $\Vert x \Vert = \sup_{i \in I} \lvert \alpha_i \rvert$.
+for scalars $\alpha_i \in K$ with $\alpha_i \to 0$ (according to the filter of cofinite subsets), and $\Vert x \Vert = \sup_{i \in I} \lvert \alpha_i \rvert$.
 Note that if $E$ is finite dimensional then the condition $\alpha_i \to 0$ is vacuous.
 
 Given a basis $(x_i)_{i \in I}$ and a sequence $(r_i)_{i \in I}$ with $r_i \in \R_{>0}$, the sets
@@ -573,24 +571,22 @@ we shall write $f = \sum_{n \geq 0} f_n$. We assume that $f$ is defined
 in a neighborhood of $0$. Under this assumption, the datum of $f$ 
 uniquely determines the $f_n$'s (a consequence of Proposition 
 \ref{prop:lambdaNP} below).
-To such a series $f$, we attach the function $\Lambda(f) : \R \to \R 
+To such a series $f$, we attach the function $\Lambda(f) : \R \cup \{+\infty\} \to \R 
 \cup \{+\infty\}$ defined by:
-$$\begin{array}{rcll}
-\Lambda(f)(v) & = & 
-\log \big( \sup_{h \in B^-_E(e^v)} \Vert f(h) \Vert \big)
-& \text{if } f \text{ is defined on } B^-_E(e^v) \\
-& = & +\infty & \text{otherwise}
-\end{array}$$
+\[
+\Lambda(f)(v) = \begin{cases} \log \left( \sup_{h \in B^-_E(e^v)} \Vert f(h) \Vert \right) & \mbox{if $f$ is defined on} B^-_E(e^v), \\
++\infty & \mbox{otherwise.} \end{cases}
+\]
 The following lemma is easy and left to the reader.
 
 \begin{lem}
 \label{lem:opLambda}
 Let $f = \sum_{n \geq 0} f_n$ and $g = \sum_{n \geq 0} g_n$ be two 
-series as above. Then:
+series as above. Then
 \begin{align*}
-\Lambda(f+g) &\leq \max (\Lambda(f),\Lambda(g)) \\
-\Lambda(f \times g) &\leq \Lambda(f)+\Lambda(g) \\
-\Lambda(f \circ g) &\leq \Lambda(f) \circ \Lambda(g)
+\Lambda(f+g) &\leq \max (\Lambda(f),\Lambda(g)), \\
+\Lambda(f \times g) &\leq \Lambda(f)+\Lambda(g), \\
+\Lambda(f \circ g) &\leq \Lambda(f) \circ \Lambda(g).
 \end{align*}
 \end{lem}
 
@@ -1085,7 +1081,7 @@ for computing it.
 
 Recall from \S \ref{ssec:stepbystep} that a SOMOS 4 sequence is a 
 four-term inductive sequence defined by $u_n = \frac{u_{n-3} u_{n-1} 
-+ u_{n-2}^2}{u_n}$ exhibiting the Laurent phenomenon.
++ u_{n-2}^2}{u_{n-4}}$ exhibiting the Laurent phenomenon.
 We will focus on SOMOS sequences with values in $\Q_p$, and 
 assume for simplicity that $u_0, u_1, u_2, u_3 \in \Z_p^\times$.
 By the Laurent phenomenon, $u_n \in \Z_p$ for all $n$, and if $u_0, u_1, u_2, u_3$ 
@@ -1780,16 +1776,16 @@ Recall that any
 ideal $I \subset K[\XX]$ admits a unique reduced Gr\"obner basis. We may
 consider the map sending a family $(f_1, \ldots, f_s)$ of 
 \emph{homogeneous}\footnote{This restriction will be convenient for us 
-mainly because we are using the article \cite{vaccon:14b}, which deals only 
+mainly because we are using the article \cite{vaccon:14a}, which deals only 
 with homogeneous polynomials. It is however probably not essential.} 
 polynomials of fixed degrees to the reduced Gr\"obner basis $(g_1, 
-\ldots, g_t)$. It follows from \cite{vaccon:14b}*{Thm. 1.1} that this 
+\ldots, g_t)$. It follows from \cite{vaccon:14a}*{Thm. 1.1} that this 
 map is continuous at $(f_1, \ldots, f_s)$ provided that:
 \begin{itemize}
 \item the sequence $(f_1, \ldots, f_s)$ is regular
 \item for all $i \in \{1, \ldots, s\}$, the ideal generated by
 $f_1, \ldots, f_i$ is weakly-$w$ where $w$ denotes the fixed monomial
-order (\emph{cf} \cite{vaccon:14b} for more detail).
+order (\emph{cf} \cite{vaccon:14a} for more detail).
 \end{itemize}
 A similar argument proves that it is actually differentiable at such
 points. We are now going to compute the differential. For this we
