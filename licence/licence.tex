@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\usepackage[a4paper,margin=0pt]{geometry}
+
+\usepackage{tikz}
+\pagestyle{empty}
+
+\definecolor{darkblue}{rgb}{0,0,0.3}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\begin{tikzpicture}
+\draw[transparent] (0,0)--(20.98,29.68);
+\begin{scope}[color=darkblue,right]
+%\node[scale=1.3] at (12,21.8) { XXX };
+%\node[scale=1.3] at (14.5,21.8) { XXX };
+\node[scale=1.4] at (7.5,20.55) { $p$-adic precision };
+\node[scale=1.4] at (3,19.1) { Xavier Caruso, David Roe, Tristan Vaccon };
+\node[scale=1.4] at (7,18.3) { \texttt{xavier.caruso@normalesup.org} };
+%\draw[very thick] (12.44,15.12)--(12.75,15.43);
+%\draw[very thick] (12.44,15.43)--(12.75,15.12);
+\end{scope}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\draw[transparent] (0,0)--(20.98,29.68);
+\begin{scope}[color=darkblue,right]
+\node[scale=1.4] at (3,13) { Xavier Caruso };
+\node[scale=1.4] at (12.8,12.9) { May 22, 2014 };
+\node[scale=0.25] at (5,11.5) { 
+  \pgftext{\includegraphics{signature-xavier.jpg}}
+};
+\end{scope}
+\end{tikzpicture}
+
+\end{document}

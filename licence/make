@@ -1,0 +1,4 @@
+pdflatex licence.tex
+mv licence.pdf licence-nude.pdf
+pdftk licence-nude.pdf multibackground JCM_licence.pdf output licence.pdf
+rm licence-nude.pdf
