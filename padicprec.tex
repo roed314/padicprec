@@ -430,7 +430,7 @@ Let $E$ and $F$ be two $K$-Banach spaces, $f : U \rightarrow F$ be a
 function defined on an open subset $U$ of $E$ and $v_0$ be a 
 point in $U$.
 A lattice $H$ in $E$ is called a \emph{first order lattice} for $f$ at 
-$v_0$ if the following equality holds:
+$v_0$ if $v_0 + H \subset U$ and the following equality holds:
 \begin{equation}
 \label{eq:firstorder}
 f(v_0 + H) = f(v_0) + f'(v_0) (H).
@@ -614,7 +614,9 @@ $\varphi : \R \to \R \cup \{+\infty\}$ is the function $\varphi^\star :
 for $v \in \R$.
 One can check that the map $\varphi \mapsto \varphi^\star$ is an
 order-reversing involution: $(\varphi^\star)^\star = \varphi$ and
-$\varphi^\star \geq \psi^\star$ whenever $\varphi \leq \psi$.
+$\varphi^\star \geq \psi^\star$ whenever $\varphi \leq \psi$. When
+necessary, we extend $\varphi^\star$ to $\R \cup \{+\infty\}$ by
+left continuity.
 We refer to \cite{Rockafellar:97} for a complete exposition on Legendre transforms.
 
 \begin{prop} \label{prop:lambdaNP}
