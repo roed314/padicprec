@@ -1,0 +1,31 @@
+(Relatively) small tasks:
+-------------------------
+
+* implement a specific base for precision (which can differ 
+  from the base of the object itself)
+  It could be useful for instance if we have to work at the
+  same time with elements in Q_p and K (a finite extension
+  of Q_p). Indeed, in this situation, it may make sense to
+  use lattices defined over Z_p to handle precision of 
+  elements in K
+ 
+* init function in lazy
+
+* implement a ModelPrecisionMode for conversion between 
+  precision models.
+  I see three modes: Standard, Increasing, Decreasing
+
+* should we implement a special class for working_precision?
+  can we reuse BigOh for this.
+
+* find something better as limit_lazyprecision 
+
+
+Big tasks
+---------
+
+* implement the precision mode "Collective"
+
+* implement convergent series
+
+* implement modules over Z_p and other rings
