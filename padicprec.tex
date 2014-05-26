@@ -61,7 +61,7 @@
 \def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
 
 \title{Tracking $p$-adic precision}
-%\author{Xavier Caruso, David Roe \& Tristan Vaccon}
+\author{Xavier Caruso, David Roe and Tristan Vaccon}
 \date\today
 
 \maketitle
@@ -169,8 +169,8 @@ an application of these ideas to an algorithm for computing terms of the SOMOS s
 
 In Appendix \ref{sec:manifold}, we extend the results of Section \ref{sec:mainlemma}
 to $p$-adic manifolds, describing how to specify precisions for points on elliptic curves
-and Grassmannians.  Finally, Appendix \ref{sec:differentials} describes how to compute
-the derivative of many common operations on polynomials and matrices, with an eye
+and Grassmannians.  Finally, Appendix \ref{sec:matrices} describes how to compute
+the derivative of some common operations on matrices as an example, with an eye
 toward applying Lemma \ref{lem:main}.
 
 \section{Precision proposals} \label{sec:prec-proposal}
@@ -229,7 +229,7 @@ precision but some numerical instability related to the algorithm used to comput
 From the above discussion, one can easily derive a numerically stable 
 algorithm that computes the SOMOS 4 sequence: 
 \begin{enumerate}
-\item compute the Laurent polynomials $P_n$ using the recurrence in 
+\item compute the polynomials $P_n$ using the recurrence in 
 the ring $\Z[X^{\pm 1}, Y^{\pm 1}, Z^{\pm 1}, T^{\pm 1}]$
 \item evaluate $P_n$ at the point $(u_0, u_1, u_2, u_3)$.
 \end{enumerate}
@@ -249,7 +249,7 @@ admits a LU factorization if it can be written as a product $LU$ where
 $L$ and $U$ are lower triangular and upper triangular respectively. 
 The computation of a LU factorization appears as an important tool to 
 tackle many classical questions about matrices or linear systems, and is
-discussed further in Appendix \ref{ssec:matrices}.
+discussed further in Appendix \ref{sec:matrices}.
 When computing the entries of $L$ and $U$ from a $d \times d$ matrix
 over $\Zp$ with entries of precision $O(p^N)$, one has a choice of algorithms:
 \begin{itemize}
@@ -1059,11 +1059,11 @@ The following list gives examples of useful precision types.  A description of t
 \item In the \emph{flat} precision type, $\T$ consists of lattices $B_E(r)$.  The flat precision type is useful since it takes so little space to store and it easy to compute with.
 \item If $E = K_{<d}[X]$ is the space of polynomials of degree less than $d$, the \emph{Newton} precision type consists of lattices $B_E((X^i),(r_i))$ where $-\log r_i$ is a convex function of $i$.  The Newton precision type is sensible if one thinks of polynomials as functions $K \to K$, since extra precision above the Newton polygon never increases the precision of an evaluation.
 \item If $E = M_{m \times n}(K)$, the \emph{column} precision type consists of lattices with identical image under all projections $\pr_i : E \to K^m$ sending a matrix to its $i$th column.  It is appropriate when considering linear maps where the image of each basis vector has the same lattice precision.
-\item If $E = \Qp \lb X \rb$, the \emph{Pollack-Stevens} precision type consists of lattices $H_N := B_E((X^i),(p^{\min(i-N,0)}))$ \cite{pollack-stevens:11a}*{\S 1.5}.  It is important when working with overconvergent modular symbols since these lattices are stable under certain Hecke operators.
+\item If $E = \Qp \lb X \rb$, the \emph{Pollack-Stevens} precision type consists of lattices of the form $H_N := B_E((X^i),(p^{\min(i-N,0)}))$ \cite{pollack-stevens:11a}*{\S 1.5}.  These lattices are stable under certain Hecke operators, which is necessary for computing with overconvergent modular symbols.
 \end{itemize}
 
 Note that sometimes the precision of a final result can be computed
-a priori (using the methods of Appendix \ref{sec:differentials} for example).
+a priori (using the methods of Appendix \ref{sec:matrices} for example).
 Taking advantage of such knowledge can minimize artificial precision loss
 even when using rougher precision types such as flat or jagged.
 Separating precision from approximation also makes
@@ -1162,15 +1162,17 @@ $\prec'$. Hence \eqref{eq:congrSOMOS2} remains true if $a'$, $b'$, $c'$
 and $d'$ are replaced by other values which are congruent to them modulo
 $p^{\prec'}$. In particular it holds if $a'$, $b'$, $c'$ and $d'$ denotes
 the values of $a$, $b$, $c$ and $d$ after the execution of line
-\ref{line:lift}. Now applying Lemma \ref{lem:main} and Proposition
+\ref{line:lift}. Applying Lemma \ref{lem:main} and Proposition
 \ref{prop:locanalytic} to $\varphi_{i-1}$ and $\varphi_i$ (at the point 
 $(u_0, u_1, u_2, u_3)$), we get:
-$$f\big((u_{i-1}, u_i, u_{i+1}, u_{i+2}) + p^N \varphi_{i-1}(\Z_p^4)\big)
-= (u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4).$$
-By the discussion above, this implies in particular that $f(a',b',c',d')$
+\[
+f\big((u_{i-1}, u_i, u_{i+1}, u_{i+2}) + p^N \varphi_{i-1}(\Z_p^4)\big)
+= (u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4).
+\]
+By the discussion above, this equation implies in particular that $f(a',b',c',d')$
 belongs to $(u_i, u_{i+1}, u_{i+2}, u_{i+3}) + p^N \varphi_i(\Z_p^4)$. We
-conclude by remarking first that $(a,b,c,d) \equiv f(a',b',c',d') \pmod 
-{p^\prec \Z_p^4}$ by construction and second that $p^\prec \Z_p^4 \subset
+conclude by remarking that $(a,b,c,d) \equiv f(a',b',c',d') \pmod 
+{p^\prec \Z_p^4}$ by construction and that $p^\prec \Z_p^4 \subset
 p^N \varphi_i(\Z_p^4)$.
 
 Finally \eqref{eq:congrSOMOS} applied with $i = n-3$ together with
@@ -1507,6 +1509,118 @@ to the same precision datum expressed in the chart $U_{P'}$.
 Of course, in practice, when we are doing computations on subspaces of
 $K^n$ (like sum or intersection), we represent the spaces in charts as
 above and perform all the calculations in these charts.
+
+
+
+
+
+\section{Example: Matrices}
+\label{sec:matrices}
+
+We saw in the core of the article that the differential of an operation 
+encodes the intrinsic loss/gain of precision when performing this 
+operation. In this appendix we compute the differential of various
+common operations on matrices. Surprisingly, 
+we observe that all differentials we will consider are rather easy to 
+compute even if the underlying operation is quite involved.
+
+In what follows, we use freely the ``method of physicists'' to compute 
+differentials: given a function $f$ differentiable at some point $x$, we 
+consider a small perturbation $dx$ of $x$ and write $f(x+dx) = y + dy$ 
+by expanding LHS and neglecting terms of order $2$. The differential of 
+$f$ at $x$ is then the linear mapping $dx \mapsto dy$.
+
+\subsubsection*{Determinants and characteristic polynomials.}
+
+We first outline the standard computation of the differential of the function
+$\det : M_n(K) \to K$. Suppose that $M \in \GL_n(K)$ and that $\com(M) = \det(M) M^{-1}$.
+Then
+\begin{align*}
+\det(M + dM) &= \det(M) \cdot \det(I + M^{-1} \cdot dM)  \\
+&= \det(M) \cdot \big(1 + \tr(M^{-1} \cdot dM)\big) \\
+&= \det(M) + \tr(\com(M) \cdot dM).
+\end{align*}
+The differential of $\det$ at $M$ is then $dM \mapsto \tr(\com(M) \cdot dM)$. It turns
+out that this formula is still valid when $M$ is not invertible.
+The same computation extends readily to characteristic polynomials,
+since they are defined as determinants. More precisely, let us 
+consider the function $\chi : M_n(K) \to K_n[X]$ taking a matrix 
+$M$ to its monic characteristic polynomial $\det(X-M)$.
+Then $\chi$ is differentiable at each point $M \in M_n(K)$ and its 
+differential is given by $dM \mapsto \tr(\com(X{-}M) \cdot dM)$.
+
+\subsubsection*{LU factorization.}
+
+Define the LU factorization of a square matrix $M \in M_n(K)$ as a decomposition $M = LU$ 
+where $L$ is lower triangular and unipotent and $U$ is upper triangular. 
+Such a decomposition exists and is unique provided that no principal minor
+of $M$ vanishes. We can then consider the mapping $M \mapsto (L,U)$ 
+defined over the Zariski-open set of matrices satisfying the above 
+condition. In order to differentiate it, we differentiate the relation 
+$M = LU$ and rewrite the result as
+$$L^{-1} dM \: U^{-1} = L^{-1} \cdot dL + dU \cdot U^{-1}.$$
+We remark that in the right hand side of the above formula, the first
+summand is lower triangular with zero diagonal whereas 
+the second summand is upper triangular. Hence in order to compute $dL$
+and $dU$, one can proceed as follows: 
+\begin{enumerate}
+\item compute the product $dX = L^{-1} dM \: U^{-1}$,
+\item separate the lower and upper part of $dX$ obtaining $L^{-1} \cdot dL$ and $dU \cdot U^{-1}$
+\item recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the left and $U$ on the right respectively.
+\end{enumerate}
+The above discussion extends almost \emph{verbatim} to LUP 
+factorization; the only difference is that LUP factorizations are not 
+unique but they are on a small neighborhood of $M$ if we fix the matrix 
+$P$.
+
+\subsubsection*{QR factorization.}
+
+A QR factorization of a square matrix $M \in M_n(K)$ will be
+a decomposition $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
+orthogonal in the sense that $\trans Q \cdot Q$ is diagonal. As before, such 
+a decomposition exists and is unique on a Zariski-open subset of $M_n(K)$. The
+mapping $f : M \mapsto (Q,R)$ is then well defined on this subset. We 
+would like to emphasize at this point that the orthogonality condition
+defines a sub-manifold of $M_n(K)$ which is \emph{not} a
+vector space: it is defined by equations of degree $2$. The codomain
+of $f$ is then also a manifold; this example then fits into the setting
+of Appendix \ref{sec:manifold} but not to those of Section \ref{sec:mainlemma}. 
+We can differentiate $f$ by following the method used for LU 
+factorization.  Differentiating the relation $M = QR$, we obtain
+\begin{equation}
+\label{eq:diffQR}
+\trans Q \cdot dM \cdot R^{-1} = \trans Q \cdot dQ + \Delta \cdot dR 
+\cdot R^{-1}
+\end{equation}
+where $\Delta = \trans Q \cdot Q$ is a diagonal matrix by definition.
+Moreover by differentiating $\trans Q \cdot Q = \Delta$, we find that
+$\trans Q \cdot dQ$ can be written as the sum of an antisymmetric 
+matrix and a diagonal one. Since moreover $dR \cdot R^{-1}$ is upper
+triangular with all diagonal entries equal to $0$, we see that 
+\eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
+and $dM$.
+
+
+
+\bibliographystyle{plain}
+\bibliography{roebib/Biblio,extras}
+
+\affiliationone{
+Xavier Caruso and Tristan Vaccon \\
+Institut de recheche en math\'ematiques de Rennes (IRMAR) \\
+Universit\'e Rennes 1 \\
+Campus de Beaulieu \\
+35042 Rennes Cedex \\
+France}
+\affiliationtwo{
+David Roe \\
+Department of Mathematics \\
+University of Calgary \\
+2500 University Dr NW \\
+Calgary AB T2N 1N4 \\
+Canada}
+
+\end{document}
 
 \section{Differential of usual operations}
 \label{sec:differentials}
@@ -1946,8 +2060,3 @@ computed as above.
 
 Finally, we note that similar results hold for images of matrices and,
 consequently, sums of subspaces.
-
-\bibliographystyle{plain}
-\bibliography{roebib/Biblio,extras}
-
-\end{document}
