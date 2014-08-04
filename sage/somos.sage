@@ -66,6 +66,6 @@ def test(a,b,c,d,n):
     print "Time:", t2
     print "rr =", rr
 
-p = 5
-R = Zp(p,20)
-a, b, c, d = R(1,10), R(1,10), R(2,10), R(p-4,10)
+p = 3
+R = Zp(p,100)
+a, b, c, d = R(1,20), R(1,20), R(1,20), R(p-1,20)
