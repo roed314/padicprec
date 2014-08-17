@@ -4,8 +4,6 @@ def my_quo_rem(self, right):
 
     Faster than the one provided by the class.
     """
-    if right.is_zero():
-        raise ZeroDivisionError, "cannot divide by a polynomial indistinguishable from 0"
     a = self.list(); da = len(a)-1
     b = right.list(); db = right.degree()
     inv = ~b[db]
@@ -101,6 +99,7 @@ def _renormalize_UV(A, B, U, V):
     Dp = a
 
     C = my_quo(D, Dp)
+    C = my_rem(C, B)
     Cinv = 1; tst = C
     prec = tst.base_ring().precision_cap()
     while val_poly(tst-1) < prec:
@@ -123,6 +122,11 @@ def xgcd_stable(A,B):
     a = A; b = B
 
     while b != 0:
+        if b.degree() == 0:
+            a = b
+            U1 = U2; V1 = V2
+            break
+
         # We compute the gcd mod p
         alpha = Sbar(a); beta = Sbar(b)
         delta, mu = xgcd_step(alpha,beta)
@@ -206,3 +210,22 @@ def xgcd_tests(p=3, prec=20, degree=20, repeat=10):
         B = S([ R.random_element() for _ in range(degree) ] + [ R(1) ])
         xgcd_test(A,B)
         print "--"
+
+
+def stat_resultants(p=3, prec=20, degree=20, repeat=10):
+    R = Zp(p, prec)
+    S.<x> = PolynomialRing(R)
+    counts = [ ]; count = 0
+    for _ in range(repeat):
+        A = S([ R.random_element() for _ in range(degree) ] + [ R(1) ])
+        B = S([ R.random_element() for _ in range(degree) ] + [ R(1) ])
+        v = A.resultant(B).valuation()
+        for _ in range(len(counts), v+1):
+            counts.append(0)
+        counts[v] += 1
+        count += 1
+    esp = 0
+    for v in range(len(counts)):
+        esp += v*counts[v]
+        print "%s: %s" % (v, RR(counts[v]/count))
+    print "Esperance: %s" % RR(esp/count)
