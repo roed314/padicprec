@@ -191,7 +191,7 @@ couple $(\ell, (n_i))$ exists but it is clear.
 Let $U$, $V$ and $W$ be three open subsets is some $K$-Banach spaces
 $E$, $F$ and $G$ respectively. We assume that $0 \in U$, $0 \in V$ and
 consider two locally analytic functions $f : U \to V$ and $g : V \to W$ 
-two locally analytic functions around $0$. The composition $h = g \circ
+two locally analytic functions around $0$, with $f(0)=0.$ The composition $h = g \circ
 f$ is then locally analytic around $0$ as well. Let us write the
 analytic expansion of $f$, $g$ and $h$ as follows:
 $$f = \sum_{n \geq 0} f_n, \quad 
@@ -280,7 +280,7 @@ equals $m$ together with $(\ell+1)$ elements $x_1, \ldots, x_{\ell+1}$
 lying in the unit ball of $\mathcal E$.
 We also consider a new variable $\lambda$ varying in
 $\O_K$. We set $x'_i = x_i$, $k'_i = k_i$ when $i < \ell$ and $x'_\ell 
-= x_\ell + \lambda x_{\ell+1}$, $k_\ell = k_\ell + k_{\ell+1}$. By the 
+= x_\ell + \lambda x_{\ell+1}$, $k'_\ell = k_\ell + k_{\ell+1}$. By the 
 induction hypothesis, we know that the inequality:
 $$\Big\Vert \binom s {k'_1 \,\, \cdots \,\, k'_\ell} \cdot
 \varphi(x'_1, \ldots, x'_1, \ldots, x'_\ell, \ldots, x'_\ell) \Big\Vert
@@ -300,7 +300,7 @@ where $x_i$ is repeated $k_i$ times if $i < \ell$ and $x_\ell$
 (resp. $x_{\ell+1}$) is repeated $j$ times (resp. $k'_\ell - j$ times).
 Since $\Vert P(\lambda) \Vert \leq \Vert \psi \Vert$ for all $\lambda$ in 
 the unit ball, the norm of all its coefficients must be at most $\Vert \psi
-\Vert$ as well. Looking at the coefficient in $\lambda^{k_i}$, we find
+\Vert$ as well. Looking at the coefficient in $\lambda^{k_{l+1}}$, we find
 Eq.~\eqref{eq:normpolar} for the families $(k_1, \ldots, k_{\ell+1})$ 
 and $(x_1, \ldots, x_{\ell+1})$. The induction follows.
 \end{proof}
@@ -322,7 +322,7 @@ is again an open subset in a $K$-Banach space $G$. Consequently, $g$
 goes from $V \times W$ to the vector space $\mathcal L(E,F)$ gathering
 all continuous linear applications $E \to F$.
 In what follows, we always assume that $V$ and $W$ contains the origin, 
-$f(0) = 0$, $h(0) = 0$ and $g(0) \neq 0$. There assumptions are armless 
+$f(0) = 0$, $h(0) = 0$ and $g(0) \neq 0$. There assumptions are harmless 
 because (1)~we can always shift $f$ and $h$ (and $g$ accordingly) so 
 that they both vanish at $0$ and (2)~in order to apply the theory of 
 \cite{padicprec}, the derivative $f'(0)$ needs to be surjective and 
@@ -388,8 +388,8 @@ u_{r+1} \leq
 since the multinomial coefficient $\binom r {\!n_1 \, \cdots \, n_m\!}$
 is an integer and hence as norm at most $1$.
 
-We now pick two real numbers $A$ and $B$ satisfying \eqref{eq:condAB}.
-Set $d = \Lambda(h)(a)$. Going back to the definitions, we remark that
+We now pick two real numbers $a$ and $b$ satisfying \eqref{eq:condAB}.
+Set $d = \Lambda(h)(a)$. Going back to the definitions of $\Lambda (h)$ and Legendre transform, we remark that
 the above equality implies:
 \begin{equation}
 \label{eq:boundhn}
@@ -508,7 +508,7 @@ where $\mu$ is the value that $\Lambda_g$ takes on the interval
 $]{-}\infty, \nu]$. Corollary \ref{cor:boundLambdaf} says that the
 graph of $\Lambda(f)$ lies below the plain blue line. We remark
 moreover that the Taylor expansion of $f(x)$ starts with the term
-$g(0)(x)$. Hence, on a neighborhood on ${-}\infty$, we have 
+$g(0) x$. Hence, on a neighborhood on ${-}\infty$, we have 
 $\Lambda(f)(x) = x + \log \Vert g(0) \Vert$. Using convexity, we 
 get:
 $$\Lambda(f)(x) \geq x + \log \Vert g(0) \Vert, 
@@ -563,7 +563,7 @@ acting as the identity on the underlying vector spaces. Doing this, the
 function $\Lambda(h)$ maps $x$ to $x + \log \lambda$ ($x \in \R$) and we 
 choose $\Lambda_h = \Lambda(h)$.
 
-We believe that a good way to opmitize $\lambda$ is to choose it so that 
+We believe that a good way to optimize $\lambda$ is to choose it so that 
 the two quantities in the minima in Proposition \ref{prop:boundLambdaf2} 
 agree. With the expression we got just above for $\Lambda_h$, our 
 heuristic yields $\log \lambda = \mu$, \emph{i.e.} $\lambda = e^\mu$.
