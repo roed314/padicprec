@@ -120,6 +120,9 @@ The aim of these preliminaries is to study the differential equation
 to derive from it some bounds on the growing function $\Lambda(f)$ 
 defined in \cite{padicprec}.
 
+\emph{In all this section, we assume that \textbf{the base field $K$ 
+has characteristic $0$}.}
+
 \begin{comment}
 
 \subsection{Legendre transform of a compositum}
@@ -188,18 +191,18 @@ couple $(\ell, (n_i))$ exists but it is clear.
 
 \subsection{Composite of locally analytic functions}
 
-Let $U$, $V$ and $W$ be three open subsets is some $K$-Banach spaces
-$E$, $F$ and $G$ respectively. We assume that $0 \in U$, $0 \in V$ and
-consider two locally analytic functions $f : U \to V$ and $g : V \to W$ 
-two locally analytic functions around $0$. The composition $h = g \circ
-f$ is then locally analytic around $0$ as well. Let us write the
-analytic expansion of $f$, $g$ and $h$ as follows:
+Let $U$, $V$ and $W$ be three open subsets is some $K$-Banach spaces 
+$E$, $F$ and $G$ respectively. We assume that $0 \in U$, $0 \in V$. Let 
+$f : U \to V$ and $g : V \to W$ be two locally analytic functions around 
+$0$ with $f(0) = 0$. The composition $h = g \circ f$ is then locally 
+analytic around $0$ as well. Let us write the analytic expansion of $f$, 
+$g$ and $h$ as follows:
 $$f = \sum_{n \geq 0} f_n, \quad 
 g = \sum_{n \geq 0} g_n, \quad
 h = \sum_{n \geq 0} h_n, \quad$$
 where $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
-some $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively. The aim of
-this subsection is to prove the following proposition.
+some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively. The 
+aim of this subsection is to prove the following proposition.
 
 \begin{prop}
 \label{prop:boundhr}
@@ -333,20 +336,20 @@ $$f = \sum_{n \geq 0} f_n, \quad
 g = \sum_{n \geq 0} g_n, \quad
 h = \sum_{n \geq 0} h_n$$
 where $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
-some $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively.
+some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively.
 Following \cite{padicprec}, we define $\NP(f) : \R \to \R \cup 
 \{+\infty\}$ as the greatest convex function such that $\NP(f)(n) \geq - 
 \log \Vert f_n \Vert$ for all integer $n$ and denote by $\Lambda(f)$ its 
 Legendre transform. We define $\NP(g)$, $\Lambda(g)$, $\NP(h)$ and
 $\Lambda(h)$ similarly.
 
-We now assume that \textbf{$K$ has caracteristic $0$} and we consider a 
-nonnegative real number $\alpha$ such that $\Vert n! \Vert \geq 
-e^{-\alpha n}$ for all positive integer $n$. A suitable value for 
+We consider a nonnegative real number $\alpha$ such that $\Vert n! \Vert 
+\geq e^{-\alpha n}$ for all positive integer $n$. A suitable value for 
 $\alpha$ is
 $$\alpha = - \frac p {p-1} \cdot \log \Vert p \Vert > 0$$
 where $p$ denotes the characteristic of the residue field and
-where, by convention, the above expression equals $0$ if $p = 0$.
+where, by convention, the above expression equals $0$ if $p = 0$
+(we recall that we have assumed that $K$ has characteristic $0$).
 
 \begin{prop}
 \label{prop:boundLambdaf}
@@ -359,8 +362,7 @@ then $b \geq \Lambda(f)(a - \alpha)$.
 \end{prop}
 
 \begin{proof}
-Assuming that $F_n$ is symmetric (which is armless in characteristic 
-$0$), we get $f' = \sum_{n \geq 0} f'_n$ where
+We have $f' = \sum_{n \geq 0} f'_n$ where
 $$f'_n : U \to \mathcal L(E,F), \quad
 x \mapsto \big(h \mapsto n \cdot F_n(h, x, x, \ldots, x)\big).$$
 In particular, taking $h = x$, we find:
@@ -388,7 +390,7 @@ u_{r+1} \leq
 since the multinomial coefficient $\binom r {\!n_1 \, \cdots \, n_m\!}$
 is an integer and hence as norm at most $1$.
 
-We now pick two real numbers $A$ and $B$ satisfying \eqref{eq:condAB}.
+We now pick two real numbers $a$ and $b$ satisfying \eqref{eq:condAB}.
 Set $d = \Lambda(h)(a)$. Going back to the definitions, we remark that
 the above equality implies:
 \begin{equation}
@@ -399,7 +401,7 @@ the above equality implies:
 In the same way, from Eq.~\eqref{eq:condAB}, we get:
 \begin{equation}
 \label{eq:boundgm}
-\Vert g_m \Vert \leq e^{- \max(b,d)\cdot m + b - a},
+\Vert g_m \Vert \leq e^{-\!\max(b,d)\cdot m + b - a},
   \quad \forall m \in \N.
 \end{equation}
 We are now ready to prove $u_r \leq e^{-ar + b}$ by induction on $r$.
