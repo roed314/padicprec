@@ -191,7 +191,7 @@ couple $(\ell, (n_i))$ exists but it is clear.
 Let $U$, $V$ and $W$ be three open subsets is some $K$-Banach spaces
 $E$, $F$ and $G$ respectively. We assume that $0 \in U$, $0 \in V$ and
 consider two locally analytic functions $f : U \to V$ and $g : V \to W$ 
-two locally analytic functions around $0$. The composition $h = g \circ
+around $0$. The composition $h = g \circ
 f$ is then locally analytic around $0$ as well. Let us write the
 analytic expansion of $f$, $g$ and $h$ as follows:
 $$f = \sum_{n \geq 0} f_n, \quad 
@@ -203,21 +203,23 @@ this subsection is to prove the following proposition.
 
 \begin{prop}
 \label{prop:boundhr}
-With the above notations, we have for all nonnegative integer $r$:
-$$\Vert h_r \Vert \leq \sup_{m, (n_i)}
-  \Vert g_m \Vert \cdot \Vert f_{n_1} \Vert \cdots \Vert f_{n_m} \Vert$$
-where the supremum is taken over all couples $(m, (n_i))$ where $m$
-is a nonnegative integer and $(n_i)_{1 \leq i \leq m}$ is a sequence of
-length $m$ of nonnegative integers such that $n_1 + \ldots + n_m = r$.
+For any nonnegative integer $r$, 
+\[
+\Vert h_r \Vert \leq \sup_{m, (n_i)}
+  \Vert g_m \Vert \cdot \Vert f_{n_1} \Vert \cdots \Vert f_{n_m} \Vert,
+\]
+where the supremum is taken over nonnegative integers $m$
+and sequences $(n_i)_{1 \leq i \leq m}$ of nonnegative integers
+with $n_1 + \cdots + n_m = r$.
 \end{prop}
 
-During the proof, multinomial coefficients will play an important role. 
-We recall that they are defined as follows: 
-given $s, k_1, \ldots, k_\ell$ some positive integers with $s \geq
-k_1 + \cdots + k_\ell$, we set:
-$$\binom s {k_1 \,\, k_2 \,\, \cdots \,\, k_\ell} =
-  \frac{s!}{k_1!\: k_2! \cdots k_\ell! \: (s{-}k_1{-}\cdots{-}k_\ell)!}.$$
-We also recall that these numbers are all positive integers.
+Multinomial coefficients will play an important role in the proof, so we recall their definition. 
+Given positive integers $s, k_1, \ldots, k_\ell$ with $s \geq k_1 + \cdots + k_\ell$, set
+\[
+\binom s {k_1 \,\, k_2 \,\, \cdots \,\, k_\ell} =
+  \frac{s!}{k_1!\: k_2! \cdots k_\ell! \: (s{-}k_1{-}\cdots{-}k_\ell)!}.
+\]
+These numbers are all positive integers.
 
 We now expand $g \circ f$ as follows:
 \begin{align}
@@ -226,7 +228,7 @@ g \circ f & = \sum_{m \geq 0} g_m \Big(\sum_{n \geq 1} f_n\Big) \nonumber \\
 G_m(f_{n_1}, \ldots, f_{n_1}, \ldots, f_{n_\ell}, \ldots, f_{n_\ell})
 \label{eq:expansiongf}
 \end{align}
-where the latest sum runs over:
+where the second sum runs over
 
 \noindent
 (a) all finite sequences $(k_i)$ of positive integers whose length 
