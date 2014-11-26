@@ -1,0 +1,125 @@
+\documentclass[12pt,a4paper]{article}
+
+%***************************************************************
+% Choisissez l'encodage:
+%\usepackage[latin1]{inputenc}            % pour Windows
+\usepackage[utf8]{inputenc}                % pour Linux
+%\usepackage[applemac]{inputenc}        % pour Mac
+%****************************************************************
+
+\usepackage[T1]{fontenc}
+\usepackage[english,francais]{babel}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{amsmath,amssymb,amsthm}
+
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\E}{\mathbb E}
+\newcommand{\prob}{\mathbb P}
+\newcommand{\pgcd}{\text{\sc pgcd}}
+\newcommand{\Res}{\text{\rm Rés}}
+
+\newtheorem{theo}{Théorème}
+
+\begin{document}
+
+\thispagestyle{empty}  
+
+\title{\textbf{Résultants et sous-résultants de polynômes $p$-adiques}}
+
+\author{\textbf{X.~Caruso} \\
+IRMAR \\
+Université Rennes 1 \\
+Campus de Beaulieu \\
+35042 Rennes Cedex \\
+\texttt{xavier.caruso@normalesup.org}}
+\date{}
+
+\maketitle
+
+Soient $p$ un nombre premier et $\Z_p$ l'anneau des entiers 
+$p$-adiques. À l'origine de ce travail est la volonté d'obtenir
+des algorithmes à la fois efficaces et stables numériquement pour
+le calcul du $\pgcd$ --- ainsi que des coefficients de Bézout ---
+de polynômes à coefficients dans $\Z_p$.
+
+\medskip
+
+Un premier candidat est, bien entendu, l'algorithme d'Euclide usuel. 
+Malheureusement, s'il est plutôt efficace, on s'aperçoit rapidement 
+qu'il ne fait pas le poids au niveau de la stabilité numérique. En 
+effet, on observe expérimentalement que sur des entrées aléatoires $A$ 
+et $B$ piochées parmi les polynômes unitaires de degré $d$ à 
+coefficients dans $\Z_p$, l'algorithme d'Euclide étendu calcule les 
+coefficients de Bézout correspondants $U$ et $V$ avec une perte moyenne 
+d'un nombre de chiffres significatifs sur chaque coefficient qui croît 
+proportionnellement à $d$.
+De surcroît, on obtient fréquemment des exemples pour lesquels on 
+observe une chute importante de la précision alors que le résultant 
+$\Res(A,B)$ est inversible dans $\Z_p$. Or, avec un algorithme stable,
+ceci ne devrait pas se produire car la théorie des résultants affirme 
+que les coefficients de $U$ et $V$ s'écrivent comme le quotient d'une 
+expression polynômiale en les coefficient de $A$ et $B$ par $\Res(A,B)$ ; 
+ainsi, si $\Res(A,B)$ est inversible dans $\Z_p$, on s'attend à 
+connaître les coefficients de Bézout avec la même précision que les 
+entrées.
+
+\bigskip
+
+La première partie de mon exposé sera consacrée à l'explication des 
+phénomènes qui viennent d'être décrits. Plus précisément, je 
+montrerai que les pertes de précision qui s'accumulent au cours de 
+l'exécution de l'algorithme d'Euclide valent approximativement :
+\begin{equation}
+\label{eq:perteEuclide}
+2 \cdot \sum_{j=0}^{d-1} V_j(A,B)
+\end{equation}
+où $V_j(A,B)$ désigne la valuation de coefficient dominant du $j$-ième
+sous-résultant de $(A,B)$.
+Cette quantité est à mettre en comparaison avec la valeur $2 \cdot 
+V_0(A,B)$ qui est la perte \og théorique \fg\ donnée par l'argument
+des résultants. J'étudierai ensuite les fonctions $V_j$ considérées 
+comme des variables aléatoires : j'énoncerai un théorème qui décrit 
+leur loi et, comme corollaire, en déduirai les résultats descriptifs 
+que voici.
+
+\begin{theo}
+Pour tout $j \in \{0, \ldots, d-1\}$, on a :
+\begin{enumerate}[i)]
+\item $\frac 1 {p-1} \leq \E[V_j] \leq \frac p {(p-1)^2}$ ;
+\item $\sigma(V_j) = O\big(\frac 1 {\sqrt p}\big)$ ;
+\item $\prob[V_j \leq m] = O\big( p^{-m + O(\sqrt m)} \big)$
+\end{enumerate}
+où les constantes dans tous les $O(\cdot)$ sont absolues (et, en
+particulier, ne dépendent ni de $j$, ni de $d$).
+\end{theo}
+
+Il résulte du théorème que l'expression \eqref{eq:perteEuclide} vaut en 
+moyenne $\simeq \frac{2d}{p-1}$, en accord avec ce qui avait été 
+observé initialement. En comparaison, la perte \og théorique \fg\ $2 
+\cdot V_0(A,B)$ ne vaut en moyenne que $\simeq \frac 2 {p-1}$. En
+d'autres termes, l'algorithme d'Euclide surestime les pertes de
+précision d'un facteur $d$.
+
+\bigskip
+
+Enfin, dans une deuxième partie de mon exposé, je présenterai une 
+variante \og stabilisée \fg\ de l'algorithme d'Euclide qui conserve sa 
+complexité mais atteint également la perte de précision donnée par la 
+théorie des résultants. Cette variante repose de façon essentielle sur
+la théorie de la précision $p$-adique développée dans \cite{padicprec}.
+
+\vspace{30pt}
+
+\renewcommand{\section}[2]{}%
+\textbf{Bibliographie}
+\begin{thebibliography}{0}
+\bibitem{padicprec}
+{\sc X.~Caruso, D.~Roe, T.~Vaccon},
+{\em Tracking $p$-adic precision},
+LMS J. Comput. Math. {\bf 17} (Special issue A), 2014,  274--294
+\end{thebibliography}
+
+
+\end{document}
+    
