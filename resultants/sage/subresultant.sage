@@ -327,17 +327,18 @@ def subresultants(A, B):
     if B.degree() == d and (B-A).degree() < d:
         R1 = A.parent()((B-A).list()[:d])
         U0 = 1; U1 = -1
+        V0 = 0; V1 = 1
     elif B.degree() > d:
         raise NotImplementedError
     else:
         R1 = B
         U0 = 1; U1 = 0
-    sres = [ ]
-    cof = [ ]
+        U0 = 0; U1 = 1
+    sres = [ ]; cofU = [ ]; cofV = [ ]
     first = True
     while R1 != 0:
         sres.append(R1)
-        cof.append(U1)
+        cofU.append(U1); cofV.append(V1)
         d -= 1
         if R1[d] == 0:
             raise NotImplementedError
@@ -348,6 +349,7 @@ def subresultants(A, B):
         else:
             scalar = ~(R0.leading_coefficient())^2
         U0, U1 = U1, scalar*(U*U0 + V*U1)
+        V0, V1 = V1, scalar*(U*V0 + V*V1)
         R0, R1 = R1, scalar*R
-    sres.reverse(); cof.reverse()
-    return sres, cof
+    sres.reverse(); cofU.reverse(); cofV.reverse()
+    return sres, cofU, cofV
