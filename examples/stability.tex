@@ -56,6 +56,7 @@
 \newcommand{\Epi}{\textrm{Epi}}
 \renewcommand{\c}{\text{\rm c}}
 
+\newcommand{\detp}{\text{\rm det}'}
 \newcommand{\DI}{\text{\rm DI}}
 \newcommand{\II}{\text{\rm II}}
 
@@ -417,34 +418,168 @@ conditions:
 \leq j$.
 
 \noindent
-Such a factorization is unique and can be easily computed by performing 
-elementary operations on rows and columns.
+Such a factorization is \emph{not} unique but the valuations of
+the ``diagonal'' entries of $\Delta_M$ are. Smith decompositions
+can be easily computed by performing elementary operations on rows and columns.
 Regarding to precision, one can prove that if the entries of $M$ are all 
 known up to some $O(\pi^N)$, it is possible to compute a factorization 
 $U_M \cdot \Delta_M \cdot V_M$ where $U_M$ and $V_M$ are \emph{exact}
 matrices satisfying the above conditions and where $\Delta_M$ is known
 at precision $O(\pi^N)$ and satisfies~(i) and~(ii) modulo $\pi^N$.
 
+\subsection{Multiplication}
 
-\subsection{Product of matrices}
+To begin with, we want to study the behaviour of the precision when 
+performing a matrix multiplication. Let $r$, $s$ and $t$ be three 
+positive integers with $s \geq \min(r,t)$ and assume that we want to 
+multiply a matrix $A \in M_{r,s}(K)$ by a matrix $B \in M_{s,t}(K)$. 
+This operation is of course modeled by the polynomial function:
+$$\begin{array}{rcl}
+\mathcal P_{r,s,t} : \quad M_{r,s}(K) \times M_{s,t}(K) & \to & 
+M_{r,t}(K) \smallskip \\
+(A,B) & \mapsto & AB.
+\end{array}$$
+According to Proposition \ref{}, the behaviour of the precision when 
+computed $AB$ is governed by $\mathcal P'_{r,s,t}(A,B)$. It is obvious 
+that this differential is the linear mapping that takes a couple 
+$(dA,dB)$ to $A \cdot dB + dA \cdot B$.
 
+To fix ideas, let us assume from now that the entries of $A$ and $B$ all 
+lie in $\O_K$ and are known at the same precision $O(\pi^N)$. In order 
+to apply Proposition \ref{}, we then need to compute the image 
+of the standard lattice $\mathcal L_0 = M_{r,s}(\O_K) \times 
+M_{s,t}(\O_K)$ under $\mathcal P'_{r,s,t}(A,B)$. It is of course 
+contained in $M_{r,t}(\O_K)$; this reflects the obvious fact that each 
+entry of the product $AB$ is also known with precision at least $O(\pi^N)$. 
+Nonetheless, it may happen that the above inclusion is strict, meaning 
+that we are \emph{gaining} precision in those cases. In order to compute 
+exactly $\mathcal P'_{a,b,c}(A,B)(\mathcal L_0)$, we introduce the Smith 
+factorization of $A$ and $B$:
+$$A = U_A \cdot \Delta_A \cdot V_A
+\text{ and } B = U_B \cdot \Delta_B \cdot V_B$$
+and denote by $a_1, \ldots, a_{\min(r,s)}$ (resp. $b_1, \ldots, 
+b_{\min(s,t)}$) the valuation of the diagonal entries of $\Delta_A$
+(resp. $\Delta_B$). We also agree to set $a_n = b_m = +\infty$ if
+$n > \min(r,s)$ and $m > \min(s,t)$. We define $M_{r,t}(\O_K)$ as 
+the sublattice of $M_{r,t}(\O_K)$ consisting of matrices $M = (M_{i,j})$ 
+such that $\val(M_{i,j}) \geq \min(a_i,b_j)$ for all $(i,j)$.
 
+\begin{prop}
+\label{prop:mulmatrix}
+With the above notations, we have:
+$$\begin{array}{rl}
+& \mathcal P'_{a,b,c}(A,B)(\mathcal L_0)
+= U_A \cdot M_{r,t}((a_i),(b_j)) \cdot V_B \smallskip \\
+\text{and} &
+\displaystyle 
+[\mathcal P'_{a,b,c}(A,B)(\mathcal L_0) : M_{r,t}(\O_K)] =
+\sum_{m=1}^\infty a^{(m)} b^{(m)}
+\end{array}$$
+where $a^{(m)}$ (resp. $b^{(m)}$) is the number of $a_i$'s (resp.
+of $b_j$'s) which are $\geq m$.
+\end{prop}
 
+\begin{proof}
+We write $A \cdot dB + dA \cdot B = U_A \cdot M \cdot V_B$ with
+$$M = \Delta_A \cdot V_A \cdot dA \cdot V_B^{-1} 
++ U_A^{-1} \cdot dB \cdot U_B \cdot \Delta_B.$$
+When $dA$ varies in $M_{a,b}(\O_K)$ so does $V_A \cdot dA \cdot V_B^{-1}$
+and therefore the first summand in $M$ varies in the subspace of 
+$M_{a,c}(\O_K)$ consisting of matrices whose all entries on the $i$-th
+row have valuation at least $a_i$. Arguing similarly for the second
+summand, we deduce the first statement of the Proposition. The second
+statement is left to the reader.
+\end{proof}
 
-{\color{Bittersweet}
+Let us briefly comment on Proposition \ref{prop:mulmatrix} from the 
+perspective of precision. The second statement roughly means that when 
+we are computing the product $AB$, we are gaining $\sum_{m=1}^\infty 
+a^{(m)} b^{(m)}$ significant digits (at least if $N$ is large enough).
+However these digits are not --- 
+even individually --- attached to some particular entry of $AB$ but are 
+``spread out'' among all its entries. Thus, a usual coordinate-wise 
+precision data does not see this gain of precision in general.
+There is a more pedestrian way to visualize this phenomenon. Remark that
+the product $AB$ can be rewritten:
+$$AB = U_A \cdot P \cdot V_B
+\quad \text{with} \quad 
+P = \Delta_A \cdot V_A \cdot U_B \cdot \Delta_B$$
+Tracking precision in the usual way, we see that the $(i,j)$-th entry
+of $P$ is known at precision $O(\pi^{N + \min(a_i,b_j)})$. Hence, the 
+gain of precision is visible here. However it is then ``spread out'' 
+when we are computing $U_A \cdot P \cdot V_B$ and mostly disappears in 
+the usual coordinate-wise precision model. The lattice precision model 
+then appears as a way to keep track of this ``diffused'' gain of
+precision.
+
+\medskip
+
+One may wonder to what extend it is important to take care of these 
+``diffused'' gains of precision. Of course, this strongly depends on the 
+problem we are interested in.
+Here is nevertheless a simple --- and hopefully persuasive --- example 
+illustrating that we may gain a lot by considering lattice precision
+data. \todo{Write the example.}
 
 \subsection{Determinant}
 
-We first outline the standard computation of the differential of the function
-$\det : M_n(K) \to K$. Suppose that $M \in \GL_n(K)$ and that $\com(M) = \det(M) M^{-1}$.
-Then
-\begin{align*}
-\det(M + dM) &= \det(M) \cdot \det(I + M^{-1} \cdot dM)  \\
-&= \det(M) \cdot \big(1 + \tr(M^{-1} \cdot dM)\big) \\
-&= \det(M) + \tr(\com(M) \cdot dM).
-\end{align*}
-The differential of $\det$ at $M$ is then $dM \mapsto \tr(\com(M) \cdot dM)$. It turns
-out that this formula is still valid when $M$ is not invertible.
+We now come to the computation of the determinant of the square $n 
+\times n$ with coefficients in $K$. The differential computation is 
+quite classical: the differential of the function $\det : M_{n,n}(K) \to 
+K$ at some point $M$ is the linear mapping:
+$$\detp(M) : dM \mapsto \tr(\com(M) \cdot dM)$$
+where $\com(M)$ stands for the comatrix of $M$. If $M$ is not 
+invertible, $\detp(M)$ is not surjective and we cannot apply Proposition 
+\ref{}. Therefore, from now on, we suppose that $M$ is invertible.
+
+As we did for matrix multiplication, we first determine the image of
+the standard lattice $\mathcal L_0 = M_{n,n}(\O_K)$ under $\detp(M)$.
+In order to do so, we write $M = U_M \cdot \Delta_M \cdot V_M$ the 
+Smith factorization of $M$ and denote by $m_1 \leq \ldots \leq m_n$ 
+the valuation of the diagonal entries of $\Delta_M$.
+
+\begin{prop}
+\label{prop:detmatrix}
+Setting $v = m_1 + \cdots + m_{n-1}$, we have
+$\detp(M)(\mathcal L_0) = \pi^v \O_K$.
+\end{prop}
+
+\begin{proof}
+From the description of $\detp(M)$, we see that it is enough to prove 
+that the smallest valuation on an entry of $\com(M)$ is $v$
+or, equivalently, that the ideal of $\O_K$ generated by all 
+minors of $M$ of size $(n-1)$ is $\pi^v
+\O_K$. But this ideal remains unchanged when we multiply $M$ 
+(on the left or on the right) by any unimodular matrix. Thus we may 
+assume that $M$ is $\Delta_M$ and the result becomes clear.
+\end{proof}
+
+In terms of precision, Proposition \ref{prop:detmatrix} implies that if 
+$M$ is given at flat precision $O(\pi^N)$ with $N > v$, then $\det(M)$ 
+is known at precision $O(\pi^{N+v})$, so we are gaining $v$ significant 
+digits in absolute precision\footnote{We note that the valuation of 
+$\det(M)$ is $v + m_n$; thus if we are considering \emph{relative} 
+precisions then we should say that we are loosing $m_n$ significant 
+digits.}.
+Furthermore, there exists a easy method for computing the determinant
+of $M$ with this optimal precision. It consists in first computing an
+approximate Smith decomposition of $M$:
+$$M = \tilde U_M \cdot \tilde \Delta_M \cdot \tilde V_M.$$
+Here $\tilde U_M$ and $\tilde V_M$ are exact unimodular matrices and
+$\tilde \Delta_M$ is known at precision $O(\pi^N)$, is diagonal modulo
+$\pi^N$ and its diagonal entries $a_1, \ldots, a_m$ have valuations 
+$m_1, \ldots, m_n$ respectively.
+We then have $\det(M) = \det(\tilde \Delta_M)$ and factoring $a_i$ on
+the $i$-th row of $\tilde \Delta_M$, we obtain
+$\det(\tilde \Delta_M) = a_1 \cdots a_m \cdot U$
+where $U$ is a matrix which is congruent to the identity modulo 
+$\pi^{N-m_n}$. Therefore we get:
+$$\det(M) \equiv a_1 \cdots a_m \pmod{\pi^{N+v}}$$
+from what we see that we can compute $\det(M)$ at the required precision
+by simply evaluating the product $a_1 \cdots a_m$.
+
+
+{\color{Bittersweet}
 
 \subsection{Characteristic polynomials.}
 
@@ -455,7 +590,7 @@ $M$ to its monic characteristic polynomial $\det(X-M)$.
 Then $\chi$ is differentiable at each point $M \in M_n(K)$ and its 
 differential is given by $dM \mapsto \tr(\com(X{-}M) \cdot dM)$.
 
-\subsection*{LU factorization.}
+\subsection{LU factorization.}
 
 Define the LU factorization of a square matrix $M \in M_n(K)$ as a decomposition $M = LU$ 
 where $L$ is lower triangular and unipotent and $U$ is upper triangular. 
@@ -479,7 +614,7 @@ factorization; the only difference is that LUP factorizations are not
 unique but they are on a small neighborhood of $M$ if we fix the matrix 
 $P$.
 
-\subsection*{QR factorization.}
+\subsection{QR factorization.}
 
 A QR factorization of a square matrix $M \in M_n(K)$ will be
 a decomposition $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
@@ -505,6 +640,8 @@ matrix and a diagonal one. Since moreover $dR \cdot R^{-1}$ is upper
 triangular with all diagonal entries equal to $0$, we see that 
 \eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
 and $dM$.
+
+\begin{comment}
 
 \section{Univariate polynomials}
 \label{sec:polynomials}
@@ -709,6 +846,8 @@ roughly $O(p^{N/m})$. However, if we know in advance that $\alpha$ has
 multiplicity $m$ then we can compute it at precision $O(p^{N-c})$ 
 where $c$ is some constant (depending on $P$ and $\alpha$ but not on
 $N$).
+
+\end{comment}
 
 }
 
