@@ -388,14 +388,52 @@ not apply.  In the second, Lemma \ref{lem:main} reflects the well-known fact tha
 raising a $p$-adic number to the $p^k$-th power increases the precision
 by $k$ extra digits.
 
+}
+
 \section{Matrices}
 \label{sec:matrices}
 
-Differentiating ring operations (sum, products, inverse) over matrices 
-is again straightforward, keeping in mind that matrix algebras are not
-commutative.
+\todo{Write a short introduction.}
 
-\subsection*{Determinants and characteristic polynomials.}
+The notation $M_{n,m}(K)$ refers to the $K$-vector space of matrices 
+with $n$ rows and $m$ columns with coefficients in $K$.
+
+\medskip
+
+\noindent
+{\bf Smith form.}
+In what follows, we will often use the \emph{Smith decomposition} of a 
+matrix $M \in M_{n,m}(K)$: we recall that it is a factorization of $M$ 
+as a product $U_M \cdot \Delta_M \cdot V_M$ when $U_M$ and $V_M$ are 
+unimodular (square) matrices of size $n$ and $m$ respectively, with 
+coefficients in $\O_K$ and $\Delta_M$ satisfies the two following
+conditions:
+
+\noindent
+(i) its $(i,j)$-th entry vanishes as soon as $i \neq j$
+
+\noindent
+(ii) its $(i,i)$-th entry divides its $(j,j)$-th entry when $i
+\leq j$.
+
+\noindent
+Such a factorization is unique and can be easily computed by performing 
+elementary operations on rows and columns.
+Regarding to precision, one can prove that if the entries of $M$ are all 
+known up to some $O(\pi^N)$, it is possible to compute a factorization 
+$U_M \cdot \Delta_M \cdot V_M$ where $U_M$ and $V_M$ are \emph{exact}
+matrices satisfying the above conditions and where $\Delta_M$ is known
+at precision $O(\pi^N)$ and satisfies~(i) and~(ii) modulo $\pi^N$.
+
+
+\subsection{Product of matrices}
+
+
+
+
+{\color{Bittersweet}
+
+\subsection{Determinant}
 
 We first outline the standard computation of the differential of the function
 $\det : M_n(K) \to K$. Suppose that $M \in \GL_n(K)$ and that $\com(M) = \det(M) M^{-1}$.
@@ -407,6 +445,9 @@ Then
 \end{align*}
 The differential of $\det$ at $M$ is then $dM \mapsto \tr(\com(M) \cdot dM)$. It turns
 out that this formula is still valid when $M$ is not invertible.
+
+\subsection{Characteristic polynomials.}
+
 The same computation extends readily to characteristic polynomials,
 since they are defined as determinants. More precisely, let us 
 consider the function $\chi : M_n(K) \to K_n[X]$ taking a matrix 
@@ -889,7 +930,7 @@ at $(V_1, V_2)$ maps $(dv_1, dv_2)$ to $dv \in \Hom(V, E/V)$ (with $V
 Using duality, we derive from this a similar result for the mapping 
 $(V_1, V_2) \mapsto V_1 \cap V_2$ (left to the reader).
 
-\subsection{Stability}
+\subsection{Application to precision}
 
 
 \appendix
