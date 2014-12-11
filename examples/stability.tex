@@ -9,6 +9,7 @@
 \usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
 \usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{comment}
+\usepackage{multirow}
 \usepackage{tikz}
 
 \newcommand{\noopsort}[1]{}
@@ -72,7 +73,7 @@
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
-\title{About p-adic stability}
+\title{About p-adic stability in linear algebra}
 
 \numberofauthors{3}
 \author{
@@ -90,12 +91,12 @@
 \maketitle
 
 \begin{abstract}
-Based on the framework developed in \cite{caruso-roe-vaccon:14a}, we study the 
-$p$-adic stability of many classical algorithms involving many usual
-algebraic objects (matrices, univariate polynomials,
-vector spaces). We observe in particular that generic algorithms ---
-which are designed to work over an arbitrary field --- are generally
-very unstable.
+Based on the framework developed in \cite{caruso-roe-vaccon:14a}, we study 
+the $p$-adic stability of standard operations on matrices and vector 
+spaces. 
+%We observe in particular that generic algorithms --- which are 
+%designed to work over an arbitrary field --- are generally very 
+%unstable.
 \end{abstract}
 
 \vspace{1mm}
@@ -132,6 +133,9 @@ precision --- which is a main issue we encounter when trying to work
 with $p$-adic numbers --- was designed only recently in 
 \cite{caruso-roe-vaccon:14a}. 
 
+\todo{Rewrite the introduction}
+
+\begin{comment}
 The present paper, which may be considered as a continuation of 
 \cite{caruso-roe-vaccon:14a}, aims at using the theory of \emph{loc. 
 cit.} in order to analyse the $p$-adic stability of many standard 
@@ -154,15 +158,18 @@ D)$ --- and sometimes even $O(1)$. We would like to underline in
 particular that the instability phenomema are much more apparent when 
 the residue field is small. It is the reason why we will always take
 $K = \Q_2$ is our examples.
+\end{comment}
 
 \medskip
 
 \noindent
 {\bf Organization of the paper.}
 The section \ref{sec:theory} introduces the theory of ultrametric 
-precision developped in \cite{caruso-roe-vaccon:14a} and completes it on a technical 
-point. The analysis of standard algorithms are treated in the next
-sections: \S\S \ref{sec:numbers}--\ref{sec:vectorspaces} are 
+precision developped in \cite{caruso-roe-vaccon:14a} and completes it 
+on a technical point. In \S \ref{sec:matrices}
+
+The analysis of standard algorithms are treated in 
+the next sections: \S\S \ref{sec:numbers}--\ref{sec:vectorspaces} are 
 successively devoted to the case of numbers, matrices, univariate 
 polynomials, multivariate polynomials and finally vector spaces.
 
@@ -181,63 +188,114 @@ $\Vert \cdot \Vert$ the corresponding norm.
 \section{The theory of p-adic precision}
 \label{sec:theory}
 
-\subsection{The main lemma and its consequences}
+The aim of this section is to summerize briefly the content of 
+\cite{caruso-roe-vaccon:14a} and complete it on certain points.
 
-\todo{Recall results of \cite{caruso-roe-vaccon:14a}.}
+\subsection{Lattices as precision data}
 
-{\color{Bittersweet}
+Roughly speaking, the main proposal of \cite{caruso-roe-vaccon:14a} is 
+to use lattices to track precision when computing with elements lying in 
+vector spaces over $K$.
 
-We saw in the core of the article that the differential of an operation
-encodes the intrinsic loss/gain of precision when performing this
-operation. The aim of this appendix is to compute the differential of
-many common operations on numbers, polynomials and matrices. Surprisingly,
-we observe that all differentials we will consider are rather easy to
-compute even if the underlying operation is quite involved (\emph{e.g.}
-Gr\"obner basis).
+To make this sentence more explcit, let us consider be a finite 
+dimensional\footnote{The framework of \cite{caruso-roe-vaccon:14a} is 
+actually those of Banach spaces. However we will not need infinite 
+dimensional spaces in the present paper.} normed vector space $E$ 
+defined over $K$. We use the notation $\Vert \cdot \Vert_E$ for the norm 
+on $E$ and $B^-_E(r)$ (resp. $B^{\phantom -}_E(r)$) for the open (resp. 
+closed) ball of radius $r$ centered at the origin. A lattice $L \subset 
+E$ is, by definition, a sub-$\O_K$-module which generates $E$ over $K$. 
+Since we are working in a ultrametric world, the balls $B^{\phantom 
+-}_E(r)$ and $B^-_E(r)$ are examples of lattices. Actually, lattices 
+should be thought as special neighborhoods of $0$ and therefore are good 
+candidates to model precision data. Moreover, as revealed in 
+\cite{caruso-roe-vaccon:14a}, they behave quite well under (strictly) 
+differentiable maps:
 
-In what follows, we use freely the ``method of physicists'' to compute
-differentials: given a function $f$ differentiable at some point $x$, we
-consider a small perturbation $dx$ of $x$ and write $f(x+dx) = y + dy$
-by expanding LHS and neglecting terms of order $2$. The differential of
-$f$ at $x$ is then the linear mapping $dx \mapsto dy$.
+\begin{prop}
+\label{prop:precision}
+Let $E$ and $F$ be two finite dimensional normed vector spaces over $K$ 
+and $f : U \rightarrow F$ be a function defined on an open subset $U$ of 
+$E$. We assume that $f$ is differentiable at some point $v_0 \in U$ and 
+that the differential $f'(v_0)$ is surjective.
+Then, for all $\rho \in (0, 1]$, there exists a positive real
+number $\delta$ such that, for all $r \in (0, \delta)$, any lattice
+$H$ such that $B^-_E(\rho r) \subset H \subset B^{\phantom -}_E(r)$ 
+satisfies:
+\begin{equation}
+\label{eq:firstorder}
+f(v_0 + H) = f(v_0) + f'(v_0) (H).
+\end{equation}
+\end{prop}
 
-}
+Proposition \ref{prop:precision} can be rephrased in terms of precision 
+as follows: if the input $v_0$ is known at precision $H$, then $f(v_0)$ 
+is known up to $f'(v_0)(H)$ and this precision is optimal. Optimality is 
+reflected by the equality sign in Eq.~\eqref{eq:firstorder}.
 
+In \cite{caruso-roe-vaccon:14a}, we also explained that if the function 
+$f$ is locally analytic, then the constant $\delta$ appearing in
+Proposition \ref{prop:precision} can be made explicit in terms of the
+growing function $\Lambda(f)$ of $f$ defined by:
+$$\textstyle \Lambda(f)(v) = 
+\log \big( \sup_{h \in B^-_E(e^v)} \Vert 
+f(h) \Vert \big)$$
+with the convention that $\Lambda(f)(v) = +\infty$ if $f$ does not
+converge on $B^-_E(e^v)$.
+We refer to \cite[Proposition 3.12]{caruso-roe-vaccon:14a} for the
+precise statement and seek here to state the particular case of
+polynomial functions. A function $f : E \to F$ is said \emph{polynomial} 
+if it is coordinate-wise given by multivariate polynomials in any 
+(equivalently all) system of coordinates associated to orthonormal 
+basis.
+
+\begin{prop}
+\label{prop:precision2}
+We keep the notations of Proposition \ref{prop:precision} and assume 
+in addition that $f$ is polynomial. Let $C$ be a positive real
+number such that $B_F(1) \subset f'(v_0)(B_E(C))$. 
+Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
+\rho^{-1}$.
+\end{prop}
 
 \subsection{A bound on a growing function}
 \label{ssec:boundLambdaf}
 
-In the next section, we will compute the derivative of many standard 
-operations and remark that it often has a simple expression in term of 
-the input and the output. In other terms, the function $f$ modeling
+In the next sections, we will compute the derivative of several standard 
+operations and remark that it sometimes has a simple expression in term 
+of the input and the output. In other terms, the function $f$ modeling
 such an operation satisfies a differential equation of the form
 $f' = g \circ (f, \id)$
 where $g$ is a given --- and hopefully rather simple --- function. The 
 aim of this subsection is to study this differential equation and to 
-derive from it some bounds on the growing function $\Lambda(f)$.
-We shall actually work with the slight more general differential 
-equation:
+derive from it some bounds on the growing function $\Lambda(f)$. 
+\emph{In the following, we shall always assume that $K$ has 
+characteristic $0$.}
+
+We actually generalize a bit the setting above and consider the 
+differential equation:
 \begin{equation}
 \label{eq:diffequah}
 f' = g \circ (f, h).
 \end{equation}
 Here $g$ and $h$ are known locally analytic functions and $f$ is the 
 unknown, which is assumed to be locally analytic as well. The function
-$f$ goes from $U$ to $V$, two open subsets in $K$-Banach spaces $E$ 
+$f$ goes from $U$ to $V$, two open subsets in two finite dimensional
+normed vector spaces $E$ 
 and $F$ respectively. The function $h$ goes from $U$ to $W$ where $W$
 is again an open subset in a $K$-Banach space $G$. Consequently, $g$
-goes from $V \times W$ to the vector space $\mathcal L(E,F)$ gathering
-all continuous linear applications $E \to F$.
+goes from $V \times W$ to the vector space $\Hom(E,F)$ gathering
+all (continuous) linear applications $E \to F$.
 In what follows, we always assume that $V$ and $W$ contains the origin, 
 $f(0) = 0$, $h(0) = 0$ and $g(0) \neq 0$. There assumptions are harmless 
 for two reasons: first, we can always shift $f$ and $h$ (and $g$ 
 accordingly) so that they both vanish at $0$ and second, in order to 
-apply the theory of \cite{caruso-roe-vaccon:14a}, the derivative $f'(0)$ needs to be 
-surjective and therefore \emph{a fortiori} nonzero.
+apply Proposition \ref{prop:precision2}, the derivative $f'(0)$ 
+needs to be surjective and therefore \emph{a fortiori} nonzero.
 
 We assume that we are given in addition two nondecreasing convex 
 functions $\Lambda_g$ and $\Lambda_h$ such that $\Lambda(g) \leq 
-\Lambda_g$ and $\Lambda(h) \leq \Lambda_h$. We assume in addition that 
+\Lambda_g$ and $\Lambda(h) \leq \Lambda_h$. We suppose further that 
 there exists $\nu$ such that $\Lambda_g$ is constant on the interval 
 $]{-}\infty, \nu]$\footnote{We note that this assumption is fullfiled if 
 we take $\Lambda_g = \Lambda(g)$ because we have assumed that $g(0)$ 
@@ -251,20 +309,16 @@ $$\begin{array}{rll}
   \tau_\nu \circ (\id + \Lambda_g \circ \Lambda_h)(x + \alpha)}
 \end{array}$$
 where $\alpha$ is a real number satisfying $\Vert n! \Vert \geq 
-e^{-\alpha n}$ for all $n$. A suitable value for $\alpha$ is 
-$$\alpha = - \frac p {p-1} \cdot \log \Vert p \Vert > 0$$ 
-where $p$ denotes the characteristic of the residue field and where, by 
-convention, the above expression equals $0$ if $p = 0$ (we recall that 
-we have assumed that $K$ has characteristic $0$).
+e^{-\alpha n}$ for all $n$. A suitable value for $\alpha$ is $\alpha = - 
+\frac p {p-1} \cdot \log \Vert p \Vert > 0$ where $p$ denotes the 
+characteristic of the residue field and where, by convention, the above 
+expression equals $0$ if $p = 0$.
+The next Proposition is proved in Appendix \ref{app:proof}.
 
 \begin{prop}
 \label{prop:boundLambdaf}\label{PROP:BOUNDLAMBDAF}
 We have $\Lambda(f) \leq \Lambda_f$.
 \end{prop}
-
-\begin{proof}
-See Appendix \ref{app:proof}.
-\end{proof}
 
 \begin{figure}
 \null \hfill
@@ -365,32 +419,6 @@ at least, on the domain we are interested in --- and we do not loose so
 much when we write that the norm of the couple $(f(x), h(x))$ is the 
 maximum of those of $f(x)$ and $h(x)$.
 
-{\color{Bittersweet}
-
-\section{Numbers}
-\label{sec:numbers}
-
-The most basic operations are, of course, sums, products and inverses of
-elements of $K$. Their differential are well-known and quite easy to
-compute: if $z = x + y$ (resp. $z = xy$, resp $z = \frac 1 x$), we have
-$dz = dx + dy$ (resp. $dz = x \cdot dy + dx \cdot y$, resp $dz = -
-\frac{dx}{x^2}$).
-
-Slightly more interesting is the $n$-th power map $f$ from $K$ to
-itself. Its differential $f'(x)$ is found by differentiating the
-equation $y = x^n$, obtaining $dy = n x^{n-1} dx$.
-Hence $f'(x)$ maps the ball $B_K(r)$ to $B_K(\lvert nx^{n-1} \rvert \cdot r)$. According to Lemma \ref{lem:main}, this
-means that the behavior of the precision depends on the absolute value
-of $n$. By the ultrametric inequality, we always have $\lvert n \rvert \leq 1$ but
-may have $\lvert n \rvert = 0$ if the characteristic of $K$ divides $n$ or
-$\lvert n \rvert = p^{-k}$ if $K$ is $p$-adic with $\val(n) = k$.  In the first case,
-$f'(x)$ also vanishes and Lemma \ref{lem:main} does
-not apply.  In the second, Lemma \ref{lem:main} reflects the well-known fact that
-raising a $p$-adic number to the $p^k$-th power increases the precision
-by $k$ extra digits.
-
-}
-
 \section{Matrices}
 \label{sec:matrices}
 
@@ -439,14 +467,14 @@ $$\begin{array}{rcl}
 M_{r,t}(K) \smallskip \\
 (A,B) & \mapsto & AB.
 \end{array}$$
-According to Proposition \ref{}, the behaviour of the precision when 
+According to Proposition \ref{prop:precision}, the behaviour of the precision when 
 computed $AB$ is governed by $\mathcal P'_{r,s,t}(A,B)$. It is obvious 
 that this differential is the linear mapping that takes a couple 
 $(dA,dB)$ to $A \cdot dB + dA \cdot B$.
 
 To fix ideas, let us assume from now that the entries of $A$ and $B$ all 
 lie in $\O_K$ and are known at the same precision $O(\pi^N)$. In order 
-to apply Proposition \ref{}, we then need to compute the image 
+to apply Propositions \ref{prop:precision} and \ref{prop:precision2}, we then need to compute the image 
 of the standard lattice $\mathcal L_0 = M_{r,s}(\O_K) \times 
 M_{s,t}(\O_K)$ under $\mathcal P'_{r,s,t}(A,B)$. It is of course 
 contained in $M_{r,t}(\O_K)$; this reflects the obvious fact that each 
@@ -494,8 +522,11 @@ statement is left to the reader.
 Let us briefly comment on Proposition \ref{prop:mulmatrix} from the 
 perspective of precision. The second statement roughly means that when 
 we are computing the product $AB$, we are gaining $\sum_{m=1}^\infty 
-a^{(m)} b^{(m)}$ significant digits (at least if $N$ is large enough).
-However these digits are not --- 
+a^{(m)} b^{(m)}$ significant digits in absolute precision\footnote{We 
+note that, on the other side, the valuation of the entries of $AB$ may 
+increase, meaning that we are also loosing some significant digits if 
+we are reasoning in relative precision.} (under the assumption of 
+Proposition \ref{prop:precision2}). However these digits are not --- 
 even individually --- attached to some particular entry of $AB$ but are 
 ``spread out'' among all its entries. Thus, a usual coordinate-wise 
 precision data does not see this gain of precision in general.
@@ -515,11 +546,77 @@ precision.
 \medskip
 
 One may wonder to what extend it is important to take care of these 
-``diffused'' gains of precision. Of course, this strongly depends on the 
-problem we are interested in.
-Here is nevertheless a simple --- and hopefully persuasive --- example 
-illustrating that we may gain a lot by considering lattice precision
-data. \todo{Write the example.}
+``diffused'' gains of precision. For one single product of matrices, 
+it is not so much. However, the benefits becomes really substantial
+when we are executing an algorithm that computes many products of
+matrices. Let us illustrate this with the following quite simple
+example.
+
+\noindent\hrulefill
+
+\noindent {\bf Algorithm 1:} {\tt example\_product}
+
+\noindent{\bf Input:} a list $(M_1, \ldots, M_n)$ of square matrices
+of size $d$.
+
+\smallskip
+
+\noindent 1.\ Set $P$ to the identity matrix of size $d$
+
+\noindent 2.\ {\bf for} $j=1,\dots,n$ {\bf do} {\bf compute} $P = P M_i$
+
+\noindent 3.\ {\bf return} the top left entry of $P$
+
+\vspace{-1ex}\noindent\hrulefill
+
+\medskip
+
+\noindent
+Figure \ref{fig:mulmatrix} compares the number of significant digits in 
+\emph{relative} precision we are loosing on the output of Algorithm 1 
+when we are using, on the one hand, a standard component-wise track of 
+precision and, on the other hand, a lattice-based method to handle 
+precision.
+%
+\begin{figure}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multirow{2}{*}{\hspace{0.2cm}$d$\hspace{0.2cm}} & 
+\multirow{2}{*}{\hspace{0.2cm}$n$\hspace{0.2cm}} & 
+\multicolumn{2}{|c|}{Average loss of precision} \\
+\cline{3-4}
+& & Comp.-wise method & Lattice method \\
+\hline 
+$2$ & $10$ & $\hphantom{00}2.8$ & $2.4$ \\
+$2$ & $100$ & $\hphantom{0}16.7$ & $5.0$ \\
+$2$ & $1000$ & $157.8$ & $7.9$ \\
+\hline
+$3$ & $10$ & $\hphantom{00}2.2$ & $1.9$ \\
+$3$ & $100$ & $\hphantom{0}12.8$ & $4.0$ \\
+$3$ & $1000$ & $122.5$ & $7.0$ \\
+\hline
+\end{tabular}
+
+\smallskip
+
+{\small
+Results for a sample of $1000$ random inputs in $M_{d,d}(\Z_2)^n$}
+\end{center}
+\renewcommand{\arraystretch}{1}
+
+\vspace{-0.3cm}
+
+\caption{Average loss of precision in Algorithm 1}
+\label{fig:mulmatrix}
+\end{figure}
+%
+We observe that, in the first case, the number of lost digits seems to 
+grow linearly with respect to the number of multiplications we are 
+performing (that is $n$) whereas, in the second case, the growing seems 
+to be only logarithmic. It would be nice to have a precise formulation 
+(and proof) of this heuristic.
 
 \subsection{Determinant}
 
@@ -530,7 +627,7 @@ K$ at some point $M$ is the linear mapping:
 $$\detp(M) : dM \mapsto \tr(\com(M) \cdot dM)$$
 where $\com(M)$ stands for the comatrix of $M$. If $M$ is not 
 invertible, $\detp(M)$ is not surjective and we cannot apply Proposition 
-\ref{}. Therefore, from now on, we suppose that $M$ is invertible.
+\ref{prop:precision}. Therefore, from now on, we suppose that $M$ is invertible.
 
 As we did for matrix multiplication, we first determine the image of
 the standard lattice $\mathcal L_0 = M_{n,n}(\O_K)$ under $\detp(M)$.
@@ -579,278 +676,21 @@ from what we see that we can compute $\det(M)$ at the required precision
 by simply evaluating the product $a_1 \cdots a_m$.
 
 
-{\color{Bittersweet}
+\subsection{Characteristic polynomials}
 
-\subsection{Characteristic polynomials.}
+\todo{Write this subsection}
 
-The same computation extends readily to characteristic polynomials,
-since they are defined as determinants. More precisely, let us 
-consider the function $\chi : M_n(K) \to K_n[X]$ taking a matrix 
-$M$ to its monic characteristic polynomial $\det(X-M)$.
-Then $\chi$ is differentiable at each point $M \in M_n(K)$ and its 
-differential is given by $dM \mapsto \tr(\com(X{-}M) \cdot dM)$.
+\subsection{LU factorization}
 
-\subsection{LU factorization.}
+We refer to \cite[Appendix B]{caruso-roe-vaccon:14a} for the computation
+of the derivative of the LU factorization.
+\todo{Complete this subsection.}
 
-Define the LU factorization of a square matrix $M \in M_n(K)$ as a decomposition $M = LU$ 
-where $L$ is lower triangular and unipotent and $U$ is upper triangular. 
-Such a decomposition exists and is unique provided that no principal minor
-of $M$ vanishes. We can then consider the mapping $M \mapsto (L,U)$ 
-defined over the Zariski-open set of matrices satisfying the above 
-condition. In order to differentiate it, we differentiate the relation 
-$M = LU$ and rewrite the result as
-$$L^{-1} dM \: U^{-1} = L^{-1} \cdot dL + dU \cdot U^{-1}.$$
-We remark that in the right hand side of the above formula, the first
-summand is lower triangular with zero diagonal whereas 
-the second summand is upper triangular. Hence in order to compute $dL$
-and $dU$, one can proceed as follows: 
-\begin{enumerate}
-\item compute the product $dX = L^{-1} dM \: U^{-1}$,
-\item separate the lower and upper part of $dX$ obtaining $L^{-1} \cdot dL$ and $dU \cdot U^{-1}$
-\item recover $dL$ and $dU$ by multiplying the above matrices by $L$ on the left and $U$ on the right respectively.
-\end{enumerate}
-The above discussion extends almost \emph{verbatim} to LUP 
-factorization; the only difference is that LUP factorizations are not 
-unique but they are on a small neighborhood of $M$ if we fix the matrix 
-$P$.
-
-\subsection{QR factorization.}
-
-A QR factorization of a square matrix $M \in M_n(K)$ will be
-a decomposition $M = QR$ where $R$ is unipotent upper triangular and $Q$ is
-orthogonal in the sense that $\trans Q \cdot Q$ is diagonal. As before, such 
-a decomposition exists and is unique on a Zariski-open subset of $M_n(K)$. The
-mapping $f : M \mapsto (Q,R)$ is then well defined on this subset. We 
-would like to emphasize at this point that the orthogonality condition
-defines a sub-manifold of $M_n(K)$ which is \emph{not} a
-vector space: it is defined by equations of degree $2$. The codomain
-of $f$ is then also a manifold; this example then fits into the setting
-of Appendix \ref{sec:manifold} but not to those of Section \ref{sec:mainlemma}. 
-We can differentiate $f$ by following the method used for LU 
-factorization.  Differentiating the relation $M = QR$, we obtain
-\begin{equation}
-\label{eq:diffQR}
-\trans Q \cdot dM \cdot R^{-1} = \trans Q \cdot dQ + \Delta \cdot dR 
-\cdot R^{-1}
-\end{equation}
-where $\Delta = \trans Q \cdot Q$ is a diagonal matrix by definition.
-Moreover by differentiating $\trans Q \cdot Q = \Delta$, we find that
-$\trans Q \cdot dQ$ can be written as the sum of an antisymmetric 
-matrix and a diagonal one. Since moreover $dR \cdot R^{-1}$ is upper
-triangular with all diagonal entries equal to $0$, we see that 
-\eqref{eq:diffQR} is enough to compute $dQ$ and $dR$ from $Q$, $R$ 
-and $dM$.
-
-\begin{comment}
-
-\section{Univariate polynomials}
-\label{sec:polynomials}
-
-For any integer $d$, let us denote by $K_{< d}[X]$ the set of 
-polynomials over $K$ of degree $< d$. It is a finite dimensional vector 
-space of dimension $d$. The affine space $X^d + K_{< d}[X]$ is then 
-the set of monic polynomials over $K$ of degree $d$. We denote it by 
-$K_d[X]$.
-
-\subsection*{Evaluation and interpolation.}
-
-Beyond sums and products (which can be treated as before), two basic 
-operations involving polynomials are evaluation and interpolation.
-Evaluation models the function $(P,x) \mapsto P(x)$, where
-$P$ is some polynomial and $x \in K$. Differentiating
-it can be done by computing
-\begin{equation}
-\label{eq:diffeval}
-(P + dP)(x + dx) = P(x + dx) + dP(x + dx) = P(x) + P'(x) dx + dP(x).
-\end{equation}
-Here $P'$ denotes the derivative of 
-$P$. The differential at $P$ is then the linear map $(dP, dx) \mapsto 
-P'(x) dx + dP(x)$.
-
-As for interpolation, we consider a positive integer $d$ and the partial 
-function $f : K^{2d} \to K_{< d}[X]$ which maps the tuple $(x_1, y_1, 
-\ldots, x_d, y_d)$ to the polynomial $P$ of degree less than $d$ such 
-that $P(x_i) = y_i$ for all $i$. The polynomial $P$ exists and is unique 
-as soon as the $x_i$'s are pairwise distinct; the above function $f$ is 
-then defined on this open set. Furthermore, if $(x_1, y_1, \ldots, x_d, 
-y_d)$ is a point in it and $P$ denotes the corresponding interpolation 
-polynomial, \eqref{eq:diffeval} shows that $d y_i = P'(x_i) dx_i + 
-dP(x_i)$ for all $i$. For this, we can compute $dP(x_i)$ from $d x_i$ 
-and $d y_i$ and finally recover $dP$ by performing a new interpolation.
-
-\subsection*{Euclidean division.}
-
-Let $A$ and $B$ be two polynomials with $B \neq 0$. The Euclidean division of 
-$A$ by $B$ is the problem of finding $Q$ and $R$ with $A = BQ + R$ and $\deg R < \deg B$. 
-Differentiating the above equality we find
-\[
-dA - dB \cdot Q = B \cdot dQ + dR,
-\]
-which implies that $dQ$ and $dR$ are respectively obtained as the 
-quotient and the remainder of the Euclidean division of $dA - dB \cdot 
-Q$ by $B$. This gives the differential. We note that the discussion 
-above extends readily to convergent series (see also 
-\cite{caruso-lubicz:14a}).
-
-\subsection*{Greatest common divisors and B\'ezout coefficients.}
-
-We fix two positive integers $n$ and $m$ with $n \geq m$. We consider the 
-function $f : K_n[X] \times K_m[X] \to (K_{\leq n}[X])^3$ which sends a 
-pair $(A,B)$ to the triple $(D, U, V)$ where $D$ is the \emph{monic} 
-greatest common divisor of $A$ and $B$ and $U$ and $V$ are the B\'ezout 
-coefficients of minimal degrees, computed by the extended 
-Euclidean algorithm.
-The nonvanishing of the resultant of $A$ and $B$ defines a Zariski open 
-subset $\mathcal V_0$ where the function $\gcd$ takes the constant value 
-$1$. On the contrary, outside $\mathcal V_0$, $\gcd(A,B)$ is a polynomial 
-of positive degree.  Since $\mathcal V_0$ is dense, $f$ is not continuous outside 
-$\mathcal V_0$. On the contrary, the function $f$ is differentiable, and even locally analytic,
-on $\mathcal V_0$.
-
-Of course, on $\mathcal V_0$, the first component $D$ is constant and 
-therefore $dD = 0$. To compute $dU$ and $dV$, one can simply 
-differentiate the B\'ezout relation $AU + BV = 1$. We get:
-$$A \cdot dU + B \cdot dV = - (dA \cdot U + dB \cdot V)$$
-from which we deduce that $dU$ (resp. $dV$) is obtained as the 
-remainder in the Euclidean division of $U{\cdot}dX$ by $B$ (resp. of 
-$V{\cdot}dX$ by $A$) where $dX = - (dA \cdot U + dB \cdot V)$.
-
-In order to differentiate $f$ outside $\mathcal V_0$, we 
-define the subset $\mathcal V_i$ of $K_n[X] \times 
-K_m[X]$ as the locus where the $\gcd$ has degree $i$. The theory of 
-subresultants shows that $\mathcal V_i$ is locally closed with respect to 
-the Zariski topology. In particular, it defines a $K$-manifold in the 
-sense of Appendix \ref{sec:manifold}, and the 
-restriction of $f$ to $\mathcal V_i$ is differentiable. To compute
-its differential, we proceed along the same lines as before: we 
-differentiate the relation $AU + BV = D$ and obtain this way
-$A \cdot dU + B \cdot dV - dD = dX$
-with $dX = - (dA \cdot U + dB \cdot V)$. In the above relation, the
-first two terms $A{\cdot}dU$ and $B{\cdot}dV$ are divisible by $D$ 
-whereas the term $dD$ has degree less than $i$. 
-Hence if $dX = D \cdot dQ + dR$ is the Euclidean division of $dX$ by $D$, 
-we must have $\frac A D \cdot dU + \frac B D \cdot dV = dQ$ and $dD = 
--dR$. These relations, together with bounds on the degree of $U$ and $V$,
-imply as before that $dU$ (resp. $dV$) are equal to the remainder in the
-Euclidean division of $U{\cdot}dQ$ by $\frac B D$ (resp. of $V{\cdot}dQ$
-by $\frac A D$).
-
-\medskip
-
-The lesson we may retain from this study is the following. If we have to 
-compute the greatest common divisor of two polynomials $A$ and $B$ known 
-with finite precision, we first need to determine what is its degree. 
-However, the degree function is not continuous --- it is only upper 
-semi-continuous --- and hence cannot be determined with certainty from $A$ and 
-$B$, unless the approximation to $(A,B)$ lies entirely within $\mathcal V_0$.
-
-We therefore need to make an extra hypothesis.  The most natural hypothesis to make
-is that $\gcd(A, B)$ has the maximal possible degree.  The main reason for choosing
-this convention is that if the actual polynomials $A, B \in K[X]$ have a greatest common
-divisor of degree $i$ then there is some precision for which the maximal degree will be
-equal to $i$, whereas if they have a positive
-degree common divisor then no amount of increased precision will eliminate an intersection
-with $\mathcal V_0$.  A second justification is that any other choice would yield a result
-with no precision, since $A$ and $B$ appear to lie in $\mathcal V_i$ at the known precision.
-Once this assumption is made, the computation is possible and one can apply Lemma 
-\ref{lem:main} to determine the precision of the result.
-Note that with the above convention, the $\gcd$ of $A$ and $A$ is $A$ 
-itself although there exist pairs of coprime polynomials in any 
-neighborhood of $(A,A)$.
-
-\subsection*{Factorization.}
-
-Suppose that we are given a polynomial $P_0 \in K_d[X]$ written as a 
-product $P_0 = A_0 B_0$, where $A_0$ and $B_0$ are monic and coprime. 
-Hensel's lemma implies that there exists a small neighborhood $\mathcal 
-U$ of $P_0$ in $K_d[X]$ such that any $P \in \mathcal U$ factors 
-uniquely as $P = A B$ with $A$ and $B$ monic and close enough to $A_0$ 
-and $B_0$ respectively. Thus, we can consider the map $f : P 
-\mapsto (A,B)$ defined on the subset of $\mathcal U$ consisting of monic 
-polynomials. We want to differentiate $f$ at $P_0$. For this, we 
-differentiate the equality $P = A B$ around $P_0$, obtaining
-\begin{equation}
-\label{eq:difffactor}
-dP = A_0 \cdot dB + B_0 \cdot dA.
-\end{equation}
-where $dP$, $dA$ and $dB$ have degree less than $\deg P$, $\deg A$ and 
-$\deg B$ respectively. If $A_0 U_0 + B_0 V_0 = 1$ is a Bezout relation
-between $A_0$ and $B_0$, it follows from \eqref{eq:difffactor} that
-$dA$ (resp. $dB$) is the remainder in the Euclidean division of $V_0
-{\cdot} dP$ by $A_0$ (resp. of $U_0 {\cdot} dP$ by $B_0$).
-
-\subsection*{Finding roots.}
-
-An important special case of the previous study occurs when $A_0$ has 
-degree $1$, that is $A_0(X) = X - \alpha_0$ with some $\alpha_0 \in K$. 
-The map $P \mapsto A$ is then nothing but the mapping that 
-follows the simple root $\alpha_0$. Of course, its differential around 
-$P_0$ can be computed by the above method. Nevertheless, we may
-obtain it more directly by expanding the equation $(P_0 + 
-dP)(\alpha_0 + d\alpha) = 0$, obtaining
-$P_0'(\alpha_0) d\alpha + dP(\alpha_0) = 0$.
-Since $\alpha_0$ is a simple root, $P_0'(\alpha_0)$ 
-does not vanish and we find:
-$$d \alpha = - \frac{dP(\alpha_0)}{P'_0(\alpha_0)}.$$
-
-We now address the case of a multiple root. Let $P_0$ be a monic 
-polynomial of degree $d$ and $\alpha_0 \in K$ be a root of $P_0$ having 
-multiplicity $m > 1$. Due to the multiplicity, it is no longer possible 
-to follow the root $\alpha_0$ in a neighborhood of $P_0$. But it is if we 
-restrict ourselves to polynomials which have a root of multiplicity $m$ 
-close to $\alpha_0$. More precisely, let us consider the locus $\mathcal 
-V_m$ consisting of monic polynomials of degree $d$ having a root of 
-multiplicity at least $m$. It is a Zariski closed subset of $K_d[X]$ and
-contains by assumption the polynomial $P_0$. 
-Moreover, the irreducible components of $\mathcal V_m$ that meet at 
-$P_0$ are in bijection with the set of roots of $P_0$ of multiplicity 
-$\geq m$. In particular, $\alpha_0$ corresponds to one of these 
-irreducible components; let us denote it by $\mathcal V_{m,\alpha_0}$. 
-The algebraic variety $\mathcal V_{m,\alpha_0}$ is \emph{a fortioti} a
-$K$-manifold. Moreover there exists a differentiable function $f$ which 
-is defined on a neighborhood of $P_0$ in $\mathcal V_{m,\alpha_0}$ and 
-follows the root $\alpha_0$, \emph{i.e.} $f(P_0) = \alpha_0$ and for all 
-$P$ such that $f(P)$ is defined, $\alpha = f(P)$ is a root of 
-multiplicity (at least) $m$ of $P$. The existence of $f$ follows from 
-Hensel's Lemma applied to the factorisation $P_0(X) = (X-\alpha_0)^m 
-B_0(X)$ where $B_0(X)$ is a polynomial which is coprime to $X - 
-\alpha_0$. We can finally compute the differential of $f$ at $P_0$ 
-(along $\mathcal V_{m,\alpha_0}$) by differentiating the equality
-$P^{(m-1)}(\alpha) = 0$ where $P^{(i)}$ denotes the $i$-th derivative
-of $P$. We find:
-\begin{equation}
-\label{eq:dalphamult}
-d \alpha = - \frac{dP^{(m-1)}(\alpha_0)}{P_0^{(m)}(\alpha_0)}.
-\end{equation}
-
-The above computation has interesting consequences for $p$-adic 
-precision. For example, consider the monic 
-polynomial $P(X) = X^2 + O(p^{2N}) X + O(p^{2N})$ (where $N$ is some 
-large integer) and suppose that we are asking a computer to compute one 
-of its roots. What is the right answer? We remark that, if $\alpha$ is 
-any $p$-adic number divisible by $p^N$, then $P(X)$ can be $X^2 - 
-\alpha^2$ whose roots are $\pm \alpha$. Conversely, we can prove that 
-the two roots of $P$ are necessarily divisible by $p^N$. Hence, the
-right answer is certainly $O(p^N)$. Nevertheless, if we know in addition 
-that $P$ has a double root, say $\alpha$, we can write $P(X) = (X - 
-\alpha)^2$ and identifying the coefficient in $X$, we get $\alpha =
-O(p^{2N})$ if $p > 2$ and $\alpha = O(p^{2N-1})$ if $p=2$.
-This is exactly the result we get by applying Lemma \ref{lem:main} and
-using \eqref{eq:dalphamult} to simplify the differential.
-
-This phenomenon is general: if $P$ is a polynomial over $\Qp$ known at 
-some finite precision $O(p^N)$, a root $\alpha$ of $P$ having possibly 
-multiplicity $m$ (\emph{i.e.} $P(\alpha), P'(\alpha), \ldots, P^{(m-1)} 
-(\alpha)$ vanish at the given precision) can be computed at precision 
-roughly $O(p^{N/m})$. However, if we know in advance that $\alpha$ has 
-multiplicity $m$ then we can compute it at precision $O(p^{N-c})$ 
-where $c$ is some constant (depending on $P$ and $\alpha$ but not on
-$N$).
-
-\end{comment}
-
-}
-
+%\subsection{QR factorization}
+%
+%We refer to \cite[Appendix B]{caruso-roe-vaccon:14a} for the computation
+%of the derivative of the QR factorization.
+%\todo{Complete this subsection.}
 
 \section{Vector spaces}
 \label{sec:vectorspaces}
@@ -937,10 +777,7 @@ Indeed, given $f \in \mathcal U_{V, V^\c}$, one can write $f = \id_V
 h \circ \pi \in \mathcal U^\star_{V, V^\c}$. The association $f \mapsto
 g$ then defines a bijection $\mathcal U_{V, V^\c} \to \mathcal
 U^\star_{V, V^\c}$ which commutes with the embeddings into the
-grassmannian. We emphasize that the above bijection is quite easy to
-compute: it consists in replacing the matrix 
-$\Big(\begin{matrix} I \\ H \end{matrix}\Big)$ by $(\begin{matrix} -H & 
-I \end{matrix})$ (in a good choice of coordinates).
+grassmannian.
 
 \medskip
 
@@ -1069,7 +906,73 @@ at $(V_1, V_2)$ maps $(dv_1, dv_2)$ to $dv \in \Hom(V, E/V)$ (with $V
 Using duality, we derive from this a similar result for the mapping 
 $(V_1, V_2) \mapsto V_1 \cap V_2$ (left to the reader).
 
-\subsection{Application to precision}
+\subsection{Implementations and experiments}
+
+\noindent
+{\bf Standard representation of vector spaces.}
+A standard way to represent subvector spaces of $K^n$ is to view them 
+through the charts $\mathcal U_{V_I, V_{I^\c}}$ (where $I$ is a subset 
+of $\{1, \ldots, n\}$) introduced above. This means more concretely 
+that a subspace $V \subset K^n$ is represented as the span of the rows
+of a matrix $G_V$ having the following extra property: there 
+exists some $I \subset \{1, \ldots, n\}$ such that the submatrix of 
+$G_V$ obtained by keeping only columns with index in $I$ is the identity 
+matrix. We recall that such a representation always exists and, when 
+the set of indices $I$ is fixed (and has good cardinality), there 
+exists at most one $G_V$ satisfying the above condition.
+Given a family of generators of $V$, one can compute $G_V$ and $I$ as 
+above by performing standard row-echelon. If we are choosing always the 
+first non-vanishing pivot, we get this way the set $I$ with the smallest 
+possible elements. It is the usual choice to get a normalized 
+representation. However, in the context of inexact base fields, it is 
+much more clever to always choose the pivot with maximal norm.
+
+\medskip
+
+\noindent
+{\bf The dual representation.}
+Of course, one may alternatively use the charts $\mathcal U^\star_{V_I, 
+V_{I^\c}}$. Concretely, this means that we represent $V$ as the left 
+kernel of a matrix $H_V$ having the following extra property: there 
+exists some $I \subset \{1, \ldots, n\}$ such that the submatrix of 
+$H_V$ obtained by \emph{deleting} rows with index in $I$ is the identity 
+matrix. Similarly as above, if $V$ is presented as the vanishing of a 
+family of linear equations, we can compute $I$ and $H_V$ by performing 
+column-echelon.
+
+We emphasize that passing from a representation to the other is almost 
+free (and also quite stable). To simplify notations, let us suppose 
+that $I = \{1, \ldots, d\}$ with $d = \dim V$. Then, denoting by $I_d$ 
+the identity matrix of size $d$, the matrix $G_V$ has the shape
+$(\begin{matrix} I_d & G'_V \end{matrix})$
+and it is quite easy to check that one can represent $V$ with the same
+$I$ and the matrix
+$H_V = \Big(\begin{matrix} -G'_V \\ I_{n-d} \end{matrix}\Big)$. Of
+course, for a general $I$, a similar formula exists.
+
+\medskip
+
+\noindent
+{\bf Operations on vector spaces.}
+The first representation we gave is well suited for the computation
+of direct images and sums. For instance, in order to compute $f(V)$, 
+we just have to apply $f$ to each row of $G_V$ (getting this way a
+family of generators of $f(V)$) and then row-echelonize. Dually, the
+second representation is nice for computing inverse images --- and 
+in particular kernels --- and intersections. Since, one know moreover
+how to go back and forth between the two dual representations, we have 
+a complete picture of the underlying algorithmic.
+
+Regarding to precision, one can either track it in the standard way or 
+by using Proposition \ref{prop:precision} and the differential 
+computations we have presented before. Of course, the second method 
+is more costly but also more accurate (as illustrated above).
+
+\medskip
+
+\noindent
+{\bf Some experiments.}
+
 
 
 \appendix
