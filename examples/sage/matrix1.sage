@@ -1,7 +1,7 @@
 p = 2
-prec = 200; d = 4
-nb = 1000
-repeat = 10
+prec = 1000; d = 2
+nb = 100
+repeat = 1000
 
 R = Zp(p, prec=2*prec)
 MS = MatrixSpace(R,d)
@@ -16,7 +16,7 @@ for i in range(d):
         M[i,j] = 1
         Basis.append(M)
 
-theory = theory2 = practice = 0
+theory = theory2 = valuation = practice = 0
 for _ in range(repeat):
     Lattice = [ ]
     for i in range(d):
@@ -42,19 +42,21 @@ for _ in range(repeat):
                     if v < val:
                         val = v; index = ind
                 if index == -1: raise RuntimeError
-                if c == nb-1: theory2 += val
                 gen = Lat[index]
                 Lattice.append(gen)
                 del Lat[index]
+                if c == nb-1: theory += gen[i,j].valuation()
                 for ind in range(len(Lat)):
                     scalar = Lat[ind][i,j] // gen[i,j]
                     scalar = scalar.lift_to_precision(prec)
                     Lat[ind][i,j] -= scalar * gen[i,j]
 
     #practice += min([ x.precision_absolute() for x in M.list() ]) - prec
+    valuation += M[0,0].valuation()
     practice += M[0,0].precision_absolute() - prec
-    theory += Lattice[0][0,0].valuation()
+    theory2 += Lattice[0][0,0].valuation()
 
-print "Theory:", RR(theory/repeat)
-print "Theory 2:", RR(theory2/d^2/repeat)
-print "Practice:", RR(practice/repeat)
+theory /= d^2
+print "Theory:", RR((theory-valuation)/repeat)
+print "Theory 2:", RR((theory2-valuation)/repeat)
+print "Practice:", RR((practice-valuation)/repeat)
