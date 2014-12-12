@@ -165,13 +165,10 @@ $K = \Q_2$ is our examples.
 \noindent
 {\bf Organization of the paper.}
 The section \ref{sec:theory} introduces the theory of ultrametric 
-precision developped in \cite{caruso-roe-vaccon:14a} and completes it 
-on a technical point. In \S \ref{sec:matrices}
-
-The analysis of standard algorithms are treated in 
-the next sections: \S\S \ref{sec:numbers}--\ref{sec:vectorspaces} are 
-successively devoted to the case of numbers, matrices, univariate 
-polynomials, multivariate polynomials and finally vector spaces.
+precision developped in \cite{caruso-roe-vaccon:14a} and completes 
+it on a technical point.
+In \S \ref{sec:matrices}, we focus on matrices... \todo{Complete
+this}.
 
 \medskip
 
@@ -244,19 +241,27 @@ with the convention that $\Lambda(f)(v) = +\infty$ if $f$ does not
 converge on $B^-_E(e^v)$.
 We refer to \cite[Proposition 3.12]{caruso-roe-vaccon:14a} for the
 precise statement and seek here to state the particular case of
-polynomial functions. A function $f : E \to F$ is said \emph{polynomial} 
-if it is coordinate-wise given by multivariate polynomials in any 
-(equivalently all) system of coordinates associated to orthonormal 
-basis.
+integral polynomial functions. A function $f : E \to F$ is said 
+\emph{integral polynomial} if it is given by multivariate polynomial 
+functions with coefficients in $\O_K$ in any (equivalently all) system 
+of coordinates associated to orthonormal basis.
 
 \begin{prop}
 \label{prop:precision2}
 We keep the notations of Proposition \ref{prop:precision} and assume 
-in addition that $f$ is polynomial. Let $C$ be a positive real
+in addition that $f$ is integral polynomial. Let $C$ be a positive real
 number such that $B_F(1) \subset f'(v_0)(B_E(C))$. 
 Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
 \rho^{-1}$.
 \end{prop}
+
+In \cite[Appendix A]{caruso-roe-vaccon:14a}, the theory is extended 
+to manifolds over $K$ and covers this way a very large families of
+situations (\emph{e.g.} computation with vector spaces as discussed
+in \S \ref{sec:vectorspaces}). In this extended framework, the precision 
+datum at some point $x$ is a lattice in the tangent space at $x$. 
+Propositions \ref{prop:precision} and \ref{prop:precision2} have
+analogues as well, simply obtained by working in charts.
 
 \subsection{A bound on a growing function}
 \label{ssec:boundLambdaf}
@@ -283,8 +288,8 @@ unknown, which is assumed to be locally analytic as well. The function
 $f$ goes from $U$ to $V$, two open subsets in two finite dimensional
 normed vector spaces $E$ 
 and $F$ respectively. The function $h$ goes from $U$ to $W$ where $W$
-is again an open subset in a $K$-Banach space $G$. Consequently, $g$
-goes from $V \times W$ to the vector space $\Hom(E,F)$ gathering
+is again an open subset in a normed $K$-vector space $G$. Consequently,
+$g$ goes from $V \times W$ to the vector space $\Hom(E,F)$ gathering
 all (continuous) linear applications $E \to F$.
 In what follows, we always assume that $V$ and $W$ contains the origin, 
 $f(0) = 0$, $h(0) = 0$ and $g(0) \neq 0$. There assumptions are harmless 
@@ -400,9 +405,8 @@ In this paragraph, we discuss a recommended choice for it.
 
 Actually, we do recommend taking $h$ as the identity function 
 \emph{but} changing the norm on the codomain of $h$ at the same time.
-More precisely, if $F$ --- which is the $K$-Banach in which $f$ takes
-its values --- is equipped with the norm $\Vert \cdot \Vert_F$, we 
-recommand endowing it with the second norm defined by
+More precisely, if $F$ is equipped with the norm $\Vert \cdot \Vert_F$, 
+we recommand endowing it with the second norm defined by
 $\Vert x \Vert'_F = \lambda \cdot \Vert x \Vert_F$ ($x \in F)$
 where $\lambda$ is a positive real number that we shall choose later 
 and taking $h : (F, \Vert \cdot \Vert_F) \to (F, \Vert \cdot \Vert'_F)$ 
@@ -456,12 +460,13 @@ matrices satisfying the above conditions and where $\Delta_M$ is known
 at precision $O(\pi^N)$ and satisfies~(i) and~(ii) modulo $\pi^N$.
 
 \subsection{Multiplication}
+\label{subsec:mulmatrix}
 
 To begin with, we want to study the behaviour of the precision when 
 performing a matrix multiplication. Let $r$, $s$ and $t$ be three 
-positive integers with $s \geq \min(r,t)$ and assume that we want to 
-multiply a matrix $A \in M_{r,s}(K)$ by a matrix $B \in M_{s,t}(K)$. 
-This operation is of course modeled by the polynomial function:
+positive integers and assume that we want to multiply a matrix $A \in 
+M_{r,s}(K)$ by a matrix $B \in M_{s,t}(K)$. This operation is of course 
+modeled by the integral polynomial function:
 $$\begin{array}{rcl}
 \mathcal P_{r,s,t} : \quad M_{r,s}(K) \times M_{s,t}(K) & \to & 
 M_{r,t}(K) \smallskip \\
@@ -488,8 +493,8 @@ $$A = U_A \cdot \Delta_A \cdot V_A
 and denote by $a_1, \ldots, a_{\min(r,s)}$ (resp. $b_1, \ldots, 
 b_{\min(s,t)}$) the valuation of the diagonal entries of $\Delta_A$
 (resp. $\Delta_B$). We also agree to set $a_n = b_m = +\infty$ if
-$n > \min(r,s)$ and $m > \min(s,t)$. We define $M_{r,t}(\O_K)$ as 
-the sublattice of $M_{r,t}(\O_K)$ consisting of matrices $M = (M_{i,j})$ 
+$n > \min(r,s)$ and $m > \min(s,t)$. We define $M_{r,t}((a_i),(b_j))$ 
+as the sublattice of $M_{r,t}(\O_K)$ consisting of matrices $M = (M_{i,j})$ 
 such that $\val(M_{i,j}) \geq \min(a_i,b_j)$ for all $(i,j)$.
 
 \begin{prop}
@@ -524,17 +529,16 @@ perspective of precision. The second statement roughly means that when
 we are computing the product $AB$, we are gaining $\sum_{m=1}^\infty 
 a^{(m)} b^{(m)}$ significant digits in absolute precision\footnote{We 
 note that, on the other side, the valuation of the entries of $AB$ may 
-increase, meaning that we are also loosing some significant digits if 
-we are reasoning in relative precision.} (under the assumption of 
-Proposition \ref{prop:precision2}). However these digits are not --- 
-even individually --- attached to some particular entry of $AB$ but are 
-``spread out'' among all its entries. Thus, a usual coordinate-wise 
-precision data does not see this gain of precision in general.
-There is a more pedestrian way to visualize this phenomenon. Remark that
-the product $AB$ can be rewritten:
-$$AB = U_A \cdot P \cdot V_B
-\quad \text{with} \quad 
-P = \Delta_A \cdot V_A \cdot U_B \cdot \Delta_B$$
+increase, meaning that we are also loosing some significant digits if we 
+are reasoning in relative precision.} as soon as $N > \min(a_r, b_t)$ 
+(\emph{cf} Proposition \ref{prop:precision2}). However these digits are 
+not --- even individually --- attached to some particular entry of $AB$ 
+but are ``spread out'' among all its entries. Thus, a usual 
+coordinate-wise precision data does not see this gain of precision in 
+general. There is a more pedestrian way to visualize this phenomenon. 
+Remark that the product $AB$ can be rewritten:
+$AB = U_A \cdot P \cdot V_B$ with
+$P = \Delta_A \cdot V_A \cdot U_B \cdot \Delta_B$.
 Tracking precision in the usual way, we see that the $(i,j)$-th entry
 of $P$ is known at precision $O(\pi^{N + \min(a_i,b_j)})$. Hence, the 
 gain of precision is visible here. However it is then ``spread out'' 
@@ -574,7 +578,7 @@ of size $d$.
 \noindent
 Figure \ref{fig:mulmatrix} compares the number of significant digits in 
 \emph{relative} precision we are loosing on the output of Algorithm 1 
-when we are using, on the one hand, a standard component-wise track of 
+when we are using, on the one hand, a standard coordinate-wise track of 
 precision and, on the other hand, a lattice-based method to handle 
 precision.
 %
@@ -587,7 +591,7 @@ precision.
 \multirow{2}{*}{\hspace{0.2cm}$n$\hspace{0.2cm}} & 
 \multicolumn{2}{|c|}{Average loss of precision} \\
 \cline{3-4}
-& & Comp.-wise method & Lattice method \\
+& & Coord-wise method & Lattice method \\
 \hline 
 $2$ & $10$ & $\hphantom{00}2.8$ & $2.4$ \\
 $2$ & $100$ & $\hphantom{0}16.7$ & $5.0$ \\
@@ -822,11 +826,12 @@ $\mathcal M_r \subset \mathcal M$ consisting of those couples $(f,V)$
 for which $f(V)$ has dimension $r$. The $\mathcal M_r$'s are
 locally closed in $\mathcal M$ are therefore are submanifolds. 
 Moreover, $\DI$ induces by restriction respectable differentiable 
-functions between $K$-manifolds:
-$$\DI_r : \mathcal M_r \to \Grass(F,r).$$
+functions between $K$-manifolds
+$\DI_r : \mathcal M_r \to \Grass(F,r)$.
+
 We would like to differentiate $\DI_r$ around some point $(f,V) \in 
 \mathcal M_r$. To do so, we use the first description of the 
-grassmannians we gave above: we shall see points in $\Grass(E,d)$ 
+grassmannians we gave above: we see points in $\Grass(E,d)$ 
 (resp. $\Grass(F,d)$) as embeddings $V \hookrightarrow E$ (resp. $W 
 \hookrightarrow F$) modulo the action of $\GL(V)$ (resp. $\GL(W)$).
 The point $V \in \Grass(E,d)$ is then represented by the canonical 
@@ -851,7 +856,7 @@ $dw \in \Hom(W,F/W)$ such that $dw \circ \varphi = d \tilde w$.
 {\bf Inverse images.}
 We now consider the mapping $\II$ (for ``inverse image'') sending a 
 couple $(f,W) \in \mathcal W = \Hom(E,F) \times \Grass(F,d)$ to 
-$f^{-1}(W)$. As before, this map does not takes its value in a single 
+$f^{-1}(W)$. As before, this map does not take its value in a single 
 grassmannian and we need to stratify $\mathcal W$ in order to get 
 differentiable functions. For each integer $r \in [0,n]$, we introduce 
 the sub-manifold $\mathcal W_r$ of $\mathcal W$ consisting of those 
@@ -906,7 +911,7 @@ at $(V_1, V_2)$ maps $(dv_1, dv_2)$ to $dv \in \Hom(V, E/V)$ (with $V
 Using duality, we derive from this a similar result for the mapping 
 $(V_1, V_2) \mapsto V_1 \cap V_2$ (left to the reader).
 
-\subsection{Implementations and experiments}
+\subsection{Implementation and experiments}
 
 \noindent
 {\bf Standard representation of vector spaces.}
@@ -972,13 +977,99 @@ is more costly but also more accurate (as illustrated above).
 
 \noindent
 {\bf Some experiments.}
+Let us consider the example of computation given by the following
+algorithm.
 
+\noindent\hrulefill
 
+\noindent {\bf Algorithm 2:} {\tt example\_vector\_space}
+
+\noindent{\bf Input:} two integers $n$ and $N$
+
+\smallskip
+
+\noindent 1.\ Set $L_0 = \langle (1 + O(2^N),  O(2^N), O(2^N)) \rangle
+\subset \Q_2^3$
+
+\noindent 2.\ {\bf for} $i=0,\dots,n-1$
+
+\noindent 3.\ \hspace{0.3cm}pick randomly $\alpha, \beta, \gamma, \delta
+\in M_{3,3}(\Z_2)$ with high precision
+
+\noindent 4.\ \hspace{0.3cm}{\bf compute} $L_{i+1} = 
+\big(\alpha(L_i) + \beta(L_i)\big) \cap \big(\gamma(L_i) + \delta(L_i)\big)$
+
+\noindent 5.\ {\bf return} $L_n$
+
+\vspace{-1ex}\noindent\hrulefill
+
+\medskip
+
+\noindent
+The expression ``high precision'' on line 3 means that the precision on 
+$\alpha$, $\beta$, $\gamma$ and $\delta$ is set in such a way that it 
+does not affect the resulting precision on $L_{i+1}$.
+%
+\begin{figure}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multirow{3}{*}{\hspace{0.2cm}$n$\hspace{0.2cm}} & 
+\multicolumn{3}{|c|}{Average loss of precision} \\
+\cline{2-4}
+& \raisebox{-0.05cm}{Coord-wise} & 
+\multicolumn{2}{|c|}{Lattice method} \\
+\cline{3-4}
+& \raisebox{0.04cm}{method} & 
+\hspace{0.2cm}projected\hspace{0.2cm} & 
+\hspace{0.2cm}diffused\hspace{0.2cm} \\
+\hline 
+$10$ & $\hphantom{0}7.3$ & $\hphantom{0}2.7$ & $\hphantom{0}{-}2.4 \times 2$ \\
+$20$ & $14.8$ & $\hphantom{0}5.5$ & $\hphantom{0}{-}4.7 \times 2$ \\
+$50$ & $38.6$ & $13.1$ & $-12.0 \times 2$ \\
+$100$ & $78.1$ & $26.5$ & $-23.5 \times 2$ \\
+\hline
+\end{tabular}
+
+\smallskip
+
+{\small
+Results for a sample of $1000$ executions (with $N \gg n$)}
+\end{center}
+\renewcommand{\arraystretch}{1}
+
+\vspace{-0.3cm}
+
+\caption{Average loss of precision in Algorithm 2}
+\label{fig:vectorspace}
+\end{figure}
+%
+Figure \ref{fig:vectorspace} shows the losses of precision when
+executing Algorithm 2 with various inputs $n$ (the input $N$ is
+always chosen sufficiently large so that it does not affect the
+behaviour of precision). The ``coord-wise column'' corresponds to
+the standard way to track precision. On the other hand, in the two 
+last columns, the precision is tracked using lattices. The meaning of 
+``diffused'' is the same than those explained in \S 
+\ref{subsec:mulmatrix} when we were dealing with matrix multiplication: 
+it then corresponds to significant digits which are ``spread out'' among 
+the two coordinates of the precision lattice. In the present situation,
+it turns out that these ``diffused'' digits may be ``separated'' by
+working in another basis of the underlying space $\Q_2^3$
+The fact that only negative numbers appear in this column means that we 
+are actually always gaining precision with this model! Finally, in the 
+``projected'' column, we have written the loss of precision we get after 
+having projected the lattice precision data onto each coordinate (in 
+order to get an answer which is coordinate-wise).
 
 \appendix
 
 \section{Proof of Proposition \ref{prop:boundLambdaf}}
 \label{app:proof}
+
+We prove Proposition \ref{prop:boundLambdaf} in the slightly more
+general context of $K$-Banach.
 
 \subsection{Composite of locally analytic functions}
 
@@ -986,12 +1077,10 @@ Let $U$, $V$ and $W$ be three open subsets is some $K$-Banach spaces
 $E$, $F$ and $G$ respectively. We assume that $0 \in U$, $0 \in V$. Let 
 $f : U \to V$ and $g : V \to W$ be two locally analytic functions around 
 $0$ with $f(0) = 0$. The composition $h = g \circ f$ is then locally 
-analytic around $0$ as well. Let us write the analytic expansion of $f$, 
-$g$ and $h$ as follows:
-$$f = \sum_{n \geq 0} f_n, \quad 
-g = \sum_{n \geq 0} g_n, \quad
-h = \sum_{n \geq 0} h_n, \quad$$
-where $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
+analytic around $0$ as well. Let $f = \sum_{n \geq 0} f_n$
+$g = \sum_{n \geq 0} g_n$ and $h = \sum_{n \geq 0} h_n$ be the
+analytic expansions of $f$, $g$ and $h$.
+Here $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
 some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively. The 
 aim of this subsection is to prove the following intermediate result.
 
@@ -1005,22 +1094,14 @@ is a nonnegative integer and $(n_i)_{1 \leq i \leq m}$ is a sequence of
 length $m$ of nonnegative integers such that $n_1 + \ldots + n_m = r$.
 \end{prop}
 
-During the proof, multinomial coefficients will play an important role. 
-We recall that they are defined as follows: 
-given $s, k_1, \ldots, k_\ell$ some positive integers with $s \geq
-k_1 + \cdots + k_\ell$, we set:
-$$\binom s {k_1 \,\, k_2 \,\, \cdots \,\, k_\ell} =
-  \frac{s!}{k_1!\: k_2! \cdots k_\ell! \: (s{-}k_1{-}\cdots{-}k_\ell)!}.$$
-We also recall that these numbers are all positive integers.
-
-We now expand $g \circ f$ as follows:
-\begin{align}
-g \circ f & = \sum_{m \geq 0} g_m \Big(\sum_{n \geq 1} f_n\Big) \nonumber \\
-& = \sum \binom m {\!k_1 \,\, \cdots \,\, k_\ell\!} \:
-G_m(f_{n_1}, \ldots, f_{n_1}, \ldots, f_{n_\ell}, \ldots, f_{n_\ell})
+A computation gives the following expansion for $g \circ f$:
+\begin{equation}
 \label{eq:expansiongf}
-\end{align}
-where the latest sum runs over:
+\sum \binom m {\!k_1 \,\, \cdots \,\, k_\ell\!} \:
+G_m(f_{n_1}, \ldots, f_{n_1}, \ldots, f_{n_\ell}, \ldots, f_{n_\ell})
+\end{equation}
+where $\binom m {\!k_1 \,\, \cdots \,\, k_\ell\!}$ denotes the
+multinomial coefficient and the sum runs over:
 
 \noindent
 (a) all finite sequences $(k_i)$ of positive integers whose length 
@@ -1059,15 +1140,12 @@ where, in LHS, the variable $x_i$ is repeated $k_i$ times.
 
 \begin{proof}
 It is enough to prove that:
-\begin{equation}
-\label{eq:normpolar}
-\Big\Vert \binom m {k_1 \,\, k_2 \,\, \cdots \,\, k_\ell} \cdot
+$$\Big\Vert \binom m {k_1 \,\, k_2 \,\, \cdots \,\, k_\ell} \cdot
 \varphi(x_1, \ldots, x_1, \ldots, x_\ell, \ldots,
-x_\ell) \Big\Vert \leq \Vert \psi \Vert
-\end{equation}
+x_\ell) \Big\Vert \leq \Vert \psi \Vert$$
 provided that all the $x_i$'s have norm at most $1$. We proceed by 
 induction on 
-$\ell$. If $\ell = 1$, Eq.~\eqref{eq:normpolar} follows directly from
+$\ell$. If $\ell = 1$, this follows directly from
 the definition of $\Vert \psi \Vert$. 
 We now pick $(\ell+1)$ integers $k_1, \ldots, k_{\ell+1}$ whose sum 
 equals $m$ together with $(\ell+1)$ elements $x_1, \ldots, x_{\ell+1}$
@@ -1088,41 +1166,38 @@ $$\binom s {k'_1 \,\, \cdots \,\, k'_\ell} \cdot
 \binom s {k_1 \,\, \cdots \,\, k_{\ell-1} \,\, j} \cdot
 \varphi(\underline x_j)$$
 with
-$$\underline x_j = (x_1, \ldots, x_1, \ldots, x_{\ell+1}, \ldots, 
-x_{\ell+1})$$
+$\underline x_j = (x_1, \ldots, x_1, \ldots, x_{\ell+1}, \ldots, 
+x_{\ell+1})$
 where $x_i$ is repeated $k_i$ times if $i < \ell$ and $x_\ell$ 
 (resp. $x_{\ell+1}$) is repeated $j$ times (resp. $k'_\ell - j$ times).
 Since $\Vert P(\lambda) \Vert \leq \Vert \psi \Vert$ for all $\lambda$ in 
 the unit ball, the norm of all its coefficients must be at most $\Vert \psi
 \Vert$ as well. Looking at the coefficient in $\lambda^{k_{l+1}}$, we find
-Eq.~\eqref{eq:normpolar} for the families $(k_1, \ldots, k_{\ell+1})$ 
-and $(x_1, \ldots, x_{\ell+1})$. The induction follows.
+the desired result.
 \end{proof}
 
 \subsection{Bounding a growing function}
 
 We now go back to the setting of Proposition \ref{prop:boundLambdaf}.
-We write the analytic expansion of $f$, $g$ and $h$ as follows: 
-$$f = \sum_{n \geq 0} f_n, \quad
-g = \sum_{n \geq 0} g_n, \quad
-h = \sum_{n \geq 0} h_n$$
-where $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
+Let $f = \sum_{n \geq 0} f_n$, $g = \sum_{n \geq 0} g_n$ and
+$h = \sum_{n \geq 0} h_n$ be the analytice expansions of
+$f$, $g$ and $h$.
+Here $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
 some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively.
 Following \cite{caruso-roe-vaccon:14a}, we define $\NP(f) : \R \to \R \cup 
 \{+\infty\}$ as the greatest convex function such that $\NP(f)(n) \geq - 
-\log \Vert f_n \Vert$ for all integer $n$ and denote by $\Lambda(f)$ its 
-Legendre transform. We define $\NP(g)$, $\Lambda(g)$, $\NP(h)$ and
-$\Lambda(h)$ similarly.
+\log \Vert f_n \Vert$ for all integer $n$. We recall that $\Lambda(f)$ 
+is the Legendre transform of $\NP(f)$ 
+\cite[Proposition 3.9]{caruso-roe-vaccon:14a}.
+We define $\NP(g)$ and $\NP(h)$ similarly.
 We recall that $\alpha$ is a nonnegative real number such that $\Vert n! 
 \Vert \geq e^{-\alpha n}$ for all positive integer $n$.
 
 \begin{lem}
 \label{lem:boundLambdaf}
-We keep the above notations. If the couple $(a,b)$ satisfies:
-\begin{equation}
-\label{eq:condAB}
-b \geq a + \Lambda(g)\big( \! \max(b, \, \Lambda(h) (a)) \big)
-\end{equation}
+We keep the above notations. 
+If $(a,b)$ satisfies
+$b \geq a + \Lambda(g)\big( \! \max(b, \, \Lambda(h) (a)) \big)$
 then $b \geq \Lambda(f)(a - \alpha)$.
 \end{lem}
 
@@ -1130,12 +1205,9 @@ then $b \geq \Lambda(f)(a - \alpha)$.
 We have $f' = \sum_{n \geq 0} f'_n$ where
 $$f'_n : U \to \mathcal L(E,F), \quad
 x \mapsto \big(h \mapsto n \cdot F_n(h, x, x, \ldots, x)\big).$$
-In particular, taking $h = x$, we find:
-\begin{equation}
-\label{eq:normderivative}
-\Vert f'_n \Vert \geq \Vert n f_n \Vert = 
-\Vert n \Vert \cdot \Vert f_n \Vert.
-\end{equation}
+Taking $h = x$, we find
+$\Vert f'_n \Vert \geq \Vert n f_n \Vert = 
+\Vert n \Vert \cdot \Vert f_n \Vert$.
 Combining this with Proposition \ref{prop:boundhr}, we get, for all
 nonnegative integer $r$:
 $$\Vert (r+1) f_{r+1} \Vert \leq
@@ -1153,62 +1225,49 @@ u_{r+1} \leq
   \prod_{i=1}^m \max(u_{n_i}, \Vert n_i! h_{n_i} \Vert)
 \end{equation}
 since the multinomial coefficient $\binom r {\!n_1 \, \cdots \, n_m\!}$
-is an integer and hence as norm at most $1$.
-
-We now pick two real numbers $a$ and $b$ satisfying \eqref{eq:condAB}.
-Set $d = \Lambda(h)(a)$. Going back to the definitions of $\Lambda (h)$ and Legendre transform, we remark that
-the above equality implies:
-\begin{equation}
-\label{eq:boundhn}
-\Vert h_n \Vert \leq e^{- a n + d},
-  \quad \forall n \in \N.
-\end{equation}
-In the same way, from Eq.~\eqref{eq:condAB}, we get:
-\begin{equation}
-\label{eq:boundgm}
-\Vert g_m \Vert \leq e^{-\!\max(b,d)\cdot m + b - a},
-  \quad \forall m \in \N.
-\end{equation}
+is an integer and hence has norm at most $1$.
+We now pick two real numbers $a$ and $b$ satisfying the hypothesis of 
+the Lemma. Set $d = \Lambda(h)(a)$. Going back to the definitions of 
+$\Lambda (h)$ and Legendre transform, we get $\Vert h_n \Vert \leq e^{- 
+a n + d}$ for all $n$.
+Similarly, from our hypothesis on $(a,b)$, we find
+$\Vert g_m \Vert \leq e^{-\!\max(b,d)\cdot m + b - a}$ for all $m$.
 We are now ready to prove $u_r \leq e^{-ar + b}$ by induction on $r$.
-When $r = 0$, it is obvious because $u_0$ vanishes. Otherwise, it
-follows from \eqref{eq:boundurrec}, \eqref{eq:boundhn}, \eqref{eq:boundgm}, 
-and the induction hypothesis that:
+When $r = 0$, it is obvious because $u_0$ vanishes. Otherwise, we 
+can write:
 \begin{align*}
 u_{r+1} 
 & \leq \sup_{m, (n_i)}
     e^{ -\max(b,d)\cdot m + b - a + \sum_{i=1}^m (-a n_i + \max(b,d))} \\
 & = e^{ b - a - a r } = e^{ -a (r+1) + b}
 \end{align*}
-and the induction goes.
-Finally, keeping in mind the definition of $u_r$, from $u_r \leq 
-e^{-a r + b}$, we obtain:
-$$\Vert f_r \Vert \leq u_r \cdot \Vert r! \Vert^{-1} \leq
-e^{-(a - \alpha) r + b}$$
-which means that $b \geq \Lambda(f)(a - \alpha)$.
+and the induction goes. Going back to the definition of $u_r$, we obtain 
+$\Vert f_r \Vert \leq u_r \cdot \Vert r! \Vert^{-1} \leq e^{-(a - \alpha) 
+r + b}$, which means $b \geq \Lambda(f)(a - \alpha)$.
 \end{proof}
 
-\begin{rem}
-A simpler proof is possible if $\Z \subset \O_K$, \emph{i.e.} if
-one can choose $\alpha = 0$. Indeed, under this extra assumption,
-one can prove using Eq.~\eqref{eq:normderivative} that:
-$$\Lambda(f') \geq \Lambda(f) - \id.$$
-Combining this with Lemma 3.7 of \cite{caruso-roe-vaccon:14a}, we find:
-$$\Lambda(f) - \id \leq \Lambda(g) \circ \max(\Lambda(f), \Lambda(h))$$
-from which we can easily derive Lemma \ref{lem:boundLambdaf}.
-\end{rem}
+%\begin{rem}
+%A simpler proof is possible if $\Z \subset \O_K$, \emph{i.e.} if
+%one can choose $\alpha = 0$. Indeed, under this extra assumption,
+%one can prove using Eq.~\eqref{eq:normderivative} that:
+%$$\Lambda(f') \geq \Lambda(f) - \id.$$
+%Combining this with Lemma 3.7 of \cite{caruso-roe-vaccon:14a}, we find:
+%$$\Lambda(f) - \id \leq \Lambda(g) \circ \max(\Lambda(f), \Lambda(h))$$
+%from which we can easily derive Lemma \ref{lem:boundLambdaf}.
+%\end{rem}
 
 We can now conclude the proof of Proposition \ref{prop:boundLambdaf} as 
 follows. Given $a \in \R$ and $b = a + \Lambda_g \circ \Lambda_h(a)$, we 
 have to prove that $\Lambda(f)(a-\alpha) \leq b$ provided that $b \leq 
 \nu$. Thanks to Proposition \ref{prop:boundLambdaf}, it is enough to 
-check that such couples $(a,b)$ satisfy \eqref{eq:condAB}. Clearly:
+check that such couples $(a,b)$ satisfy the hypothesis of Lemma
+\ref{lem:boundLambdaf}. Clearly:
 $b \geq a + \Lambda(g) \circ \Lambda(h)(a)$
 since $\Lambda_g \geq \Lambda(g)$, $\Lambda_h \geq \Lambda(h)$ and
-$\Lambda_g$ is nondecreasing. Furthermore, from $b \leq \nu$, we get:
-$$\Lambda_g(b) = \min_{x \in \R} \Lambda_g(x) \leq \Lambda_g \circ 
-\Lambda_h(a).$$
-Thus $a + \Lambda_g(b) \leq a + \Lambda_g \circ \Lambda_h(a) =
-b$ and we are done.
+$\Lambda_g$ is nondecreasing. Furthermore, from $b \leq \nu$, we get
+$\Lambda_g(b) = \min_{x \in \R} \Lambda_g(x) \leq \Lambda_g \circ 
+\Lambda_h(a)$, from what we derive 
+$a + \Lambda_g(b) \leq a + \Lambda_g \circ \Lambda_h(a) = b$.
 
 \bibliographystyle{plain}
 \bibliography{../roebib/Biblio,extras}
