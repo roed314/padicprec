@@ -1,0 +1,943 @@
+\documentclass{beamer}
+%\documentclass[handout]{beamer}
+
+\usetheme{Copenhagen}
+
+\usepackage[latin1]{inputenc}
+\usepackage[english,francais]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{times}
+\usepackage{verbatim}
+\usepackage{array}
+\usepackage{stmaryrd}
+
+\newtheorem{prop}{Proposition}
+
+\definecolor{bleu}{rgb}{0,0,0.6}
+\definecolor{bleufonce}{rgb}{0,0,0.4}
+\definecolor{rouge}{rgb}{0.7,0.2,0.2}
+\definecolor{vert}{rgb}{0.1,0.3,0.1}
+\definecolor{vert2}{rgb}{0.2,0.6,0}
+\definecolor{violet}{rgb}{0.5,0,0.5}
+
+\newcommand\Wider[2][3em]{%
+\makebox[\linewidth][c]{%
+  \begin{minipage}{\dimexpr\textwidth+#1\relax}
+  \raggedright#2
+  \end{minipage}%
+  }%
+}
+
+\newenvironment<>{varblock}[2][\textwidth]{
+    \begin{center}
+      \begin{minipage}{#1}
+        \setlength{\textwidth}{#1}
+        \setbeamercolor{block title}{fg=white,bg=jaune}
+          \begin{actionenv}#3
+            \def\insertblocktitle{#2}
+            \par
+            \usebeamertemplate{block begin}}
+  {\par
+      \usebeamertemplate{block end}
+    \end{actionenv}
+  \end{minipage}
+\end{center}}
+
+\newcommand{\ph}{\vphantom{$A^A_A$}}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\C}{\mathbb C}
+\newcommand{\E}{\mathbb E}
+\renewcommand{\P}{\mathbb P}
+
+\newcommand{\U}{\mathcal U}
+\newcommand{\V}{\mathcal V}
+
+\newcommand{\Res}{\textrm{Rés}}
+\newcommand{\pgcd}{\textsc{pgcd}}
+\newcommand{\Frac}{\textrm{Frac}}
+
+\newcommand{\lc}{\textrm{lc}}
+
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+
+\begin{document}
+
+\title
+{Résultants et sous-résultants de polynômes $p$-adiques}
+\author{Xavier Caruso}
+
+
+\begin{frame}[plain]
+\setbeamercolor{titre}{fg=bleu,bg=bleu!10}
+
+\hfill
+\begin{beamercolorbox}[sep=1em,wd=7.5cm,rounded=true]{titre}
+\large \bf \centering
+Résultants et sous-résultants
+
+de polynômes $p$-adiques
+\end{beamercolorbox}
+\hfill \null
+
+\vspace{0.7cm}
+
+\hfill%
+{\footnotesize%
+\begin{tabular}{c}
+Xavier Caruso \smallskip \\
+Université Rennes 1 \\
+\texttt{\tiny xavier.caruso@normalesup.org}
+\end{tabular}}%
+\hfill \null
+
+\vspace{0.5cm}
+
+{\color{bleu} \hfill \hrulefill \hfill \null}
+
+\vspace{0.5cm}
+
+\hfill%
+{\small \color{vert}%
+{\bf J}ournées 
+{\bf N}ationales de 
+{\bf C}alcul 
+{\bf F}ormel
+}%
+\hfill \null
+
+\vspace{0.5cm}
+
+\hfill%
+3 novembre 2014%
+\hfill \null
+
+\end{frame}
+
+\setbeamercolor{frametitle}{bg=bleufonce}
+
+\begin{frame}
+\frametitle{Nombres $p$-adiques}
+
+\pause
+
+Soit {\color{bleu} $p$} un nombre premier. \pause
+
+{\scriptsize
+En pratique, dans tout l'exposé, $p$ sera plutôt petit.}
+
+\bigskip \pause
+
+Un {\color{bleu} entier $p$-adique} est un entier écrit en base $p$ 
+avec une infinité de chiffres :
+
+\vspace{-0.3cm}
+
+$$\ldots \: a_n \: a_{n-1} \: \ldots \: a_2 \: a_1 \: a_0
+\qquad \text{avec} \quad 0 \leq a_i < p.$$
+
+\medskip \pause
+
+Un {\color{bleu} nombre $p$-adique} est un nombre de la forme :
+
+\vspace{-0.3cm}
+
+$$\ldots \: a_n \: a_{n-1} \: \ldots \: a_2 \: a_1 \: a_0 \: , 
+a_{-1} a_{-2} \: \ldots \: a_v.$$
+
+\medskip \pause
+
+Ces nombres s'additionnent et se multiplient selon les règles
+habituelles.
+
+\bigskip \pause
+
+{\color{violet}
+Sur machine, on travaille avec des $p$-adiques tronqués.}
+
+\end{frame}
+
+\begin{frame}[plane]
+  \begin{center}
+  \color{bleu} \Large \bf
+  Algorithme d'Euclide
+
+  et précision $p$-adique
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Un exemple} \pause
+
+\begin{minipage}{10cm}
+\hspace{-0.5cm} \footnotesize
+$\begin{array}{rrrrrrr}
+& \mathbf{x^5}\hphantom{,\!0} & \mathbf{x^4}\hphantom{,\!0} & \mathbf{x^3}\hphantom{,\!0} & \mathbf{x^2}\hphantom{,\!0} & \mathbf{x}\hphantom{,\!0} & \mathbf{1} \bigskip \\
+& {\color{bleu} 1}\hphantom{,\!0} & {\color{bleu} \ldots 11011}\hphantom{,\!0} & {\color{bleu} \ldots 01011}\hphantom{,\!0} & {\color{bleu} \ldots 00101}\hphantom{,\!0} & {\color{bleu} \ldots 10010}\hphantom{,\!0} & {\color{bleu} \ldots 11001} \medskip \\
+& {\color{bleu} 1}\hphantom{,\!0} & {\color{bleu} \ldots 11000}\hphantom{,\!0} & {\color{bleu} \ldots 11001}\hphantom{,\!0} & {\color{bleu} \ldots 01100}\hphantom{,\!0} & {\color{bleu} \ldots 00011}\hphantom{,\!0} & {\color{bleu} \ldots 01010} \medskip \pause \\
+&  & \ldots 00011\hphantom{,\!0} & \ldots 10010\hphantom{,\!0} & \ldots 11001\hphantom{,\!0} & \ldots 01111\hphantom{,\!0} & \ldots 01111 \medskip \pause \\
+p \, \times &  &  & \ldots 1101\hphantom{,\!0} & \ldots 1000,\!1 & \ldots 0010\hphantom{,\!0} & \ldots 1000 \medskip \pause \\
+p^{-2} \, \times &  &  &  & \ldots 0011\hphantom{,\!0} & \ldots 11000\hphantom{,\!0} & \ldots 01100 \medskip \pause \\
+p^2 \, \times &  &  &  &  & \ldots 101\hphantom{,\!0} & \ldots 011 \medskip \pause \\
+p^{-2} \, \times &  &  &  &  &  & \ldots 111 \medskip \pause \\
+\end{array}$
+\end{minipage}
+
+\bigskip
+
+On constate une perte de précision...
+
+\medskip \pause
+
+Le même phénomène se produit avec les coefficients de Bézout 
+calculés par l'algorithme d'Euclide étendu.
+\end{frame}
+
+\begin{frame}
+\frametitle{Pertes de précision \hspace{4.2cm} $p=2$, $d=20$}
+\input{prec-deg20-1.tex}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pertes de précision \hspace{4.2cm} $p=2$, $d=20$}
+\input{prec-deg20-2.tex}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pertes de précision \hspace{4.2cm} $p=2$, $d=20$}
+\input{prec-deg20-3.tex}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pertes de précision \hspace{4.2cm} $p=2$, $d=100$}
+\input{prec-deg100.tex}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pertes de précision \hspace{4.2cm} $p=2$, $d=300$}
+\input{prec-deg300-1.tex}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pertes de précision \hspace{4.2cm} $p=2$, $d=300$}
+\input{prec-deg300-2.tex}
+\end{frame}
+
+\begin{frame}
+\frametitle{Analyse de la perte de précision} \pause
+
+{\bf \color{vert} Hypothèses} 
+
+\medskip \pause
+
+On suppose que, dans l'algorithme d'Euclide, les degrés des restes 
+décroissent de $1$ à chaque étape.
+
+\medskip \pause
+
+On utilise un modèle de précision \og plat \fg.
+
+\bigskip \pause
+
+{\bf \color{bleu} Notations} 
+
+\vspace{-0.6cm} \pause
+
+\begin{align*}
+\uncover<6->{
+  {\color{rouge} r_j} & 
+  = \text{le reste de degré $j$ dans l'algorithme d'Euclide} \hspace{1cm} \smallskip \\
+}
+\uncover<7->{
+  {\color{rouge} \lc(r_j)} & 
+  = \text{le coefficient dominant de $r_j$} \smallskip \\
+}
+\uncover<8->{
+  {\color{rouge} N_j} & 
+  = \text{la précision de $r_j$} \smallskip \\
+}
+\uncover<9->{
+  {\color{rouge} v_j} & 
+  = \text{la valuation de $\lc(r_j)$} \smallskip \\ 
+}
+\uncover<10->{
+  {\color{rouge} w_j} & 
+  = \text{la plus petite valuation d'un coefficient de $r_j$} \smallskip \\
+}
+\uncover<11->{
+  {\color{rouge} \delta_j} & = v_j - w_j \uncover<12->{\geq 0}
+}
+\end{align*}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Analyse de la perte de précision}
+
+\pause
+
+{\bf \color{bleu}
+Perte de précision dans la division euclidienne}
+
+\medskip \pause
+
+D'après les conditions sur les degrés, on a :
+
+\vspace{-0.2cm}
+
+$$\tilde r_{j-1} = r_{j+1} - 
+\frac{{\only<5>{\color{rouge}} \lc(r_{j+1})}}
+     {{\only<6>{\color{rouge}} \lc(r_j)}} 
+\cdot {\only<7>{\color{rouge}} r_j}
+\quad ; \quad 
+r_{j-1} = \tilde r_{j-1} - \frac{\lc(\tilde r_{j-1})}{\lc(r_j)} \cdot r_j$$
+
+\vspace{-0.2cm} \pause
+
+\begin{overlayarea}{\textwidth}{4.9cm}
+\begin{tikzpicture}[color=violet]
+\node[right] at (0,0) { \ph {\it Précision 
+\only<4-9>{relative}\only<10->{absolue}
+de $\frac{\lc(r_{j+1})}{\lc(r_j)} \cdot r_j$} :};
+
+\only<5-> {
+  \node[right] at (0.5,-0.6) { \ph%
+  $\uncover<8->{\min( \,\, }
+   {\color{violet}\only<5>{\color{rouge}} N_{j+1} - v_{j+1}}
+   \uncover<8->{\color{violet}, \,\,}
+   \only<6->{\color{violet}\only<6>{\color{rouge}} N_j - v_j}
+   \uncover<8->{\color{violet}, \,\,}
+   \only<7->{\color{violet}\only<7>{\color{rouge}} N_j - w_j}
+   \uncover<8->{\color{violet}\,\,)}
+   \only<10->{\color{violet}\, + \, v_{j+1} - v_j + w_j}$};
+}
+\only<9->{
+  \draw[very thick] (5.3,-0.75)--(6.5,-0.45);
+}
+
+\only<11->{
+  \node[right] at (2.5,-1.2) { \ph%
+    $= \, \min( \,\, N_{j+1} - \delta_j, \,\, N_j - \delta_j + v_{j+1} - v_j \,\,)$};
+}
+
+\only<12->{
+  \node[right] at (0,-1.9) { \ph {\it Précision absolue de $\tilde r_{j-1}$} :};
+}
+
+\only<13->{
+  \node[right] at (0.5,-2.5) { \ph $\tilde N_{j-1} \,=\, 
+  \min( \,\, N_{j+1} - \delta_j, \,\, N_j - \delta_j + v_{j+1} - v_j
+  \,\,)$};
+}
+
+\only<14->{
+  \node[right] at (0,-3.2) { \ph {\it Précision absolue de $r_{j-1}$} :};
+}
+
+\only<15->{
+  \node[right] at (0.5,-3.8) { \ph 
+  $N_{j-1} 
+  \only<15>{=}\only<16->{\leq}
+  \uncover<15>{\min( \,\,}
+  \tilde N_{j-1} - \delta_j
+  \uncover<15>{, \,\, N_j - \delta_j + \tilde v_{j-1} - v_j \,\,)}$};
+}
+\only<17->{
+  \node[right] at (4.8,-3.8) { \ph 
+  $\leq \,\, N_j - 2 \cdot \delta_j + v_{j+1} - v_j$};
+}
+\end{tikzpicture}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Analyse de la perte de précision}
+
+{\bf \color{bleu}
+Perte de précision dans la division euclidienne}
+
+\medskip
+
+D'après les conditions sur les degrés, on a :
+
+\vspace{-0.2cm}
+
+$$\tilde r_{j-1} = r_{j+1} - 
+\frac{\lc(r_{j+1})}{\lc(r_j)} \cdot r_j \quad ; \quad 
+r_{j-1} = \tilde r_{j-1} - \frac{\lc(\tilde r_{j-1})}{\lc(r_j)} \cdot r_j$$
+
+\vspace{-0.2cm}
+
+\begin{overlayarea}{\textwidth}{4.9cm}
+\vspace{-0.1cm}
+
+D'où on déduit :
+
+\vspace{-0.3cm}
+
+$$N_{j-1} \leq N_j - 2 \cdot \delta_j + (v_{j+1} - v_j)$$
+
+\medskip \pause
+
+{\bf \color{bleu}
+Perte de précision dans l'algorithme d'Euclide}
+
+\medskip \pause
+
+En sommant on trouve une minoration des pertes de précision :
+
+\vspace{-0.3cm}  \pause
+
+$$N - (N_j - v_j)
+\uncover<5->{\, \geq \, v_j + v_{j+1} + 2 \sum_{k=j+1}^d \delta_k.}$$
+
+\vspace{-0.7cm}
+
+\hfill {\color{violet} $[\, N = N_d \,]$}
+
+\pause \pause 
+
+{\footnotesize \color{vert}
+Une formule analogue existe pour les coefficients de Bézout.}
+
+\end{overlayarea}
+\end{frame}
+
+
+\begin{frame}[plane]
+  \begin{center}
+  \color{bleu} \Large \bf
+  Estimation des pertes de précision
+
+  pour des polynômes aléatoires
+
+  \vspace{1cm}
+
+  {\large Résultants et sous-résultants}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Résultants}
+
+\pause
+
+Soient $A, B \in R[X]$ \pause
+{\small (où $R$ est un anneau intègre)}.
+
+\medskip \pause
+
+On suppose que $A$ et $B$ sont {\color{vert} unitaires} de même degré 
+{\color{vert} $d$}. \pause
+
+\vspace{0.6cm}
+
+La {\color{bleu} matrice de Sylvester} est la matrice de l'application
+
+$$\begin{array}{rcl}
+R_{<d}[X] \times R_{<d}[X] & \to & R_{<2d}[X] \smallskip \\
+(U, V) & \mapsto & A \: U + B \: V
+\end{array}$$
+
+dans les bases canoniques.
+
+\vspace{0.6cm} \pause
+
+Le {\color{bleu} résultant} de $A$ et $B$, noté {\color{rouge} 
+$\Res(A,B)$}, est son déterminant.
+
+\smallskip \pause
+
+C'est un élément de l'anneau $R$.
+
+\end{frame}
+
+\setbeamercolor{postit}{fg=vert,bg=yellow!30}
+
+\begin{frame}
+\frametitle{Résultants}
+
+\begin{overlayarea}{\textwidth}{7.3cm}
+
+\hfill
+\begin{beamercolorbox}[sep=0.3em,wd=6cm,rounded=true]{postit}
+\small
+\textit{Application de Sylvester :}
+
+\medskip
+
+\hfill
+$\begin{array}{rcl}
+R_{<d}[X] \times R_{<d}[X] & \to & R_{<2d}[X] \smallskip \\
+(U, V) & \mapsto & A \: U + B \: V
+\end{array}$
+\hfill \null
+\end{beamercolorbox}
+
+\vspace{-2.1cm} \pause
+
+{\bf \color{bleu} Propriétés}
+
+\medskip \pause
+
+Si $R$ est un corps, 
+
+\smallskip
+
+\hspace{0.3cm}\hphantom{ssi} $\Res(A,B) \neq 0$ 
+
+\hspace{0.3cm}ssi $\pgcd(A,B) = 1$.
+
+\bigskip \pause
+
+Il existe des polynômes $\U_0, \V_0 \in R_{<d}[X]$
+
+\vspace{-0.1cm}
+
+\begin{itemize}
+\item dont les coefficients sont, au signe près, des 
+mineurs de la matrice de Sylvester, et
+\item tels que $A \: \U_0 + B \: \V_0 = \Res(A,B)$.
+\end{itemize}
+
+\medskip \pause
+
+{\bf \color{vert} Remarque en passant}
+
+\medskip
+
+En calculant $\frac{\U_0}{\Res(A,B)}$ et $\frac{\V_0}{\Res(A,B)}$, on 
+obtient les coefficients de
+
+\smallskip
+
+Bézout avec une perte de précision de {\color{vert} $2 \cdot 
+v_p(\Res(A,B))$} chiffres.
+
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sous-résultants}
+
+\begin{overlayarea}{\textwidth}{7.3cm}
+
+\hfill
+\begin{beamercolorbox}[sep=0.3em,wd=6cm,rounded=true]{postit}
+\small
+\textit{Application de Sylvester :}
+
+\medskip
+
+\hfill
+$\begin{array}{rcl}
+R_{<d}[X] \times R_{<d}[X] & \to & R_{<2d}[X] \smallskip \\
+(U, V) & \mapsto & A \: U + B \: V
+\end{array}$
+\hfill \null
+\end{beamercolorbox}
+
+\vspace{-2.1cm} \pause
+
+{\bf \color{bleu} Théorème}
+
+\smallskip \pause
+
+Pour $j \in \{0, \ldots, d-1\}$,
+
+il existe des polynômes 
+
+$R_j, \U_j, \V_j \in R[X]$ avec : \pause
+
+\begin{itemize}
+\item $\deg R_j \leq j$, \, $\deg \U_j < d-j$, \, $\deg \V_j < d-j$\pause,
+
+\item les coefficients de $R_j$, $\U_j$ et $\V_j$ sont tous, au signe
+près, des mineurs de la matrice de Sylvester\pause, et
+
+\item $A \: \U_j + B \: \V_j = R_j$.
+\end{itemize}
+
+\smallskip \pause
+
+Le polynôme $R_j$ est appelé le {\color{bleu} $j$-ième sous-résultant} 
+de $A$ et $B$.
+
+\bigskip \pause
+
+{\bf \color{bleu} Propriété}
+
+\smallskip \pause
+
+Si $R$ est un corps et si $j$ est le plus petit indice tel que
+$R_j \neq 0$, alors
+$\deg R_j = j$ et $\pgcd(A,B) \sim R_j$.
+
+\end{overlayarea}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Calcul des sous-résultants}
+
+\pause
+
+On suppose, pour simplifier, que {\color{vert} $\deg R_j = j$}
+pour tout $j$.
+
+\bigskip \pause
+
+{\bf \color{bleu} Algorithme des pseudo-restes}
+
+\smallskip \pause
+
+En posant $R_{d+1} = A$ et $R_d = B$, on a :
+
+\vspace{-0.2cm}
+
+$$R_{j-1} = 
+\frac{\lc(R_j)^2}{\lc(R_{j+1})^2} \cdot R_{j+1} \,\texttt{\%}\, R_j.$$
+
+\medskip \pause
+
+{\bf \color{bleu} Corollaire}
+
+\smallskip \pause
+
+Pour tout $j$, on a :
+
+\vspace{-0.3cm}
+
+$${\color{bleu} r_j = \lambda_j \cdot R_j}
+\qquad \text{avec} \quad {\color{rouge} \lambda_j} \in \Frac(R)$$
+
+\pause
+
+ainsi que la relation 
+${\color{bleu} \lambda_{j-1} \cdot \lambda_j = \lc(R_j)^2}$.
+
+\medskip \pause
+
+{\color{violet} \footnotesize
+{\bf Preuve:} Récurrence descendante sur $j$
+à partir de $r_{j-1} = r_{j+1} \,\texttt{\%}\, r_j$.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Retour sur les pertes de précision}
+
+\pause
+
+\hfill
+\begin{beamercolorbox}[sep=0.3em,wd=8cm,rounded=true]{postit}
+\small
+\textit{Pertes de précision dans l'algorithme d'Euclide :}
+
+\smallskip
+
+\hfill
+$\displaystyle
+N - (N_j - v_j) \, \geq \, 
+    \makebox[4em]{$\only<2-10>{v_j + v_{j+1}}\only<11->{V_j - V_{j+1}}$}
+  + \, 2 \sum_{k=j+1}^d \delta_k$
+\hfill \null
+\end{beamercolorbox}
+\hfill \null
+
+\pause
+
+\begin{overlayarea}{\textwidth}{5.5cm}
+
+{\bf \color{bleu} Notations} 
+
+\vspace{-0.7cm} \pause
+
+\begin{align*}
+\uncover<4->{
+  {\color{rouge} V_j} & 
+  = \text{la valuation de $\lc(R_j)$} \smallskip \\ 
+}
+\uncover<5->{
+  {\color{rouge} W_j} & 
+  = \text{la plus petite valuation d'un coefficient de $R_j$} \hspace{1.5cm}
+}
+\end{align*}
+
+\pause \pause
+
+{\bf \color{bleu} Relations} \pause
+
+\begin{itemize}
+\item $\delta_j = v_j - w_j = V_j - W_j$ \pause
+
+{\footnotesize \color{violet}
+provient de $r_j = \lambda_j \cdot R_j$} \pause
+
+\item $v_j + v_{j+1} = V_j - V_{j+1}$ \pause
+
+{\footnotesize \color{violet}
+provient de $\lambda_j \cdot \lambda_{j+1} = \lc(R_{j+1})^2$}
+\end{itemize}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Retour sur les pertes de précision}
+
+\hfill
+\begin{beamercolorbox}[sep=0.3em,wd=8cm,rounded=true]{postit}
+\small
+\textit{Pertes de précision dans l'algorithme d'Euclide :}
+
+\smallskip
+
+\hfill
+$\displaystyle
+N - (N_j - v_j) \, \geq \, 
+    \makebox[4em]{$V_j - V_{j+1}$}
+  + \, 2 \sum_{k=j+1}^d \delta_k$
+\hfill \null
+\end{beamercolorbox}
+\hfill \null
+
+\begin{overlayarea}{\textwidth}{5.5cm}
+
+\vspace{0.1cm} \pause
+
+On considère $V_j$, $W_j$ et $\delta_j$ comme des variables aléatoires.
+
+\bigskip \pause
+
+{\bf \color{bleu} Théorème} \pause
+
+\begin{itemize}
+\item $\frac 1{p-1} \leq \E[V_j] \leq \frac p{(p-1)^2}$ \pause
+\item $\E[\delta_j] \geq \frac 1 p - \frac 1 {p^{j+1}}$
+\end{itemize}
+
+\medskip \pause
+
+{\bf \color{bleu} Corollaire}
+
+\smallskip \pause
+
+Les pertes de précision dans l'algorithme d'Euclide sont en moyenne
+en $\Omega(\frac{d-j} p)$.
+
+\pause
+
+\vspace{-4cm}
+
+\hfill
+\begin{beamercolorbox}[sep=0.3em,wd=5cm,rounded=true]{postit}
+\footnotesize
+\textit{Remarque en passant :}
+
+\medskip       
+
+En calculant $\U_0/R_0$ et $\V_0/R_0$, on
+obtient les coefficients de Bézout avec une perte de précision de 
+$2 V_0$ chiffres.
+\end{beamercolorbox}
+\hspace{0.5cm}
+
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Retour sur les pertes de précision}
+
+\hfill
+\begin{beamercolorbox}[sep=0.3em,wd=8cm,rounded=true]{postit}
+\small
+\textit{Pertes de précision dans l'algorithme d'Euclide :}
+
+\smallskip
+
+\hfill
+$\displaystyle
+N - (N_j - v_j) \, \geq \, 
+    \makebox[4em]{$V_j - V_{j+1}$}
+  + \, 2 \sum_{k=j+1}^d \delta_k$
+\hfill \null
+\end{beamercolorbox}
+\hfill \null
+
+\begin{overlayarea}{\textwidth}{5.5cm}
+
+\vspace{0.1cm}
+
+On considère $V_j$, $W_j$ et $\delta_j$ comme des variables aléatoires.
+
+\bigskip
+
+{\bf \color{bleu} Théorème amélioré pour $V_j$}
+
+\smallskip \pause
+
+Soient $X_0, \ldots, X_{d-1}$ des variables aléatoires deux à deux 
+indépendantes avec $\P[X_i = k] = (1 - p^{-1}) \cdot p^{-k}$.
+
+\pause
+
+\hfill {\footnotesize \color{violet}
+[\,loi géométrique discrète de paramètre $(1 - p^{-1})$\,]}
+
+\smallskip \pause
+
+Alors $V_i$ suit la même loi que :
+${\color{bleu} \displaystyle 
+ \sum_{k=0}^d \min(X_{j-k}, X_{j-k+1}, \ldots, X_{j+k})}$
+
+\smallskip
+
+où par convention $X_i = +\infty$ pour $i < 0$ et $X_i = 0$ pour 
+$i \geq d$.
+
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}[plane]
+  \begin{center}
+  \color{bleu} \Large \bf
+  Une version stable de
+
+  l'algorithme d'Euclide
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Une méthode naïve}
+\input{naivelift}
+\end{frame}
+
+\begin{frame}
+\frametitle{Une méthode adaptative}
+
+\pause
+
+{\bf \color{bleu} Lemme clé}
+
+\smallskip \pause
+
+On suppose $2 V_{j+1} < N$.
+
+\smallskip
+
+Toute perturbation de $(R_{j+1}, R_j)$ par un $O(p^{N + 2 V_{j+1}})$
+est induite par une perturbation de $(A,B)$ par un $O(p^N)$.
+
+\smallskip \pause
+
+{\footnotesize \color{violet}
+Démonstration par le calcul différentiel}
+
+\bigskip \pause
+
+{\bf \color{bleu} Une itération dans l'algorithme}
+
+\smallskip \pause
+
+{\bf Entrée :} le couple $(R_{j+1}, R_j)$ à précision $O(p^{N + 2 V_{j+1}})$
+
+\smallskip
+
+{\bf Sortie :} le couple $(R_j, R_{j-1})$ à précision $O(p^{N + 2 V_j})$
+
+\pause
+
+\begin{enumerate}
+\item relever $(R_{j+1}, R_j)$ à précision $O(p^{N + 2 V_j + 2 V_{j+1}})$ \pause
+\item calculer $R_{j-1}$ à précision $O(p^{N + 2 V_j})$ \pause
+\item renvoyer $(R_j, R_{j-1})$ à précision $O(p^{N + 2 V_j})$
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Une méthode adaptative}
+\input{adaptlift}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparaison des méthodes}
+\input{comparaison}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparaison des méthodes}
+\input{comparaison-deg300}
+\end{frame}
+
+\begin{frame}[plane]
+  \begin{center}
+  \color{bleu} \Large \bf
+  Conclusion
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Vers les \og $p$-adiques flottants \fg ?}
+
+\pause
+
+{\bf \color{bleu} Concept} 
+
+\smallskip \pause
+
+On calcule avec un nombre de chiffres significatifs fixé \emph{a priori}. \pause
+
+On complète par des zéros quand cela est nécessaire.
+
+\bigskip \pause
+
+{\bf \color{bleu} Inconvénient}
+
+\smallskip \pause
+
+Aucune garantie sur l'exactitude des chiffres du résultat calculé.
+
+\bigskip \pause
+
+{\bf \color{bleu} Avantages (potentiels)}
+
+\smallskip \pause
+
+Implémentation plus simple (et possiblement plus rapide).
+
+\smallskip \pause
+
+En moyenne, beaucoup de chiffres pourraient être corrects. \pause
+
+{\scriptsize \color{violet} \hfill
+[\,beaucoup = bien plus que ceux prédits par un suivi naïf de
+la précision\,]}
+
+\medskip \pause
+
+\raisebox{0.65cm}{\footnotesize \color{vert} Exemples :}
+\hspace{-0.3cm}
+\begin{minipage}{8cm}
+\scriptsize
+\begin{itemize}
+\item \raisebox{0.05cm}{\color{vert} calcul des sous-résultants} \pause
+\item \raisebox{0.05cm}{\color{vert} résolution d'équations différentielles} \pause
+\item \raisebox{0.05cm}{\color{vert} calcul de la décomposition LU d'une matrice} \pause
+\item \raisebox{0.05cm}{\color{vert} calcul de la suite de SOMOS 4}
+\end{itemize}
+\end{minipage}
+
+\end{frame}
+
+\begin{frame}[plane]
+  \begin{center}
+  \large
+  Merci pour votre attention
+  \end{center}
+
+\end{frame}
+
+\end{document}

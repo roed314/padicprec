@@ -124,12 +124,13 @@ def xgcd_stable(A,B):
     while b != 0:
         if b.degree() == 0:
             a = b
-            U1 = U2; V1 = V2
+            M = matrix(2,2, [0,1,0,0]) * M
             break
 
         # We compute the gcd mod p
         alpha = Sbar(a); beta = Sbar(b)
         delta, mu = xgcd_step(alpha,beta)
+        print "DEGREE: %s" % delta.degree()
 
         # We lift the transformation matrix
         Mbar = matrix(2,2, [ S([ K(c).lift_to_precision(prec) for c in entry.list() ]) for entry in mu.list() ])
@@ -148,6 +149,7 @@ def xgcd_stable(A,B):
         val = val_poly(R)
         if val is not Infinity:
             coeff = K(1) >> val
+            print "VAL: %s - %s" % (val, val_poly(R2))
             R *= coeff
             U *= coeff
             V *= coeff
@@ -195,6 +197,12 @@ def xgcd_test(A,B):
     print "  degree of GCD: %s" % D.degree()
     prec_stable = min(prec_poly(U), prec_poly(V))
     print "  precision: %s" % prec_stable
+    print "  D = %s" % D
+    valUV = min(val_poly(U), val_poly(V))
+    print "  valuation (U,V): %s" % valUV
+    valres = A.resultant(B).valuation()
+    print "  valuation resultant: %s" % valres
+    if A*U + B*V != D: raise RuntimeError
     print "  time: %s" % cputime(t)
 
 
