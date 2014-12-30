@@ -180,7 +180,7 @@ polynomials of fixed degree. Looking at the last line, we see that
 extended Euclide's algorithm outputs the B\'ezout coefficients of two 
 monic $2$-adic polynomials of degree $100$ with an average loss of 
 $161.1$ significant digits by coefficient whereas a stable 
-algorithm should only loose \todo{$4$} digits in average. This 
+algorithm should only loose $3.2$ digits in average. This 
 ``theoretical'' loss is computed as the double of the valuation of the 
 resultant. Indeed Cramer-like formulae imply that B\'ezout coefficients 
 can be computed by performing a unique division by the resultant, 
@@ -188,7 +188,7 @@ inducing then only the aforementioned loss of precision. Examining the
 table a bit more, we furthermore observe that the ``practical'' loss of 
 precision due to Euclide's algorithm seems to grow linearly with respect 
 to the degree of the input polynomials whereas the ``theoretical'' loss 
-seems to be independant of it. In other words, the unstability of 
+seems to be independant of it. In other words, the instability of 
 Euclide's algorithm is becoming more and more critical when the degree 
 of the input increases.
 
@@ -300,7 +300,8 @@ exclusively consider the problem of computing subresultants.
 \medskip
 
 \noindent
-\textbf{Notations.} We refer to \cite{resultant} for a nice and rather complete 
+\textbf{Notations.} We refer to \cite[\S 3.3]{cohen} and \cite[\S 4.1]{winkler}
+for a nice 
 introduction to resultants and subresultants and seek to fix notations
 in this paragraph. For now, we work over a 
 general ring $\ring$. We denote by $\ring_{<n}[X]$ (resp. $\ring_{\leq 
@@ -1213,8 +1214,6 @@ is not as good as one might have expected at first. Therefore, it
 probably makes sense to seriously study the analogue of floating point 
 arithmetic in a ultrametric context.
 
-\medskip
-
 Let us describe quickly what might be this analogue and what are its
 advantages and disadvantages. We keep the notations of previous
 sections: the letter $\A$ denotes a complete discrete valuation ring
@@ -1265,6 +1264,7 @@ the ultrametric setting: we may hope to get proved results relatively
 cheaply.
 
 \begin{thebibliography}{99}
+\footnotesize
 \bibitem{andrews}
   G.~Andrews,
   \emph{The Theory of Partitions},
@@ -1288,21 +1288,26 @@ cheaply.
   X.~Caruso,
   \emph{Random matrices over a DVR and LU factorization},
   to appear at J. Symb. Comp.
+\bibitem{cohen}
+  H.~Cohen,
+  \emph{A course in Computational Algebraic Number Theory},
+  Springer (1996)
 \bibitem{kedlaya}
   K.~Kedlaya,
   \emph{Counting points on hyperelliptic curves using Monsky--Washnitzer cohomology}, 
   J. Ramanujan Math. Soc. {\bf 16} (2001), 323--338
 \bibitem{padicdiff}
   P.~Lairez, T.~Vaccon,
-  \emph{...}
+  \emph{Computation of power series solutions with $p$-adic coefficients of certain differential equations},
   preprint (2014)
 \bibitem{sage}
   W.~Stein et al.
   \emph{Sage Mathematics Software}, 
   The Sage Development Team (2005--2013)
-
-\bibitem{resultant}
-
+\bibitem{winkler}
+  F.~Winkler,
+  \emph{Polynomial Algorithms in Computer Algebra},
+  Springer Wien New Work (1996)
 \bibitem{}
 \end{thebibliography}
 

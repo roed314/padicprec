@@ -91,12 +91,12 @@
 \maketitle
 
 \begin{abstract}
-Based on the framework developed in \cite{caruso-roe-vaccon:14a}, we study 
+Based on the framework of ``differential precision'' developed in a
+previous work by the same authors, we study 
 the $p$-adic stability of standard operations on matrices and vector 
-spaces. 
-%We observe in particular that generic algorithms --- which are 
-%designed to work over an arbitrary field --- are generally very 
-%unstable.
+spaces. In particular, we highlight that lattice-based methods can be
+quite profitable in many cases (\emph{e.g.} matrix multiplication). We 
+underpin this observation by numerous numerical evidences.
 \end{abstract}
 
 \vspace{1mm}
@@ -504,8 +504,9 @@ $$\begin{array}{rl}
 & \mathcal P'_{a,b,c}(A,B)(\mathcal L_0)
 = U_A \cdot M_{r,t}((a_i),(b_j)) \cdot V_B \smallskip \\
 \text{and} &
+\text{\emph{length}}\Big(\frac{\mathcal P'_{a,b,c}(A,B)(\mathcal L_0) }
+{M_{r,t}(\O_K)}\Big) =
 \displaystyle 
-[\mathcal P'_{a,b,c}(A,B)(\mathcal L_0) : M_{r,t}(\O_K)] =
 \sum_{m=1}^\infty a^{(m)} b^{(m)}
 \end{array}$$
 where $a^{(m)}$ (resp. $b^{(m)}$) is the number of $a_i$'s (resp.
@@ -686,9 +687,114 @@ by simply evaluating the product $a_1 \cdots a_m$.
 
 \subsection{LU factorization}
 
-We refer to \cite[Appendix B]{caruso-roe-vaccon:14a} for the computation
-of the derivative of the LU factorization.
-\todo{Complete this subsection.}
+\todo{Improve this Subsection.}
+
+In this Subsection, we apply our framework to the case of $LU$ factorization. The computation of the differential of this factorization has already been done in \cite[Appendix B]{caruso-roe-vaccon:14a}. It remains to determine under which condition Proposition \ref{prop:precision} applies.
+
+
+\begin{deftn}
+Let $n \in \mathbb{Z}_{\geq 0}$ and  $O_n \subset K^{n \times n}$ be the set of the matrices such that all principal minors are non-vanishing. Let $U_n$ (resp. $L_n$)  be the $K$-vector spaces of the upper-triangular (resp. the strictly lower-triangular) matrices in $K^{n \times n}.$ Let $L_n^u \subset K^{n \times n} $ be the set of lower-triangular matrices with $1$'s one the diagonal. We define $D : O_n \rightarrow L_n^u \times U_n$ to be the mapping sending a matrix $M$ to $(L,M)$ such that $LU$ is the LU factorization of $M.$
+\end{deftn}
+
+This example has been previously studied by X.Caruso in \cite{caruso:12a}, but without using differential precision.
+We show here that the framework of Subsection \ref{ssec:boundLambdaf} applies directly.
+
+\subsubsection*{Computation of the differential of $D$} 
+We begin with some notations:
+\begin{deftn}
+We denote by $\textrm{low}$ (resp. $\textrm{up}$) the canonical projection $K^{n \times n} \rightarrow L_n$ (resp. $K^{n \times n} \rightarrow U_n$).
+\end{deftn}
+
+Then, an explicit formula for $D'$ has been computed in \cite[Appendix B]{caruso-roe-vaccon:14a} :
+\begin{prop}
+Let $(M,L,U) \in O_n \times L_n^u \times U_n$ be such that $M=LU.$ Then, 
+
+\begin{tabular}{cccc}
+$D'(M) :$ &  $K^{n \times n}$ & $\rightarrow$ & $L_n \times U_n$ \\ 
+ & $\mathrm{d}M$ & $ \mapsto$ & $(L \textrm{low}(L^{*-1} \mathrm{d}M U^{-1}), \textrm{up}(L^{*-1} \mathrm{dM} U^{-1}) U).$ \\ 
+\end{tabular} 
+\end{prop}
+
+A right inverse of $D'(M)$ can be made explicit:
+\begin{rem} \label{rem:rightinverseLU}
+Let \begin{tabular}{cccc}
+$E(M) :$ & $L_n \times U_n$  & $\rightarrow$ &  $K^{n \times n}$\\ 
+ & $(A,B)$ & $ \mapsto$ & $AU+LB$. \\ 
+\end{tabular} 
+
+Then $D'(M)  \circ E(M) = Id.$
+\end{rem} 
+
+\subsubsection*{Applying Subsection \ref{ssec:boundLambdaf}}
+
+In order to apply Subsection \ref{ssec:boundLambdaf}, $f$ will be a translation of $D,$ so as to ensure $g(0) \neq 0.$ Namely,  let $(M_0,L_{0},U_{0}) \in O_n \times L_n^u \times U_n$ be such that $M_0 = L_{0}U_{0},$ we define
+
+\begin{tabular}{cccc}
+$f :$ &  $K^{n \times n}$ & $\rightarrow$ & $L_n \times U_n$ \\ 
+ & $M$ & $ \mapsto$ & $(L_{M+M_0}-L_{0}, U_{M+M_0}-U_{0}).$ \\ 
+\end{tabular} 
+
+Then, $f(0)=0$ and \[f'(M) \cdot \mathrm{d}M = (L_{M+M_0} \textrm{low}(L_{M+M_0}^{-1} \mathrm{d}M U_{M+M_0}^{-1}), \textrm{up}(L_{M+M_0}^{-1} \mathrm{dM} U_{M+M_0}^{-1}) U).\]
+
+We now proceed with the three steps of the framework of Subsection \ref{ssec:boundLambdaf}.
+
+\textbf{The $C$ constant:}
+
+\begin{lem}
+For $C = \max (\Vert U_{0} \Vert,\Vert L_{0} \Vert ),$ $B_{K^{n \times n}}(1) \subset f'(0) \cdot B_{K^{n \times n}}(C).$ 
+\end{lem}
+\begin{proof}
+Apply Remark \ref{rem:rightinverseLU}.
+\end{proof}
+
+\textbf{The differential equation:}
+
+\begin{lem} Let $g=g_{M_0}$ be defined by:
+\begin{align*}
+g(A,B) \cdot X =& ( (L_0^*+A) \textrm{low} \left( (L_0^*+A)^{-1}X(U_0+B)^{-1} \right), \\
+& \: \textrm{up} \left( (L_0^*+A)^{-1}X(U_0+B)^{-1} \right) (U_0+B) ).\\
+\end{align*}
+Then, \[f' = g \circ f.\]
+\end{lem}
+
+\textbf{Determining $\mu$ and $\nu$}
+
+Let $\vert \: \vert $ be an ultrametric norm on $K$ and $\Vert \: \Vert$ be the corresponding subordinate matrix norm. To determine $\mu$ and $\nu,$ we first use the following lemma
+
+\begin{lem}
+Let $(U,V) \in K^{n \times n} \times K^{n \times n}.$ If $\Vert V \Vert < \Vert U \Vert$ then $\Vert U+V \Vert = \Vert U \Vert.$
+
+If $U \in GL_n(K)$ and $\Vert U \Vert < \Vert U^{-1} \Vert^{-1},$ then $\Vert (U+V)^{-1} \Vert = \Vert U^{-1} \Vert.$
+
+Finally $\Vert U^{-1} \Vert^{-1} \leq \Vert U \Vert.$
+\end{lem}
+
+This leads to the following upper-bound on the norm of $g(A,B)$.
+
+\begin{prop}
+Let $(A,B) \in L_n \times U_n.$ be such that $\Vert A \Vert < \Vert L_0^{*-1} \Vert $ and $\Vert B \Vert <\Vert U_0^{*-1} \Vert. $ Then 
+\[ \Vert g(A,B) \cdot X \Vert \leq \max \left( \Vert L_0^* \Vert \Vert L_0^{*-1} \Vert  \Vert U_0^{*-1} \Vert, \Vert U_0^* \Vert \Vert U_0^{*-1} \Vert  \Vert L_0^{*-1} \Vert \right) \times \Vert X \Vert . \]
+\end{prop}
+
+\begin{prop}
+For $f$ and $g$ as before, we can take $\nu = \min ( \Vert L_0^{-1} \Vert ^{-1} ,\Vert U_0^{-1} \Vert ^{-1} ),$ and \[ \mu = \max \left( \Vert L_0^* \Vert \Vert L_0^{*-1} \Vert  \Vert U_0^{*-1} \Vert, \Vert U_0^* \Vert \Vert U_0^{*-1} \Vert  \Vert L_0^{*-1} \Vert \right).\]
+\end{prop}
+
+\textbf{Conclusion}
+
+Consequently, we can apply Proposition \ref{prop:boundLambdaf2} and Proposition 3.12 of \cite{caruso-roe-vaccon:14a}: 
+
+\begin{prop}
+For any $\rho \in (0,1],$ if $r<e^{ \nu -2(\alpha +\mu)+\log \left( \frac{\rho}{C} \right)},$ the equation \ref{eq:firstorder} for $f$ is satisfied.
+\end{prop}
+
+\begin{ex}
+If $\Vert L_0\Vert = \Vert L_0^{-1}\Vert =\Vert U_0\Vert =  \Vert U_0^{-1}\Vert = \rho=1$ and $p=2,$ then Proposition \ref{prop:precision} can be applied with $r=2^{-4}.$
+\end{ex}
+
+\subsubsection*{Numerical experiments}
+
+\todo{Add numerical experiments...}
 
 %\subsection{QR factorization}
 %
