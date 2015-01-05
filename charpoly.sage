@@ -76,12 +76,33 @@ class NonmaximalExamples(SageObject):
             for d in dims:
                 self.add_examples(d)
 
+    def add_smith_examples(self, dim, p, max_val=40, num_examples=10):
+        trials = 0r
+        found = 0r
+        examples = self.examples[dim,0]
+        while found < num_examples:
+            vals = []
+            while len(vals) < dim:
+                new_val = ZZ.random_element()
+                if 0 <= new_val <= max_val:
+                    vals.append(p^new_val)
+            D = diagonal_matrix(sorted(vals))
+            U = random_matrix(ZZ,dim,algorithm="unimodular")
+            V = random_matrix(ZZ,dim,algorithm="unimodular")
+            A = U * D * V
+            index, G = prec_gens(A)
+            if index != 1r:
+                examples[index].append((A,G))
+                found += 1r
+            trials += 1r
+        self.trials[dim,0] += trials
+
     @staticmethod
     def _match_dim(dim, d):
         return dim is None or d == dim
     @staticmethod
     def _match_N(p, N, strict):
-        return not strict or N.is_power_of(p)
+        return N != 0 and (not strict or N.is_power_of(p))
 
     def index_stats(self, p, dim=None, strict=False, percentage=False):
         def match(d, N):
@@ -144,6 +165,23 @@ class NonmaximalExamples(SageObject):
                         L.append(ex)
         return L
 
+    def all_nondiagonal_examples(self):
+        L = []
+        for key, examples in self.examples.iteritems():
+            for ind, exs in examples.iteritems():
+                for ex in exs:
+                    if self._match_diag(False, ex):
+                        L.append(ex)
+        return L
+
+    def all_smith_examples(self):
+        L = []
+        for key, examples in self.examples.iteritems():
+            if key[1] == 0:
+                for ind, exs in examples.iteritems():
+                    L.extend(exs)
+        return L
+
 def update(NME):
     NME2 = NonmaximalExamples()
     NME2.examples = NME.examples
@@ -153,18 +191,21 @@ def update(NME):
 def minval(A, p):
     return min([c.valuation(p) for c in A.list()])
 
-def NP(A, p):
-    f = A.charpoly()
-    P = Polyhedron(vertices = [(i,f[i].valuation(p)) for i in range(f.degree()+1)], rays=[(0,1)])
+def convexify(L):
+    P = Polyhedron(vertices = list(enumerate(L)), rays=[(0,1)])
     verts = sorted(P.vertices_list())
-    NP = [QQ(verts[0][1])]
+    heights = [QQ(verts[0][1])]
     for i in range(len(verts)-1):
         cur = verts[i]
         next = verts[i+1]
         slope = (next[1] - cur[1])/(next[0] - cur[0])
         for x in range(cur[0],next[0]):
-            NP.append(NP[-1] + slope)
-    return NP
+            heights.append(heights[-1] + slope)
+    return heights
+
+def NP(A, p):
+    f = A.charpoly()
+    return convexify([a.valuation(p) for a in f])
 
 def HP(A, p):
     D, U, V = A.smith_form()
@@ -178,9 +219,7 @@ def HP(A, p):
 
 def CP(G, p):
     vals = [min([g[i].valuation(p) for g in G if g[i]]) for i in range(len(G))]
-    # the following works for diagonal only
-    #vals = [g.leading_coefficient().valuation(p) for g in G]
-    return vals
+    return convexify(vals)
 
 def test_between(L, p):
     for A, G in L:
@@ -201,6 +240,12 @@ def HPexceed(L, p):
         diff = tuple(cp[i] - hp[i+1] for i in range(len(cp)))
         exceed[diff] += 1
     return exceed
+
+def HPexceed_display(L, p):
+    exceed = HPexceed(L, p)
+    excesses = sorted(exceed.keys(), cmp=lenlex)
+    for key in excesses:
+        print key, exceed[key]
 
 def lenlex(x, y):
     # For sorting difference tuples
