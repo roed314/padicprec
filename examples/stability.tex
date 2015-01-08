@@ -730,7 +730,16 @@ $$\begin{array}{l}
 
 \noindent
 {\bf Numerical experiments.}
-\todo{Do it.}
+Let $B_n=(E_{1,1},\dots,E_{1,n},\dots,E_{n,1},\dots,E_{n,n})$ be the canonical basis of $M_n(K)$. It can be naturally seen as a basis of $L_n \times U_n.$ For a given $M \in O_n,$ we write $D'(M)$ in $B_n,$ and we can remark that $D'(M)$ is lower-triangular in this basis. We can compute the coordinate-wise loss of precision of $D'(M),$ given by $\sum_u \left( \max_v \left( val(D'(M)_{u,v}) \right) \right),$ and compare it to the lattice-method loss of precision, given by $val(\det(D'(M))).$ The following array sums up the the mean and standard deviation of those losses for 2000 random matrices in $M_d(\mathbb{Z}_2)$ known at precision $100.$
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ \multirow{2}{*}{ \hspace{0.2cm}$d$\hspace{0.2cm}} & \multicolumn{2}{|c|}{coord-wise method} & \multicolumn{2}{|c|}{lattice method}  \\  \cline{2-5}
+  & mean & std & mean & std \\ \hline
+$2$ & $-3$& $5$ & $-1.5$ & $1.4$ \\ \hline
+$3$& $-9.4$& $11$ & $-2.3$ & $2.3$\\ \hline
+$4$ & $-20$& $20$ & $-3.8$ & $3.1$\\ \hline
+\end{tabular} 
 
 %\subsection{QR factorization}
 %
