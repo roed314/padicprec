@@ -730,16 +730,47 @@ $$\begin{array}{l}
 
 \noindent
 {\bf Numerical experiments.}
-Let $B_n=(E_{1,1},\dots,E_{1,n},\dots,E_{n,1},\dots,E_{n,n})$ be the canonical basis of $M_n(K)$. It can be naturally seen as a basis of $L_n \times U_n.$ For a given $M \in O_n,$ we write $D'(M)$ in $B_n,$ and we can remark that $D'(M)$ is lower-triangular in this basis. We can compute the coordinate-wise loss of precision of $D'(M),$ given by $\sum_u \left( \max_v \left( val(D'(M)_{u,v}) \right) \right),$ and compare it to the lattice-method loss of precision, given by $val(\det(D'(M))).$ The following array sums up the the mean and standard deviation of those losses for 2000 random matrices in $M_d(\mathbb{Z}_2)$ known at precision $100.$
-
+Let $B_n=(E_{i,j})_{1 \leq i,j\leq n}$ be the canonical basis of 
+$M_n(K)$. It can be naturally seen as a basis of $L_n \times U_n$ as
+well. For a given $M \in O_n$, let us abuse notation and write $D'(M)$
+for the matrix of this linear mapping in the above basis. We remark that
+$D'(M)$ is lower-triangular in this basis. Projecting $D'(M)$ onto each
+coordinate, we find the best coordinate-wise loss of precision we can 
+hope for the computation of $D$ is given by $\sum_u \left( \max_v \left( 
+val(D'(M)_{u,v}) \right) \right)$. This number should be compared to
+$val(\det(D'(M)))$, which is the lattice-method loss of precision.
+Figure \ref{fig:LU} sums up the mean and standard deviation of those 
+losses for a sample of 2000 random matrices in $M_d(\mathbb{Z}_2)$.
+%
+\begin{figure}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
 \begin{tabular}{|c|c|c|c|c|}
-\hline
- \multirow{2}{*}{ \hspace{0.2cm}$d$\hspace{0.2cm}} & \multicolumn{2}{|c|}{coord-wise method} & \multicolumn{2}{|c|}{lattice method}  \\  \cline{2-5}
-  & mean & std & mean & std \\ \hline
-$2$ & $-3$& $5$ & $-1.5$ & $1.4$ \\ \hline
-$3$& $-9.4$& $11$ & $-2.3$ & $2.3$\\ \hline
-$4$ & $-20$& $20$ & $-3.8$ & $3.1$\\ \hline
+\hline 
+& \multicolumn{4}{|c|}{Loss of precision} \\
+\cline{2-5}
+\raisebox{0.2em}{matrix}
+& \multicolumn{2}{|c|}{coord-wise method} & \multicolumn{2}{|c|}{lattice method}  \\  \cline{2-5}
+\smash{\raisebox{0.6em}{size}} 
+& \hspace{0.5em}mean\hspace{0.5em} & deviation 
+& \hspace{0.5em}mean\hspace{0.5em} & deviation \\ \hline
+$2$ & $\phantom{2}{-}3.0$& $5$ & $-1.5$ & $1.4$ \\% \hline
+$3$& $\phantom{2}{-}9.4$& $11$ & $-2.3$ & $2.3$\\% \hline
+$4$ & $-20\phantom{.4}$& $20$ & $-3.8$ & $3.1$\\ \hline
 \end{tabular} 
+\smallskip
+
+{\small
+Results for a sample of $2000$ instances}
+\end{center}
+\renewcommand{\arraystretch}{1}
+
+\vspace{-0.3cm}
+
+\caption{Loss of precision for LU factorization}
+\label{fig:LU}
+\end{figure}
+%
 
 %\subsection{QR factorization}
 %
