@@ -57,10 +57,9 @@
 \newcommand{\Epi}{\textrm{Epi}}
 \renewcommand{\c}{\text{\rm c}}
 
-%\newcommand{\detp}{\text{\rm det}'}
-
-%\DeclareMathOperator{\det}{det}
 \newcommand{\detp}{\det'}
+\newcommand{\low}{\text{\rm low}}
+\newcommand{\up}{\text{\rm up}}
 \newcommand{\DI}{\text{\rm DI}}
 \newcommand{\II}{\text{\rm II}}
 \DeclareMathOperator{\charpoly}{char}
@@ -103,8 +102,8 @@ Using the differential precision methods developed previously by the same author
 we study the $p$-adic stability of standard operations on matrices and vector 
 spaces. We demonstrate that lattice-based methods surpass naive methods in many
 applications, such as matrix multiplication and sums and intersections of subspaces.
-We also analyze determinants and characteristic polynomials using these differential methods.
-We supplement these observations with numerical experiments.
+We also analyze determinants, characteristic polynomials and LU factorization using these differential methods.
+We supplement our observations with numerical experiments.
 \end{abstract}
 
 \vspace{1mm}
@@ -202,7 +201,7 @@ Roughly speaking, the main proposal of \cite{caruso-roe-vaccon:14a} is
 to use lattices to track precision when computing with elements lying in 
 vector spaces over $K$.
 
-To make this sentence more explcit, let us consider be a finite 
+To make this sentence more explicit, let us consider a finite 
 dimensional\footnote{The framework of \cite{caruso-roe-vaccon:14a} is 
 actually those of Banach spaces. However we will not need infinite 
 dimensional spaces in the present paper.} normed vector space $E$ 
@@ -404,32 +403,20 @@ Just remark that $y = 2(x + \alpha + \mu) - y_0$ is the equation of
 the dashed blue line.
 \end{proof}
 
-\noindent
-{\bf About the choice of the function $h$}.
-At the beginning of \S \ref{ssec:boundLambdaf}, we have introduced a 
-function $h$ in our differential equation. The aim of this was to be 
-more flexible and possibly get this way better bounds on $\Lambda(f)$. 
-In this paragraph, we discuss a recommended choice for it.
+\begin{rem}
+In certain situations,
+it may happen that the function $f$ is solution of a simplier 
+differential equation of the form $f' = g \circ f$. If this holds, 
+Proposition \ref{prop:boundLambdaf2} gives the bound $\Lambda(f)_{\leq 
+2} (x) \leq 2(x + \alpha + \mu) - \nu$ for $x \leq \nu - \mu - \alpha$.
 
-Actually, we do recommend taking $h$ as the identity function 
-\emph{but} changing the norm on the codomain of $h$ at the same time.
-More precisely, if $F$ is equipped with the norm $\Vert \cdot \Vert_F$, 
-we recommand endowing it with the second norm defined by
-$\Vert x \Vert'_F = \lambda \cdot \Vert x \Vert_F$ ($x \in F)$
-where $\lambda$ is a positive real number that we shall choose later 
-and taking $h : (F, \Vert \cdot \Vert_F) \to (F, \Vert \cdot \Vert'_F)$ 
-acting as the identity on the underlying vector spaces. Doing this, the 
-function $\Lambda(h)$ maps $x$ to $x + \log \lambda$ ($x \in \R$) and we 
-choose $\Lambda_h = \Lambda(h)$.
-
-We believe that a good way to optimize $\lambda$ is to choose it so that 
-the two quantities in the minima in Proposition \ref{prop:boundLambdaf2} 
-agree. With the expression we got just above for $\Lambda_h$, our 
-heuristic yields $\log \lambda = \mu$, \emph{i.e.} $\lambda = e^\mu$.
-Making this choice, the norms of $f(x)$ and $h(x)$ are comparable --- 
-at least, on the domain we are interested in --- and we do not loose so 
-much when we write that the norm of the couple $(f(x), h(x))$ is the 
-maximum of those of $f(x)$ and $h(x)$.
+Beyond this particular case, our general recommandation for choosing the 
+function $h$ is to endow $F$ with the second norm $\Vert x \Vert'_F = 
+e^\mu \cdot \Vert x \Vert_F$ ($x \in F$) and to take $h : (F, \Vert 
+\cdot \Vert_F) \to (F, \Vert \cdot \Vert'_F)$ acting as identity on the
+underlying vector spaces. The function $\Lambda(h)$ the maps $x$ to $x + 
+\mu$ ($x \in \R$) and we can choose $\Lambda_h = \Lambda(h)$.
+\end{rem}
 
 \section{Matrices}
 \label{sec:matrices}
@@ -438,34 +425,6 @@ maximum of those of $f(x)$ and $h(x)$.
 
 The notation $M_{n,m}(K)$ refers to the $K$-vector space of matrices 
 with $n$ rows and $m$ columns with coefficients in $K$.
-
-\medskip
-
-\noindent
-{\bf Smith form.}
-In what follows, we will often use the \emph{Smith decomposition} of a 
-matrix $M \in M_{n,m}(K)$: we recall that it is a factorization of $M$ 
-as a product $U_M \cdot \Delta_M \cdot V_M$ when $U_M$ and $V_M$ are 
-unimodular (square) matrices of size $n$ and $m$ respectively, with 
-coefficients in $\O_K$ and $\Delta_M$ satisfies the two following
-conditions:
-
-\noindent
-(i) its $(i,j)$-th entry vanishes as soon as $i \neq j$
-
-\noindent
-(ii) its $(i,i)$-th entry divides its $(j,j)$-th entry when $i
-\leq j$.
-
-\noindent
-Such a factorization is \emph{not} unique but the valuations of
-the ``diagonal'' entries of $\Delta_M$ are. Smith decompositions
-can be easily computed by performing elementary operations on rows and columns.
-Regarding to precision, one can prove that if the entries of $M$ are all 
-known up to some $O(\pi^N)$, it is possible to compute a factorization 
-$U_M \cdot \Delta_M \cdot V_M$ where $U_M$ and $V_M$ are \emph{exact}
-matrices satisfying the above conditions and where $\Delta_M$ is known
-at precision $O(\pi^N)$ and satisfies~(i) and~(ii) modulo $\pi^N$.
 
 \subsection{Multiplication}
 \label{subsec:mulmatrix}
@@ -673,11 +632,11 @@ precisions then we should say that we are loosing $m_n$ significant
 digits.}.
 Furthermore, there exists a easy method for computing the determinant
 of $M$ with this optimal precision. It consists in first computing an
-approximate Smith decomposition of $M$:
-$$M = \tilde U_M \cdot \tilde \Delta_M \cdot \tilde V_M.$$
-Here $\tilde U_M$ and $\tilde V_M$ are exact unimodular matrices and
+approximate Smith decomposition of $M$, that is a writing
+$M = \tilde U_M \cdot \tilde \Delta_M \cdot \tilde V_M$
+where $\tilde U_M$ and $\tilde V_M$ are exact unimodular matrices and
 $\tilde \Delta_M$ is known at precision $O(\pi^N)$, is diagonal modulo
-$\pi^N$ and its diagonal entries $a_1, \ldots, a_m$ have valuations 
+$\pi^N$ and has diagonal entries $a_1, \ldots, a_m$ of valuations 
 $m_1, \ldots, m_n$ respectively.
 We then have $\det(M) = \det(\tilde \Delta_M)$ and factoring $a_i$ on
 the $i$-th row of $\tilde \Delta_M$, we obtain
@@ -687,7 +646,6 @@ $\pi^{N-m_n}$. Therefore we get:
 $$\det(M) \equiv a_1 \cdots a_m \pmod{\pi^{N+v}}$$
 from what we see that we can compute $\det(M)$ at the required precision
 by simply evaluating the product $a_1 \cdots a_m$.
-
 
 \subsection{Characteristic polynomials}
 
@@ -742,114 +700,128 @@ Moreover, one can construct examples with arbitrarily large extra lattice precis
 
 \subsection{LU factorization}
 
-\todo{Improve this Subsection.}
+In this subsection, we study the LU factorization.
+%This example has been previously studied by Caruso in \cite{caruso:12a}, 
+%but without using differential precision. We are going to show here that 
+%the framework of \S \ref{ssec:boundLambdaf} applies directly.
+We first introduce several notations.
+We denote by $\Vert \cdot \Vert$ the subordinate matrix norm on $M_n(K)$
+and, given a positive real number $C$, we let $B(C)$ be the closed ball 
+in $M_n(K)$ centered at the origin of radius $C$. We consider in addition
+the following subsets of $M_n(K)$:
 
-In this Subsection, we apply our framework to the case of $LU$ factorization. The computation of the differential of this factorization has already been done in \cite[Appendix B]{caruso-roe-vaccon:14a}. It remains to determine under which condition Proposition \ref{prop:precision} applies.
+\noindent $\bullet$
+$O_n$ is the open subset of matrices whose all principal 
+minors do not vanish (we recall that the latest condition implies the
+existence and the unicity of a LU factorization);
 
+\noindent $\bullet$
+$U_n$ is the sub-vector space of upper-triangular 
+matrices;
 
-\begin{deftn}
-Let $n \in \mathbb{Z}_{\geq 0}$ and  $O_n \subset K^{n \times n}$ be the set of the matrices such that all principal minors are non-vanishing. Let $U_n$ (resp. $L_n$)  be the $K$-vector spaces of the upper-triangular (resp. the strictly lower-triangular) matrices in $K^{n \times n}.$ Let $L_n^u \subset K^{n \times n} $ be the set of lower-triangular matrices with $1$'s one the diagonal. We define $D : O_n \rightarrow L_n^u \times U_n$ to be the mapping sending a matrix $M$ to $(L,M)$ such that $LU$ is the LU factorization of $M.$
-\end{deftn}
+\noindent $\bullet$
+$L_n$ (resp. $L_n^u$) is the sub-affine space space of 
+nilpotent (resp. unipotent) lower-triangular matrices.
 
-This example has been previously studied by X.Caruso in \cite{caruso:12a}, but without using differential precision.
-We show here that the framework of Subsection \ref{ssec:boundLambdaf} applies directly.
+\medskip
 
-\subsubsection*{Computation of the differential of $D$} 
-We begin with some notations:
-\begin{deftn}
-We denote by $\textrm{low}$ (resp. $\textrm{up}$) the canonical projection $K^{n \times n} \rightarrow L_n$ (resp. $K^{n \times n} \rightarrow U_n$).
-\end{deftn}
+\noindent
+{\bf Calculus and precision.}
+We choose to normalize the LU factorization by requiring that $L$ is 
+unipotent and denote by $D : O_n \to L_n^u \times U_n$ the function 
+modeling this decomposition. The computation of the differential of $D$ 
+has already been done in \cite[Appendix B]{caruso-roe-vaccon:14a}. For
+$M \in \O_n$ with $D(M) = (L,U)$, the linear mapping $D'(M)$ is given 
+by:
+$$\begin{array}{l}
+dM \mapsto (L \cdot \low(dX), \up(dX) \cdot U) \smallskip \\
+\hspace{1cm}\text{with } dX = L^{-1} \cdot dM \cdot U^{-1}
+\end{array}$$
+where $\low$ (resp. $\up$) denotes the canonical projection of $M_n(K)$ 
+onto $L_n$ (resp. $U_n$). 
+It is easily checked that $D'(M)$ is bijective with inverse given by
+$(A,B) \mapsto AU+LB$.
 
-Then, an explicit formula for $D'$ has been computed in \cite[Appendix B]{caruso-roe-vaccon:14a} :
-\begin{prop}
-Let $(M,L,U) \in O_n \times L_n^u \times U_n$ be such that $M=LU.$ Then, 
+We now want to apply Proposition \ref{prop:boundLambdaf2}
+in order to derive a concrete result on precision. We pick $M_0 \in
+O_n$ and write $D(M_0) = (L_0,U_0)$. We consider the ``translated'' 
+function $f$ taking $M$ to $D(M_0+M)-D(M_0)$. We then have $f(0) = 0$ 
+and $f'(M) = D'(M_0+M)$. Using the explicit description of the inverse
+of $D'(M_0+M)$, we find $B(1) \subset f'(0) \cdot B(C)$
+for $C = \max(\Vert U_0 \Vert, \Vert L_0 \Vert)$. Moreover $f$ satisfies 
+the differential equation $f' = g \circ f$ where $g$ is defined by:
+\begin{equation}
+\label{eq:gAB}
+\begin{array}{l}
+g(A,B)(X) = \big( (L_0+A) \cdot \low(Y), \up(Y) \cdot (U_0+B) \big)
+\smallskip \\
+\hspace{1.8cm}\text{with } Y = (L_0+A)^{-1} \cdot X \cdot (U_0+B)^{-1}.
+\end{array}
+\end{equation}
+Let $\kappa(S) = \Vert S \Vert \cdot \Vert S^{-1} \Vert$ denote the 
+condition number of a matrix $S$. Remarking that $\Vert S + T 
+\Vert = \Vert S \Vert$ if $\Vert T \Vert < \Vert S \Vert$ and $\Vert (S 
++ T)^{-1} \Vert = \Vert S^{-1} \Vert$ if $\Vert T \Vert < \Vert S^{-1} 
+\Vert^{-1}$, we deduce from \eqref{eq:gAB} that
+$\Vert g(A,B) \Vert \leq \max 
+\big( \kappa(L_0) \Vert U_0^{-1} \Vert, 
+\kappa(U_0) \Vert L_0^{-1} \Vert \big)$
+provided that $\Vert A \Vert < \Vert L_0^{-1} \Vert^{-1}$ and 
+$\Vert B \Vert < \Vert U_0^{-1} \Vert^{-1}$.
+Combining this with Proposition \ref{prop:boundLambdaf2} and 
+\cite[Proposition.~3.12]{caruso-roe-vaccon:14a}, we finally find that 
+Eq.~\eqref{eq:firstorder} holds as soon as 
+$$\begin{array}{l}
+\displaystyle \frac \rho r > \Vert p \Vert^{-\frac{2p}{p-1}} \cdot
+\max ( \Vert L_0 \Vert, \Vert U_0 \Vert) \cdot
+\max ( \Vert L_0 ^{-1} \Vert, \Vert U_0 ^{-1} \Vert) \cdot{} \\
+\hspace{3.5cm} \max \big( \kappa(L_0) \Vert U_0^{-1} \Vert, 
+  \kappa(U_0) \Vert L_0^{-1} \Vert \big)^2.
+\end{array}$$
 
-\begin{tabular}{cccc}
-$D'(M) :$ &  $K^{n \times n}$ & $\rightarrow$ & $L_n \times U_n$ \\ 
- & $\mathrm{d}M$ & $ \mapsto$ & $(L \textrm{low}(L^{*-1} \mathrm{d}M U^{-1}), \textrm{up}(L^{*-1} \mathrm{dM} U^{-1}) U).$ \\ 
+\noindent
+{\bf Numerical experiments.}
+Let $B_n=(E_{i,j})_{1 \leq i,j\leq n}$ be the canonical basis of 
+$M_n(K)$. It can be naturally seen as a basis of $L_n \times U_n$ as
+well. For a given $M \in O_n$, let us abuse notation and write $D'(M)$
+for the matrix of this linear mapping in the above basis. We remark that
+$D'(M)$ is lower-triangular in this basis. Projecting $D'(M)$ onto each
+coordinate, we find the best coordinate-wise loss of precision we can 
+hope for the computation of $D$ is given by $\sum_u \left( \max_v \left( 
+val(D'(M)_{u,v}) \right) \right)$. This number should be compared to
+$val(\det(D'(M)))$, which is the lattice-method loss of precision.
+Figure \ref{fig:LU} sums up the mean and standard deviation of those 
+losses for a sample of 2000 random matrices in $M_d(\mathbb{Z}_2)$.
+%
+\begin{figure}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+& \multicolumn{4}{|c|}{Loss of precision} \\
+\cline{2-5}
+\raisebox{0.2em}{matrix}
+& \multicolumn{2}{|c|}{coord-wise method} & \multicolumn{2}{|c|}{lattice method}  \\  \cline{2-5}
+\smash{\raisebox{0.6em}{size}} 
+& \hspace{0.5em}mean\hspace{0.5em} & deviation 
+& \hspace{0.5em}mean\hspace{0.5em} & deviation \\ \hline
+$2$ & $\phantom{2}{-}3.0$& $5$ & $-1.5$ & $1.4$ \\% \hline
+$3$& $\phantom{2}{-}9.4$& $11$ & $-2.3$ & $2.3$\\% \hline
+$4$ & $-20\phantom{.4}$& $20$ & $-3.8$ & $3.1$\\ \hline
 \end{tabular} 
-\end{prop}
+\smallskip
 
-A right inverse of $D'(M)$ can be made explicit:
-\begin{rem} \label{rem:rightinverseLU}
-Let \begin{tabular}{cccc}
-$E(M) :$ & $L_n \times U_n$  & $\rightarrow$ &  $K^{n \times n}$\\ 
- & $(A,B)$ & $ \mapsto$ & $AU+LB$. \\ 
-\end{tabular} 
+{\small
+Results for a sample of $2000$ instances}
+\end{center}
+\renewcommand{\arraystretch}{1}
 
-Then $D'(M)  \circ E(M) = Id.$
-\end{rem} 
+\vspace{-0.3cm}
 
-\subsubsection*{Applying Subsection \ref{ssec:boundLambdaf}}
-
-In order to apply Subsection \ref{ssec:boundLambdaf}, $f$ will be a translation of $D,$ so as to ensure $g(0) \neq 0.$ Namely,  let $(M_0,L_{0},U_{0}) \in O_n \times L_n^u \times U_n$ be such that $M_0 = L_{0}U_{0},$ we define
-
-\begin{tabular}{cccc}
-$f :$ &  $K^{n \times n}$ & $\rightarrow$ & $L_n \times U_n$ \\ 
- & $M$ & $ \mapsto$ & $(L_{M+M_0}-L_{0}, U_{M+M_0}-U_{0}).$ \\ 
-\end{tabular} 
-
-Then, $f(0)=0$ and \[f'(M) \cdot \mathrm{d}M = (L_{M+M_0} \textrm{low}(L_{M+M_0}^{-1} \mathrm{d}M U_{M+M_0}^{-1}), \textrm{up}(L_{M+M_0}^{-1} \mathrm{dM} U_{M+M_0}^{-1}) U).\]
-
-We now proceed with the three steps of the framework of Subsection \ref{ssec:boundLambdaf}.
-
-\textbf{The $C$ constant:}
-
-\begin{lem}
-For $C = \max (\Vert U_{0} \Vert,\Vert L_{0} \Vert ),$ $B_{K^{n \times n}}(1) \subset f'(0) \cdot B_{K^{n \times n}}(C).$ 
-\end{lem}
-\begin{proof}
-Apply Remark \ref{rem:rightinverseLU}.
-\end{proof}
-
-\textbf{The differential equation:}
-
-\begin{lem} Let $g=g_{M_0}$ be defined by:
-\begin{align*}
-g(A,B) \cdot X =& ( (L_0^*+A) \textrm{low} \left( (L_0^*+A)^{-1}X(U_0+B)^{-1} \right), \\
-& \: \textrm{up} \left( (L_0^*+A)^{-1}X(U_0+B)^{-1} \right) (U_0+B) ).\\
-\end{align*}
-Then, \[f' = g \circ f.\]
-\end{lem}
-
-\textbf{Determining $\mu$ and $\nu$}
-
-Let $\vert \: \vert $ be an ultrametric norm on $K$ and $\Vert \: \Vert$ be the corresponding subordinate matrix norm. To determine $\mu$ and $\nu,$ we first use the following lemma
-
-\begin{lem}
-Let $(U,V) \in K^{n \times n} \times K^{n \times n}.$ If $\Vert V \Vert < \Vert U \Vert$ then $\Vert U+V \Vert = \Vert U \Vert.$
-
-If $U \in GL_n(K)$ and $\Vert U \Vert < \Vert U^{-1} \Vert^{-1},$ then $\Vert (U+V)^{-1} \Vert = \Vert U^{-1} \Vert.$
-
-Finally $\Vert U^{-1} \Vert^{-1} \leq \Vert U \Vert.$
-\end{lem}
-
-This leads to the following upper-bound on the norm of $g(A,B)$.
-
-\begin{prop}
-Let $(A,B) \in L_n \times U_n.$ be such that $\Vert A \Vert < \Vert L_0^{*-1} \Vert $ and $\Vert B \Vert <\Vert U_0^{*-1} \Vert. $ Then 
-\[ \Vert g(A,B) \cdot X \Vert \leq \max \left( \Vert L_0^* \Vert \Vert L_0^{*-1} \Vert  \Vert U_0^{*-1} \Vert, \Vert U_0^* \Vert \Vert U_0^{*-1} \Vert  \Vert L_0^{*-1} \Vert \right) \times \Vert X \Vert . \]
-\end{prop}
-
-\begin{prop}
-For $f$ and $g$ as before, we can take $\nu = \min ( \Vert L_0^{-1} \Vert ^{-1} ,\Vert U_0^{-1} \Vert ^{-1} ),$ and \[ \mu = \max \left( \Vert L_0^* \Vert \Vert L_0^{*-1} \Vert  \Vert U_0^{*-1} \Vert, \Vert U_0^* \Vert \Vert U_0^{*-1} \Vert  \Vert L_0^{*-1} \Vert \right).\]
-\end{prop}
-
-\textbf{Conclusion}
-
-Consequently, we can apply Proposition \ref{prop:boundLambdaf2} and Proposition 3.12 of \cite{caruso-roe-vaccon:14a}: 
-
-\begin{prop}
-For any $\rho \in (0,1],$ if $r<e^{ \nu -2(\alpha +\mu)+\log \left( \frac{\rho}{C} \right)},$ the equation \ref{eq:firstorder} for $f$ is satisfied.
-\end{prop}
-
-\begin{ex}
-If $\Vert L_0\Vert = \Vert L_0^{-1}\Vert =\Vert U_0\Vert =  \Vert U_0^{-1}\Vert = \rho=1$ and $p=2,$ then Proposition \ref{prop:precision} can be applied with $r=2^{-4}.$
-\end{ex}
-
-\subsubsection*{Numerical experiments}
-
-\todo{Add numerical experiments...}
+\caption{Loss of precision for LU factorization}
+\label{fig:LU}
+\end{figure}
+%
 
 %\subsection{QR factorization}
 %
@@ -901,7 +873,7 @@ such that $\pi \circ f = \id_V$. Clearly it is an affine space over
 $\Hom(V,V^\c)$. 
 Furthermore, we can embed it into $\Grass(E,d)$ by taking $f$ as
 above to its image. This way, $\mathcal U_{V,V^\c}$ appears as
-on open subset of $\Grass(E,d)$ consistant exactly of those subspaces 
+an open subset of $\Grass(E,d)$ consistant exactly of those subspaces 
 $W$ such that $W \cap V^\c = 0$. As a consequence, the tangent space 
 at each such $W$ becomes isomorphic to $\Hom(V,V^\c)$. The
 identification $\Hom(V,V^\c) \to \Hom(W, E/W)$ is given by
@@ -910,7 +882,7 @@ $du \mapsto (du \circ f^{-1}) \text{ mod } W$ where $f : V
 
 When the couple $(V, V^\c)$ varies, the open subsets $\mathcal 
 U_{V,V^\c}$ cover the whole grassmaniann and then define an atlas 
-of it. When implementing vector spaces on computes, we usually restrict 
+of it. When implementing vector spaces on computer, we usually restrict 
 ourselves to the subatlas consisting of all charts of the form $(V_I, 
 V_{I^\c})$ where $I$ runs over the family of subsets of $\{1, 
 \ldots, n\}$ of cardinality $d$ and $V_I$ is the subspaces spanned by 
@@ -985,7 +957,7 @@ grassmannian. To tackle this problem, we stratify $\mathcal M$ as
 follows: for each integer $r \in [0,d]$, we introduce the subset
 $\mathcal M_r \subset \mathcal M$ consisting of those couples $(f,V)$
 for which $f(V)$ has dimension $r$. The $\mathcal M_r$'s are
-locally closed in $\mathcal M$ are therefore are submanifolds. 
+locally closed in $\mathcal M$ and therefore are submanifolds. 
 Moreover, $\DI$ induces by restriction respectable differentiable 
 functions between $K$-manifolds
 $\DI_r : \mathcal M_r \to \Grass(F,r)$.
