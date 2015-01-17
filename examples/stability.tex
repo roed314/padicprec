@@ -14,6 +14,8 @@
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
+\DeclareMathOperator{\HP}{HP}
+\DeclareMathOperator{\PP}{PP}
 \DeclareMathOperator{\Hom}{Hom}
 \DeclareMathOperator{\End}{End}
 \DeclareMathOperator{\GL}{GL}
@@ -181,10 +183,11 @@ this}.
 
 \noindent
 {\bf Notations.}
-Throughout the paper, the letter $K$ will refer to a \emph{complete 
-discrete valuation field of characteristic $0$}, \todo{why characteristic 0?} that is either a finite 
+Throughout the paper, the letter $K$ will refer to a complete 
+discrete valuation field of characteristic $0$, that is either a finite 
 extension of the field of $p$-adic numbers $\Qp$ or a field of Laurent 
-series over a field of characteristic $0$. We denote by $\val : K \to \Z 
+series over a field of characteristic $0$ \todo{what about mixed characteristic with infinite residue field?}.
+We denote by $\val : K \to \Z 
 \cup \{+\infty\}$ of $K$ --- it is the $p$-adic valuation when $K = \Qp$ 
 and the usual valuation of a Laurent series when $K = k((t))$ --- and by 
 $\Vert \cdot \Vert$ the corresponding norm.
@@ -321,14 +324,13 @@ $$\begin{array}{rll}
   \tau_\nu \circ (\id + \Lambda_g \circ \Lambda_h)(x + \alpha)}
 \end{array}$$
 where $\alpha$ is a real number satisfying $\Vert n! \Vert \geq 
-e^{-\alpha n}$ for all $n$. A suitable value for $\alpha$ is $\alpha = - 
-\frac p {p-1} \cdot \log \Vert p \Vert > 0$ where $p$ denotes the 
-characteristic of the residue field and where, by convention, the above 
-expression equals $0$ if $p = 0$. \todo{which expression; the one defining $\alpha$?}
+e^{-\alpha n}$ for all $n$. If $p$ is the characteristic of the residue field,
+a suitable value for $\alpha$ is $\alpha = - 
+\frac p {p-1} \cdot \log \Vert p \Vert$ if $p > 0$ and $\alpha = 0$ if $p = 0$.
 The next Proposition is proved in Appendix \ref{app:proof}.
 
 \begin{prop}
-\label{prop:boundLambdaf}
+\label{prop:boundLambdaf} \label{PROP:BOUNDLAMBDAF}
 We have $\Lambda(f) \leq \Lambda_f$.
 \end{prop}
 
@@ -364,7 +366,7 @@ We have $\Lambda(f) \leq \Lambda_f$.
 \end{figure}
 
 Figure \ref{fig:area} illustrates Proposition \ref{prop:boundLambdaf}. 
-The blue \todo{do we have color?} plain line represents the graph of the function $\Lambda_f$. A 
+The blue plain line represents the graph of the function $\Lambda_f$. A 
 quick computation shows that, on a neighborhood of ${-}\infty$, this 
 function is given by $\Lambda_f(x) = x + \alpha + \mu$
 where $\mu$ is the value that $\Lambda_g$ takes on the interval 
@@ -421,10 +423,15 @@ underlying vector spaces. The function $\Lambda(h)$ then maps $x$ to $x +
 \section{Matrices}
 \label{sec:matrices}
 
-\todo{Write a short introduction.}
-
-The notation $M_{n,m}(K)$ refers to the $K$-vector space of matrices 
-with $n$ rows and $m$ columns with coefficients in $K$.
+The notation $M_{m,n}(K)$ refers to the $K$-vector space of matrices 
+with $m$ rows and $n$ columns with coefficients in $K$.  We will repeatedly
+use the Smith decomposition for $M \in M_{m,n}(K)$:
+\[
+M = U_M \cdot \Delta_M \cdot V_M,
+\]
+with $U_M$ and $V_M$ unimodular and $\Delta_M$ diagonal.  Write $\sigma_i(M)$
+for the valuation of the $(i,i)$-th entry of $\Delta_M$, and by convention set
+$\sigma_i(M) = +\infty$ if $i > \min(m,n)$.  Order the $\sigma_i(M)$ so that $\sigma_i(M) \le \sigma_{i+1}(M)$.
 
 \subsection{Multiplication}
 \label{subsec:mulmatrix}
@@ -451,32 +458,27 @@ M_{s,t}(\O_K)$ under $\mathcal P'_{r,s,t}(A,B)$. It is of course
 contained in $M_{r,t}(\O_K)$; this reflects the obvious fact that each 
 entry of the product $AB$ is also known with precision at least $O(\pi^N)$. 
 Nonetheless, it may happen that the above inclusion is strict, meaning 
-that we are \emph{gaining} precision in those cases. In order to compute 
-exactly $\mathcal P'_{a,b,c}(A,B)(\mathcal L_0)$, we introduce the Smith 
-factorization of $A$ and $B$:
-$$A = U_A \cdot \Delta_A \cdot V_A
-\text{ and } B = U_B \cdot \Delta_B \cdot V_B$$
-and denote by $a_1, \ldots, a_{\min(r,s)}$ (resp. $b_1, \ldots, 
-b_{\min(s,t)}$) the valuation of the diagonal entries of $\Delta_A$
-(resp. $\Delta_B$). We also agree to set $a_n = b_m = +\infty$ if
-$n > \min(r,s)$ and $m > \min(s,t)$. We define $M_{r,t}((a_i),(b_j))$ 
+that we are \emph{gaining} precision in those cases.
+
+Set $a_i = \sigma_i(A)$ and $b_i = \sigma_i(B)$, and define $M_{r,t}((a_i),(b_j))$ 
 as the sublattice of $M_{r,t}(\O_K)$ consisting of matrices $M = (M_{i,j})$ 
-such that $\val(M_{i,j}) \geq \min(a_i,b_j)$ for all $(i,j)$.
+such that $\val(M_{i,j}) \geq \min(a_i,b_j)$ for all $(i,j)$.  Write $a^{(m)}$ (resp. $b^{(m)}$)
+for the number of $a_i$'s (resp. $b_i$'s) which are at least $m$.
 
 \begin{prop}
 \label{prop:mulmatrix}
-With the above notations, we have:
-$$\begin{array}{rl}
+With the above notations, we have
+\[
+\begin{array}{rl}
 & \mathcal P'_{r,s,t}(A,B)(\mathcal L_0)
 = U_A \cdot M_{r,t}((a_i),(b_j)) \cdot V_B \smallskip \\
 \text{and} &
 \text{\emph{length}}\Big(\frac{M_{r,t}(\O_K)}{\mathcal P'_{r,s,t}(A,B)(\mathcal L_0) }
 \Big) =
 \displaystyle 
-\sum_{m=1}^\infty a^{(m)} b^{(m)}
-\end{array}$$
-where $a^{(m)}$ (resp. $b^{(m)}$) is the number of $a_i$'s (resp.
-of $b_j$'s) which are $\geq m$.
+\sum_{m=1}^\infty a^{(m)} b^{(m)}.
+\end{array}
+\]
 \end{prop}
 
 \begin{proof}
@@ -602,13 +604,10 @@ invertible, $\detp(M)$ is not surjective and we cannot apply Proposition
 
 As we did for matrix multiplication, we first determine the image of
 the standard lattice $\mathcal L_0 = M_{n,n}(\O_K)$ under $\detp(M)$.
-In order to do so, we write $M = U_M \cdot \Delta_M \cdot V_M$ the 
-Smith factorization of $M$ and denote by $m_1 \leq \ldots \leq m_n$ 
-the valuation of the diagonal entries of $\Delta_M$.
 
 \begin{prop}
 \label{prop:detmatrix}
-Setting $v = m_1 + \cdots + m_{n-1}$, we have
+Setting $v = \sigma_1(M) + \cdots + \sigma_{n-1}(M)$, we have
 $\detp(M)(\mathcal L_0) = \pi^v \O_K$.
 \end{prop}
 
@@ -618,35 +617,21 @@ that the smallest valuation of an entry of $\com(M)$ is $v$
 or, equivalently, that the ideal of $\O_K$ generated by all 
 minors of $M$ of size $(n-1)$ is $\pi^v
 \O_K$. But this ideal remains unchanged when we multiply $M$ 
-(on the left or on the right) by any unimodular matrix. Thus we may 
-assume that $M$ is $\Delta_M$ and the result becomes clear.
+on the left or on the right by a unimodular matrix. Thus we may 
+assume that $M = \Delta_M$, and the result becomes clear.
 \end{proof}
 
 In terms of precision, Proposition \ref{prop:detmatrix} implies that if 
 $M$ is given at flat precision $O(\pi^N)$ with $N > v$, then $\det(M)$ 
-is known at precision $O(\pi^{N+v})$, so we are gaining $v$ significant 
-digits in absolute precision\footnote{We note that the valuation of 
-$\det(M)$ is $v + m_n$; thus if we are considering \emph{relative} 
-precisions then we should say that we are loosing $m_n$ significant 
-digits.}.
-Furthermore, there exists a easy method for computing the determinant
-of $M$ with this optimal precision. It consists in first computing an
-approximate Smith decomposition of $M$, that is a writing
-$M = \tilde U_M \cdot \tilde \Delta_M \cdot \tilde V_M$
-where $\tilde U_M$ and $\tilde V_M$ are exact unimodular matrices and
-$\tilde \Delta_M$ is known at precision $O(\pi^N)$, is diagonal modulo
-$\pi^N$ and has diagonal entries $a_1, \ldots, a_n$ of valuations 
-$m_1, \ldots, m_n$ respectively.
-We then have $\det(M) = \det(\tilde \Delta_M)$ and factoring $a_i$ on
-the $i$-th row of $\tilde \Delta_M$, we obtain
-$\det(\tilde \Delta_M) = a_1 \cdots a_m \cdot U$
-where $U$ is a matrix which is congruent to the identity modulo 
-$\pi^{N-m_n}$. Therefore we get:
-$$\det(M) \equiv a_1 \cdots a_m \pmod{\pi^{N+v}}$$
-from what we see that we can compute $\det(M)$ at the required precision
-by simply evaluating the product $a_1 \cdots a_m$.
+is known at precision $O(\pi^{N+v})$.  Thus we are gaining $v$ significant 
+digits in absolute precision or, equivalently, losing $\sigma_n(M)$ digits
+of relative precision.
+Furthermore, one may easily compute the determinant
+of $M$ with this optimal precision by finding an approximate
+Smith decomposition with $\Delta_M$ known at precision $O(\pi^N)$ and
+multiplying its diagonal entries. 
 
-\subsection{Characteristic polynomials}
+\subsection{Characteristic polynomials} \label{ssec:charpoly}
 
 Write $\charpoly : M_{n,n}(K) \to K[X]$ for the characteristic polynomial, and $K_{<n}[X] \subset K[X]$ for the subspace consisting of polynomials of degree less than $n$.  Then the determinant of $\charpoly$ at a point $M$ is
 \[
@@ -654,48 +639,65 @@ Write $\charpoly : M_{n,n}(K) \to K[X]$ for the characteristic polynomial, and $
 \]
 The image is the $K$-span of the entries of $\com(X - M)$, which is clearly contained within $K_{<n}[X]$.  In fact, the image will equal $K_{<n}[X]$ as long as $M$ does not have two Jordan blocks with the same generalized eigenvalue.
 
-For any precision lattice $H$, the precision of the characteristic polynomial will thus be the lattice in $K_{<n}[X]$ generated by the polynomials $\tr(\com(X - M) \cdot dM)$, as $dM$ ranges over a set of generators for $H$.  In the standard case that the precision lattice for $M$ is just $H = \pi^N M_{n,n}(\O_K)$, we can further analyze $\charp(H)$.
+Write $\mathcal{E}$ for the precision lattice in $K_{<n}[X]$ of the characteristic polynomial of $M$, where $M$ is known with precision lattice $\mathcal{L}$.  As long as $\mathcal{L}$ is sufficiently small, Proposition \ref{prop:precision} implies that $\mathcal{E}$ will be generated by the polynomials $\tr(\com(X - M) \cdot dM)$, as $dM$ ranges over a set of generators for $\mathcal{L}$.  When $\mathcal{L} = \mathcal{L}_N := \pi^N M_{n,n}(\O_K)$, we can further analyze $\mathcal{E}$.
 
-Recall that the \emph{Newton polygon} of a polynomial $\sum_{i} a_i X^i$ is the lower convex hull of the points $(i, \val(a_i))$ and the \emph{Newton polygon} of a matrix is the Newton polygon of its characteristic polynomial.  If $m_1 \le \cdots \le m_n$ are the valuations of the diagonal entries of $\Delta_M$ in a Smith factorization $U_M \cdot \Delta_M \cdot V_M$ of $M$ as in the previous section, the \emph{Hodge polygon} of $M$ is the lower convex hull of the points $(i, \sum_{j = i+1}^n m_i)$.
+Recall that the \emph{Newton polygon} $\NP(f)$ of a polynomial $f(X) = \sum_{i} a_i X^i$ is the lower convex hull of the points $(i, \val(a_i))$ and the \emph{Newton polygon} $\NP(M)$ of a matrix $M$ is $\NP(\charpoly(M))$.  The \emph{Hodge polygon} of $M$ is the lower convex hull of the points $(i, \sum_{j = 1}^{n-i} \sigma_i(M))$.  Such polygons arise naturally in tracking the precision of polynomials \cite{caruso-roe-vaccon:14a}*{\S 4.2}.  Any such polygon $P$ yields a lattice $\mathcal{L}_P$ in $K_{<n}[X]$ consisting polynomials whose Newton polygons lie above $P$.  This lattice is generated by monomials $a_iX^i$, where $\val(a_i)$ is the ceiling of the height of $P$ at $i$.  One uses these polygons to do a certain kind of coordinate-wise precision tracking for polynomials, bounding the actual precision lattice.
+
+For any matrix $M$, the Newton polygon lies above the Hodge polygon \cite{kedlaya:padicDiffEq}*{Thm. 4.3.11}.  We now introduce another polygon that will be bounded by between these two, and will provide an estimate for $\mathcal{E}$.
 
 \begin{deftn}
-The \emph{precision polygon} of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X - M)$.  
+The \emph{precision polygon} $\PP(M)$ of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X - M)$.  
 \end{deftn}
-
-Any such polygon $P$ naturally yields a lattice in $K_{<n}[X]$, consisting of polynomials whose Newton polygons lie above $P$.  The lattice associated to $P$ is generated by monomials $a_iX^i$, where $\val(a_i)$ is the ceiling of the height of $P$ at $i$.
 
 If a polygon $P$ has vertices $(x_i, y_i)$, we let $T_n(P)$ be the translated polygon with vertices $(x_i - n, y_i)$ and $S_n(P)$ be the translated polygon with vertices $(x_i, y_i + n)$.
 
 \begin{prop}
-Suppose a matrix $M$ is known with precision $H = \pi^N M_{n,n}(\O_K)$.  Then the precision of the characteristic polynomial of $M$ is contained within $S_N$ applied to the lattice of the precision polygon of $M$.
+Suppose a matrix $M$ is known with precision $\mathcal{L}_N$ with $N$ sufficiently large.  Then $\mathcal{E} \subseteq \mathcal{L}_{S_N(\PP(M))}$.
 \end{prop}
 \begin{proof}
-The Newton polygon of each entry of $\com(X - M)$ lies above the precision polygon by definition.  Since these generate $\charp(M)(H)$, the result follows.
+The Newton polygon of each entry of $\com(X - M)$ lies above the precision polygon by definition.  Since these generate $\charp(M)(\mathcal{L}_0)$, the result follows from Proposition \ref{prop:precision}.
 \end{proof}
 
 
 \begin{prop} \label{prop:prec_hodge}
-The precision polygon of $M$ lies above $T_1$ applied to the Hodge polygon of $M$.
+The precision polygon $\PP(M)$ is bounded below by the translated Hodge polygon $T_1(\HP(M))$.
 \end{prop}
 
 \begin{proof}
-\todo{Add this proof from Xavier's e-mail}
+The coefficients of $\charpoly(M)$ can be expressed as traces of exterior powers: the coefficient of $X^i$ is $\tr(\Lambda^i(M)) = \tr(\Lambda^i(U_M) \Lambda^i(\Delta_M) \Lambda^i(V_M))$.  The entries of $\Lambda^i(\Delta_M)$ can be computed easily, and now the result follows from Proposition \ref{prop:precision2}. % Clarify and expand.
 \end{proof}
 
-For many matrices, the precision polygon equals the Hodge polygon.  For integer matrices with entries uniformly chosen between $0$ and $1024$, the $2$-adic precision polygon is equal to the Hodge polygon in $99.5\%$ of cases in dimension $4$, down to $99.1\%$ in dimension $8$.  \todo{p=3?}  Moreover, experiments support the following conjectures.
+For many matrices, $\PP(M) = T_1(\HP(M))$.  For integer matrices with entries uniformly chosen between $0$ and $1024$, the $2$-adic precision polygon is equal to the Hodge polygon in $99.5\%$ of cases in dimension $4$, down to $99.1\%$ in dimension $8$.  For $p=3$, the fraction rises to $99.98\%$, with no clear dependence on dimension.
+
+We may also bound $\PP(M)$ above:
+
+\begin{prop} \label{prop:newton_prec}
+If $M \in M_{n,n}(\O_K)$, the precision polygon $\PP(M)$ is bounded above by the Newton polygon $\NP(M)$.
+\end{prop}
+\begin{proof}
+Set $f = \charpoly(M)$, set $m_{i,j}$ as the $(i,j)$th entry of $M$ and $f_{i,j}$ as the $(i,j)$th entry of $\com(X - M)$. We write $f[k]$ for valuation of the coefficient of $X^k$ in $f$, and set $f[-1] = +\infty$. The equation $(X - M) \cdot \com(X - M) = f \cdot I$  yields, for all $i$ and $k$,
+\begin{align*}
+f[k] &= \inf(f_{i,i}[k-1], \val(m_{i,0}) + f_{0,i}[k], \ldots, \val(m_{i,n}) + f_{n,i}[k]) \\
+&\ge \inf(f_{j,i}[k]),
+\end{align*}
+with the infimum taken over $j$.  Taking lower convex hulls yields the result.
+\end{proof}
+
+Moreover, experiments support the following stronger results.
 
 \begin{conj}
 \begin{enumerate}
-\item The precision polygon is equal to the Hodge polygon if the determinant of $M$ has valuation $0$ or $1$, or if $M$ is $3 \times 3$.
-\item The height at $0$ of the precision polygon is equal to the height at $1$ of the Hodge polygon.
-\item The precision polygon lies below $T_1$ applied to the Newton polygon.
+\item $\PP(M) = T_1(\HP(M))$ if $\val(\det(M))$ is $0$ or $1$, or if $M \in M_{3,3}(\O_K)$.
+\item The precision polygon $\PP(M)$ is bounded above by $T_1(\NP(M))$.
 \end{enumerate}
 \end{conj}
-Empirically, the precision polynomial seems most likely to differ from the Hodge polygon at $1$, corresponding to the precision of the linear term of the characteristic polynomial.
+Empirically, $\PP(M)$ seems most likely to differ from $T_1(\HP(M))$ at $1$, corresponding to the precision of the linear term of the characteristic polynomial.
 
-Of course, the precision polygon does necessarily agree with the full precision of the characteristic polynomial of $M$.  In $11\%$ of cases in dimension $3$, up to $15\%$ of cases in dimension $8$, the lattice associated to the precision polygon contains the actual precision lattice with index greater than $1$.  This percentage increases as the valuation of the determinant increases, reaching $34\%$ in dimension $9$ for matrices constrained to have determinant with $2$-adic valuation $12$.
+Of course, $\PP(M)$ does necessarily agree with $\mathcal{E}$.  In $11\%$ of cases in dimension $3$, up to $15\%$ of cases in dimension $8$, the index of $\mathcal{E}$ in $\mathcal{L}_{\PP(M)}$ is greater than $1$.  This percentage increases as $\val(\det(M))$ increases, reaching $34\%$ in dimension $9$ for matrices constrained to have determinant with $2$-adic valuation $12$.
 
-Moreover, one can construct examples with arbitrarily large extra lattice precision.  If $M$ has elementary divisors with valuations $m_1 \le \cdots \le m_n$, Proposition \ref{prop:prec_hodge} implies that the precision lattice of the characteristic polynomial of $M$ is contained within $\O_{K,n}[X]$ with index at least $\sum_{i=1}^{n-1} m_i$.  The precision lattice of $1 + M$ is obtained from the precision lattice of $M$ via the transformation $X \mapsto X + 1$, but the precision polygon is now flat with height $0$.
+Moreover, one can construct examples with $[\mathcal{L}_{\PP(M)} : \mathcal{E}]$ arbitrarily large.  Suppose the $\sigma_i(M)$ are large.  Proposition \ref{prop:prec_hodge} implies that $\mathcal{E}$ is contained within $\O_{K, <n}[X]$ with index at least $\sum_{i=1}^{n-1} \sigma_i(M)$.  The precision lattice of $1 + M$ is obtained from $\mathcal{E}$ via the transformation $X \mapsto 1 + X$, but $\PP(1 + M)$ is now flat with height $0$.
+
+In conclusion, for randomly chosen matrices, approximating $\mathcal{E}$ using the Hodge polygon rarely loses much precision.  However, if the $\sigma_i(M)$ are known to be large or if $M$ is a translate of such a matrix, using lattice precision can be very useful.
 
 \subsection{LU factorization}
 
@@ -789,8 +791,8 @@ coordinate, we find the best coordinate-wise loss of precision we can
 hope for the computation of $D$ is given by $\sum_u \left( \max_v \left( 
 \val(D'(M)_{u,v}) \right) \right)$. This number should be compared to
 $\val(\det(D'(M)))$, which is the lattice-method loss of precision.
-Figure \ref{fig:LU} sums up the mean and standard deviation of those 
-losses for a sample of 2000 random matrices in $M_d(\mathbb{Z}_2)$.
+Figure \ref{fig:LU} summarizes the mean and standard deviation of those 
+losses for a sample of 2000 random matrices in $M_{d,d}(\mathbb{Z}_2)$.
 %
 \begin{figure}
 \begin{center}
@@ -879,12 +881,12 @@ identification $\Hom(V,V^\c) \to \Hom(W, E/W)$ is given by
 $du \mapsto (du \circ f^{-1}) \text{ mod } W$ where $f : V 
 \stackrel{\sim}{\to} W$ is the linear mapping defining $W$.
 
-When the couple $(V, V^\c)$ varies, the open subsets $\mathcal 
+When the pair $(V, V^\c)$ varies, the open subsets $\mathcal 
 U_{V,V^\c}$ cover the whole Grassmaniann and then define an atlas 
-of it. When implementing vector spaces on computer, we usually restrict 
+of it. When implementing vector spaces on a computer, we usually restrict 
 ourselves to the subatlas consisting of all charts of the form $(V_I, 
 V_{I^\c})$ where $I$ runs over the family of subsets of $\{1, 
-\ldots, n\}$ of cardinality $d$ and $V_I$ is the subspaces spanned by 
+\ldots, n\}$ of cardinality $d$ and $V_I$ is the subspace spanned by 
 the $e_i$'s with $i \in I$. A subspace $W \in E$ then belongs to at 
 least one $\mathcal U_{V_I, V_{I^{\text{c}}}}$ and, given a family of
 generators of $W$, we can determine such an $I$ together with the
@@ -903,10 +905,10 @@ tangent space at a given point $V$ as the quotient $\Hom(V, E/V) /
 Given a decomposition $E = V \oplus V^\c$ as above, we let $\mathcal 
 U^\star_{V, V^\c}$ denote the set of surjective linear maps $f : E 
 \to V^\c$ whose restriction to $V^\c$ is the identity. It is an 
-affine space over $\Hom(V, V^\c)$ which can be identified to an open
+affine space over $\Hom(V, V^\c)$ which can be identified with an open
 subset of $\Grass(E,d)$ \emph{via} the map $f \mapsto \ker f$.
 
-It is actually easily seen that $\mathcal U_{V, V^\c}$ and $\mathcal 
+It is easily seen that $\mathcal U_{V, V^\c}$ and $\mathcal 
 U^\star_{V, V^\c}$ define the same open subset in $\Grass(E,d)$. 
 Indeed, given $f \in \mathcal U_{V, V^\c}$, one can write $f = \id_V 
 + h$ with $h \in \Hom(V, V^\c)$ and define the morphism $g = \id_E -
@@ -920,8 +922,8 @@ Grassmannian.
 \noindent
 {\bf Duality.}
 If $E$ is a finite dimension vector space over $K$, we use the notation 
-$E^\star$ for its dual (\emph{i.e.} $E^\star = \Hom(E,K)$) and, given in 
-addition a subspace $V \subset E$, we denote by $V^\perp$ the subspace 
+$E^\star$ for its dual (\emph{i.e.} $E^\star = \Hom(E,K)$). If we are also given
+a subspace $V \subset E$, we denote by $V^\perp$ the subspace 
 of $E^\star$ consisting of linear maps that vanish on $V$. We recall
 that the dual of $V^\perp$ (resp. $E^\star/V^\perp$) is canonically
 isomorphic to $E/V$ (resp. $V$).
@@ -950,14 +952,14 @@ Let $E$ and $F$ be two finite dimensional $K$-vector spaces of dimension
 $n$ and $m$ respectively. Let $d$ be an integer in $[0,n]$. We are
 interested here in the function $\DI$ (for ``direct image'') defined 
 over $\mathcal M = \Hom(E,F) \times \Grass(E,d)$ that takes the 
-couple $(f,V)$ to $f(V)$. Since the dimension of $f(V)$ may \emph{a 
-priori} vary, the map $\DI$ does not take its values in well-defined 
+pair $(f,V)$ to $f(V)$. Since the dimension of $f(V)$ may \emph{a 
+priori} vary, the map $\DI$ does not take its values in a well-defined 
 Grassmannian. To tackle this problem, we stratify $\mathcal M$ as
 follows: for each integer $r \in [0,d]$, we introduce the subset
-$\mathcal M_r \subset \mathcal M$ consisting of those couples $(f,V)$
+$\mathcal M_r \subset \mathcal M$ consisting of those pairs $(f,V)$
 for which $f(V)$ has dimension $r$. The $\mathcal M_r$'s are
 locally closed in $\mathcal M$ and therefore are submanifolds. 
-Moreover, $\DI$ induces by restriction respectable differentiable 
+Moreover, $\DI$ induces by restriction differentiable 
 functions between $K$-manifolds
 $\DI_r : \mathcal M_r \to \Grass(F,r)$.
 
@@ -970,10 +972,10 @@ The point $V \in \Grass(E,d)$ is then represented by the canonical
 inclusion $v : V \to E$ whereas a representative $w$ of $W$ satisfies
 $w \circ \varphi = f \circ v$
 where $\varphi : V \to W$ is the linear mapping induced by $f$. The 
-previous relation still holds if $(f,v)$ is replaced by a couple $(f', 
+previous relation still holds if $(f,v)$ is replaced by a pair $(f', 
 v') \in \mathcal M_r$ sufficiently close to $(f,v)$.
 Differentiating it and passing to the quotient we find, first, that the 
-tangent space of $\mathcal M_r$ at $(f,v)$ consists of couples $(df, dv) 
+tangent space of $\mathcal M_r$ at $(f,v)$ consists of pairs $(df, dv) 
 \in \Hom(E,F) \times \Hom(V,E/V)$ such that
 $$d\tilde w = \big((df \circ v + f \circ dv) \text{ mod } W\big)
 \in \Hom(V, F/W)$$
@@ -987,12 +989,12 @@ $dw \in \Hom(W,F/W)$ such that $dw \circ \varphi = d \tilde w$.
 \noindent
 {\bf Inverse images.}
 We now consider the mapping $\II$ (for ``inverse image'') sending a 
-couple $(f,W) \in \mathcal W = \Hom(E,F) \times \Grass(F,d)$ to 
+pair $(f,W) \in \mathcal W = \Hom(E,F) \times \Grass(F,d)$ to 
 $f^{-1}(W)$. As before, this map does not take its value in a single 
 Grassmannian and we need to stratify $\mathcal W$ in order to get 
 differentiable functions. For each integer $r \in [0,n]$, we introduce 
 the sub-manifold $\mathcal W_r$ of $\mathcal W$ consisting of those 
-couples $(f,W)$ such that $\dim f^{-1}(W) = s$. For all $s$, $\II$ 
+pairs $(f,W)$ such that $\dim f^{-1}(W) = s$. For all $s$, $\II$ 
 induces a continuous function
 $\II_r : \mathcal W_r \to \Grass(E,s)$.
 Pick $(f,W) \in \mathcal W_r$. Set $V = f^{-1}(W)$ and denote by $w : F 
@@ -1000,7 +1002,7 @@ Pick $(f,W) \in \mathcal W_r$. Set $V = f^{-1}(W)$ and denote by $w : F
 Similarly to what we have done for direct images, one can prove that
 the tangent space of $\mathcal W_r$ at some point $(f,W) \in \mathcal
 W_r$ is the subspace of $\Hom(E,F) \times \Hom(W,F/W)$ consisting of 
-couples $(df,dw)$ such that
+pairs $(df,dw)$ such that
 $d \tilde v = (w \circ df + dw \circ f)_{|W}$
 factors through the linear mapping $\varphi : E/V \to F/W$ induced by 
 $f$. Furthermore $\II_r$ is differentiable at $(f,W)$ and its 
@@ -1029,18 +1031,18 @@ function $\Sigma$ defined on the manifold $\mathcal C = \Grass(E,d_1)
 order to study $\Sigma$, we stratify $\mathcal C$ according to the 
 dimension of the sum: for each integer $d \in [0, d_1+d_2]$, we define 
 $\mathcal C_d$ as the sub-manifold of $\mathcal C$ consisting of those 
-couples $(V_1, V_2)$ such that $\dim(V_1 + V_2) = d$. We get the way a 
+pairs $(V_1, V_2)$ such that $\dim(V_1 + V_2) = d$. We get a 
 well-defined mapping $\mathcal C_d \to \Grass(E,d)$ whose differential
-can be computed similarly as before. We seek to state the result: the
+can be computed as before. The
 tangent space of $\mathcal C_d$ at a given point $(V_1, V_2)$ consists 
-of couples $(dv_1, dv_2) \in \Hom(V_1, E/V_1)
+of pairs $(dv_1, dv_2) \in \Hom(V_1, E/V_1)
 \times \Hom(V_2, E/V_2)$ such that $dv_1 \equiv dv_2 \pmod{V_1 + V_2}$ 
 on the intersection $V_1 \cap V_2$ and the differential of $\Sigma_r$
 at $(V_1, V_2)$ maps $(dv_1, dv_2)$ to $dv \in \Hom(V, E/V)$ (with $V
 = V_1 + V_2$) defined by $dv(v_1 + v_2) = dv_1(v_1) + dv_2(v_2)$ ($v_1
 \in V_1$, $v_2 \in V_2$).
 
-Using duality, we derive from this a similar result for the mapping 
+Using duality, we derive a similar result for the mapping 
 $(V_1, V_2) \mapsto V_1 \cap V_2$ (left to the reader).
 
 \subsection{Implementation and experiments}
@@ -1049,20 +1051,20 @@ $(V_1, V_2) \mapsto V_1 \cap V_2$ (left to the reader).
 {\bf Standard representation of vector spaces.}
 A standard way to represent subvector spaces of $K^n$ is to view them 
 through the charts $\mathcal U_{V_I, V_{I^\c}}$ (where $I$ is a subset 
-of $\{1, \ldots, n\}$) introduced above. This means more concretely 
-that a subspace $V \subset K^n$ is represented as the span of the rows
+of $\{1, \ldots, n\}$) introduced above. More concretely,
+a subspace $V \subset K^n$ is represented as the span of the rows
 of a matrix $G_V$ having the following extra property: there 
 exists some $I \subset \{1, \ldots, n\}$ such that the submatrix of 
 $G_V$ obtained by keeping only columns with index in $I$ is the identity 
 matrix. We recall that such a representation always exists and, when 
-the set of indices $I$ is fixed (and has good cardinality), there 
+the set of indices $I$ is fixed, there 
 exists at most one $G_V$ satisfying the above condition.
 Given a family of generators of $V$, one can compute $G_V$ and $I$ as 
-above by performing standard row-echelon. If we are choosing always the 
+above by performing standard row reduction. If we are choosing always the 
 first non-vanishing pivot, we get this way the set $I$ with the smallest 
 possible elements. It is the usual choice to get a normalized 
 representation. However, in the context of inexact base fields, it is 
-much more clever to always choose the pivot with maximal norm.
+much better to always choose the pivot with maximal norm.
 
 \medskip
 
@@ -1075,10 +1077,10 @@ exists some $I \subset \{1, \ldots, n\}$ such that the submatrix of
 $H_V$ obtained by \emph{deleting} rows with index in $I$ is the identity 
 matrix. Similarly as above, if $V$ is presented as the vanishing of a 
 family of linear equations, we can compute $I$ and $H_V$ by performing 
-column-echelon.
+column reduction.
 
-We emphasize that passing from a representation to the other is almost 
-free (and also quite stable). To simplify notations, let us suppose 
+We emphasize that passing from one representation to the other is almost 
+free (and also quite stable). To simplify notation, let us suppose 
 that $I = \{1, \ldots, d\}$ with $d = \dim V$. Then, denoting by $I_d$ 
 the identity matrix of size $d$, the matrix $G_V$ has the shape
 $(\begin{matrix} I_d & G'_V \end{matrix})$
@@ -1094,13 +1096,13 @@ course, for a general $I$, a similar formula exists.
 The first representation we gave is well suited for the computation
 of direct images and sums. For instance, in order to compute $f(V)$, 
 we just have to apply $f$ to each row of $G_V$ (getting this way a
-family of generators of $f(V)$) and then row-echelonize. Dually, the
-second representation is nice for computing inverse images --- and 
-in particular kernels --- and intersections. Since, one know moreover
-how to go back and forth between the two dual representations, we have 
-a complete picture of the underlying algorithmic.
+family of generators of $f(V)$) and then row reduce. Dually, the
+second representation works well for computing inverse images, including 
+kernels, and intersections. Since translating between the two dual
+representations is straightforward, we get algorithms for solving both
+problems using either representation.
 
-Regarding to precision, one can either track it in the standard way or 
+With regard to precision, one can either track it in the standard way or 
 by using Proposition \ref{prop:precision} and the differential 
 computations we have presented before. Of course, the second method 
 is more costly but also more accurate (as illustrated above).
@@ -1109,7 +1111,7 @@ is more costly but also more accurate (as illustrated above).
 
 \noindent
 {\bf Some experiments.}
-Let us consider the example of computation given by the following
+Let us consider the example computation given in the following
 algorithm.
 
 \noindent\hrulefill
@@ -1180,15 +1182,15 @@ Results for a sample of $1000$ executions (with $N \gg n$)}
 Figure \ref{fig:vectorspace} shows the losses of precision when
 executing Algorithm 2 with various inputs $n$ (the input $N$ is
 always chosen sufficiently large so that it does not affect the
-behavior of precision). The ``coord-wise column'' corresponds to
-the standard way to track precision. On the other hand, in the two 
-last columns, the precision is tracked using lattices. The meaning of 
-``diffused'' is the same than those explained in \S 
+behavior of precision). The ``coord-wise'' column corresponds to
+the standard way of tracking precision. On the other hand, in the two 
+last columns, the precision is tracked using lattices. The term 
+``diffused'' has the same meaning as in \S 
 \ref{subsec:mulmatrix} when we were dealing with matrix multiplication: 
 it then corresponds to significant digits which are ``spread out'' among 
 the two coordinates of the precision lattice. In the present situation,
 it turns out that these ``diffused'' digits may be ``separated'' by
-working in another basis of the underlying space $\Q_2^3$
+working in another basis of the underlying space $\Q_2^3$.
 The fact that only negative numbers appear in this column means that we 
 are actually always gaining precision with this model! Finally, in the 
 ``projected'' column, we have written the loss of precision we get after 
@@ -1201,11 +1203,11 @@ order to get an answer which is coordinate-wise).
 \label{app:proof}
 
 We prove Proposition \ref{prop:boundLambdaf} in the slightly more
-general context of $K$-Banach.
+general context of $K$-Banach spaces.
 
 \subsection{Composite of locally analytic functions}
 
-Let $U$, $V$ and $W$ be three open subsets is some $K$-Banach spaces 
+Let $U$, $V$ and $W$ be three open subsets in $K$-Banach spaces 
 $E$, $F$ and $G$ respectively. We assume that $0 \in U$, $0 \in V$. Let 
 $f : U \to V$ and $g : V \to W$ be two locally analytic functions around 
 $0$ with $f(0) = 0$. The composition $h = g \circ f$ is then locally 
@@ -1218,10 +1220,10 @@ aim of this subsection is to prove the following intermediate result.
 
 \begin{prop}
 \label{prop:boundhr}
-With the above notations, we have for all nonnegative integer $r$:
+With the above notation, we have
 $$\Vert h_r \Vert \leq \sup_{m, (n_i)}
   \Vert g_m \Vert \cdot \Vert f_{n_1} \Vert \cdots \Vert f_{n_m} \Vert$$
-where the supremum is taken over all couples $(m, (n_i))$ where $m$
+for all nonnegative integer $r$, where the supremum is taken over all pairs $(m, (n_i))$ where $m$
 is a nonnegative integer and $(n_i)_{1 \leq i \leq m}$ is a sequence of
 length $m$ of nonnegative integers such that $n_1 + \ldots + n_m = r$.
 \end{prop}
@@ -1255,11 +1257,11 @@ $(k_i)$, $(n_i)$ such that $k_1 n_1 + \ldots + k_\ell n_\ell = r$.
 Proposition \ref{prop:boundhr} now follows from the next lemma.
 
 \begin{lem}
-Let $\mathcal E$ be a $K$-vector space. Let $\varphi : \mathcal E^n \to 
-K$ be a symmetric $s$-linear form and $\psi: E \to K$ defined by 
+Let $E$ be a $K$-vector space. Let $\varphi : E^m \to 
+K$ be a symmetric $m$-linear form and $\psi: E \to K$ defined by 
 $\psi(x) = \varphi(x, x, \ldots, x)$.
-Given $k_1, \ldots, k_\ell$ some positive integers whose sum is $m$ and 
-$x_1, \ldots, x_\ell$ some elements of $\mathcal E$, we have:
+Given positive integers $k_1, \ldots, k_\ell$ whose sum is $m$ and 
+$x_1, \ldots, x_\ell \in E$, we have:
 $$\begin{array}{l}
 \Big\Vert \binom m {k_1 \,\, k_2 \,\, \cdots \,\, k_\ell} \cdot
 \varphi(x_1, \ldots, x_1, \ldots, x_\ell, \ldots,
@@ -1281,21 +1283,21 @@ $\ell$. If $\ell = 1$, this follows directly from
 the definition of $\Vert \psi \Vert$. 
 We now pick $(\ell+1)$ integers $k_1, \ldots, k_{\ell+1}$ whose sum 
 equals $m$ together with $(\ell+1)$ elements $x_1, \ldots, x_{\ell+1}$
-lying in the unit ball of $\mathcal E$.
+lying in the unit ball of $E$.
 We also consider a new variable $\lambda$ varying in
 $\O_K$. We set $x'_i = x_i$, $k'_i = k_i$ when $i < \ell$ and $x'_\ell 
-= x_\ell + \lambda x_{\ell+1}$, $k'_\ell = k_\ell + k_{\ell+1}$. By the 
+= x_\ell + \lambda x_{\ell+1}$ and $k'_\ell = k_\ell + k_{\ell+1}$. By the 
 induction hypothesis, we know that the inequality:
-$$\Big\Vert \binom s {k'_1 \,\, \cdots \,\, k'_\ell} \cdot
+$$\Big\Vert \binom m {k'_1 \,\, \cdots \,\, k'_\ell} \cdot
 \varphi(x'_1, \ldots, x'_1, \ldots, x'_\ell, \ldots, x'_\ell) \Big\Vert
 \leq \Vert \psi \Vert$$
 holds for all $\lambda \in K$. Furthermore, LHS of the above inequality
 is a polynomial $P(\lambda)$ of degree $k'_\ell$ whose coefficient in 
 $\lambda^j$ is:
-$$\binom s {k'_1 \,\, \cdots \,\, k'_\ell} \cdot
+$$\binom m {k'_1 \,\, \cdots \,\, k'_\ell} \cdot
 \binom {k'_\ell} {j} \cdot
 \varphi(\underline x_j) = 
-\binom s {k_1 \,\, \cdots \,\, k_{\ell-1} \,\, j} \cdot
+\binom m {k_1 \,\, \cdots \,\, k_{\ell-1} \,\, j} \cdot
 \varphi(\underline x_j)$$
 with
 $\underline x_j = (x_1, \ldots, x_1, \ldots, x_{\ell+1}, \ldots, 
@@ -1304,7 +1306,7 @@ where $x_i$ is repeated $k_i$ times if $i < \ell$ and $x_\ell$
 (resp. $x_{\ell+1}$) is repeated $j$ times (resp. $k'_\ell - j$ times).
 Since $\Vert P(\lambda) \Vert \leq \Vert \psi \Vert$ for all $\lambda$ in 
 the unit ball, the norm of all its coefficients must be at most $\Vert \psi
-\Vert$ as well. Looking at the coefficient in $\lambda^{k_{l+1}}$, we find
+\Vert$ as well. Looking at the coefficient of $\lambda^{k_l}$, we find
 the desired result.
 \end{proof}
 
@@ -1316,14 +1318,10 @@ $h = \sum_{n \geq 0} h_n$ be the analytic expansions of
 $f$, $g$ and $h$.
 Here $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
 some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively.
-Following \cite{caruso-roe-vaccon:14a}, we define $\NP(f) : \R \to \R \cup 
-\{+\infty\}$ as the greatest convex function such that $\NP(f)(n) \geq - 
-\log \Vert f_n \Vert$ for all integer $n$. We recall that $\Lambda(f)$ 
-is the Legendre transform of $\NP(f)$ 
-\cite[Proposition 3.9]{caruso-roe-vaccon:14a}.
-We define $\NP(g)$ and $\NP(h)$ similarly.
-We recall that $\alpha$ is a nonnegative real number such that $\Vert n! 
-\Vert \geq e^{-\alpha n}$ for all positive integer $n$.
+We recall that $\Lambda(f)$ 
+is the Legendre transform of the Newton polygon $\NP(f)$ defined in Section \ref{sec:matrices}
+\cite[Proposition 3.9]{caruso-roe-vaccon:14a} and that $\alpha$ is a nonnegative
+real number such that $\Vert n! \Vert \geq e^{-\alpha n}$ for all positive integer $n$.
 
 \begin{lem}
 \label{lem:boundLambdaf}
@@ -1340,12 +1338,12 @@ x \mapsto \big(h \mapsto n \cdot F_n(h, x, x, \ldots, x)\big).$$
 Taking $h = x$, we find
 $\Vert f'_n \Vert \geq \Vert n f_n \Vert = 
 \Vert n \Vert \cdot \Vert f_n \Vert$.
-Combining this with Proposition \ref{prop:boundhr}, we get, for all
-nonnegative integer $r$:
+Combining this with Proposition \ref{prop:boundhr}, we get
 $$\Vert (r+1) f_{r+1} \Vert \leq
   \sup_{m, (n_i)} \Vert g_m \Vert \cdot 
   \prod_{i=1}^m \max(\Vert f_{n_i} \Vert, \Vert h_{n_i} \Vert)$$
-where the supremum runs over all couples $(m, (n_i))$ where $m$
+for all nonnegative integer $r$,
+where the supremum runs over all pairs $(m, (n_i))$ where $m$
 is a nonnegative integer and $(n_i)_{1 \leq i \leq m}$ is a sequence of
 length $m$ of nonnegative integers such that $n_1 + \ldots + n_m = r$.
 We set $u_r = \Vert r! f_r \Vert$. Multiplying the above inequality by
@@ -1392,7 +1390,7 @@ We can now conclude the proof of Proposition \ref{prop:boundLambdaf} as
 follows. Given $a \in \R$ and $b = a + \Lambda_g \circ \Lambda_h(a)$, we 
 have to prove that $\Lambda(f)(a-\alpha) \leq b$ provided that $b \leq 
 \nu$. Thanks to Proposition \ref{prop:boundLambdaf}, it is enough to 
-check that such couples $(a,b)$ satisfy the hypothesis of Lemma
+check that such pairs $(a,b)$ satisfy the hypothesis of Lemma
 \ref{lem:boundLambdaf}. Clearly:
 $b \geq a + \Lambda(g) \circ \Lambda(h)(a)$
 since $\Lambda_g \geq \Lambda(g)$, $\Lambda_h \geq \Lambda(h)$ and
