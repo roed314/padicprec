@@ -169,7 +169,7 @@ the residue field is small. It is the reason why we will always take
 $K = \Q_2$ is our examples.
 \end{comment}
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Organization of the paper.}
@@ -179,18 +179,17 @@ it on a technical point.
 In \S \ref{sec:matrices}, we focus on matrices... \todo{Complete
 this}.
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Notations.}
-Throughout the paper, the letter $K$ will refer to a complete 
-discrete valuation field of characteristic $0$, that is either a finite 
-extension of the field of $p$-adic numbers $\Qp$ or a field of Laurent 
-series over a field of characteristic $0$ \todo{what about mixed characteristic with infinite residue field?}.
-We denote by $\val : K \to \Z 
-\cup \{+\infty\}$ of $K$ --- it is the $p$-adic valuation when $K = \Qp$ 
-and the usual valuation of a Laurent series when $K = k((t))$ --- and by 
-$\Vert \cdot \Vert$ the corresponding norm.
+Throughout the paper, the letter $K$ will refer to a complete discrete 
+valuation field of characteristic $0$. Usual examples are finite 
+extensions of $\Qp$ and Laurent series fields over a field of 
+characteristic $0$. We denote by $\val : K \to \Z \cup \{+\infty\}$ of 
+$K$ --- it is the $p$-adic valuation when $K = \Qp$ and the usual 
+valuation of a Laurent series when $K = k((t))$ --- and by $\Vert \cdot 
+\Vert$ the corresponding norm.
 
 \section{The theory of p-adic precision}
 \label{sec:theory}
@@ -390,14 +389,19 @@ and then has to stay in the green area.
 
 As a consequence of the above discussion, we derive the following 
 proposition which can be directly combined with Proposition 3.12 of 
-\cite{caruso-roe-vaccon:14a}.
+\cite{caruso-roe-vaccon:14a}. Following \cite{caruso-roe-vaccon:14a},
+if $\varphi$ is a convex function and $v$ is a real number, we define
+$$\varphi_{\geq v} : x \mapsto \inf_{y \geq 0} \big( \varphi(x+y)
+- vy \big).$$
+It is highest convex function with $\varphi_{\geq v} \leq \varphi$ and 
+$\varphi'_{\geq v} \geq v$.
 
 \begin{prop}
 \label{prop:boundLambdaf2}
 Keeping the above notations, we have:
 $$\Lambda(f)_{\leq 2} (x) \leq 2(x + \alpha + \mu) -
 \min(\Lambda_h^{-1}(\nu) + \mu, \: \nu)$$
-for all $x \leq \min(\Lambda_h^{-1}(\nu) - \alpha, \: \nu - \mu - \alpha)$. \todo{What is $\Lambda(f)_{\leq 2}$?}
+for all $x \leq \min(\Lambda_h^{-1}(\nu) - \alpha, \: \nu - \mu - \alpha)$.
 \end{prop}
 
 \begin{proof}
@@ -516,7 +520,7 @@ the usual coordinate-wise precision model. The lattice precision model
 then appears as a way to keep track of this ``diffused'' gain of
 precision.
 
-\medskip
+\smallskip
 
 One may wonder to what extent it is important to take care of these 
 ``diffused'' gains of precision. For one single product of matrices, 
@@ -774,7 +778,7 @@ matrices;
 $L_n$ (resp. $L_n^u$) is the sub-affine space of 
 nilpotent (resp. unipotent) lower-triangular matrices.
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Calculus and precision.}
@@ -899,7 +903,7 @@ recall standard facts about its geometry. In what follows, we set
 $n = \dim E$ and equip $E$ with a distinguished basis $(e_1, \ldots, 
 e_n)$.
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Description and tangent space.}
@@ -911,7 +915,7 @@ $f(V)$. It follows from this description that the tangent space of
 $\Grass(E,d)$ is canonically isomorphic to $$\Hom(V, E) / \End(V) 
 \simeq \Hom(V, E/V).$$
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Charts.}
@@ -943,7 +947,7 @@ generators of $W$, we can determine such an $I$ together with the
 corresponding embedding $f : V_I \hookrightarrow E$ by echelonizing 
 the matrix of generators of $W$.
 
-\medskip
+\smallskip
 
 \noindent
 {\bf A variant.}
@@ -967,7 +971,7 @@ g$ then defines a bijection $\mathcal U_{V, V^\c} \to \mathcal
 U^\star_{V, V^\c}$ which commutes with the embeddings into the
 Grassmannian.
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Duality.}
@@ -994,7 +998,7 @@ vector spaces. For brevity, we skip the estimation of the corresponding
 growing functions (but this can be done using Proposition 
 \ref{prop:boundLambdaf2} as before).
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Direct images.}
@@ -1034,7 +1038,7 @@ factors through $\varphi$ (\emph{i.e.} vanishes on $\ker \varphi = V
 is the linear mapping sending $(df,dv)$ as above to the unique element 
 $dw \in \Hom(W,F/W)$ such that $dw \circ \varphi = d \tilde w$.
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Inverse images.}
@@ -1071,7 +1075,7 @@ can deduce the differential of $\DI_r$ from those of $\II_s$ and
 %of kernels.
 %\end{rem}
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Sums and intersections.}
@@ -1116,7 +1120,7 @@ possible elements. It is the usual choice to get a normalized
 representation. However, in the context of inexact base fields, it is 
 much better to always choose the pivot with maximal norm.
 
-\medskip
+\smallskip
 
 \noindent
 {\bf The dual representation.}
@@ -1139,7 +1143,7 @@ $I$ and the matrix
 $H_V = \Big(\begin{matrix} -G'_V \\ I_{n-d} \end{matrix}\Big)$. Of
 course, for a general $I$, a similar formula exists.
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Operations on vector spaces.}
@@ -1157,7 +1161,7 @@ by using Proposition \ref{prop:precision} and the differential
 computations we have presented before. Of course, the second method 
 is more costly but also more accurate (as illustrated above).
 
-\medskip
+\smallskip
 
 \noindent
 {\bf Some experiments.}
