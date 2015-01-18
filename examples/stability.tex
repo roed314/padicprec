@@ -434,7 +434,7 @@ use the Smith decomposition for $M \in M_{m,n}(K)$:
 M = U_M \cdot \Delta_M \cdot V_M,
 \]
 with $U_M$ and $V_M$ unimodular and $\Delta_M$ diagonal.  Write $\sigma_i(M)$
-for the valuation of the $(i,i)$-th entry of $\Delta_M$, and by convention set
+for the valuation of the $(i,i)$th entry of $\Delta_M$, and by convention set
 $\sigma_i(M) = +\infty$ if $i > \min(m,n)$.  Order the $\sigma_i(M)$ so that $\sigma_i(M) \le \sigma_{i+1}(M)$.
 
 \subsection{Multiplication}
@@ -491,7 +491,7 @@ $$M = \Delta_A \cdot V_A \cdot dA \cdot V_B^{-1}
 + U_A^{-1} \cdot dB \cdot U_B \cdot \Delta_B.$$
 When $dA$ varies in $M_{a,b}(\O_K)$ so does $V_A \cdot dA \cdot V_B^{-1}$
 and therefore the first summand in $M$ varies in the subspace of 
-$M_{a,c}(\O_K)$ consisting of matrices whose all entries on the $i$-th
+$M_{a,c}(\O_K)$ consisting of matrices whose all entries on the $i$th
 row have valuation at least $a_i$. Arguing similarly for the second
 summand, we deduce the first statement of the Proposition. The second
 statement is left to the reader.
@@ -509,18 +509,16 @@ not --- even individually --- attached to some particular entry of $AB$
 but are ``spread out'' among all its entries. Thus, a usual 
 coordinate-wise precision data does not see this gain of precision in 
 general. There is a more pedestrian way to visualize this phenomenon. 
-Remark that the product $AB$ can be rewritten:
+Remark that the product $AB$ can be rewritten
 $AB = U_A \cdot P \cdot V_B$ with
 $P = \Delta_A \cdot V_A \cdot U_B \cdot \Delta_B$.
-Tracking precision in the usual way, we see that the $(i,j)$-th entry
+Tracking precision in the usual way, we see that the $(i,j)$th entry
 of $P$ is known at precision $O(\pi^{N + \min(a_i,b_j)})$. Hence, the 
 gain of precision is visible here. However it is then ``spread out'' 
 when we are computing $U_A \cdot P \cdot V_B$ and mostly disappears in 
 the usual coordinate-wise precision model. The lattice precision model 
 then appears as a way to keep track of this ``diffused'' gain of
 precision.
-
-\smallskip
 
 One may wonder to what extent it is important to take care of these 
 ``diffused'' gains of precision. For one single product of matrices, 
