@@ -1,7 +1,11 @@
+%% from this description could be cut for space
+
+
 \documentclass{sig-alternate}
 \usepackage[utf8]{inputenc}
 
 \usepackage{amsmath,amssymb}
+\usepackage{amsthmnoproof}
 \usepackage{amsrefs}
 \usepackage[usenames,dvipsnames]{color}
 \usepackage{stmaryrd}
@@ -26,19 +30,6 @@
 \DeclareMathOperator{\Grass}{Grass}
 \DeclareMathOperator{\Lat}{Lat}
 \DeclareMathOperator{\round}{round}
-
-
-\newtheorem{theo}{Theorem}[section]
-\newtheorem{lem}[theo]{Lemma}
-\newtheorem{prop}[theo]{Proposition}
-\newtheorem{cor}[theo]{Corollary}
-\newtheorem{quest}[theo]{Question}
-\newtheorem{conj}[theo]{Conjecture}
-%\theoremstyle{definition}
-\newtheorem{rem}[theo]{Remark}
-\newtheorem{ex}[theo]{Example}
-\newtheorem{deftn}[theo]{Definition}
-\newtheorem{rmk}[theo]{Remark}
 
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
@@ -81,6 +72,16 @@
 
 \begin{document}
 
+\newtheorem{theo}{Theorem}[section]
+\newtheorem{lem}[theo]{Lemma}
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{cor}[theo]{Corollary}
+\newtheorem{quest}[theo]{Question}
+\newtheorem{conj}[theo]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rem}[theo]{Remark}
+\newtheorem{ex}[theo]{Example}
+\newtheorem{deftn}[theo]{Definition}
 
 \title{p-adic stability in linear algebra}
 
@@ -126,23 +127,45 @@ We supplement our observations with numerical experiments.
 \section{Introduction}
 
 For about twenty years, the use of $p$-adic methods in symbolic 
-computation has been gaining popularity: they were successfully 
-used for instance 
-to compute compose products of polynomials 
+computation has been gaining popularity. Such methods were 
+used to compute composed products of polynomials 
 \cite{boston-gonzalez-perdry-schost:05a}, 
 to produce hyperelliptic curves of genus $2$ with complex multiplication 
 \cite{gaudry-houtmann-weng-ritzenthaler-kohel:06a},
 to compute isogenies between elliptic curves \cite{lercier-sirvent:08a} 
-and, last but not least,
-to count points on certain varieties (mainly curves) using $p$-adic 
-cohomology theories (\emph{cf} \cite{kedlaya:01a,lauder:04a} and many
+and to count points on varieties using $p$-adic 
+cohomology theories (\emph{cf.} \cite{kedlaya:01a,lauder:04a} and many
 followers).
 However, a general framework allowing a precise study of $p$-adic 
-precision --- which is a main issue we encounter when trying to work 
+precision --- the main issue encountered when computing 
 with $p$-adic numbers --- was designed only recently in 
 \cite{caruso-roe-vaccon:14a}. 
 
-\todo{Rewrite the introduction}
+In \cite{caruso-roe-vaccon:14a}, we advocate the use of lattices
+to track the precision of vectors and points on $p$-adic manifolds.
+The main result of \emph{loc. cit.}, recalled here as Proposition \ref{prop:precision},
+allows for the propagation of precision using differentials.  While
+allowing arbitrary lattices in representing precision carries a high
+cost in space and time requirements, the reduced precision loss
+can sometimes make up for these costs as part of a larger algorithm.
+In this paper we apply the ideas of \cite{caruso-roe-vaccon:14a} to
+a variety of linear algebraic tasks.
+
+\smallskip
+
+\noindent
+{\bf Main Results.}
+We give a number of contexts where lattice-based precision methods
+outperform the standard coordinate-wise methods.  The two most striking
+examples are an analysis of matrix multiplication and of 
+sums and intersections of subspaces.  In Proposition \ref{prop:mulmatrix},
+we give a formula for the lattice-precision of the product of two matrices.
+In Figure \ref{fig:mulmatrix}, we describe the precision loss in multiplying
+$n$ matrices, which appears linear in $n$ when using standard methods
+and logarithmic in $n$ when using lattice methods.  We also give an
+example in Figure \ref{fig:vectorspace} where lattice methods
+actually yield an \emph{increase} in precision as the computation
+proceeds.
 
 \begin{comment}
 The present paper, which may be considered as a continuation of 
@@ -164,7 +187,7 @@ algorithm under analysis and by $q$ the cardinality of the residue
 field, it appears that the numbers of lost digits is about $O(\frac D 
 q)$ whereas the theoretical loss of precision is closer than $O(\log_q 
 D)$ --- and sometimes even $O(1)$. We would like to underline in 
-particular that the instability phenomema are much more apparent when 
+particular that the instability phenomena are much more apparent when 
 the residue field is small. It is the reason why we will always take
 $K = \Q_2$ is our examples.
 \end{comment}
@@ -173,16 +196,39 @@ $K = \Q_2$ is our examples.
 
 \noindent
 {\bf Organization of the paper.}
-The section \ref{sec:theory} introduces the theory of ultrametric 
-precision developed in \cite{caruso-roe-vaccon:14a} and completes 
-it on a technical point.
-In \S \ref{sec:matrices}, we focus on matrices... \todo{Complete
-this}.
+Section \ref{ssec:latticeprec} recalls the theory of 
+precision developed in \cite{caruso-roe-vaccon:14a} and defines
+a notion of diffuse precision for comparing to coordinate-wise methods.
+In particular, we recall Proposition \ref{prop:precision}, which
+allows the computation of precision using differentials.
+Proposition \ref{prop:boundLambdaf2} in Section \ref{ssec:boundLambdaf}
+is a technical result that will be used to determine the applicability of
+Proposition \ref{prop:precision}.
+
+In Section \ref{ssec:mulmatrix}, we analyze matrix multiplication and report
+on experiments that demonstrate the utility of lattice-based precision tracking.
+Section \ref{ssec:det} finds the precision of the determinant of a
+matrix, and Section \ref{ssec:charpoly} applies the resulting formula to
+characteristic polynomials.  We define the precision polygon of a matrix, which
+gives a lower bound on the precision of the characteristic polynomial.
+The precision polygon lies above the Hodge polygon of the matrix, and
+we give statistics on the difference and the amount of diffuse precision.
+Finally, we find the precision of LU factorization, determine the conditions under which
+Proposition \ref{prop:precision} may be applied, and again describe experiments
+with lattice-based precision analysis.
+
+Section \ref{ssec:grassgeo} reviews the geometry of Grassmannians,
+which we apply in Section \ref{ssec:grassdiff} to differentiating
+the direct image, inverse image, sum and intersection maps
+between Grassmannians.  We then report in Section \ref{grassimpl}
+on tracking the precision of subspace arithmetic in practice.
+
+In the appendix, we give a proof of Proposition \ref{prop:boundLambdaf}.
 
 \smallskip
 
 \noindent
-{\bf Notations.}
+{\bf Notation.}
 Throughout the paper, the letter $K$ will refer to a complete discrete 
 valuation field of characteristic $0$. Usual examples are finite 
 extensions of $\Qp$ and Laurent series fields over a field of 
@@ -194,18 +240,19 @@ valuation of a Laurent series when $K = k((t))$ --- and by $\Vert \cdot
 \section{The theory of p-adic precision}
 \label{sec:theory}
 
-The aim of this section is to summarize briefly the content of 
-\cite{caruso-roe-vaccon:14a} and complete it on certain points.
+The aim of this section is to briefly summarize the content of 
+\cite{caruso-roe-vaccon:14a} and fill in certain details.
 
 \subsection{Lattices as precision data}
+\label{ssec:latticeprec}
 
 Roughly speaking, the main proposal of \cite{caruso-roe-vaccon:14a} is 
 to use lattices to track precision when computing with elements lying in 
 vector spaces over $K$.
 
-To make this sentence more explicit, let us consider a finite 
+More explicitly, let us consider a finite 
 dimensional\footnote{The framework of \cite{caruso-roe-vaccon:14a} is 
-actually those of Banach spaces. However we will not need infinite 
+actually those of Banach spaces. However, we will not need infinite 
 dimensional spaces in the present paper.} normed vector space $E$ 
 defined over $K$. We use the notation $\Vert \cdot \Vert_E$ for the norm 
 on $E$ and $B^-_E(r)$ (resp. $B^{\phantom -}_E(r)$) for the open (resp. 
@@ -249,15 +296,15 @@ f(h) \Vert \big)$$
 with the convention that $\Lambda(f)(v) = +\infty$ if $f$ does not
 converge on $B^-_E(e^v)$.
 We refer to \cite[Proposition 3.12]{caruso-roe-vaccon:14a} for the
-precise statement and seek here to state the particular case of
-integral polynomial functions. A function $f : E \to F$ is said 
+precise statement.  We state here the case of
+integral polynomial functions. A function $f : E \to F$ is said to be
 \emph{integral polynomial} if it is given by multivariate polynomial 
 functions with coefficients in $\O_K$ in any (equivalently all) system 
 of coordinates associated to orthonormal bases.
 
 \begin{prop}
 \label{prop:precision2}
-We keep the notations of Proposition \ref{prop:precision} and assume 
+We keep the notation of Proposition \ref{prop:precision} and assume 
 in addition that $f$ is integral polynomial. Let $C$ be a positive real
 number such that $B_F(1) \subset f'(v_0)(B_E(C))$. 
 Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
@@ -265,46 +312,61 @@ Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
 \end{prop}
 
 In \cite[Appendix A]{caruso-roe-vaccon:14a}, the theory is extended 
-to manifolds over $K$ and covers this way a very large families of
+to manifolds over $K$ and covers in this way a very large familiy of
 situations (\emph{e.g.} computation with vector spaces as discussed
 in \S \ref{sec:vectorspaces}). In this extended framework, the precision 
 datum at some point $x$ is a lattice in the tangent space at $x$. 
 Propositions \ref{prop:precision} and \ref{prop:precision2} have
 analogues as well, simply obtained by working in charts.
 
+In this paper, we will compare the use of lattices to track precision
+with the standard coordinate-wise methods.  The following definition
+will be useful in discussing the differences.  Suppose $E$ is equipped
+with a basis $(e_1, \ldots, e_n)$ and write $\pi_i : E \to Ke_i$ for the projections.
+
+\begin{deftn} \label{def:diffused}
+If $H \subset E$ is a lattice, let
+\[
+H_0 = \pi_1(H) \oplus \cdots \oplus \pi_n(H).
+\]
+Set $k = \log_p([H_0 : H])$.  Then we say that $H$ has $k$
+\emph{diffused digits of precision}.
+\end{deftn}
+If $H$ represents the actual precision of some object, then
+$H_0$ is the best coordinate-wise approximation to $H$.
+The diffused precision is not visible coordinate-wise in the
+specified basis of $E$.
+
 \subsection{A bound on a growing function}
 \label{ssec:boundLambdaf}
 
 In the next sections, we will compute the derivative of several standard 
-operations and remark that it sometimes has a simple expression in term 
-of the input and the output. In other terms, the function $f$ modeling
+operations and sometimes give a simple expression in term 
+of the input and the output. In other words, the function $f$ modeling
 such an operation satisfies a differential equation of the form
-$f' = g \circ (f, \id)$
+$f' = g \circ (f, \id)$  %%%%%%%% HERE
 where $g$ is a given --- and hopefully rather simple --- function. The 
 aim of this subsection is to study this differential equation and to 
-derive from it some bounds on the growing function $\Lambda(f)$. 
-\emph{In the following, we shall always assume that $K$ has 
+derive from it certain bounds on the growing function $\Lambda(f)$. 
+\emph{We will assume that $K$ has 
 characteristic $0$.}
 
-We actually generalize a bit the setting above and consider the 
+Let $E, F$ and $G$ be finite-dimensional normed vector spaces with
+$U \subseteq E$ and $V \subseteq F$ and $W \subset G$ open subsets.
+Generalizing the setting above, we consider the 
 differential equation:
 \begin{equation}
 \label{eq:diffequah}
 f' = g \circ (f, h).
 \end{equation}
-Here $g$ and $h$ are known locally analytic functions and $f$ is the 
-unknown, which is assumed to be locally analytic as well. The function
-$f$ goes from $U$ to $V$, two open subsets in two finite dimensional
-normed vector spaces $E$ 
-and $F$ respectively. The function $h$ goes from $U$ to $W$ where $W$
-is again an open subset in a normed $K$-vector space $G$. Consequently,
-$g$ goes from $V \times W$ to the vector space $\Hom(E,F)$ of
-(continuous) linear maps $E \to F$.
+Here $g : V \times W \to \Hom(E, F)$ and $h : U \to W$ are known
+locally analytic functions and $f : U \to V$ is the 
+unknown locally analytic function. 
 In what follows, we always assume that $V$ and $W$ contain the origin, 
 $f(0) = 0$, $h(0) = 0$ and $g(0) \neq 0$. There assumptions are harmless 
 for two reasons: first, we can always shift $f$ and $h$ (and $g$ 
-accordingly) so that they both vanish at $0$ and second, in order to 
-apply Proposition \ref{prop:precision2}, the derivative $f'(0)$ 
+accordingly) so that they both vanish at $0$, and second, in order to 
+apply Proposition \ref{prop:precision2} the derivative $f'(0)$ 
 needs to be surjective and therefore \emph{a fortiori} nonzero.
 
 We assume that we are given in addition two nondecreasing convex 
@@ -370,27 +432,29 @@ quick computation shows that, on a neighborhood of ${-}\infty$, this
 function is given by $\Lambda_f(x) = x + \alpha + \mu$
 where $\mu$ is the value that $\Lambda_g$ takes on the interval 
 $({-}\infty, \nu]$. Proposition \ref{prop:boundLambdaf} says that the
-graph of $\Lambda(f)$ lies below the plain blue line. We remark
-moreover that the Taylor expansion of $f(z)$ starts with the term
+graph of $\Lambda(f)$ lies below the plain blue line. Moreover, we remark
+that the Taylor expansion of $f(z)$ starts with the term
 $g(0) z$. Hence, on a neighborhood on ${-}\infty$, we have 
 $\Lambda(f)(x) = x + \log \Vert g(0) \Vert$. Using convexity, we 
 get:
-$$\Lambda(f)(x) \geq x + \log \Vert g(0) \Vert, 
-  \quad \forall x \in \R.$$
-In other words, the graph of $\Lambda(f)$ lies above the brown line.
+\[
+\Lambda(f)(x) \geq x + \log \Vert g(0) \Vert,
+\]
+%  \quad \forall x \in \R.$$
+for all $x \in \R$.  In other words, the graph of $\Lambda(f)$ lies above the brown line.
 Furthermore, we know that the slopes of $\Lambda(f)$ are all integral
 because $f$ is locally analytic. Hence, $\Lambda(f)$ cannot lie above
 the dashed blue line defined as the line of slope $2$ passing through
-the first break point of the blue plain line --- which has coordinate 
+the first break point of the blue plain line, which has coordinate 
 $(y_0 - \alpha - \mu, y_0)$ with $y_0 = \min(\Lambda_h^{-1}(\nu) + \mu, 
 \nu)$. As a conclusion, we have proved that the graph of $\Lambda(f)$ 
 must coincide with the brown line until it meets the dashed blue line 
 and then has to stay in the green area.
 
-As a consequence of the above discussion, we derive the following 
-proposition which can be directly combined with Proposition 3.12 of 
+As a consequence, we derive the following 
+proposition, which can be combined with Proposition 3.12 of 
 \cite{caruso-roe-vaccon:14a}. Following \cite{caruso-roe-vaccon:14a},
-if $\varphi$ is a convex function and $v$ is a real number, we define
+if $\varphi$ is a convex function and $v \in \R$, we define
 $$\varphi_{\geq v} : x \mapsto \inf_{y \geq 0} \big( \varphi(x+y)
 - vy \big).$$
 It is highest convex function with $\varphi_{\geq v} \leq \varphi$ and 
@@ -398,14 +462,14 @@ $\varphi'_{\geq v} \geq v$.
 
 \begin{prop}
 \label{prop:boundLambdaf2}
-Keeping the above notations, we have:
+Keeping the above notation, we have:
 $$\Lambda(f)_{\leq 2} (x) \leq 2(x + \alpha + \mu) -
 \min(\Lambda_h^{-1}(\nu) + \mu, \: \nu)$$
 for all $x \leq \min(\Lambda_h^{-1}(\nu) - \alpha, \: \nu - \mu - \alpha)$.
 \end{prop}
 
 \begin{proof}
-Just remark that $y = 2(x + \alpha + \mu) - y_0$ is the equation of 
+The inequality follows from the fact that $y = 2(x + \alpha + \mu) - y_0$ is the equation of 
 the dashed blue line.
 \end{proof}
 
@@ -416,19 +480,18 @@ differential equation of the form $f' = g \circ f$. If this holds,
 Proposition \ref{prop:boundLambdaf2} gives the bound $\Lambda(f)_{\leq 
 2} (x) \leq 2(x + \alpha + \mu) - \nu$ for $x \leq \nu - \mu - \alpha$.
 
-Beyond this particular case, our general recommendation for choosing the 
-function $h$ is to endow $F$ with the second norm $\Vert x \Vert'_F = 
-e^\mu \cdot \Vert x \Vert_F$ ($x \in F$) and to take $h : (F, \Vert 
-\cdot \Vert_F) \to (F, \Vert \cdot \Vert'_F)$ acting as identity on the
-underlying vector spaces. The function $\Lambda(h)$ then maps $x$ to $x + 
-\mu$ ($x \in \R$) and we can choose $\Lambda_h = \Lambda(h)$.
+Beyond this particular case, we recommend choosing the 
+function $h$ by endowing $F$ with the second norm $\Vert x \Vert'_F = 
+e^\mu \cdot \Vert x \Vert_F$ ($x \in F$) and to taking $h : (F, \Vert 
+\cdot \Vert_F) \to (F, \Vert \cdot \Vert'_F)$ to be the identity on the
+underlying vector spaces. The function $\Lambda(h) : \R \to \R$ then maps $x$ to $x + 
+\mu$ and we can choose $\Lambda_h = \Lambda(h)$.
 \end{rem}
 
 \section{Matrices}
 \label{sec:matrices}
 
-The notation $M_{m,n}(K)$ refers to the $K$-vector space of matrices 
-with $m$ rows and $n$ columns with coefficients in $K$.  We will repeatedly
+Let $M_{m,n}(K)$ denote the space of $m \times n$ matrices over $K$.  We will repeatedly
 use the Smith decomposition for $M \in M_{m,n}(K)$:
 \[
 M = U_M \cdot \Delta_M \cdot V_M,
@@ -438,7 +501,7 @@ for the valuation of the $(i,i)$th entry of $\Delta_M$, and by convention set
 $\sigma_i(M) = +\infty$ if $i > \min(m,n)$.  Order the $\sigma_i(M)$ so that $\sigma_i(M) \le \sigma_{i+1}(M)$.
 
 \subsection{Multiplication}
-\label{subsec:mulmatrix}
+\label{ssec:mulmatrix}
 
 To begin with, we want to study the behavior of the precision when 
 performing a matrix multiplication. Let $r$, $s$ and $t$ be three 
@@ -471,7 +534,7 @@ for the number of $a_i$'s (resp. $b_i$'s) which are at least $m$.
 
 \begin{prop}
 \label{prop:mulmatrix}
-With the above notations, we have
+With the above notation, we have
 \[
 \begin{array}{rl}
 & \mathcal P'_{r,s,t}(A,B)(\mathcal L_0)
@@ -491,40 +554,34 @@ $$M = \Delta_A \cdot V_A \cdot dA \cdot V_B^{-1}
 + U_A^{-1} \cdot dB \cdot U_B \cdot \Delta_B.$$
 When $dA$ varies in $M_{a,b}(\O_K)$ so does $V_A \cdot dA \cdot V_B^{-1}$
 and therefore the first summand in $M$ varies in the subspace of 
-$M_{a,c}(\O_K)$ consisting of matrices whose all entries on the $i$th
+$M_{a,c}(\O_K)$ consisting of matrices whose entries on the $i$-th
 row have valuation at least $a_i$. Arguing similarly for the second
 summand, we deduce the first statement of the Proposition. The second
 statement is left to the reader.
 \end{proof}
 
-Let us briefly comment on Proposition \ref{prop:mulmatrix} from the 
-perspective of precision. The second statement roughly means that when 
-we are computing the product $AB$, we are gaining $\sum_{m=1}^\infty 
+From the perspective of precision, the second statement of Proposition \ref{prop:mulmatrix}
+means that the computation of $AB$ gains $\sum_{m=1}^\infty 
 a^{(m)} b^{(m)}$ significant digits in absolute precision\footnote{We 
 note that, on the other side, the valuation of the entries of $AB$ may 
 increase, meaning that we are also loosing some significant digits if we 
 are reasoning in relative precision.} as soon as $N > \min(a_r, b_t)$ 
-(\emph{cf} Proposition \ref{prop:precision2}). However these digits are 
-not --- even individually --- attached to some particular entry of $AB$ 
-but are ``spread out'' among all its entries. Thus, a usual 
-coordinate-wise precision data does not see this gain of precision in 
-general. There is a more pedestrian way to visualize this phenomenon. 
-Remark that the product $AB$ can be rewritten
+(\emph{cf.} Proposition \ref{prop:precision2}). However, many of these digits are 
+diffused in the sense of Definition \ref{def:diffused}.
+To change bases in order to make this increased precision visible
+with coordinates, write 
 $AB = U_A \cdot P \cdot V_B$ with
 $P = \Delta_A \cdot V_A \cdot U_B \cdot \Delta_B$.
-Tracking precision in the usual way, we see that the $(i,j)$th entry
-of $P$ is known at precision $O(\pi^{N + \min(a_i,b_j)})$. Hence, the 
-gain of precision is visible here. However it is then ``spread out'' 
-when we are computing $U_A \cdot P \cdot V_B$ and mostly disappears in 
-the usual coordinate-wise precision model. The lattice precision model 
-then appears as a way to keep track of this ``diffused'' gain of
-precision.
+Tracking precision in the usual way, the $(i,j)$-th entry
+of $P$ is known at precision $O(\pi^{N + \min(a_i,b_j)})$.  Multiplication by
+$U_A$ and $V_B$ then diffuses the precision across the entries of $AB$.
 
-One may wonder to what extent it is important to take care of these 
-``diffused'' gains of precision. For one single product of matrices, 
-it is not so much. However, the benefits become substantial
-when we are executing an algorithm that computes many products of
-matrices. Let us illustrate this with the following quite simple
+\smallskip
+
+We now consider the impact of tracking this diffuse precision.
+Although the benefit is not substantial for
+a single product of matrices, it accumulates as we multiply a large
+number of matrices.  We illustrate this phenomenon with the following simple
 example.
 
 \noindent\hrulefill
@@ -594,17 +651,18 @@ to be only logarithmic. It would be nice to have a precise formulation
 (and proof) of this heuristic.
 
 \subsection{Determinant}
+\label{ssec:det}
 
-We now come to the computation of the determinant of a square $n 
-\times n$ matrix with coefficients in $K$. The differential computation is 
-quite classical.  The differential of the function $\det : M_{n,n}(K) \to 
-K$ at some point $M$ is the linear mapping
-$$\detp(M) : dM \mapsto \tr(\com(M) \cdot dM),$$
+The computation of the differential of $\det : M_{n,n}(K) \to K$
+is classical: at a point $M$ it is the linear map
+\[
+\detp(M) : dM \mapsto \tr(\com(M) \cdot dM),
+\]
 where $\com(M)$ stands for the comatrix of $M$, which is $\det(M) M^{-1}$ when $M$ is invertible. If $M$ is not 
 invertible, $\detp(M)$ is not surjective and we cannot apply Proposition 
 \ref{prop:precision}. Therefore, we suppose that $M$ is invertible for the rest of this section.
 
-As we did for matrix multiplication, we first determine the image of
+As with matrix multiplication, we first determine the image of
 the standard lattice $\mathcal L_0 = M_{n,n}(\O_K)$ under $\detp(M)$.
 
 \begin{prop}
@@ -625,11 +683,10 @@ assume that $M = \Delta_M$, and the result becomes clear.
 
 In terms of precision, Proposition \ref{prop:detmatrix} implies that if 
 $M$ is given at flat precision $O(\pi^N)$ with $N > v$, then $\det(M)$ 
-is known at precision $O(\pi^{N+v})$.  Thus we are gaining $v$ significant 
+is known at precision $O(\pi^{N+v})$.  Thus we are gaining $v$  
 digits in absolute precision or, equivalently, losing $\sigma_n(M)$ digits
 of relative precision.
-Furthermore, one may easily compute the determinant
-of $M$ with this optimal precision by finding an approximate
+Furthermore, one may compute $\det(M)$ with this optimal precision by finding an approximate
 Smith decomposition with $\Delta_M$ known at precision $O(\pi^N)$ and
 multiplying its diagonal entries. 
 
@@ -685,7 +742,7 @@ the translated polygon with vertices $(x_i - n, y_i)$.
 The precision polygon $\PP(M)$ lies between $T_1(\HP(M))$
 and $\NP(M)$.
 
-Moreover $\PP(M)$ and $T_1(\HP(M))$ meet at $0$ and $n{-}1$.
+Moreover, $\PP(M)$ and $T_1(\HP(M))$ meet at $0$ and $n{-}1$.
 \end{prop}
 
 \begin{proof}
@@ -699,8 +756,8 @@ that $\PP(M)$ and $T_1(\HP(M))$ meet at abscissa $0$ follows from
 Proposition \ref{prop:detmatrix}.
 
 It remains to prove the comparison with Newton polygon.
-Set $f = \charpoly(M)$, set $m_{i,j}$ as the $(i,j)$th entry of $M$, 
-$f_{i,j}$ as the $(i,j)$th entry of $\com(X{-}M)$ and $\mu_{i,j} = 
+Set $f = \charpoly(M)$, set $m_{i,j}$ as the $(i,j)$-th entry of $M$, 
+$f_{i,j}$ as the $(i,j)$-th entry of $\com(X{-}M)$ and $\mu_{i,j} = 
 \val(m_{i,j})$. We write $f[k]$ 
 for valuation of the coefficient of $X^k$ in $f$, and set $f[-1] = 
 +\infty$. The equation $(X{-}M) \cdot \com(X{-}M) = f \cdot I$ yields, 
@@ -710,9 +767,9 @@ f[k] &\ge \inf(f_{i,i}[k{-}1], \mu_{i,0} + f_{0,i}[k], \ldots,
 \mu_{i,n} + f_{n,i}[k]) \\
 &\ge \inf(f_{i,i}[k{-}1], f_{j,i}[k]),
 \end{align*}
-with the infimum taken over $j$. 
-Taking lower convex hulls and noting that $\PP(M)$ is nonincreasing
-(which follows from the comparison with the Hodge polygon), we get the 
+with the infimum over $j$. 
+Taking lower convex hulls and noting that $\PP(M)$ is nonincreasing,
+which follows from the comparison with the Hodge polygon, we get the 
 result.
 \end{proof}
 
@@ -730,15 +787,15 @@ Empirically, $\PP(M)$ seems most likely to differ from $T_1(\HP(M))$ at
 $1$, corresponding to the precision of the linear term of the 
 characteristic polynomial.
 
-Of course, $\PP(M)$ does necessarily agree with the precision lattice 
-$\mathcal{E} = \charp(M)(\mathcal L_0)$.  In $11\%$ of cases in 
-dimension $3$, up to $15\%$ of cases in dimension $8$, the index of 
-$\mathcal{E}$ in $\mathcal{L}_{\PP(M)}$ is greater than $1$.  This 
+Of course, the precision lattice $\mathcal{E} = \charp(M)(\mathcal L_0)$ 
+may contain diffuse precision which is not encapsulated in $\PP(M)$.
+Diffuse precision arises in $11\%$ of cases in 
+dimension $3$, up to $15\%$ of cases in dimension $8$.  This 
 percentage increases as $\val(\det(M))$ increases, reaching $34\%$ in 
 dimension $9$ for matrices constrained to have determinant with $2$-adic 
 valuation $12$.
-Moreover, one can construct examples with $[\mathcal{L}_{\PP(M)} : 
-\mathcal{E}]$ arbitrarily large.  Suppose the $\sigma_i(M)$ are large.  
+Moreover, one can construct examples with arbitrarily large amounts of diffuse precision.
+Suppose the $\sigma_i(M)$ are large.  
 Proposition \ref{prop:polygons} implies that $\mathcal{E}$ is 
 contained within $\O_{K, <n}[X]$ with index at least $\sum_{i=1}^{n-1} 
 \sigma_i(M)$.  The precision lattice of $1 + M$ is obtained from 
@@ -747,24 +804,21 @@ is now flat with height $0$.
 
 In conclusion, for randomly chosen matrices, approximating $\mathcal{E}$ 
 using the Hodge polygon loses only a small amount of precision. However,
-if the $\sigma_i(M)$'s are known to be 
-large or if $M$ is a translate of such a matrix, using lattice precision 
-can be very useful.
+if the $\sigma_i(M)$'s are known to be large or if $M$ is a translate of
+such a matrix, using lattice precision can be very useful.
 
 \subsection{LU factorization}
 
-In this subsection, we study the LU factorization.
 %This example has been previously studied by Caruso in \cite{caruso:12a}, 
 %but without using differential precision. We are going to show here that 
 %the framework of \S \ref{ssec:boundLambdaf} applies directly.
-We first introduce several notations.
-We denote by $\Vert \cdot \Vert$ the subordinate matrix norm on $M_n(K)$
+In this section, we denote by $\Vert \cdot \Vert$ the subordinate matrix norm on $M_n(K)$
 and, given a positive real number $C$, we let $B(C)$ be the closed ball 
 in $M_n(K)$ centered at the origin of radius $C$. We consider in addition
 the following subsets of $M_n(K)$:
 
 \noindent $\bullet$
-$O_n$ is the open subset of matrices whose all principal 
+$O_n$ is the open subset of matrices whose principal 
 minors do not vanish (we recall that the latest condition implies the
 existence and the unicity of a LU factorization);
 
@@ -797,11 +851,11 @@ $(A,B) \mapsto AU+LB$.
 
 We now want to apply Proposition \ref{prop:boundLambdaf2}
 in order to derive a concrete result on precision. We pick $M_0 \in
-O_n$ and write $D(M_0) = (L_0,U_0)$. We consider the ``translated'' 
+O_n$ and write $D(M_0) = (L_0,U_0)$. We consider the translated
 function $f$ taking $M$ to $D(M_0+M)-D(M_0)$. We then have $f(0) = 0$ 
 and $f'(M) = D'(M_0+M)$. Using the explicit description of the inverse
 of $D'(M_0+M)$, we find $B(1) \subset f'(0) \cdot B(C)$
-for $C = \max(\Vert U_0 \Vert, \Vert L_0 \Vert)$. Moreover $f$ satisfies 
+for $C = \max(\Vert U_0 \Vert, \Vert L_0 \Vert)$. Moreover, $f$ satisfies 
 the differential equation $f' = g \circ f$ where $g$ is defined by:
 \begin{equation}
 \label{eq:gAB}
@@ -886,26 +940,26 @@ Results for a sample of $2000$ instances}
 \label{sec:vectorspaces}
 
 Vector spaces are generally represented as subspaces of $K^n$ for some 
-$n$. Hence they naturally appear as points on Grassmannians. Therefore, 
+$n$ and hence naturally appear as points on Grassmannians. Therefore, 
 one can use the framework of \cite[Appendix A]{caruso-roe-vaccon:14a} to 
 study the $p$-adic in this context.
 
 \subsection{Geometry of Grassmannians}
+\label{ssec:grassgeo}
 
-Given $E$ be a finite dimensional vector space over $K$ and $d$ an 
-integer in the range $[0, \dim E]$ we denote by $\Grass(E,d)$ the 
-set of $d$-dimensional subspaces of $E$. It is the so-called 
-\emph{Grassmannian}. It is well-known that $\Grass(E,d)$ has a 
-natural structure of $K$-manifold. The aim of this subsection is to 
-recall standard facts about its geometry. In what follows, we set
-$n = \dim E$ and equip $E$ with a distinguished basis $(e_1, \ldots, 
-e_n)$.
+Given $E$, a finite dimensional vector space over $K$, and $d$, an 
+integer in the range $[0, \dim E]$, we write $\Grass(E,d)$ for the
+Grassmannian of $d$-dimensional subspaces of $E$. It is well-known
+that $\Grass(E,d)$ has a natural structure of $K$-manifold. The aim of
+this subsection is to recall standard facts about its geometry. In what follows,
+we set $n = \dim E$ and equip $E$ with a distinguished basis
+$(e_1, \ldots, e_n)$.
 
 \smallskip
 
 \noindent
 {\bf Description and tangent space.}
-Let $V$ denote a fixed sub-vector space of $E$ of dimension $d$. The 
+Let $V$ denote a fixed subspace of $E$ of dimension $d$. The 
 Grassmannian $\Grass(E,d)$ can be viewed as the quotient of the set 
 of linear embeddings $f: V \hookrightarrow E$ modulo the action (by 
 precomposition) of $\GL(V)$: the mapping $f$ represents its image 
@@ -922,7 +976,7 @@ Let $V$ and $V^\c$ be two complementary subspaces of $E$
 dimension $d$ and denote by $\pi$ the projection $E \to V$ 
 corresponding to the above decomposition. We introduce the set 
 $\mathcal U_{V,V^\c}$ of all embeddings $f : V \hookrightarrow E$ 
-such that $\pi \circ f = \id_V$. Clearly it is an affine space over
+such that $\pi \circ f = \id_V$. Clearly, it is an affine space over
 $\Hom(V,V^\c)$. 
 Furthermore, we can embed it into $\Grass(E,d)$ by taking $f$ as
 above to its image. This way, $\mathcal U_{V,V^\c}$ appears as
@@ -934,15 +988,15 @@ $du \mapsto (du \circ f^{-1}) \text{ mod } W$ where $f : V
 \stackrel{\sim}{\to} W$ is the linear mapping defining $W$.
 
 When the pair $(V, V^\c)$ varies, the open subsets $\mathcal 
-U_{V,V^\c}$ cover the whole Grassmaniann and then define an atlas 
-of it. When implementing vector spaces on a computer, we usually restrict 
+U_{V,V^\c}$ cover the whole Grassmaniann and define an atlas.
+When implementing vector spaces on a computer, we usually restrict 
 ourselves to the subatlas consisting of all charts of the form $(V_I, 
 V_{I^\c})$ where $I$ runs over the family of subsets of $\{1, 
 \ldots, n\}$ of cardinality $d$ and $V_I$ is the subspace spanned by 
 the $e_i$'s with $i \in I$. A subspace $W \in E$ then belongs to at 
 least one $\mathcal U_{V_I, V_{I^{\text{c}}}}$ and, given a family of
 generators of $W$, we can determine such an $I$ together with the
-corresponding embedding $f : V_I \hookrightarrow E$ by echelonizing 
+corresponding embedding $f : V_I \hookrightarrow E$ by row reducing 
 the matrix of generators of $W$.
 
 \smallskip
@@ -951,9 +1005,9 @@ the matrix of generators of $W$.
 {\bf A variant.}
 Alternatively, one can describe $\Grass(E,d)$ as the set of linear 
 surjective morphisms $f : E \to E/V$ modulo the action (by 
-postcomposition) of $\GL(E/V)$ as well. This identification presents the 
-tangent space at a given point $V$ as the quotient $\Hom(V, E/V) / 
-\End(E/V)$, which turns out to be again isomorphic to $\Hom(V, E/V)$. 
+postcomposition) of $\GL(E/V)$. This identification presents the 
+tangent space at a given point $V$ as the quotient $\Hom(E, E/V) / 
+\End(E/V) \cong \Hom(V, E/V)$.
 Given a decomposition $E = V \oplus V^\c$ as above, we let $\mathcal 
 U^\star_{V, V^\c}$ denote the set of surjective linear maps $f : E 
 \to V^\c$ whose restriction to $V^\c$ is the identity. It is an 
@@ -984,14 +1038,15 @@ morphism $\psi_E : \Grass(E,d) \to \Grass(E^\star, n-d)$. The action of
 $\psi_E$ on tangent spaces is easily described. Indeed, the differential 
 of $\psi_E$ at $V$ is nothing but the canonical identification between
 $\Hom(V, E/V)$ and $\Hom(V^\perp, E^\star/V^\perp)$ induced by 
-``transposition''. Furthermore, we observe that $\psi_E$ respects
+transposition. Furthermore, we observe that $\psi_E$ respects
 the charts we have defined above, in the sense that it maps bijectively 
 $\mathcal U_{V, V^\c}$ to $\mathcal U^\star_{V^\perp, (V^\c)^\perp}
 \simeq \mathcal U_{V^\perp, (V^\c)^\perp}$.
 
 \subsection{Differential computations}
+\label{ssec:grassdiff}
 
-We compute in this subsection the differential of various operations on 
+In this subsection, we compute the differential of various operations on 
 vector spaces. For brevity, we skip the estimation of the corresponding 
 growing functions (but this can be done using Proposition 
 \ref{prop:boundLambdaf2} as before).
@@ -1001,19 +1056,17 @@ growing functions (but this can be done using Proposition
 \noindent
 {\bf Direct images.}
 Let $E$ and $F$ be two finite dimensional $K$-vector spaces of dimension 
-$n$ and $m$ respectively. Let $d$ be an integer in $[0,n]$. We are
-interested here in the function $\DI$ (for ``direct image'') defined 
-over $\mathcal M = \Hom(E,F) \times \Grass(E,d)$ that takes the 
-pair $(f,V)$ to $f(V)$. Since the dimension of $f(V)$ may \emph{a 
-priori} vary, the map $\DI$ does not take its values in a well-defined 
-Grassmannian. To tackle this problem, we stratify $\mathcal M$ as
-follows: for each integer $r \in [0,d]$, we introduce the subset
-$\mathcal M_r \subset \mathcal M$ consisting of those pairs $(f,V)$
-for which $f(V)$ has dimension $r$. The $\mathcal M_r$'s are
-locally closed in $\mathcal M$ and therefore are submanifolds. 
-Moreover, $\DI$ induces by restriction differentiable 
-functions between $K$-manifolds
-$\DI_r : \mathcal M_r \to \Grass(F,r)$.
+$n$ and $m$, respectively. Let $d$ be an integer in $[0,n]$. We are
+interested in the direct image function $\DI$ defined 
+on $\mathcal M = \Hom(E,F) \times \Grass(E,d)$ that takes the 
+pair $(f,V)$ to $f(V)$. Since the dimension of $f(V)$ may vary,
+the map $\DI$ does not take its values in a well-defined 
+Grassmannian. We therefore stratify $\mathcal M$ as
+follows: for each integer $r \in [0,d]$, let $\mathcal M_r \subset \mathcal M$
+be the subset of pairs $(f,V)$ for which $f(V)$ has dimension $r$.
+The $\mathcal M_r$'s are locally closed in $\mathcal M$ and are therefore
+submanifolds. Moreover, $\DI$ induces differentiable 
+functions $\DI_r : \mathcal M_r \to \Grass(F,r)$.
 
 We would like to differentiate $\DI_r$ around some point $(f,V) \in 
 \mathcal M_r$. To do so, we use the first description of the 
@@ -1040,12 +1093,12 @@ $dw \in \Hom(W,F/W)$ such that $dw \circ \varphi = d \tilde w$.
 
 \noindent
 {\bf Inverse images.}
-We now consider the mapping $\II$ (for ``inverse image'') sending a 
+We now consider the inverse image mapping $\II$ sending a 
 pair $(f,W) \in \mathcal W = \Hom(E,F) \times \Grass(F,d)$ to 
 $f^{-1}(W)$. As before, this map does not take its value in a single 
 Grassmannian and we need to stratify $\mathcal W$ in order to get 
 differentiable functions. For each integer $r \in [0,n]$, we introduce 
-the sub-manifold $\mathcal W_r$ of $\mathcal W$ consisting of those 
+the submanifold $\mathcal W_r$ of $\mathcal W$ consisting of those 
 pairs $(f,W)$ such that $\dim f^{-1}(W) = s$. For all $s$, $\II$ 
 induces a continuous function
 $\II_r : \mathcal W_r \to \Grass(E,s)$.
@@ -1062,10 +1115,10 @@ differential is the linear mapping that takes $(df,dw)$ as above to the
 unique element $dv \in \Hom(V,E/V)$ satisfying $\varphi \circ dv =
 d\tilde v$.
 
-The cases of direct images and inverse images are related by duality
+Direct images and inverse images are related by duality
 as follows: if $f : E \to F$ is any linear map and $W$ is a subspace
-of $F$, then $f^\star(W^\perp) = f^{-1}(W)^\perp$. Using this, one 
-can deduce the differential of $\DI_r$ from those of $\II_s$ and 
+of $F$, then $f^\star(W^\perp) = f^{-1}(W)^\perp$. We 
+can thus deduce the differentials of $\DI_r$ from those of $\II_s$ and 
 \emph{vice versa}.
 
 %\begin{rem}
@@ -1082,7 +1135,7 @@ function $\Sigma$ defined on the manifold $\mathcal C = \Grass(E,d_1)
 \times \Grass(E,d_2)$ by $\Sigma(V_1, V_2) = V_1 + V_2$. As before, in 
 order to study $\Sigma$, we stratify $\mathcal C$ according to the 
 dimension of the sum: for each integer $d \in [0, d_1+d_2]$, we define 
-$\mathcal C_d$ as the sub-manifold of $\mathcal C$ consisting of those 
+$\mathcal C_d$ as the submanifold of $\mathcal C$ consisting of those 
 pairs $(V_1, V_2)$ such that $\dim(V_1 + V_2) = d$. We get a 
 well-defined mapping $\mathcal C_d \to \Grass(E,d)$ whose differential
 can be computed as before. The
@@ -1098,25 +1151,24 @@ Using duality, we derive a similar result for the mapping
 $(V_1, V_2) \mapsto V_1 \cap V_2$ (left to the reader).
 
 \subsection{Implementation and experiments}
+\label{grassimpl}
 
 \noindent
-{\bf Standard representation of vector spaces.}
-A standard way to represent subvector spaces of $K^n$ is to view them 
-through the charts $\mathcal U_{V_I, V_{I^\c}}$ (where $I$ is a subset 
+{\bf Standard representation of vector spaces.}  %%%%%%%%% Repetitive
+One commonly represents subspaces of $K^n$  
+using the charts $\mathcal U_{V_I, V_{I^\c}}$ (where $I$ is a subset 
 of $\{1, \ldots, n\}$) introduced above. More concretely,
 a subspace $V \subset K^n$ is represented as the span of the rows
 of a matrix $G_V$ having the following extra property: there 
 exists some $I \subset \{1, \ldots, n\}$ such that the submatrix of 
 $G_V$ obtained by keeping only columns with index in $I$ is the identity 
 matrix. We recall that such a representation always exists and, when 
-the set of indices $I$ is fixed, there 
-exists at most one $G_V$ satisfying the above condition.
+the set of indices $I$ is fixed, at most one $G_V$ satisfies the above condition.
 Given a family of generators of $V$, one can compute $G_V$ and $I$ as 
-above by performing standard row reduction. If we are choosing always the 
-first non-vanishing pivot, we get this way the set $I$ with the smallest 
-possible elements. It is the usual choice to get a normalized 
-representation. However, in the context of inexact base fields, it is 
-much better to always choose the pivot with maximal norm.
+above by performing standard row reduction.  Choosing the first non-vanishing
+pivot at every stage provides a canonical choice for $I$, but in the context of
+inexact base fields, choosing the pivot with the maximal norm yields
+a more stable algorithm.
 
 \smallskip
 
@@ -1127,37 +1179,33 @@ V_{I^\c}}$. Concretely, this means that we represent $V$ as the left
 kernel of a matrix $H_V$ having the following extra property: there 
 exists some $I \subset \{1, \ldots, n\}$ such that the submatrix of 
 $H_V$ obtained by \emph{deleting} rows with index in $I$ is the identity 
-matrix. Similarly as above, if $V$ is presented as the vanishing of a 
-family of linear equations, we can compute $I$ and $H_V$ by performing 
+matrix. As above, we can then compute $I$ and $H_V$ by performing 
 column reduction.
 
-We emphasize that passing from one representation to the other is almost 
-free (and also quite stable). To simplify notation, let us suppose 
-that $I = \{1, \ldots, d\}$ with $d = \dim V$. Then, denoting by $I_d$ 
-the identity matrix of size $d$, the matrix $G_V$ has the shape
-$(\begin{matrix} I_d & G'_V \end{matrix})$
-and it is quite easy to check that one can represent $V$ with the same
-$I$ and the matrix
-$H_V = \Big(\begin{matrix} -G'_V \\ I_{n-d} \end{matrix}\Big)$. Of
-course, for a general $I$, a similar formula exists.
+Note that switching representations is cheap and stable.
+If $I = \{1, \ldots, d\}$ with $d = \dim V$ and $I_d$ 
+is the identity matrix of size $d$, the matrix $G_V$ has the form
+$(\begin{matrix} I_d & G'_V \end{matrix})$.
+One can represent $V$ with the same $I$ and the matrix
+$H_V = \Big(\begin{matrix} -G'_V \\ I_{n-d} \end{matrix}\Big)$.
+A similar formula exists for general $I$.
 
 \smallskip
 
 \noindent
 {\bf Operations on vector spaces.}
 The first representation we gave is well suited for the computation
-of direct images and sums. For instance, in order to compute $f(V)$, 
-we just have to apply $f$ to each row of $G_V$ (getting this way a
-family of generators of $f(V)$) and then row reduce. Dually, the
+of direct images and sums. For instance, to compute $f(V)$
+we apply $f$ to each row of $G_V$, obtaining a
+family of generators of $f(V)$, and then row reduce. Dually, the
 second representation works well for computing inverse images, including 
 kernels, and intersections. Since translating between the two dual
 representations is straightforward, we get algorithms for solving both
 problems using either representation.
 
-With regard to precision, one can either track it in the standard way or 
-by using Proposition \ref{prop:precision} and the differential 
-computations we have presented before. Of course, the second method 
-is more costly but also more accurate (as illustrated above).
+%One can either track precision in the standard way or 
+%by using Proposition \ref{prop:precision}.  While the second method 
+%is more costly, it is also more accurate.
 
 \smallskip
 
@@ -1192,7 +1240,7 @@ algorithm.
 \medskip
 
 \noindent
-The expression ``high precision'' on line 3 means that the precision on 
+The expression \emph{high precision} on line 3 means that the precision on 
 $\alpha$, $\beta$, $\gamma$ and $\delta$ is set in such a way that it 
 does not affect the resulting precision on $L_{i+1}$.
 %
@@ -1208,8 +1256,8 @@ does not affect the resulting precision on $L_{i+1}$.
 \multicolumn{2}{|c|}{Lattice method} \\
 \cline{3-4}
 & \raisebox{0.04cm}{method} & 
-\hspace{0.2cm}projected\hspace{0.2cm} & 
-\hspace{0.2cm}diffused\hspace{0.2cm} \\
+\hspace{0.2cm}Projected\hspace{0.2cm} & 
+\hspace{0.2cm}Diffused\hspace{0.2cm} \\
 \hline 
 $10$ & $\hphantom{0}7.3$ & $\hphantom{0}2.7$ & $\hphantom{0}{-}2.4 \times 2$ \\
 $20$ & $14.8$ & $\hphantom{0}5.5$ & $\hphantom{0}{-}4.7 \times 2$ \\
@@ -1234,20 +1282,15 @@ Results for a sample of $1000$ executions (with $N \gg n$)}
 Figure \ref{fig:vectorspace} shows the losses of precision when
 executing Algorithm 2 with various inputs $n$ (the input $N$ is
 always chosen sufficiently large so that it does not affect the
-behavior of precision). The ``coord-wise'' column corresponds to
+behavior of precision). The \emph{Coord-wise} column corresponds to
 the standard way of tracking precision. On the other hand, in the two 
-last columns, the precision is tracked using lattices. The term 
-``diffused'' has the same meaning as in \S 
-\ref{subsec:mulmatrix} when we were dealing with matrix multiplication: 
-it then corresponds to significant digits which are ``spread out'' among 
-the two coordinates of the precision lattice. In the present situation,
-it turns out that these ``diffused'' digits may be ``separated'' by
-working in another basis of the underlying space $\Q_2^3$.
+last columns, the precision is tracked using lattices. The \emph{Diffused}
+column gives the amount of diffused precision, factored to be comparible
+to the Coord-wise column. 
 The fact that only negative numbers appear in this column means that we 
-are actually always gaining precision with this model! Finally, in the 
-``projected'' column, we have written the loss of precision we get after 
-having projected the lattice precision data onto each coordinate (in 
-order to get an answer which is coordinate-wise).
+are actually always gaining precision with this model! Finally, the 
+\emph{Projected} column gives the precision loss after projecting the lattice
+precision onto coordinates.
 
 \appendix
 
@@ -1260,14 +1303,14 @@ general context of $K$-Banach spaces.
 \subsection{Composite of locally analytic functions}
 
 Let $U$, $V$ and $W$ be three open subsets in $K$-Banach spaces 
-$E$, $F$ and $G$ respectively. We assume that $0 \in U$, $0 \in V$. Let 
+$E$, $F$ and $G$, respectively. We assume that $0 \in U$, $0 \in V$. Let 
 $f : U \to V$ and $g : V \to W$ be two locally analytic functions around 
 $0$ with $f(0) = 0$. The composition $h = g \circ f$ is then locally 
 analytic around $0$ as well. Let $f = \sum_{n \geq 0} f_n$
 $g = \sum_{n \geq 0} g_n$ and $h = \sum_{n \geq 0} h_n$ be the
 analytic expansions of $f$, $g$ and $h$.
 Here $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
-some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively. The 
+some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$, respectively. The 
 aim of this subsection is to prove the following intermediate result.
 
 \begin{prop}
@@ -1313,7 +1356,7 @@ Let $E$ be a $K$-vector space. Let $\varphi : E^m \to
 K$ be a symmetric $m$-linear form and $\psi: E \to K$ defined by 
 $\psi(x) = \varphi(x, x, \ldots, x)$.
 Given positive integers $k_1, \ldots, k_\ell$ whose sum is $m$ and 
-$x_1, \ldots, x_\ell \in E$, we have:
+$x_1, \ldots, x_\ell \in E$, we have
 $$\begin{array}{l}
 \Big\Vert \binom m {k_1 \,\, k_2 \,\, \cdots \,\, k_\ell} \cdot
 \varphi(x_1, \ldots, x_1, \ldots, x_\ell, \ldots,
@@ -1321,31 +1364,31 @@ x_\ell) \Big\Vert  \\
 \hspace{4.3cm} \leq \Vert \psi \Vert \cdot \Vert x_1 \Vert^{k_1} \cdots
  \Vert x_\ell \Vert^{k_\ell}
 \end{array}$$
-where, in LHS, the variable $x_i$ is repeated $k_i$ times.
+where, in the LHS, the variable $x_i$ is repeated $k_i$ times.
 \end{lem}
 
 \begin{proof}
-It is enough to prove that:
+It is enough to prove that
 $$\Big\Vert \binom m {k_1 \,\, k_2 \,\, \cdots \,\, k_\ell} \cdot
 \varphi(x_1, \ldots, x_1, \ldots, x_\ell, \ldots,
 x_\ell) \Big\Vert \leq \Vert \psi \Vert$$
 provided that all the $x_i$'s have norm at most $1$. We proceed by 
 induction on 
-$\ell$. If $\ell = 1$, this follows directly from
+$\ell$. The $\ell = 1$ case follows directly from
 the definition of $\Vert \psi \Vert$. 
 We now pick $(\ell+1)$ integers $k_1, \ldots, k_{\ell+1}$ whose sum 
-equals $m$ together with $(\ell+1)$ elements $x_1, \ldots, x_{\ell+1}$
+equals $m$, together with $(\ell+1)$ elements $x_1, \ldots, x_{\ell+1}$
 lying in the unit ball of $E$.
 We also consider a new variable $\lambda$ varying in
 $\O_K$. We set $x'_i = x_i$, $k'_i = k_i$ when $i < \ell$ and $x'_\ell 
 = x_\ell + \lambda x_{\ell+1}$ and $k'_\ell = k_\ell + k_{\ell+1}$. By the 
-induction hypothesis, we know that the inequality:
+induction hypothesis, we know that the inequality
 $$\Big\Vert \binom m {k'_1 \,\, \cdots \,\, k'_\ell} \cdot
 \varphi(x'_1, \ldots, x'_1, \ldots, x'_\ell, \ldots, x'_\ell) \Big\Vert
 \leq \Vert \psi \Vert$$
-holds for all $\lambda \in K$. Furthermore, LHS of the above inequality
+holds for all $\lambda \in K$. Furthermore, the LHS of the inequality
 is a polynomial $P(\lambda)$ of degree $k'_\ell$ whose coefficient in 
-$\lambda^j$ is:
+$\lambda^j$ is
 $$\binom m {k'_1 \,\, \cdots \,\, k'_\ell} \cdot
 \binom {k'_\ell} {j} \cdot
 \varphi(\underline x_j) = 
@@ -1357,27 +1400,26 @@ x_{\ell+1})$
 where $x_i$ is repeated $k_i$ times if $i < \ell$ and $x_\ell$ 
 (resp. $x_{\ell+1}$) is repeated $j$ times (resp. $k'_\ell - j$ times).
 Since $\Vert P(\lambda) \Vert \leq \Vert \psi \Vert$ for all $\lambda$ in 
-the unit ball, the norm of all its coefficients must be at most $\Vert \psi
-\Vert$ as well. Looking at the coefficient of $\lambda^{k_l}$, we find
-the desired result.
+the unit ball, the norm of all its coefficients must also be at most $\Vert \psi
+\Vert$. From the coefficient of $\lambda^{k_l}$, the result follows.
 \end{proof}
 
 \subsection{Bounding a growing function}
 
-We now go back to the setting of Proposition \ref{prop:boundLambdaf}.
+We return to the setting of Proposition \ref{prop:boundLambdaf}.
 Let $f = \sum_{n \geq 0} f_n$, $g = \sum_{n \geq 0} g_n$ and
 $h = \sum_{n \geq 0} h_n$ be the analytic expansions of
 $f$, $g$ and $h$.
 Here $f_n$, $g_n$ and $h_n$ are the restrictions to the diagonal of 
-some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$ respectively.
+some symmetric $n$-linear forms $F_n$, $G_n$ and $H_n$, respectively.
 We recall that $\Lambda(f)$ 
 is the Legendre transform of the Newton polygon $\NP(f)$ defined in Section \ref{sec:matrices}
-\cite[Proposition 3.9]{caruso-roe-vaccon:14a} and that $\alpha$ is a nonnegative
-real number such that $\Vert n! \Vert \geq e^{-\alpha n}$ for all positive integer $n$.
+\cite[Proposition 3.9]{caruso-roe-vaccon:14a}, and that $\alpha$ is a
+real number such that $\Vert n! \Vert \geq e^{-\alpha n}$ for all positive integers $n$.
 
 \begin{lem}
 \label{lem:boundLambdaf}
-We keep the above notations. 
+We keep the above notation. 
 If $(a,b)$ satisfies
 $b \geq a + \Lambda(g)\big( \! \max(b, \, \Lambda(h) (a)) \big)$
 then $b \geq \Lambda(f)(a - \alpha)$.
@@ -1415,17 +1457,17 @@ a n + d}$ for all $n$.
 Similarly, from our hypothesis on $(a,b)$, we find
 $\Vert g_m \Vert \leq e^{-\!\max(b,d)\cdot m + b - a}$ for all $m$.
 We are now ready to prove $u_r \leq e^{-ar + b}$ by induction on $r$.
-When $r = 0$, it is obvious because $u_0$ vanishes. Otherwise, we 
-can write:
+When $r = 0$, it is obvious because $u_0$ vanishes. Otherwise, the
+induction follows from
 \begin{align*}
 u_{r+1} 
 & \leq \sup_{m, (n_i)}
     e^{ -\max(b,d)\cdot m + b - a + \sum_{i=1}^m (-a n_i + \max(b,d))} \\
-& = e^{ b - a - a r } = e^{ -a (r+1) + b}
+& = e^{ b - a - a r } = e^{ -a (r+1) + b}.
 \end{align*}
-and the induction goes. Going back to the definition of $u_r$, we obtain 
+From the definition of $u_r$, we obtain 
 $\Vert f_r \Vert \leq u_r \cdot \Vert r! \Vert^{-1} \leq e^{-(a - \alpha) 
-r + b}$, which means $b \geq \Lambda(f)(a - \alpha)$.
+r + b}$. Thus $b \geq \Lambda(f)(a - \alpha)$.
 \end{proof}
 
 %\begin{rem}
@@ -1448,7 +1490,7 @@ $b \geq a + \Lambda(g) \circ \Lambda(h)(a)$
 since $\Lambda_g \geq \Lambda(g)$, $\Lambda_h \geq \Lambda(h)$ and
 $\Lambda_g$ is nondecreasing. Furthermore, from $b \leq \nu$, we get
 $\Lambda_g(b) = \min_{x \in \R} \Lambda_g(x) \leq \Lambda_g \circ 
-\Lambda_h(a)$, from what we derive 
+\Lambda_h(a)$, from which we derive 
 $a + \Lambda_g(b) \leq a + \Lambda_g \circ \Lambda_h(a) = b$.
 
 \bibliographystyle{plain}
