@@ -328,7 +328,7 @@ If $H \subset E$ is a lattice, let
 \[
 H_0 = \pi_1(H) \oplus \cdots \oplus \pi_n(H).
 \]
-Set $k = \log_p([H_0 : H])$.  Then we say that $H$ has $k$
+Set $k = \text{length}(H_0/H)$.  Then we say that $H$ has $k$
 \emph{diffused digits of precision}.
 \end{deftn}
 If $H$ represents the actual precision of some object, then
@@ -553,7 +553,7 @@ $$M = \Delta_A \cdot V_A \cdot dA \cdot V_B^{-1}
 + U_A^{-1} \cdot dB \cdot U_B \cdot \Delta_B.$$
 When $dA$ varies in $M_{a,b}(\O_K)$ so does $V_A \cdot dA \cdot V_B^{-1}$
 and therefore the first summand in $M$ varies in the subspace of 
-$M_{a,c}(\O_K)$ consisting of matrices whose entries on the $i$-th
+$M_{r,t}(\O_K)$ consisting of matrices whose entries on the $i$-th
 row have valuation at least $a_i$. Arguing similarly for the second
 summand, we deduce the first statement of the Proposition. The second
 statement is left to the reader.
@@ -919,9 +919,9 @@ losses for a sample of 2000 random matrices in $M_{d,d}(\mathbb{Z}_2)$.
 \smash{\raisebox{0.6em}{size}} 
 & \hspace{0.5em}mean\hspace{0.5em} & deviation 
 & \hspace{0.5em}mean\hspace{0.5em} & deviation \\ \hline
-$2$ & $\phantom{2}{-}3.0$& $5$ & $-1.5$ & $1.4$ \\% \hline
-$3$& $\phantom{2}{-}9.4$& $11$ & $-2.3$ & $2.3$\\% \hline
-$4$ & $-20\phantom{.4}$& $20$ & $-3.8$ & $3.1$\\ \hline
+$2$ & $\phantom{2}3.0$& $5$ & $1.5$ & $1.4$ \\% \hline
+$3$& $\phantom{2}9.4$& $11$ & $2.3$ & $2.3$\\% \hline
+$4$ & $20\phantom{.4}$& $20$ & $3.8$ & $3.1$\\ \hline
 \end{tabular} 
 \smallskip
 
@@ -949,7 +949,7 @@ Results for a sample of $2000$ instances}
 Vector spaces are generally represented as subspaces of $K^n$ for some 
 $n$ and hence naturally appear as points on Grassmannians. Therefore, 
 one can use the framework of \cite[Appendix A]{caruso-roe-vaccon:14a} to 
-study the $p$-adic in this context.
+study $p$-adic precision in this context.
 
 \subsection{Geometry of Grassmannians}
 \label{ssec:grassgeo}
@@ -1408,7 +1408,7 @@ where $x_i$ is repeated $k_i$ times if $i < \ell$ and $x_\ell$
 (resp. $x_{\ell+1}$) is repeated $j$ times (resp. $k'_\ell - j$ times).
 Since $\Vert P(\lambda) \Vert \leq \Vert \psi \Vert$ for all $\lambda$ in 
 the unit ball, the norm of all its coefficients must also be at most $\Vert \psi
-\Vert$. From the coefficient of $\lambda^{k_l}$, the result follows.
+\Vert$. From the coefficient of $\lambda^{k_\ell}$, the result follows.
 \end{proof}
 
 \subsection{Bounding a growing function}
