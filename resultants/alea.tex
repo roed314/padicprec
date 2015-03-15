@@ -275,78 +275,58 @@ On pose les opérations comme à l'école primaire.
 \begin{center}
 \begin{tikzpicture}[scale=0.5]
 \node at (-1.2,2) { $\ldots$ };
-{\only<27>{\color{vert2}} \node at (0,2) { $0$ };}
-{\only<26>{\color{vert2}} \node at (1,2) { $0$ };}
-{\only<25>{\color{vert2}} \node at (2,2) { $1$ };}
-{\only<24>{\color{vert2}} \node at (3,2) { $0$ };}
-{\only<23>{\color{vert2}} \node at (4,2) { $1$ };}
-{\only<22>{\color{vert2}} \node at (5,2) { $1$ };}
-{\only<21>{\color{vert2}} \node at (6,2) { $0$ };}
-{\only<20>{\color{vert2}} \node at (7,2) { $0$ };}
-{\only<19>{\color{vert2}} \node at (8,2) { $1$ };}
-{\only<18>{\color{vert2}} \node at (9,2) { $0$ };}
+\node at (0,2) { $0$ };
+\node at (1,2) { $0$ };
+\node at (2,2) { $1$ };
+\node at (3,2) { $0$ };
+\node at (4,2) { $1$ };
+\node at (5,2) { $1$ };
+\node at (6,2) { $0$ };
+\node at (7,2) { $0$ };
+\node at (8,2) { $1$ };
+\node at (9,2) { $0$ };
 
 \node at (-1.2,1) { $\ldots$ };
-{\only<27>{\color{vert2}} \node at (0,1) { $1$ };}
-{\only<26>{\color{vert2}} \node at (1,1) { $0$ };}
-{\only<25>{\color{vert2}} \node at (2,1) { $1$ };}
-{\only<24>{\color{vert2}} \node at (3,1) { $1$ };}
-{\only<23>{\color{vert2}} \node at (4,1) { $1$ };}
-{\only<22>{\color{vert2}} \node at (5,1) { $1$ };}
-{\only<21>{\color{vert2}} \node at (6,1) { $0$ };}
-{\only<20>{\color{vert2}} \node at (7,1) { $0$ };}
-{\only<19>{\color{vert2}} \node at (8,1) { $0$ };}
-{\only<18>{\color{vert2}} \node at (9,1) { $1$ };}
+\node at (0,1) { $1$ };
+\node at (1,1) { $0$ };
+\node at (2,1) { $1$ };
+\node at (3,1) { $1$ };
+\node at (4,1) { $1$ };
+\node at (5,1) { $1$ };
+\node at (6,1) { $0$ };
+\node at (7,1) { $0$ };
+\node at (8,1) { $0$ };
+\node at (9,1) { $1$ };
 
 \draw[thick] (-2,0.4)--(9.5,0.4);
 
 \only<18->{
-  {\only<18>{\color{vert2}} \node at (9,-0.2) { $1$ };}
+  \node at (9,-0.2) { $1$ };
   {\color{rouge}
   \node[scale=0.5] at (8.7,2) { $1$ };
   \node[scale=0.5] at (7.65,1.2) { $1\!{+}$ };
   }
-}
-\only<18->{
-  {\only<19>{\color{vert2}} \node at (8,-0.2) { $0$ };}
-}
-\only<20->{
-  {\only<20>{\color{vert2}} \node at (7,-0.2) { $0$ };}
-}
-\only<21->{
-  {\only<21>{\color{vert2}} \node at (6,-0.2) { $0$ };}
-}
-\only<22->{
-  {\only<22>{\color{vert2}} \node at (5,-0.2) { $0$ };}
-}
-\only<23->{
-  {\only<23>{\color{vert2}} \node at (4,-0.2) { $0$ };}
-}
-\only<24->{
-  {\only<24>{\color{vert2}} \node at (3,-0.2) { $1$ };}
+  \node at (8,-0.2) { $0$ };
+  \node at (7,-0.2) { $0$ };
+  \node at (6,-0.2) { $0$ };
+  \node at (5,-0.2) { $0$ };
+  \node at (4,-0.2) { $0$ };
+  \node at (3,-0.2) { $1$ };
   {\color{rouge}
   \node[scale=0.5] at (2.7,2) { $1$ }; 
   \node[scale=0.5] at (1.65,1.2) { $1\!{+}$ };
   }
-}
-\only<25->{
-  {\only<25>{\color{vert2}} \node at (2,-0.2) { $1$ };}
+  \node at (2,-0.2) { $1$ };
   {\color{rouge}
   \node[scale=0.5] at (1.7,2) { $1$ }; 
   \node[scale=0.5] at (0.65,1.2) { $1\!{+}$ };
   }
-}
-\only<26->{
-  {\only<26>{\color{vert2}} \node at (1,-0.2) { $1$ };}
+  \node at (1,-0.2) { $1$ };
   {\color{rouge}
   \node[scale=0.5] at (0.7,2) { $1$ }; 
   \node[scale=0.5] at (-0.35,1.2) { $1\!{+}$ };
   }
-}
-\only<27->{
-  {\only<27>{\color{vert2}} \node at (0,-0.2) { $0$ };}
-}
-\only<28->{
+  \node at (0,-0.2) { $0$ };
   \node at (-1.2,-0.2) { $\ldots$ };
 }
 \end{tikzpicture}
@@ -367,7 +347,6 @@ On pose les opérations comme à l'école primaire.
 
 \begin{center}
 \begin{tikzpicture}[scale=0.5]
-{\only<3-12>{\color{vert2}}
 \node at (-1.2,2) { $\ldots$ };
 \node at (0,2) { $0$ };
 \node at (1,2) { $0$ };
@@ -379,19 +358,18 @@ On pose les opérations comme à l'école primaire.
 \node at (7,2) { $0$ };
 \node at (8,2) { $1$ };
 \node at (9,2) { $0$ };
-}
 
 \node at (-1.2,1) { $\ldots$ };
-{\only<12>{\color{vert2}} \node at (0,1) { $1$ };}
-{\only<11>{\color{vert2}} \node at (1,1) { $0$ };}
-{\only<10>{\color{vert2}} \node at (2,1) { $1$ };}
-{\only<9>{\color{vert2}} \node at (3,1) { $1$ };}
-{\only<8>{\color{vert2}} \node at (4,1) { $1$ };}
-{\only<7>{\color{vert2}} \node at (5,1) { $1$ };}
-{\only<6>{\color{vert2}} \node at (6,1) { $0$ };}
-{\only<5>{\color{vert2}} \node at (7,1) { $0$ };}
-{\only<4>{\color{vert2}} \node at (8,1) { $0$ };}
-{\only<3>{\color{vert2}} \node at (9,1) { $1$ };}
+\node at (0,1) { $1$ };
+\node at (1,1) { $0$ };
+\node at (2,1) { $1$ };
+\node at (3,1) { $1$ };
+\node at (4,1) { $1$ };
+\node at (5,1) { $1$ };
+\node at (6,1) { $0$ };
+\node at (7,1) { $0$ };
+\node at (8,1) { $0$ };
+\node at (9,1) { $1$ };
 
 \draw[thick] (-2,0.4)--(9.5,0.4);
 
@@ -407,9 +385,7 @@ On pose les opérations comme à l'école primaire.
 \node at (7,-0.2) { $0$ };
 \node at (8,-0.2) { $1$ };
 \node at (9,-0.2) { $0$ };
-}
 
-\only<7->{
 \node at (-1.2,-1.2) { $\ldots$ };
 \node at (0,-1.2) { $1$ };
 \node at (1,-1.2) { $1$ };
@@ -417,38 +393,28 @@ On pose les opérations comme à l'école primaire.
 \node at (3,-1.2) { $0$ };
 \node at (4,-1.2) { $1$ };
 \node at (5,-1.2) { $0$ };
-}
 
-\only<8->{
 \node at (-1.2,-2.2) { $\ldots$ };
 \node at (0,-2.2) { $1$ };
 \node at (1,-2.2) { $0$ };
 \node at (2,-2.2) { $0$ };
 \node at (3,-2.2) { $1$ };
 \node at (4,-2.2) { $0$ };
-}
 
-\only<9->{
 \node at (-1.2,-3.2) { $\ldots$ };
 \node at (0,-3.2) { $0$ };
 \node at (1,-3.2) { $0$ };
 \node at (2,-3.2) { $1$ };
 \node at (3,-3.2) { $0$ };
-}
 
-\only<10->{
 \node at (-1.2,-4.2) { $\ldots$ };
 \node at (0,-4.2) { $0$ };
 \node at (1,-4.2) { $1$ };
 \node at (2,-4.2) { $0$ };
-}
 
-\only<12->{
 \node at (-1.2,-5.2) { $\ldots$ };
 \node at (0,-5.2) { $0$ };
-}
 
-\only<13->{
 \draw[thick] (-2,-5.8)--(9.5,-5.8);
 
 \node at (-1.2,-6.4) { $\ldots$ };
@@ -824,7 +790,7 @@ Soient $A, B \in R[X]$ \pause
 Le {\color{bleu} résultant} de $A$ et $B$, 
 noté {\color{bleu} $\Res(A,B)$}, est le déterminant de 
 
-\vspace{-0.6cm}
+\vspace{-0.8cm}
 
 \begin{eqnarray*}
 R[X]_{< \deg B} \times R[X]_{< \deg A} 
@@ -873,15 +839,18 @@ $\begin{array}{rrcl}
 \vspace{-0.1cm} \pause
 
 \begin{theo}
-Soit $X_1, \ldots, X_d$ des variables aléatoires mutuellement
-indépendantes qui suivent toutes une loi géométrique de paramètre
-$1 - \frac 1 p$.
-Alors $V_d$ suit la même loi que
+$V_d$ suit la même loi que
 
 \vspace{-0.35cm}
 
 $$Y_d = X_1 + \min(X_1, X_2) + 
-\cdots +  \min(X_1, \ldots, X_d).$$
+\cdots +  \min(X_1, \ldots, X_d)$$
+
+\vspace{-0.1cm}
+
+où $X_1, \ldots, X_d$ sont des variables aléatoires mutuellement
+indépendantes suivant une loi géométrique de param.
+$1 - \frac 1 p$.
 \end{theo}
 
 \smallskip \pause
@@ -1028,7 +997,7 @@ Il existe des variantes dans le cas où l'un des $a_j$ s'annule.}
 Pour $a \in \Z_p$, on note $\bar a$ son chiffre des unités. \pause
 
 \begin{prop}
-Les variables aléatoires $\bar a_i : \Z_p[X]_d \times \Z_p[X]_d \to 
+Les variables aléatoires $\bar a_j : \Z_p[X]_d \times \Z_p[X]_d \to 
 \{0, 1, \ldots, p{-}1\}$
 
 suivent la loi uniforme et sont mutuellement indépendantes.
@@ -1449,8 +1418,9 @@ déterminent tous les $\bar R_j$ pour $j \geq n$.
 \end{tikzpicture}
 \end{frame}
 
+\begin{comment}
 \begin{frame}
-\frametitle{Distribution des $\val(a_j)$} \pause
+\frametitle{Compléments} \pause
 
 \begin{theo}
 Soit $X_0, \ldots, X_{d-1}$ des variables aléatoires mutuellement
@@ -1490,6 +1460,7 @@ $$\big(X, X' + \min(X', [X/2])\big).$$
 }
 
 \end{frame}
+\end{comment}
 
 \begin{frame}
 \frametitle{That's all folks}
