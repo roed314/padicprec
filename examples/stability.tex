@@ -143,7 +143,7 @@ with $p$-adic numbers --- was designed only recently in
 
 In \cite{caruso-roe-vaccon:14a}, we advocate the use of lattices
 to track the precision of vectors and points on $p$-adic manifolds.
-The main result of \emph{loc. cit.}, recalled here as Proposition \ref{prop:precision},
+The main result of \emph{loc.~cit.}, recalled here as Proposition \ref{prop:precision},
 allows for the propagation of precision using differentials.  While
 allowing arbitrary lattices in representing precision carries a high
 cost in space and time requirements, the reduced precision loss
@@ -169,8 +169,7 @@ proceeds.
 
 \begin{comment}
 The present paper, which may be considered as a continuation of 
-\cite{caruso-roe-vaccon:14a}, aims at using the theory of \emph{loc. 
-cit.} in order to analyze the $p$-adic stability of many standard 
+\cite{caruso-roe-vaccon:14a}, aims at using the theory of \emph{loc.~cit.} in order to analyze the $p$-adic stability of many standard 
 algorithms for computing with basic algebraic structures: numbers, 
 matrices, univariate polynomials and vector spaces. For each considered 
 algorithm, we will follow the same protocol: 
@@ -259,7 +258,7 @@ closed) ball of radius $r$ centered at the origin. A lattice $L \subset
 E$ is, by definition, a sub-$\O_K$-module which generates $E$ over $K$. 
 Since we are working in a ultrametric world, the balls $B^{\phantom 
 -}_E(r)$ and $B^-_E(r)$ are examples of lattices. Actually, lattices 
-should be thought as special neighborhoods of $0$ and therefore are good 
+should be thought of as special neighborhoods of $0$ and therefore are good 
 candidates to model precision data. Moreover, as revealed in 
 \cite{caruso-roe-vaccon:14a}, they behave quite well under (strictly) 
 differentiable maps:
@@ -311,7 +310,7 @@ Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
 \end{prop}
 
 In \cite[Appendix A]{caruso-roe-vaccon:14a}, the theory is extended 
-to manifolds over $K$ and covers in this way a very large familiy of
+to manifolds over $K$ and covers in this way a very large family of
 situations (\emph{e.g.} computation with vector spaces as discussed
 in \S \ref{sec:vectorspaces}). In this extended framework, the precision 
 datum at some point $x$ is a lattice in the tangent space at $x$. 
@@ -362,7 +361,7 @@ Here $g : V \times W \to \Hom(E, F)$ and $h : U \to W$ are known
 locally analytic functions and $f : U \to V$ is the 
 unknown locally analytic function. 
 In what follows, we always assume that $V$ and $W$ contain the origin, 
-$f(0) = 0$, $h(0) = 0$ and $g(0) \neq 0$. There assumptions are harmless 
+$f(0) = 0$, $h(0) = 0$ and $g(0) \neq 0$. These assumptions are harmless 
 for two reasons: first, we can always shift $f$ and $h$ (and $g$ 
 accordingly) so that they both vanish at $0$, and second, in order to 
 apply Proposition \ref{prop:precision2} the derivative $f'(0)$ 
@@ -372,7 +371,7 @@ We assume that we are given in addition two nondecreasing convex
 functions $\Lambda_g$ and $\Lambda_h$ such that $\Lambda(g) \leq 
 \Lambda_g$ and $\Lambda(h) \leq \Lambda_h$. We suppose further that 
 there exists $\nu$ such that $\Lambda_g$ is constant on the interval 
-$({-}\infty, \nu]$\footnote{We note that this assumption is fullfilled if 
+$({-}\infty, \nu]$\footnote{We note that this assumption is fulfilled if 
 we take $\Lambda_g = \Lambda(g)$ because we have assumed that $g(0)$ 
 does not vanish.}. We introduce the functions $\tau_\nu$ and $\Lambda_f$ 
 defined by:
@@ -433,7 +432,7 @@ where $\mu$ is the value that $\Lambda_g$ takes on the interval
 $({-}\infty, \nu]$. Proposition \ref{prop:boundLambdaf} says that the
 graph of $\Lambda(f)$ lies below the plain blue line. Moreover, we remark
 that the Taylor expansion of $f(z)$ starts with the term
-$g(0) z$. Hence, on a neighborhood on ${-}\infty$, we have 
+$g(0) z$. Hence, on a neighborhood of ${-}\infty$, we have 
 $\Lambda(f)(x) = x + \log \Vert g(0) \Vert$. Using convexity, we 
 get:
 \[
@@ -444,7 +443,7 @@ for all $x \in \R$.  In other words, the graph of $\Lambda(f)$ lies above the br
 Furthermore, we know that the slopes of $\Lambda(f)$ are all integral
 because $f$ is locally analytic. Hence, $\Lambda(f)$ cannot lie above
 the dashed blue line defined as the line of slope $2$ passing through
-the first break point of the blue plain line, which has coordinate 
+the first break point of the blue plain line, which has coordinates
 $(y_0 - \alpha - \mu, y_0)$ with $y_0 = \min(\Lambda_h^{-1}(\nu) + \mu, 
 \nu)$. As a conclusion, we have proved that the graph of $\Lambda(f)$ 
 must coincide with the brown line until it meets the dashed blue line 
@@ -456,7 +455,7 @@ proposition, which can be combined with Proposition 3.12 of
 if $\varphi$ is a convex function and $v \in \R$, we define
 $$\varphi_{\geq v} : x \mapsto \inf_{y \geq 0} \big( \varphi(x+y)
 - vy \big).$$
-It is highest convex function with $\varphi_{\geq v} \leq \varphi$ and 
+It is the highest convex function with $\varphi_{\geq v} \leq \varphi$ and 
 $\varphi'_{\geq v} \geq v$.
 
 \begin{prop}
@@ -481,7 +480,7 @@ Proposition \ref{prop:boundLambdaf2} gives the bound $\Lambda(f)_{\geq
 
 Beyond this particular case, we recommend choosing the 
 function $h$ by endowing $F$ with the second norm $\Vert x \Vert'_F = 
-e^\mu \cdot \Vert x \Vert_F$ ($x \in F$) and to taking $h : (F, \Vert 
+e^\mu \cdot \Vert x \Vert_F$ ($x \in F$) and taking $h : (F, \Vert 
 \cdot \Vert_F) \to (F, \Vert \cdot \Vert'_F)$ to be the identity on the
 underlying vector spaces. The function $\Lambda(h) : \R \to \R$ then maps $x$ to $x + 
 \mu$ and we can choose $\Lambda_h = \Lambda(h)$.
@@ -513,7 +512,7 @@ M_{r,t}(K) \smallskip \\
 (A,B) & \mapsto & AB.
 \end{array}$$
 According to Proposition \ref{prop:precision}, the behavior of the precision when 
-computed $AB$ is governed by $\mathcal P'_{r,s,t}(A,B)$, the linear mapping that takes a pair 
+computing $AB$ is governed by $\mathcal P'_{r,s,t}(A,B)$, the linear mapping that takes a pair 
 $(dA,dB)$ to $A \cdot dB + dA \cdot B$.
 
 To fix ideas, let us assume from now that the entries of $A$ and $B$ all 
@@ -563,7 +562,7 @@ From the perspective of precision, the second statement of Proposition \ref{prop
 means that the computation of $AB$ gains $\sum_{m=1}^\infty 
 a^{(m)} b^{(m)}$ significant digits in absolute precision\footnote{We 
 note that, on the other side, the valuation of the entries of $AB$ may 
-increase, meaning that we are also loosing some significant digits if we 
+increase, meaning that we are also losing some significant digits if we 
 are reasoning in relative precision.} as soon as $N > \min(a_r, b_t)$ 
 (\emph{cf.} Proposition \ref{prop:precision2}). However, many of these digits are 
 diffused in the sense of Definition \ref{def:diffused}.
@@ -645,7 +644,7 @@ Results for a sample of $1000$ random inputs in $M_{d,d}(\Z_2)^n$}
 %
 We observe that, in the first case, the number of lost digits seems to 
 grow linearly with respect to the number of multiplications we are 
-performing (that is $n$) whereas, in the second case, the growing seems 
+performing (that is $n$) whereas, in the second case, the growth seems 
 to be only logarithmic. It would be nice to have a precise formulation 
 (and proof) of this heuristic.
 
@@ -707,7 +706,7 @@ Recall that the \emph{Newton polygon} $\NP(f)$ of a polynomial $f(X) =
 \sum_{i} a_i X^i$ is the lower convex hull of the points $(i, 
 \val(a_i))$ and the \emph{Newton polygon} $\NP(M)$ of a matrix $M$ is 
 $\NP(\charpoly(M))$.  The \emph{Hodge polygon} of $M$ is the lower 
-convex hull of the points $(i, \sum_{j = 1}^{n-i} \sigma_i(M))$. For 
+convex hull of the points $(i, \sum_{j = 1}^{n-i} \sigma_j(M))$. For 
 any matrix $M$, the Newton polygon lies above the Hodge polygon 
 \cite{kedlaya:padicDiffEq}*{Thm. 4.3.11}.
 
@@ -723,12 +722,12 @@ between these two, that will provide an estimate on the precision of $\charpoly(
 
 \begin{deftn}
 The \emph{precision polygon} $\PP(M)$ of $M$ is the lower convex hull of 
-the Newton polygons of the entries of $\com(X{-}M)$.
+the Newton polygon of the entries of $\com(X{-}M)$.
 \end{deftn}
 
 It is clear from the definition $\mathcal L_{\PP(M)} \subset 
 \charp(M)(\mathcal{L}_0)$ where $\mathcal{L}_0$ is the standard lattice 
-$M_{n,n}{\OK}$. More precisely $\PP(M)$ is the smallest polygon $P$ for 
+$M_{n,n}(\OK)$. More precisely $\PP(M)$ is the smallest polygon $P$ for 
 which the inclusion $\mathcal L_P \subset \charp(M)(\mathcal{L}_0)$ holds. By 
 Proposition \ref{prop:precision}, the precision polygon determines the minimal 
 precision losses possible when encoding polynomial precision using polygons.
@@ -819,7 +818,7 @@ the following subsets of $M_n(K)$:
 \noindent $\bullet$
 $O_n$ is the open subset of matrices whose principal 
 minors do not vanish (we recall that the latest condition implies the
-existence and the unicity of a LU factorization);
+existence and the uniqueness of a LU factorization);
 
 \noindent $\bullet$
 $U_n$ is the sub-vector space of upper-triangular 
@@ -957,7 +956,7 @@ study $p$-adic precision in this context.
 Given $E$, a finite dimensional vector space over $K$, and $d$, an 
 integer in the range $[0, \dim E]$, we write $\Grass(E,d)$ for the
 Grassmannian of $d$-dimensional subspaces of $E$. It is well-known
-that $\Grass(E,d)$ has a natural structure of $K$-manifold. The aim of
+that $\Grass(E,d)$ has the natural structure of a $K$-manifold. The aim of
 this subsection is to recall standard facts about its geometry. In what follows,
 we set $n = \dim E$ and equip $E$ with a distinguished basis
 $(e_1, \ldots, e_n)$.
@@ -995,7 +994,7 @@ $du \mapsto (du \circ f^{-1}) \text{ mod } W$ where $f : V
 \stackrel{\sim}{\to} W$ is the linear mapping defining $W$.
 
 When the pair $(V, V^\c)$ varies, the open subsets $\mathcal 
-U_{V,V^\c}$ cover the whole Grassmaniann and define an atlas.
+U_{V,V^\c}$ cover the whole Grassmannian and define an atlas.
 When implementing vector spaces on a computer, we usually restrict 
 ourselves to the subatlas consisting of all charts of the form $(V_I, 
 V_{I^\c})$ where $I$ runs over the family of subsets of $\{1, 
@@ -1034,7 +1033,7 @@ Grassmannian.
 
 \noindent
 {\bf Duality.}
-If $E$ is a finite dimension vector space over $K$, we use the notation 
+If $E$ is a finite dimensional vector space over $K$, we use the notation 
 $E^\star$ for its dual (\emph{i.e.} $E^\star = \Hom(E,K)$). If we are also given
 a subspace $V \subset E$, we denote by $V^\perp$ the subspace 
 of $E^\star$ consisting of linear maps that vanish on $V$. We recall
@@ -1102,10 +1101,10 @@ $dw \in \Hom(W,F/W)$ such that $dw \circ \varphi = d \tilde w$.
 {\bf Inverse images.}
 We now consider the inverse image mapping $\II$ sending a 
 pair $(f,W) \in \mathcal W = \Hom(E,F) \times \Grass(F,d)$ to 
-$f^{-1}(W)$. As before, this map does not take its value in a single 
+$f^{-1}(W)$. As before, this map does not take its values in a single 
 Grassmannian and we need to stratify $\mathcal W$ in order to get 
 differentiable functions. For each integer $r \in [0,n]$, we introduce 
-the submanifold $\mathcal W_r$ of $\mathcal W$ consisting of those 
+the submanifold $\mathcal W_s$ of $\mathcal W$ consisting of those 
 pairs $(f,W)$ such that $\dim f^{-1}(W) = s$. For all $s$, $\II$ 
 induces a continuous function
 $\II_r : \mathcal W_r \to \Grass(E,s)$.
@@ -1325,7 +1324,7 @@ aim of this subsection is to prove the following intermediate result.
 With the above notation, we have
 $$\Vert h_r \Vert \leq \sup_{m, (n_i)}
   \Vert g_m \Vert \cdot \Vert f_{n_1} \Vert \cdots \Vert f_{n_m} \Vert$$
-for all nonnegative integer $r$, where the supremum is taken over all pairs $(m, (n_i))$ where $m$
+for all nonnegative integers $r$, where the supremum is taken over all pairs $(m, (n_i))$ where $m$
 is a nonnegative integer and $(n_i)_{1 \leq i \leq m}$ is a sequence of
 length $m$ of nonnegative integers such that $n_1 + \ldots + n_m = r$.
 \end{prop}
@@ -1443,7 +1442,7 @@ Combining this with Proposition \ref{prop:boundhr}, we get
 $$\Vert (r+1) f_{r+1} \Vert \leq
   \sup_{m, (n_i)} \Vert g_m \Vert \cdot 
   \prod_{i=1}^m \max(\Vert f_{n_i} \Vert, \Vert h_{n_i} \Vert)$$
-for all nonnegative integer $r$,
+for all nonnegative integers $r$,
 where the supremum runs over all pairs $(m, (n_i))$ where $m$
 is a nonnegative integer and $(n_i)_{1 \leq i \leq m}$ is a sequence of
 length $m$ of nonnegative integers such that $n_1 + \ldots + n_m = r$.
