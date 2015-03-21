@@ -1,0 +1,24 @@
+This is an article about precision of p-adic computations in linear 
+algebra.
+
+The article is very well written, the topic is interesting; I found no 
+technical error. My recommendation is to accept it for publication.
+
+Lattice based p-adic precision methods are recalled in section 2, 
+summarized and with extra precisions from a previous recent refereed 
+article of the Authors. Section 3 is devoted to major linear algebra 
+operations (MatMul, Det, CharPoly, LU). The results compare very 
+favourably with the naive coordinate-wise method.
+
+There are implementation results on random matrices. There is no link to 
+check the code and using random matrices is certainly not a good choice.
+
+Section 4, I don't really know about.
+
+It is interesting (and very surprising) that these results seem not to 
+depend on the algorithm used in Section 3
+
+Typos:
+- title not capitalised properly
+- p1:
+loc. -> loc.\

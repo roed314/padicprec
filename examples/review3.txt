@@ -1,0 +1,14 @@
+This paper gives several applications of the theory for estimating 
+precision under differential maps developed by the authors. But at least 
+for me the description of this paper is too rough to understand the 
+contents. The paper compares "standard coordinate-wise methods" and 
+"lattice based method" for tracking precision in each application. 
+However their meanings are not clearly given. It seems that the diffused 
+digits of precision (Definition 2.3) is related to the coordinate-wise 
+tracking of precision, but it is not clear for me. Also, the algorithms 
+used for comparison are not clearly stated. For example, if the 
+precision tracking by the lattice method is based on Prop3.1, then it 
+seems that the Smith decompositions of A and B are necessary. If so, it 
+is not a fair comparison because the comparison of time complexity is 
+not given. As to Prop3.1, the proof of the second statement is not 
+given. It should be given in the paper.

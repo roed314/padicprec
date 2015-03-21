@@ -1,0 +1,61 @@
+The "standard coordinate-wise method" is a common way of tracking 
+precision: each individual p-adic number carries its own precision and 
+this precision is updated after each basic arithmetic operation. On the 
+contrary, in the "lattice based method", we attach a global precision 
+datum (a lattice) to the set of all variables (or maybe a subset of it) 
+and propogate it using Proposition 2.1.
+
+
+The notion of diffused digits of precision just depends on the way we 
+represent precision, not on the way we track it. There are (at least) 
+two solutions:
+ . the standard one where each variable x_i carries its 
+   own precision datum, which has the form O(p^n_i) for some n_i
+ . the one we proposed using lattices.
+Precisions of the first form can be represented in the second with 
+diagonal lattices:
+  bigoplus_i  p^(n_i)*O_K*e_i
+Given any lattice H, there exists a unique minimal diagonal lattice H_0 
+containing H. The number of diffused digits of precision measures the 
+difference between H and H_0.
+If we are tracking precision coordinate-wise, we will end up with 
+diagonal precision data. Now suppose we are given an algorithm for 
+computing the function f and we call it on the input x + O(p^N) (where x 
+is a vector). By Proposition 2.1, the optimal precision on the output 
+f(x) is
+  H = p^N f'(x)(O_K^d) 
+Now assuming only that the given algorithm uses coordinate-wise 
+precision data, we deduce that the best precision it can output is 
+O(H_0). If there are many diffused digits of precision, this answer has 
+to be far from being optimal.
+
+
+The two algorithms we are comparing in Section 3.1 are those described 
+in Algorithm 1, except that:
+ . in the first case, we use the standard coordinate-wise method in
+   order to track precision, meaning that we perform the product 
+   P*M_i by calling the standard product function in Sage (for example)
+ . in the second case, we use the lattice method: to the matrix P is 
+   attached a lattice dP in M_d(K) and when we set P = P*M_i, we update 
+   dP at the same time by setting:
+     dP = dP*M_i + M_d(p^N*O_K)*P
+The second method is much more stable but is more time consuming as 
+well. Of course, in concrete situations, we will have to select one of 
+these methods (or a compromise between them) depending on the problem we 
+want to solve: if it's difficult to compute extra digits of the input, 
+the use of a stable algorithm might be very profitable. 
+Unfortunately, we still don't have heuristics for linear VS logarithmic.
+
+
+The phenomena we are illuminating in our paper are much more visible when 
+p is small. That's why we chose p=2,3 in our examples. But everything
+is similar for p>3.
+
+
+We chose to use random matrices in order to illustrate the fact that 
+diffuse precision occurs even generically.  In crafted examples one may 
+certainly get even more diffuse precision, as we note at the end of 
+section 3.3 for example.
+
+
+We will post our code online and add a reference.
