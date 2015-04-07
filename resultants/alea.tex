@@ -1,0 +1,1462 @@
+\documentclass{beamer}
+%\documentclass[handout]{beamer}
+
+\usetheme{Copenhagen}
+
+\usepackage[latin1]{inputenc}
+\usepackage[english,francais]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{times}
+\usepackage{verbatim}
+\usepackage{array,multicol}
+\usepackage{stmaryrd}
+\usepackage{comment}
+
+\newtheorem{deftn}{Définition}
+\newtheorem{prop}{Proposition}
+\newtheorem{theo}{Théorème}
+\newtheorem{cor}{Corollaire}
+
+\definecolor{bleu}{rgb}{0,0,0.6}
+\definecolor{bleufonce}{rgb}{0,0,0.4}
+\definecolor{rouge}{rgb}{0.7,0.2,0.2}
+\definecolor{vert}{rgb}{0.1,0.3,0.1}
+\definecolor{vert2}{rgb}{0.2,0.6,0}
+\definecolor{violet}{rgb}{0.5,0,0.5}
+
+\definecolor{zero}{rgb}{0.6,0.6,1}
+\definecolor{nonzero}{rgb}{1,0.6,0.6}
+
+\newcommand\Wider[2][3em]{%
+\makebox[\linewidth][c]{%
+  \begin{minipage}{\dimexpr\textwidth+#1\relax}
+  \raggedright#2
+  \end{minipage}%
+  }%
+}
+
+\newenvironment<>{varblock}[2][\textwidth]{
+    \begin{center}
+      \begin{minipage}{#1}
+        \setlength{\textwidth}{#1}
+        \setbeamercolor{block title}{fg=white,bg=jaune}
+          \begin{actionenv}#3
+            \def\insertblocktitle{#2}
+            \par
+            \usebeamertemplate{block begin}}
+  {\par
+      \usebeamertemplate{block end}
+    \end{actionenv}
+  \end{minipage}
+\end{center}}
+
+\newcommand{\ph}{\vphantom{$A^A_A$}}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\C}{\mathbb C}
+\newcommand{\E}{\mathbb E}
+\renewcommand{\P}{\mathbb P}
+
+\newcommand{\val}{\text{\rm val}}
+\renewcommand{\det}{\text{\rm det}}
+
+\newcommand{\U}{\mathcal U}
+\newcommand{\V}{\mathcal V}
+
+\newcommand{\Res}{\textrm{Rés}}
+\newcommand{\pgcd}{\textsc{pgcd}}
+\newcommand{\Frac}{\textrm{Frac}}
+
+\newcommand{\lc}{\textrm{lc}}
+
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+
+\begin{document}
+
+\title
+{Polynômes %Structures algébriques 
+$p$-adiques aléatoires}
+\author{Xavier Caruso}
+
+\begin{frame}[plain]
+\setbeamercolor{titre}{fg=bleu,bg=bleu!10}
+
+\hfill
+\begin{beamercolorbox}[sep=1em,wd=7.5cm,rounded=true]{titre}
+\large \bf \centering
+Polynômes%Structures algébriques
+
+$p$-adiques aléatoires
+\end{beamercolorbox}
+\hfill \null
+
+\vspace{0.7cm}
+
+\hfill%
+{\footnotesize%
+\begin{tabular}{c}
+Xavier Caruso \smallskip \\
+Université Rennes 1 \\
+\texttt{\tiny xavier.caruso@normalesup.org}
+\end{tabular}}%
+\hfill \null
+
+\vspace{0.5cm}
+
+{\color{bleu} \hfill \hrulefill \hfill \null}
+
+\vspace{0.5cm}
+
+\hfill%
+{\small \color{vert}%
+Journées ALEA
+}%
+\hfill \null
+
+\vspace{0.5cm}
+
+\hfill%
+16 mars 2015%
+\hfill \null
+
+\end{frame}
+
+\setbeamercolor{frametitle}{bg=bleufonce}
+
+\begin{frame}[plane]
+  \begin{center}
+  \color{bleu} \Large \bf
+  Les entiers $p$-adiques
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Définition}
+
+\pause
+
+Soit {\color{bleu} $p$} un nombre premier fixé.
+
+\bigskip \pause
+
+Un {\color{bleu} entier $p$-adique} est un entier écrit en base $p$ 
+avec une infinité de chiffres :
+
+\vspace{-0.3cm}
+
+$$\ldots \: a_n \: a_{n-1} \: \ldots \: a_2 \: a_1 \: a_0
+\qquad \text{avec} \quad 0 \leq a_i < p.$$
+
+\medskip \pause
+
+{\color{vert}
+En particulier, tout entier naturel est un entier $p$-adique.
+
+\smallskip \pause
+
+Plus généralement, tout entier relatif est un entier $p$-adique \pause
+
+et même toute fraction de la forme $\frac a b$ avec $b$ premier avec $p$.
+}
+
+\bigskip \pause
+
+On note {\color{bleu} $\Z_p$} l'ensemble des entiers $p$-adiques.
+
+\bigskip \pause
+
+{\color{vert} 
+{\bf \underline{Exemple}}
+
+\vspace{-0.2cm}
+
+$$\ldots
+\: 1 \: 1 \: 0
+\: 1 \: 0 \: 1
+\: 1 \: 0 \: 0
+\: 1 \: 1
+\: 1 \: 0
+\: 1 \: 0
+\, \in \Z_2$$
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Structure d'anneau} \pause
+
+On pose les opérations comme à l'école primaire.
+
+\medskip \pause
+
+\begin{overlayarea}{\textwidth}{7cm}
+
+{\bf \color{bleu} Addition} \pause
+
+\vspace{-0.2cm}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\draw[transparent] (0,3)--(9,3);
+\node at (-1.2,2) { $\ldots$ };
+{\only<14>{\color{vert2}} \node at (0,2) { $0$ };}
+{\only<13>{\color{vert2}} \node at (1,2) { $0$ };}
+{\only<12>{\color{vert2}} \node at (2,2) { $1$ };}
+{\only<11>{\color{vert2}} \node at (3,2) { $0$ };}
+{\only<10>{\color{vert2}} \node at (4,2) { $1$ };}
+{\only<9>{\color{vert2}} \node at (5,2) { $1$ };}
+{\only<8>{\color{vert2}} \node at (6,2) { $0$ };}
+{\only<7>{\color{vert2}} \node at (7,2) { $0$ };}
+{\only<6>{\color{vert2}} \node at (8,2) { $1$ };}
+{\only<5>{\color{vert2}} \node at (9,2) { $0$ };}
+
+\node at (-1.2,1) { $\ldots$ };
+{\only<14>{\color{vert2}} \node at (0,1) { $1$ };}
+{\only<13>{\color{vert2}} \node at (1,1) { $0$ };}
+{\only<12>{\color{vert2}} \node at (2,1) { $1$ };}
+{\only<11>{\color{vert2}} \node at (3,1) { $1$ };}
+{\only<10>{\color{vert2}} \node at (4,1) { $1$ };}
+{\only<9>{\color{vert2}} \node at (5,1) { $1$ };}
+{\only<8>{\color{vert2}} \node at (6,1) { $0$ };}
+{\only<7>{\color{vert2}} \node at (7,1) { $0$ };}
+{\only<6>{\color{vert2}} \node at (8,1) { $0$ };}
+{\only<5>{\color{vert2}} \node at (9,1) { $1$ };}
+
+\draw[thick] (-2,0.4)--(9.5,0.4);
+
+\only<5->{
+  {\only<5>{\color{vert2}} \node at (9,-0.2) { $1$ };}
+}
+\only<6->{
+  {\only<6>{\color{vert2}} \node at (8,-0.2) { $1$ };}
+}
+\only<7->{
+  {\only<7>{\color{vert2}} \node at (7,-0.2) { $0$ };}
+}
+\only<8->{
+  {\only<8>{\color{vert2}} \node at (6,-0.2) { $0$ };}
+}
+\only<9->{
+  {\only<9>{\color{vert2}} \node at (5,-0.2) { $0$ };}
+  {\color{rouge} \node[scale=0.5] at (4,2.7) { $1$ };}
+}
+\only<10->{
+  {\only<10>{\color{vert2}} \node at (4,-0.2) { $1$ };}
+  {\color{rouge} \node[scale=0.5] at (3,2.7) { $1$ };}
+}
+\only<11->{
+  {\only<11>{\color{vert2}} \node at (3,-0.2) { $0$ };}
+  {\color{rouge} \node[scale=0.5] at (2,2.7) { $1$ };}
+}
+\only<12->{
+  {\only<12>{\color{vert2}} \node at (2,-0.2) { $1$ };}
+  {\color{rouge} \node[scale=0.5] at (1,2.7) { $1$ };}
+}
+\only<13->{
+  {\only<13>{\color{vert2}} \node at (1,-0.2) { $1$ };}
+}
+\only<14->{
+  {\only<14>{\color{vert2}} \node at (0,-0.2) { $1$ };}
+}
+\only<15->{
+  \node at (-1.2,-0.2) { $\ldots$ };
+}
+\end{tikzpicture}
+\end{center}
+
+\pause \pause \pause \pause \pause \pause
+\pause \pause \pause \pause \pause \pause
+
+{\bf \color{bleu} Soustraction} \pause
+
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\node at (-1.2,2) { $\ldots$ };
+\node at (0,2) { $0$ };
+\node at (1,2) { $0$ };
+\node at (2,2) { $1$ };
+\node at (3,2) { $0$ };
+\node at (4,2) { $1$ };
+\node at (5,2) { $1$ };
+\node at (6,2) { $0$ };
+\node at (7,2) { $0$ };
+\node at (8,2) { $1$ };
+\node at (9,2) { $0$ };
+
+\node at (-1.2,1) { $\ldots$ };
+\node at (0,1) { $1$ };
+\node at (1,1) { $0$ };
+\node at (2,1) { $1$ };
+\node at (3,1) { $1$ };
+\node at (4,1) { $1$ };
+\node at (5,1) { $1$ };
+\node at (6,1) { $0$ };
+\node at (7,1) { $0$ };
+\node at (8,1) { $0$ };
+\node at (9,1) { $1$ };
+
+\draw[thick] (-2,0.4)--(9.5,0.4);
+
+\only<18->{
+  \node at (9,-0.2) { $1$ };
+  {\color{rouge}
+  \node[scale=0.5] at (8.7,2) { $1$ };
+  \node[scale=0.5] at (7.65,1.2) { $1\!{+}$ };
+  }
+  \node at (8,-0.2) { $0$ };
+  \node at (7,-0.2) { $0$ };
+  \node at (6,-0.2) { $0$ };
+  \node at (5,-0.2) { $0$ };
+  \node at (4,-0.2) { $0$ };
+  \node at (3,-0.2) { $1$ };
+  {\color{rouge}
+  \node[scale=0.5] at (2.7,2) { $1$ }; 
+  \node[scale=0.5] at (1.65,1.2) { $1\!{+}$ };
+  }
+  \node at (2,-0.2) { $1$ };
+  {\color{rouge}
+  \node[scale=0.5] at (1.7,2) { $1$ }; 
+  \node[scale=0.5] at (0.65,1.2) { $1\!{+}$ };
+  }
+  \node at (1,-0.2) { $1$ };
+  {\color{rouge}
+  \node[scale=0.5] at (0.7,2) { $1$ }; 
+  \node[scale=0.5] at (-0.35,1.2) { $1\!{+}$ };
+  }
+  \node at (0,-0.2) { $0$ };
+  \node at (-1.2,-0.2) { $\ldots$ };
+}
+\end{tikzpicture}
+\end{center}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Structure d'anneau}
+
+On pose les opérations comme à l'école primaire.
+
+\medskip
+
+\begin{overlayarea}{\textwidth}{7cm}
+
+{\bf \color{bleu} Multiplication} \pause
+
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\node at (-1.2,2) { $\ldots$ };
+\node at (0,2) { $0$ };
+\node at (1,2) { $0$ };
+\node at (2,2) { $1$ };
+\node at (3,2) { $0$ };
+\node at (4,2) { $1$ };
+\node at (5,2) { $1$ };
+\node at (6,2) { $0$ };
+\node at (7,2) { $0$ };
+\node at (8,2) { $1$ };
+\node at (9,2) { $0$ };
+
+\node at (-1.2,1) { $\ldots$ };
+\node at (0,1) { $1$ };
+\node at (1,1) { $0$ };
+\node at (2,1) { $1$ };
+\node at (3,1) { $1$ };
+\node at (4,1) { $1$ };
+\node at (5,1) { $1$ };
+\node at (6,1) { $0$ };
+\node at (7,1) { $0$ };
+\node at (8,1) { $0$ };
+\node at (9,1) { $1$ };
+
+\draw[thick] (-2,0.4)--(9.5,0.4);
+
+\only<3->{
+\node at (-1.2,-0.2) { $\ldots$ };
+\node at (0,-0.2) { $0$ };
+\node at (1,-0.2) { $0$ };
+\node at (2,-0.2) { $1$ };
+\node at (3,-0.2) { $0$ };
+\node at (4,-0.2) { $1$ };
+\node at (5,-0.2) { $1$ };
+\node at (6,-0.2) { $0$ };
+\node at (7,-0.2) { $0$ };
+\node at (8,-0.2) { $1$ };
+\node at (9,-0.2) { $0$ };
+
+\node at (-1.2,-1.2) { $\ldots$ };
+\node at (0,-1.2) { $1$ };
+\node at (1,-1.2) { $1$ };
+\node at (2,-1.2) { $0$ };
+\node at (3,-1.2) { $0$ };
+\node at (4,-1.2) { $1$ };
+\node at (5,-1.2) { $0$ };
+
+\node at (-1.2,-2.2) { $\ldots$ };
+\node at (0,-2.2) { $1$ };
+\node at (1,-2.2) { $0$ };
+\node at (2,-2.2) { $0$ };
+\node at (3,-2.2) { $1$ };
+\node at (4,-2.2) { $0$ };
+
+\node at (-1.2,-3.2) { $\ldots$ };
+\node at (0,-3.2) { $0$ };
+\node at (1,-3.2) { $0$ };
+\node at (2,-3.2) { $1$ };
+\node at (3,-3.2) { $0$ };
+
+\node at (-1.2,-4.2) { $\ldots$ };
+\node at (0,-4.2) { $0$ };
+\node at (1,-4.2) { $1$ };
+\node at (2,-4.2) { $0$ };
+
+\node at (-1.2,-5.2) { $\ldots$ };
+\node at (0,-5.2) { $0$ };
+
+\draw[thick] (-2,-5.8)--(9.5,-5.8);
+
+\node at (-1.2,-6.4) { $\ldots$ };
+\node at (0,-6.4) { $1$ };
+\node at (1,-6.4) { $1$ };
+\node at (2,-6.4) { $1$ };
+\node at (3,-6.4) { $0$ };
+\node at (4,-6.4) { $0$ };
+\node at (5,-6.4) { $1$ };
+\node at (6,-6.4) { $0$ };
+\node at (7,-6.4) { $0$ };
+\node at (8,-6.4) { $1$ };
+\node at (9,-6.4) { $0$ };
+}
+
+\end{tikzpicture}
+\end{center}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Valuation et inverse} \pause
+
+La {\color{bleu} valuation} d'un nombre $p$-adique
+
+\vspace{-0.3cm}
+
+$$a = \ldots \: a_n \: a_{n-1} \: \ldots \: a_2 \: a_1 \: a_0$$
+
+est le nombre de zéros par lequel il se termine. \pause
+
+\begin{prop}
+Tout entier $p$-adique de valuation nulle est inversible dans $\Z_p$.
+\end{prop}
+
+\smallskip \pause
+
+{\color{violet}
+{\bf \underline{Démonstration}} : Poser la division...}
+
+\smallskip \pause
+
+\begin{cor}
+Les éléments $\Q_p = \text{Frac}(\Z_p)$ s'écrivent sous
+la forme $\frac a{p^v}$ pour $a \in \Z_p$ et $v \in \N$.
+\end{cor}
+
+\pause
+
+Les éléments de $\Q_p$ peuvent ainsi se représenter comme des nombres à 
+virgule avec une infinité de chiffres avant la virgule et un nombre fini 
+après.
+\end{frame}
+
+\begin{frame}
+\frametitle{Mesure de probabilité} \pause
+
+Posons $\mathcal D_p = \{0, 1, \ldots, p{-}1\}$ \pause
+de sorte que $\Z_p = \mathcal D_p^{\N}$.
+
+\medskip \pause
+
+On munit $\Z_p = \mathcal D_p^{\N}$ de la mesure de probabilité
+{\color{bleu} $\mu = \text{unif}^{\otimes \N}$}.
+
+\bigskip \pause
+
+{\color{vert}
+Autrement dit, tirer aléatoirement un entier $p$-adique revient
+à tirer aléatoirement chaque chiffre dans $\mathcal D_p$
+de manière uniforme et indépendante.
+}
+
+\bigskip \pause
+
+{\bf \color{bleu} Propriétés} \pause
+
+\begin{itemize}
+\item $\mu$ est invariante par translation \pause :
+
+c'est la mesure de Haar sur $\Z_p$ \pause
+
+\item $\mu(a U) = p^{-\val(a)} \mu(U)$ pour $a \in \Z_p$ et
+$U \subset \Z_p$ \pause ;
+
+$\mu$ est invariante par multiplication par un inversible \pause
+
+\item la valuation $\val : \Z_p \to \N$ suit 
+
+une loi géométrique de paramètre $1 - \frac 1 p$.
+\end{itemize}
+\end{frame}
+
+
+\begin{comment}
+
+\begin{frame}[plane]
+  \begin{center}
+  \color{bleu} \Large \bf
+  Matrices $p$-adiques aléatoires
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Déterminants} \pause
+
+On munit $M_n(\Z_p) = \Z_p^{n \times n}$ de la mesure
+{\color{bleu} $\mu^{\otimes n \times n}$}.
+
+\smallskip \pause
+
+Soit {\color{bleu} $\det_n : M_n(\Z_p) \to \Z_p$} 
+l'application déterminant. \pause
+
+\begin{theo}[Abdel-Ghaffar]
+Soit $X_1, \ldots, X_n$ des variables aléatoires indépendantes
+telles que $X_i$ suit une loi géométrique de paramètre $1 - \frac 1{p^i}$.
+Alors :
+
+\vspace{-0.3cm}
+
+$$\val(\det_n) 
+\text{ suit la même loi que } 
+X_1 + \cdots + X_n.$$
+\end{theo}
+
+\smallskip \pause
+
+{\color{violet}
+{\bf \underline{Démonstration}} \pause
+
+\begin{tikzpicture}[xscale=0.8, yscale=0.5]
+\clip (0,0) rectangle (5,-5);
+\node[xscale=1.8,yscale=5.5] at (0.4,-2.75) { $($ };
+\node[xscale=1.8,yscale=5.5] at (4.6,-2.75) { $)$ };
+
+\only<6-8>{
+\node at (1,-1) { \ph $a_{1,1}$ };
+\node at (2,-1) { \ph $a_{1,2}$ };
+\node at (3,-1) { \ph $\ldots$ };
+\node at (4,-1) { \ph $a_{1,n}$ };
+\node at (1,-2) { \ph $a_{2,1}$ };
+\node at (2,-2) { \ph $a_{2,2}$ };
+\node at (3,-2) { \ph $\ldots$ };
+\node at (4,-2) { \ph $a_{2,n}$ };
+\node at (1,-3) { \ph $\vdots$ };
+\node at (2,-3) { \ph $\vdots$ };
+\node at (4,-3) { \ph $\vdots$ };
+\node at (1,-4.5) { \ph $a_{n,1}$ };
+\node at (2,-4.5) { \ph $a_{n,2}$ };
+\node at (3,-4.5) { \ph $\ldots$ };
+\node at (4,-4.5) { \ph $a_{n,n}$ };
+}
+
+\only<9>{
+\node at (1,-1) { \ph $p^{V_1}$ };
+\node at (2,-1) { \ph $0$ };
+\node at (3,-1) { \ph $\ldots$ };
+\node at (4,-1) { \ph $0$ };
+\node at (1,-2) { \ph $b_{2,1}$ };
+\node at (1,-3) { \ph $\vdots$ };
+\node at (1,-4.5) { \ph $b_{n,1}$ };
+}
+\only<10->{
+\begin{scope}[color=violet!20]
+\node at (1,-1) { \ph $p^{V_1}$ };
+\node at (2,-1) { \ph $0$ };
+\node at (3,-1) { \ph $\ldots$ };
+\node at (4,-1) { \ph $0$ };
+\node at (1,-2) { \ph $b_{2,1}$ };
+\node at (1,-3) { \ph $\vdots$ };
+\node at (1,-4.5) { \ph $b_{n,1}$ };
+\end{scope}
+}
+
+\only<9->{
+\node at (2,-2) { \ph $b_{2,2}$ };
+\node at (3,-2) { \ph $\ldots$ };
+\node at (4,-2) { \ph $b_{2,n}$ };
+\node at (2,-3) { \ph $\vdots$ };
+\node at (4,-3) { \ph $\vdots$ };
+\node at (2,-4.5) { \ph $b_{n,2}$ };
+\node at (3,-4.5) { \ph $\ldots$ };
+\node at (4,-4.5) { \ph $b_{n,n}$ };
+}
+\end{tikzpicture}
+%
+\hspace{0.3cm} \pause
+%
+\raisebox{1cm}{
+\begin{minipage}{6cm}
+$V_1 = \min\big(\val(a_{1,1}), \ldots, \val(a_{1,n})\big)$ \pause
+
+suit la même loi que $X_n$.
+
+\smallskip \pause \pause \pause
+
+$V_2 = \min\big(\val(b_{2,2}), \ldots, \val(b_{2,n})\big)$
+
+suit la même loi que $X_{n-1}$ \pause
+
+et est indépendant de $V_1$.
+\end{minipage}}
+}
+\end{frame}
+
+\end{comment}
+
+\begin{frame}[plane]
+  \begin{center}
+  \color{bleu} \Large \bf
+  Nombre de racines des
+
+  polynômes $p$-adiques aléatoires
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Nombre moyen de zéros} \pause
+
+Soit {\color{bleu} $\Z_p[X]_{\leq d}$}
+l'espace des polynômes sur $\Z_p$ de degré $\leq d$.
+
+\smallskip \pause
+
+On le munit de la mesure produit. \pause
+
+\begin{theo}[Evans]
+Soit $Z_d : \Z_p[X]_{\leq d} \to \N$
+la fonction qui à $P(X)$ associe le nombre de ses racines dans $\Z_p$.
+
+On a $\E[Z_d] = \frac 1{1+p^{-1}}$.
+\end{theo}
+
+\medskip \pause
+
+{\bf \color{violet} 
+\underline{Questions}}
+
+\smallskip \pause
+
+{\color{violet}
+Quelle est la loi de $Z_d$ ?} \pause
+
+{\small 
+Pour $d \geq p$ et $p \to \infty$, elle tend vers 
+une loi de Poisson de param.~$1$}
+
+\medskip \pause
+
+{\color{violet}
+Quelle est l'espérance du nombre de racines dans $\Q_p$ ?} \pause
+
+{\small Bien sûr, pour $d = 1$, elle vaut $1$.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Démonstration du théorème d'Evans} \pause
+
+\begin{tikzpicture}[scale=0.3]
+\draw[transparent] (-8,-9)--(8,9);
+\only<4-6>{
+  \fill[blue!50] (-6,-8) rectangle (-4,8);
+  \fill[blue!50] (4,-8) rectangle (6,8);
+}
+\only<7->{
+  \fill[green!50] (-8,1) rectangle (-6,8);
+  \fill[green!50] (-6,1) rectangle (-4,-4);
+  \fill[green!50] (-4,-4) rectangle (-2,-7);
+  \fill[green!50] (-2,-7) rectangle (2,-8);
+  \fill[green!50] (2,-7) rectangle (4,-4);
+  \fill[green!50] (4,-4) rectangle (6,1);
+  \fill[green!50] (6,1) rectangle (8,8);
+}
+\only<3->{
+  \foreach \x in {-8,-6,...,8} { \draw[black!50,thin] (\x,-8)--(\x,8); }
+  \node[scale=0.4] at (-7,-8.5) { $\ldots 011$ };
+  \node[scale=0.4] at (-5,-8.5) { $\ldots 010$ };
+  \node[scale=0.4] at (-3,-8.5) { $\ldots 001$ };
+  \node[scale=0.4] at (-1,-8.5) { $\ldots 000$ };
+  \node[scale=0.4] at (7,-8.5) { $\ldots 111$ };
+  \node[scale=0.4] at (5,-8.5) { $\ldots 110$ };
+  \node[scale=0.4] at (3,-8.5) { $\ldots 101$ };
+  \node[scale=0.4] at (1,-8.5) { $\ldots 100$ };
+}
+\only<3-5>{
+  \draw[black!50,thin] (-8,-8)--(8,-8);
+  \draw[black!50,thin] (-8,8)--(8,8);
+}
+\only<6->{
+  \foreach \y in {-8,-7,...,8} { \draw[black!50,thin] (-8,\y)--(8,\y); }
+}
+
+\draw[->] (-8.5,0)--(8.5,0);
+\node[below right,scale=0.5] at (8.2,0) { $\Z_p$ };
+\draw[->] (0,-8.5)--(0,8.5);
+\node[above right,scale=0.5] at (0,8.2) { $\Z_p$ };
+
+\draw[thick,domain=-8:8] plot[id=parabole] function{0.25*x**2-8};
+\end{tikzpicture}
+%
+\hspace{0.2cm}
+%
+\raisebox{2.3cm}{ \pause \pause \pause
+\begin{minipage}{4.8cm} 
+Pour $\omega \in \Z_p[X]_{\leq d}$ fixé :
+
+\medskip
+
+$\displaystyle
+Z_d(\omega) = \lim_{i \mapsto \infty} p^i \cdot \mathcal A_i(\omega)$
+
+\medskip
+
+où $\mathcal A_i(\omega)$ est l'aire bleue.
+
+\vspace{0.7cm} \pause \pause
+
+En passant à l'espérance :
+
+\medskip
+
+$\displaystyle
+\E[Z_d] =  \lim_{i,j \mapsto \infty} p^i \cdot \E[\mathcal B_{i,j}]$.
+
+\medskip
+
+où $\mathcal B_{i,j}(\omega)$ est l'aire verte.
+
+\bigskip \pause
+
+\end{minipage}
+}
+
+Or, pour $i$ et $j$ grands, on a
+$\displaystyle
+\mathcal B_{i,j}(\omega) 
+ = p^{-i} \cdot \sum_{T \in \Z_p/p^i} \mu\big( \omega(T) \big)$ \pause
+
+et donc
+$\displaystyle
+\E[B_{i,j}] = \E\big[\mu\big( \omega(p^i \Z_p) \big)\big]
+\pause
+= p^{-i} \cdot \E\big[p^{-\val(\omega'(0))}\big] 
+\pause
+{\textstyle = \frac {p^{-i}}{1+p^{-1}}}$.
+\end{frame}
+
+\begin{frame}[plane]
+  \begin{center}
+  \color{bleu} \Large \bf
+  Résultant des
+
+  polynômes $p$-adiques aléatoires
+  \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Résultants} \pause
+
+Soient $A, B \in R[X]$ \pause
+{\scriptsize (où $R$ est un anneau quelconque)} \pause
+
+\begin{deftn}
+Le {\color{bleu} résultant} de $A$ et $B$, 
+noté {\color{bleu} $\Res(A,B)$}, est le déterminant de 
+
+\vspace{-0.8cm}
+
+\begin{eqnarray*}
+R[X]_{< \deg B} \times R[X]_{< \deg A} 
+& \to & R[X]_{< \deg A + \deg B} \\
+(U,V) & \mapsto & A U + B V
+\end{eqnarray*}
+\end{deftn}
+
+\medskip \pause
+
+Sur un corps, le résultant caractérise la relative primalité\pause :
+
+{\small \color{violet}
+$\Res(A,B)$ s'annule ssi $A$ et $B$ ne sont pas premiers entre eux.}
+
+\medskip \pause
+
+Sur $\mathbb R$, la taille du résultant mesure la stabilité numérique du 
+calcul des coefficients de Bézout.
+
+\vspace{-0.1cm} \pause
+
+{\scriptsize Au plus il est petit, au plus le calcul est instable.}
+
+\medskip \pause
+
+C'est vrai aussi sur $\Z_p$!
+
+\vspace{-0.1cm} \pause
+
+{\scriptsize Être petit signifie ici avoir une grande valuation.}
+\end{frame}
+
+\begin{frame}
+\frametitle{La loi de la valuation du résultant} \pause
+
+\medskip
+
+$\begin{array}{rrcl}
+{\color{bleu} \Z_p[X]_d} = &
+\multicolumn{3}{l}{\big\{ \, \text{polynômes \emph{unitaires} de degré $d$ sur } \Z_p \, \big\}} \medskip \pause \\
+{\color{bleu} V_d} : & \, \Z_p[X]_d \times \Z_p[X]_d & \to & \N \smallskip \\
+& (A,B) & \mapsto & \val(\Res(A,B))
+\end{array}$
+
+\vspace{-0.1cm} \pause
+
+\begin{theo}
+$V_d$ suit la même loi que
+
+\vspace{-0.35cm}
+
+$$Y_d = X_1 + \min(X_1, X_2) + 
+\cdots +  \min(X_1, \ldots, X_d)$$
+
+\vspace{-0.1cm}
+
+où $X_1, \ldots, X_d$ sont des variables aléatoires mutuellement
+indépendantes suivant une loi géométrique de param.
+$1 - \frac 1 p$.
+\end{theo}
+
+\smallskip \pause
+
+On en déduit : \pause
+
+\begin{itemize}
+\item \makebox[2.2cm][l]{\color{violet}(Espérance)}
+$\E[V_d] =
+\textstyle \sum_{i=1}^d \frac 1{p^i-1} \pause < \frac p{(p-1)^2}$ \pause
+\item \makebox[2.2cm][l]{\color{violet}(Écart type)}
+$\sigma[V_d]^2 = \textstyle \sum_{i=1}^d \frac {(2i-1)\cdot p^i}{(p^i-1)^2} \pause
+< \frac{p^2(p+1)}{(p-1)^4}$ \pause
+\item \makebox[2.2cm][l]{\color{violet}(Queue)}
+$\P[V_d \geq m] \leq p^{-m + O(\sqrt m)}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Interprétation géométrique de $Y_d$} \pause
+
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+\draw[transparent] (10.5,0)--(10.5,6);
+
+\only<3->{
+\fill[color=zero] (0,0) rectangle (9.8,6);
+\begin{scope}[color=nonzero]
+\fill (4,0) rectangle (5,1);
+\fill (6,0) rectangle (7,1);
+\fill (8,0) rectangle (9.8,1);
+\fill (7,1) rectangle (8,2);
+\fill (9,1) rectangle (9.8,2);
+\fill (3,2) rectangle (4,3);
+\fill (5,2) rectangle (9.8,3);
+\fill (1,3) rectangle (4,4);
+\fill (5,3) rectangle (7,4);
+\fill (8,3) rectangle (9.8,4);
+\fill (2,4) rectangle (5,5);
+\fill (6,4) rectangle (7,5);
+\fill (8,4) rectangle (9,5);
+\fill (0,5) rectangle (5,6);
+\fill (6,5) rectangle (7,6);
+\fill (8,5) rectangle (9.8,6);
+\end{scope}
+}
+
+\draw (0,0) grid (9.8,6);
+\node[scale=0.8] at (-0.3,0.5) { \ph $1$ };
+\node[scale=0.8] at (-0.3,1.5) { \ph $2$ };
+\node[scale=0.8] at (-0.3,2.5) { \ph $3$ };
+\node[scale=0.8] at (-0.3,3.5) { \ph $4$ };
+\node[scale=0.8] at (-0.3,4.5) { \ph $5$ };
+\node[scale=0.8] at (-0.3,5.5) { \ph $6$ };
+\node[scale=0.8] at (-0.8,5.5) { \ph $d=$ };
+
+\node[scale=0.8] at (0.5,-0.3) { $1$ };
+\node[scale=0.8] at (1.5,-0.3) { $2$ };
+\node[scale=0.8] at (2.5,-0.3) { $3$ };
+\node[scale=0.8] at (3.5,-0.3) { $4$ };
+\node[scale=0.8] at (4.5,-0.3) { $5$ };
+\node[scale=0.8] at (5.5,-0.3) { $6$ };
+\node[scale=0.8] at (6.5,-0.3) { $7$ };
+\node[scale=0.8] at (7.5,-0.3) { $8$ };
+\node[scale=0.8] at (8.5,-0.3) { $9$ };
+\node[scale=0.8] at (9.5,-0.3) { $\ldots$ };
+
+\only<4->{
+\fill[color=white,opacity=0.6]
+  (4,0)--(4,2)--(3,2)--(3,3)--(1,3)--(1,5)--(0,5)--(0,6)--(9.8,6)--(9.8,0)--cycle;
+\draw[thick]
+  (4,0)--(4,2)--(3,2)--(3,3)--(1,3)--(1,5)--(0,5)--(0,0)--cycle;
+}
+\end{tikzpicture}
+\end{center}
+
+\pause
+
+\hfill
+$\P(\begin{tikzpicture} 
+\draw[fill=zero] (0,0) rectangle (0.25,0.25);
+\end{tikzpicture}) = \frac 1 p$
+\hspace{0.8cm} ; \hspace{0.8cm}
+$\P(\begin{tikzpicture} 
+\draw[fill=nonzero] (0,0) rectangle (0.25,0.25); 
+\end{tikzpicture}) = 1 - \frac 1 p$
+\hfill \null
+\end{frame}
+
+\begin{frame}
+\frametitle{La suite des pseudo-restes} \pause
+
+Soient $A$ et $B$ deux polynômes unitaires de degré $d$
+
+\vspace{-0.1cm} \pause
+
+{\scriptsize (à coefficients dans un anneau $R$ intègre quelconque)}
+
+\medskip \pause
+
+On définit la suite $(R_j)_{0 \leq j \leq d}$ par récurrence descendante :
+
+\vspace{-0.6cm}
+
+$$R_d = B 
+\quad ; \quad 
+R_{d-1} = B - A 
+\quad ; \quad 
+R_{j-1} = \frac{a_j^2}{a_{j+1}^2} \cdot (R_{j+1} \, \% \, R_j)$$
+
+\vspace{-0.4cm}
+
+où $a_j$ est le coefficient de $R_j$ en $X^j$.
+
+\medskip \pause
+
+{\color{violet}
+{\bf Hypothèse implicite :} pour tout $j$, $a_j \neq 0$ 
+(\emph{i.e.} $\deg R_j = j$)} 
+
+\vspace{-0.1cm} \pause
+
+\begin{prop}
+\begin{enumerate}
+\item $R_0 = \Res(A,B)$. \pause
+\item Tous les coefficients de $R_j$ s'expriment
+comme des déterminants de matrices dont les coefficients sont
+des coefficients de $A$ ou $B$. \pause
+En particulier $R_j \in R[X]$.
+\end{enumerate}
+\end{prop}
+
+\vspace{-0.1cm} \pause 
+
+{\small
+Il existe des variantes dans le cas où l'un des $a_j$ s'annule.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Distribution sur les chiffres des unités} \pause
+
+\begin{overlayarea}{\textwidth}{7.6cm}
+
+Pour $a \in \Z_p$, on note $\bar a$ son chiffre des unités. \pause
+
+\begin{prop}
+Les variables aléatoires $\bar a_j : \Z_p[X]_d \times \Z_p[X]_d \to 
+\{0, 1, \ldots, p{-}1\}$
+
+suivent la loi uniforme et sont mutuellement indépendantes.
+\end{prop}
+
+\medskip \pause
+
+{\bf \color{violet} \underline{Idée de la démonstration}}
+
+\smallskip \pause
+
+On peut travailler uniquement avec les chiffres des unités\pause,
+c'est-à-dire dans $\Z/p\Z$.
+
+\medskip \pause
+
+On pose $\bar R_j = \bar a_j X^j + \bar b_j X^{j-1} + \cdots$
+
+\medskip \pause
+
+\uncover<9->{
+{\bf Si les $\bar a_j$ ne s'annulent pas,}
+
+alors les $\bar a_j$ et $\bar b_j$ déterminent $\bar A$ et $\bar B$ 
+
+de manière univoque.}
+
+\smallskip
+
+\uncover<10->{
+\scriptsize
+On démontre par récurrence sur $n$ :
+
+les $\bar a_j$ et $\bar b_j$ pour $j \geq n$ 
+déterminent tous les $\bar R_j$ pour $j \geq n$.
+
+}
+
+\vspace{-3.4cm}
+
+\hfill
+\begin{tikzpicture}[xscale=0.65,yscale=0.48]
+  \begin{scope}[thin]
+  \fill[yellow!20] 
+     (0,2)--(6,2)--(6,-5)--
+     (5,-5)--(5,-4)--
+     (4,-4)--(4,-3)--
+     (3,-3)--(3,-2)--
+     (2,-2)--(2,-1)--
+     (1,-1)--(1,0)--
+     (0,0)--cycle;
+  \draw (0,1)--(6,1);
+  \draw (0,2)--(6,2);
+  \foreach \y in {0,...,-6} { 
+    \draw (-\y,\y)--(6,\y);
+  }
+  \foreach \x in {0,...,5} { 
+    \draw (\x,2)--(\x,-\x);
+  }
+  \draw (6,2)--(6,-5);
+  \end{scope}
+  \node[right,scale=0.8] at (6.2, 1.5) { \ph $\bar A$ };
+  \node[right,scale=0.8] at (6.2, 0.5) { \ph $\bar B$ };
+  \node[right,scale=0.8] at (6.2, -0.5) { \ph $\bar R_4$ };
+  \node[right,scale=0.8] at (6.2, -1.5) { \ph $\bar R_3$ };
+  \node[right,scale=0.8] at (6.2, -2.5) { \ph $\bar R_2$ };
+  \node[right,scale=0.8] at (6.2, -3.5) { \ph $\bar R_1$ };
+  \node[right,scale=0.8] at (6.2, -4.5) { \ph $\bar R_0$ };
+
+  \node[scale=0.9] at (0.5,1.5) { \ph $1$ };
+  \node[scale=0.9] at (0.5,0.5) { \ph $\bar a_5$ };
+  \node[scale=0.9] at (1.5,0.5) { \ph $\bar b_5$ };
+  \node[scale=0.9] at (1.5,-0.5) { \ph $\bar a_4$ };
+  \node[scale=0.9] at (2.5,-0.5) { \ph $\bar b_4$ };
+  \node[scale=0.9] at (2.5,-1.5) { \ph $\bar a_3$ };
+  \node[scale=0.9] at (3.5,-1.5) { \ph $\bar b_3$ };
+  \node[scale=0.9] at (3.5,-2.5) { \ph $\bar a_2$ };
+  \node[scale=0.9] at (4.5,-2.5) { \ph $\bar b_2$ };
+  \node[scale=0.9] at (4.5,-3.5) { \ph $\bar a_1$ };
+  \node[scale=0.9] at (5.5,-3.5) { \ph $\bar b_1$ };
+  \node[scale=0.9] at (5.5,-4.5) { \ph $\bar a_0$ };
+
+  \only<11->{
+  \node[scale=0.9] at (5.5,-2.5) { \ph $\star$ };
+  }
+
+  \only<12->{
+  \node[scale=0.9] at (4.5,-1.5) { \ph $\star$ };
+  \node[scale=0.9] at (5.5,-1.5) { \ph $\star$ };
+  }
+
+  \only<13->{
+  \node[scale=0.9] at (3.5,-0.5) { \ph $\star$ };
+  \node[scale=0.9] at (4.5,-0.5) { \ph $\star$ };
+  \node[scale=0.9] at (5.5,-0.5) { \ph $\star$ };
+  }
+
+  \only<14->{
+  \node[scale=0.9] at (2.5,0.5) { \ph $\star$ };
+  \node[scale=0.9] at (3.5,0.5) { \ph $\star$ };
+  \node[scale=0.9] at (4.5,0.5) { \ph $\star$ };
+  \node[scale=0.9] at (5.5,0.5) { \ph $\star$ };
+  }
+
+  \only<15->{
+  \node[scale=0.9] at (1.5,1.5) { \ph $\star$ };
+  \node[scale=0.9] at (2.5,1.5) { \ph $\star$ };
+  \node[scale=0.9] at (3.5,1.5) { \ph $\star$ };
+  \node[scale=0.9] at (4.5,1.5) { \ph $\star$ };
+  \node[scale=0.9] at (5.5,1.5) { \ph $\star$ };
+  }
+\end{tikzpicture}
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Fin de la démonstration} \pause
+
+\begin{tikzpicture}[xscale=1,yscale=0.7]
+  \draw[thick,transparent] (-1.8,-8.5) rectangle (8.9,2.05);
+  \begin{scope}
+  \fill[yellow!20] 
+     (0,2)--(7,2)--(7,-6)--
+     (6,-6)--(6,-5)--
+     (5,-5)--(5,-4)--
+     (4,-4)--(4,-3)--
+     (3,-3)--(3,-2)--
+     (2,-2)--(2,-1)--
+     (1,-1)--(1,0)--
+     (0,0)--cycle;
+
+  \only<4-5>{
+  \fill[zero] (6,-5) rectangle (7,-6);
+  \fill[zero] (5,-4) rectangle (6,-5);
+  \fill[zero] (4,-3) rectangle (5,-4);
+  \fill[zero] (3,-2) rectangle (4,-3);
+  \fill[zero] (2,-1) rectangle (3,-2);
+  \fill[nonzero] (1,0) rectangle (2,-1);
+  }
+  \only<9-10>{
+  \fill[zero] (6,-5) rectangle (7,-6);
+  \fill[zero] (5,-4) rectangle (6,-5);
+  \fill[zero] (4,-3) rectangle (5,-4);
+  \fill[nonzero] (3,-2) rectangle (4,-3);
+  \fill[zero] (2,-1) rectangle (3,-2);
+  }
+  \only<15-16>{
+  \fill[zero] (6,-5) rectangle (7,-6);
+  \fill[zero] (5,-4) rectangle (6,-5);
+  \fill[zero] (4,-3) rectangle (5,-4);
+  }
+  \only<20-21>{
+  \fill[zero] (6,-5) rectangle (7,-6);
+  \fill[zero] (5,-4) rectangle (6,-5);
+  \fill[nonzero] (4,-3) rectangle (5,-4);
+  }
+  \only<26-27>{
+  \fill[nonzero] (6,-5) rectangle (7,-6);
+  \fill[zero] (5,-4) rectangle (6,-5);
+  }
+
+  \draw (0,1)--(7,1);
+  \draw (0,2)--(7,2);
+  \foreach \y in {0,...,-7} { 
+    \draw (-\y,\y)--(7,\y);
+  }
+  \foreach \x in {0,...,6} { 
+    \draw (\x,2)--(\x,-\x);
+  }
+  \draw (7,2)--(7,-6);
+  \end{scope}
+  \node[right,scale=0.8] at (7.2, 1.5) { \ph $A$ };
+  \node[right,scale=0.8] at (7.2, 0.5) { \ph $B$ };
+  \node[right,scale=0.8] at (7.2, -0.5) { \ph $R_5$ };
+  \node[right,scale=0.8] at (7.2, -1.5) { 
+    \ph $R_4\only<7->{/p}$
+  };
+  \node[right,scale=0.8] at (7.2, -2.5) { 
+    \ph $R_3\only<8->{/p^2}$ 
+  };
+  \node[right,scale=0.8] at (7.2, -3.5) {
+    \ph $R_2%
+         \only<8-11>{/p^3}%
+         \only<12>{/p^3 \, / \, p}%
+         \only<13-16>{/p^4}%
+         \only<17>{/p^4 \, / \, p}%
+         \only<18->{/p^5}$
+  };
+  \node[right,scale=0.8] at (7.2, -4.5) {
+    \ph $R_1%
+         \only<8-11>{/p^4}%
+         \only<12>{/p^4 \, / \, p^2}%
+         \only<13-16>{/p^6}%
+         \only<17>{/p^6 \, / \, p^2}%
+         \only<18-22>{/p^8}%
+         \only<23>{/p^8 \, / \, p}%
+         \only<24->{/p^9}$
+  };
+  \node[right,scale=0.8] at (7.2, -5.5) {
+    \ph $R_0%
+         \only<8-11>{/p^5}%
+         \only<12>{/p^5 \, / \, p^3}%
+         \only<13-16>{/p^8}%
+         \only<17>{/p^8 \, / \, p^3}%
+         \only<18-22>{/p^{11}}%
+         \only<23>{/p^{11} \, / \, p^2}%
+         \only<24->{/p^{13}}$
+  };
+
+  % A
+  \node at (0.5,1.5) { $...1$ };
+  \node at (1.5,1.5) { $...1$ };
+  \node at (2.5,1.5) { $...1$ };
+  \node at (3.5,1.5) { $...0$ };
+  \node at (4.5,1.5) { $...1$ };
+  \node at (5.5,1.5) { $...1$ };
+  \node at (6.5,1.5) { $...1$ };
+
+  % B
+  \node at (0.5,0.5) { $...1$ };
+  \node at (1.5,0.5) { $...0$ };
+  \node at (2.5,0.5) { $...1$ };
+  \node at (3.5,0.5) { $...1$ };
+  \node at (4.5,0.5) { $...0$ };
+  \node at (5.5,0.5) { $...1$ };
+  \node at (6.5,0.5) { $...0$ };
+
+  \only<3->{
+  \node at (1.5,-0.5) { $...1$ };
+  \node at (2.5,-0.5) { $...0$ };
+  \node at (3.5,-0.5) { $...1$ };
+  \node at (4.5,-0.5) { $...1$ };
+  \node at (5.5,-0.5) { $...0$ };
+  \node at (6.5,-0.5) { $...1$ };
+  }
+  \only<3-6>{
+  \node at (2.5,-1.5) { $...0$ };
+  \node at (3.5,-1.5) { $...0$ };
+  \node at (4.5,-1.5) { $...0$ };
+  \node at (5.5,-1.5) { $...0$ };
+  \node at (6.5,-1.5) { $...0$ };
+  \node at (3.5,-2.5) { $...0$ };
+  \node at (4.5,-2.5) { $...0$ };
+  \node at (5.5,-2.5) { $...0$ };
+  \node at (6.5,-2.5) { $...0$ };
+  \node at (4.5,-3.5) { $...0$ };
+  \node at (5.5,-3.5) { $...0$ };
+  \node at (6.5,-3.5) { $...0$ };
+  \node at (5.5,-4.5) { $...0$ };
+  \node at (6.5,-4.5) { $...0$ };
+  \node at (6.5,-5.5) { $...0$ };
+  }
+
+  \only<7->{
+  \node at (2.5,-1.5) { $...0$ };
+  \node at (3.5,-1.5) { $...1$ };
+  \node at (4.5,-1.5) { $...0$ };
+  \node at (5.5,-1.5) { $...0$ };
+  \node at (6.5,-1.5) { $...1$ };
+  }
+  \only<8->{
+  \node at (3.5,-2.5) { $...1$ };
+  \node at (4.5,-2.5) { $...0$ };
+  \node at (5.5,-2.5) { $...0$ };
+  \node at (6.5,-2.5) { $...1$ };
+  }
+  \only<8-11,12-16>{
+  \node at (4.5,-3.5) { $...0$ };
+  \node at (5.5,-3.5) { $...0$ };
+  \node at (6.5,-3.5) { $...0$ };
+  }
+  \only<8-11,14-16>{
+  \node at (5.5,-4.5) { $...0$ };
+  \node at (6.5,-4.5) { $...0$ };
+  \node at (6.5,-5.5) { $...0$ };
+  }
+  \only<17->{
+  \node at (4.5,-3.5) { $...1$ };
+  \node at (5.5,-3.5) { $...1$ };
+  \node at (6.5,-3.5) { $...1$ };
+  }
+  \only<19-22>{
+  \node at (5.5,-4.5) { $...0$ };
+  \node at (6.5,-4.5) { $...0$ };
+  \node at (6.5,-5.5) { $...0$ };
+  }
+  \only<23->{
+  \node at (5.5,-4.5) { $...0$ };
+  \node at (6.5,-4.5) { $...1$ };
+  }
+  \only<25->{
+  \node at (6.5,-5.5) { $...1$ };
+  }
+
+  \only<6-10>{
+  \fill[white,opacity=0.8] 
+     (-1,2.05)--(8.9,2.05)--(8.9,0)--(1,0)--(1,-0.5)--(-1,-0.5)--cycle;
+  \draw (1,-1)--(1,0)--(7,0);
+  }
+  \only<11-21>{
+  \fill[white,opacity=0.8] 
+     (-1,2.05)--(8.9,2.05)--(8.9,-2)--(3,-2)--(3,-2.5)--(-1,-2.5)--cycle;
+  \draw (3,-3)--(3,-2)--(7,-2);
+  }
+  \only<22->{
+  \fill[white,opacity=0.8] 
+     (-1,2.05)--(8.9,2.05)--(8.9,-3)--(4,-3)--(4,-3.5)--(-1,-3.5)--cycle;
+  \draw (4,-4)--(4,-3)--(7,-3);
+  }
+
+  \begin{scope}[xshift=-1.8cm,yshift=-8.5cm,scale=0.8]
+  \only<5->{
+    \fill[color=zero] (0,0) rectangle (1,5);
+    \fill[color=nonzero] (0,5) rectangle (1,6);
+  }
+  \only<10->{
+    \fill[color=zero] (1,0) rectangle (2,3);
+    \fill[color=nonzero] (1,3) rectangle (2,4);
+    \fill[color=zero] (1,4) rectangle (2,5);
+  }
+  \only<16->{
+    \fill[color=zero] (2,0) rectangle (3,3);
+  }
+  \only<21->{
+    \fill[color=zero] (3,0) rectangle (4,2);
+    \fill[color=nonzero] (3,2) rectangle (4,3);
+  }
+  \only<27->{
+    \fill[color=nonzero] (4,0) rectangle (5,1);
+    \fill[color=zero] (4,1) rectangle (5,2);
+  }
+  \only<5->{  
+    \draw (0,6)--(1,6);
+    \draw (0,5)--(1,5);
+    \draw (0,4)--(1,4);
+    \draw (0,3)--(1,3);
+    \draw (0,2)--(1,2);
+    \draw (0,1)--(1,1);
+    \draw (0,0)--(1,0);
+    \draw (0,0)--(0,6);
+    \draw (1,0)--(1,6);
+  }
+  \only<10->{
+    \draw (1,5)--(2,5);
+    \draw (1,4)--(2,4);
+    \draw (1,3)--(2,3);
+    \draw (1,2)--(2,2);
+    \draw (1,1)--(2,1);
+    \draw (1,0)--(2,0);
+    \draw (2,0)--(2,5);
+  }
+  \only<16->{
+    \draw (2,3)--(3,3);
+    \draw (2,2)--(3,2);
+    \draw (2,1)--(3,1);
+    \draw (2,0)--(3,0);
+    \draw (3,0)--(3,3);
+  }
+  \only<21->{
+    \draw (3,3)--(4,3);
+    \draw (3,2)--(4,2);
+    \draw (3,1)--(4,1);
+    \draw (3,0)--(4,0);
+    \draw (4,0)--(4,3);
+  }
+  \only<27->{
+    \draw (4,2)--(5,2);
+    \draw (4,1)--(5,1);
+    \draw (4,0)--(5,0);
+    \draw (5,0)--(5,2);
+  }
+  \only<30->{
+  \fill[color=white,opacity=0.6]
+    (4,0)--(4,2)--(3,2)--(3,3)--(1,3)--(1,5)--(0,5)--(0,6)--(5.1,6)--(5.1,0)--cycle;
+  \draw[thick]
+    (4,0)--(4,2)--(3,2)--(3,3)--(1,3)--(1,5)--(0,5)--(0,0)--cycle;
+  }
+  \end{scope}
+
+  \only<29->{
+    \node[left] at (8,-7.5) { $\Longrightarrow \,\, V_d = 13$ };
+  }
+\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Fin de la démonstration}
+
+\begin{tikzpicture}[xscale=1,yscale=0.7]
+\draw[thick,transparent] (-1.8,-8.5) rectangle (8.9,2.05);
+\begin{scope}[xshift=-1.8cm,yshift=-8.5cm,scale=0.8]
+\fill[color=zero] (0,0) rectangle (9.8,6);
+\begin{scope}[color=nonzero]
+\fill (4,0) rectangle (5,1);
+\fill (6,0) rectangle (7,1);
+\fill (8,0) rectangle (9.8,1);
+\fill (7,1) rectangle (8,2);
+\fill (9,1) rectangle (9.8,2);
+\fill (3,2) rectangle (4,3);
+\fill (5,2) rectangle (9.8,3);
+\fill (1,3) rectangle (4,4);
+\fill (5,3) rectangle (7,4);
+\fill (8,3) rectangle (9.8,4);
+\fill (2,4) rectangle (5,5);
+\fill (6,4) rectangle (7,5);
+\fill (8,4) rectangle (9,5);
+\fill (0,5) rectangle (5,6);
+\fill (6,5) rectangle (7,6);
+\fill (8,5) rectangle (9.8,6);
+\end{scope}
+\draw (0,0) grid (9.8,6); 
+\fill[color=white,opacity=0.6]
+  (4,0)--(4,2)--(3,2)--(3,3)--(1,3)--(1,5)--(0,5)--(0,6)--(9.8,6)--(9.8,0)--cycle;
+\draw[thick]
+  (4,0)--(4,2)--(3,2)--(3,3)--(1,3)--(1,5)--(0,5)--(0,0)--cycle;
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+\begin{comment}
+\begin{frame}
+\frametitle{Compléments} \pause
+
+\begin{theo}
+Soit $X_0, \ldots, X_{d-1}$ des variables aléatoires mutuellement
+indépendantes qui suivent toutes une loi géométrique de paramètre
+$1 - \frac 1 p$.
+
+Alors $\val(a_j)$ suit la même loi que
+
+\vspace{-0.35cm}
+
+$$Y_{j,d} = \sum_{k=0}^d \min(X_{j-k}, X_{j-k+1}, \ldots, X_{j+k})$$
+
+où, par convention, $X_i = +\infty$ pour $i < 0$ et $X_i = 0$
+pour $i \geq d$. 
+\end{theo}
+
+\medskip \pause
+
+{\color{violet} 
+{\bf \underline{Question}}
+
+Quelles sont les corrélations entre les $\val(a_j)$?
+}
+
+\medskip \pause
+
+{\small
+Ce ne sont pas les mêmes que celles entre les $Y_{j,d}$. \pause
+
+\smallskip
+
+Par exemple, le couple $(Y_{d-1,d}, Y_{d-2,d})$ suit la même loi que :
+
+\vspace{-0.3cm}
+
+$$\big(X, X' + \min(X', [X/2])\big).$$
+}
+
+\end{frame}
+\end{comment}
+
+\begin{frame}
+\frametitle{That's all folks}
+\hfill {\Large Merci de votre attention} \hfill \null
+\end{frame}
+
+\end{document}

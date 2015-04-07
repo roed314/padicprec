@@ -96,7 +96,7 @@
 We address the problem of the stability of the computations of resultants 
 and subresultants of polynomials defined over complete discrete valuation 
 rings (\emph{e.g.} $\Zp$ or $k[[t]]$ where $k$ is a field). We prove that 
-Euclide-like algorithms are highly unstable in average and we explain, in
+Euclide-like algorithms are highly unstable on average and we explain, in
 many cases, how one can stabilize them without sacrifying the complexity.
 On the way, we completely determine the distribution of the valuation of
 the subresultants of two random monic $p$-adic polynomials having the
@@ -115,7 +115,8 @@ same degree.
 
  \vspace{1mm}
  \noindent
- {\bf Keywords:} $p$-adic precision, subresultants
+ {\bf Keywords:} $p$-adic precision, subresultants, random $p$-adic 
+polynomials
 \medskip
 
 \section{Introduction}
@@ -180,7 +181,7 @@ polynomials of fixed degree. Looking at the last line, we see that
 extended Euclide's algorithm outputs the B\'ezout coefficients of two 
 monic $2$-adic polynomials of degree $100$ with an average loss of 
 $161.1$ significant digits by coefficient whereas a stable 
-algorithm should only loose $3.2$ digits in average. This 
+algorithm should only loose $3.2$ digits on average. This 
 ``theoretical'' loss is computed as the double of the valuation of the 
 resultant. Indeed Cramer-like formulae imply that B\'ezout coefficients 
 can be computed by performing a unique division by the resultant, 
@@ -282,7 +283,7 @@ specified. Hence, the notation above does not represent a unique
 element of $\A$ but all elements lying in the ball having center
 $\sum_{i=0}^{N-1} x_i \pi^i$ and radius $e^{-N v(\pi)}$. In other
 words, on a computer, we do not work with elements of $\A$ but with
-balls in $\A$ which are much more tractable.
+balls in $\A$ which are more tractable.
 
 \subsection{Subresultants}
 \label{subsec:subres}
@@ -322,7 +323,7 @@ respectively.
 We recall briefly that $\Res_j^{d_A, d_B}(A,B)$ (resp. $U_j^{d_A, 
 d_B}(A,B)$, resp. $V_j^{d_A, d_B}(A,B)$) is a polynomial with 
 coefficients in $\ring$ of degree at most $j$ (resp. $d-j-1$, resp. 
-$d-j-1$) whose coefficients can be expressed, up to a sign, as a minor 
+$d-j-1$) whose coefficients can be expressed, up to a sign, as minors
 of the Sylvester matrix. These polynomials satisfy in addition the
 relation:
 $$A \cdot U_j^{d_A,d_B}(A,B) + B \cdot V_j^{d_A,d_B}(A,B) = 
@@ -404,12 +405,12 @@ subresultants do not vanish. Under this additional assumption, one can
 prove that the degrees of the $S_i$'s decrease by one at each step, 
 meaning that we $\deg S_i = d_B - i$ for all $i$. The sequence 
 $(S_i)$ then stops at $i = d_B$. Moreover, the $\delta_i$'s and the 
-$c_i$'s are no longer necessary since we have $\delta_i = 1$ and $c_i
+$c_i$'s are now all ``trivial'' since we have $\delta_i = 1$ and $c_i
 = s_i$ for all $i$. The recurrence formula then becomes:
 $$S_{i+1} = s_i^2 \cdot s_{i-1}^{-2}
 \cdot (S_{i-1} \,\%\, S_i) \quad \text{for } i \geq 1.$$
 To conclude with, we remark that Proposition \ref{prop:prem} simply 
-states that $R_j = S_{d_B-j}$.
+states that $R_j = S_{d_B-j}$ in this case.
 
 \section{Euclide-like algorithms\\are unstable}
 \label{sec:unstable}
@@ -429,8 +430,8 @@ In this subsection, we estimate the loss of precision if we compute the
 $R_j$'s using the recurrence formula given by Proposition \ref{prop:prem}. 
 In what follows, we are going use a \emph{flat precision model}: this 
 means that a polynomial $P(X)$ is represented as:
-$$P(X) = \sum_{i=1}^n a_i X^i + O(p^N)
-\quad \text{with } a_i \in \Qp \text{ and } N \in \Z.$$
+$$P(X) = \sum_{i=1}^n a_i X^i + O(\pi^N)
+\quad \text{with } a_i \in K \text{ and } N \in \Z.$$
 In other words, we assume that the software we are using does not
 carry a precision data on each coefficient but only a unique precision
 data for the whole polynomial. Concretely this means that, after having
@@ -451,7 +452,7 @@ course have $V_j \geq W_j$ and we set $\delta_j = V_j - W_j$.
 Let $A$ and $B$ as above. We assume that all scalar subresultants of 
 $(A,B)$ do not vanish. Then, in the flat precision model, the 
 subresultant pseudo-remainder sequence computes $R_j$ at precision 
-$O(p^{N_j})$ with:
+$O(\pi^{N_j})$ with:
 $$N_j \leq N + V_{j+1} - 2 \cdot (\delta_{j+1} + \delta_{j+2} + \cdots
 + \delta_{d-1}).$$
 \end{prop}
@@ -481,7 +482,7 @@ $R_{j+1}$ is known with higher precision. Repeating the argument, we
 find that the precision of $(R_{j+1} \,\%\, R_j)$ is equal to 
 $\min(M - \delta_j, N_j - \delta_j + \val(s) - V_j)$ and therefore is 
 lower bounded by $M - \delta_j \leq N_j - 2 \delta_j + V_{j+1} - V_j$.
-We derive for this $N_{j-1} \leq N_j - 2 \delta_j - V_{j+1} + V_j$ and
+From this, we derive $N_{j-1} \leq N_j - 2 \delta_j - V_{j+1} + V_j$ and
 the proposition finally follows by summing up these inequalities.
 \end{proof}
 
@@ -491,7 +492,7 @@ is a lower bound on the number of digits lost after having computed the
 resultant using the subresultant pseudo-remainder sequence algorithm. In 
 the next subsection (\emph{cf} Corollary \ref{cor:Vj}), we shall see that 
 $V_1$ and all $\delta_j$'s are 
-approximatively equal to $\frac 1 {p-1}$ in average. The loss of 
+approximatively equal to $\frac 1 {p-1}$ on average. The loss of 
 precision then grows linearly with respect to $d$. This confirms the 
 precision benchmarks shown in Figure \ref{fig:precision}.
 We emphasize one more time that this loss of precision is \emph{not}
@@ -511,7 +512,7 @@ In what follows, we assume that the residue field of $\A$ is finite
 and we use the letter $q$ to denote its cardinality.
 
 We endow $\A$ with its Haar measure. The set $\Omega$ of couples of 
-monic polynomial of degree $d$ with coefficients in $A$ is canonically 
+monic polynomial of degree $d$ with coefficients in $\A$ is canonically 
 in bijection with $\A^{2d}$ and hence inherits the product measure. 
 We consider $V_j$, $W_j$ and $\delta_j$ as random variables defined on 
 $\Omega$.
@@ -541,7 +542,7 @@ $(X, \, X' + \min(X', [X/2]))$
 where $X$ and $X'$ are two independant discrete random variables with 
 geometric law of parameter $(1 - q^{-1})$ and the notation $[\cdot]$ 
 stands for the integer part function. In particular, we observe that 
-the couple $(2,1)$ does not occur almost surely although the events 
+$(V_{d-2}, V_{d-1}) \neq (2,1)$ almost surely although the events 
 $\{V_{d-1} = 2\}$ and $\{V_{d-2} = 1\}$ both occur with positive 
 probability.
 
@@ -602,7 +603,7 @@ is fixed during all the proof). Our conventions imply that $Z_i$
 vanishes if $i > d-j$. On the contrary, if $i \leq d-j$, let us define 
 $\tau(1), \ldots, \tau(d-j)$ as the numbers $\sigma(1), \ldots, 
 \sigma(d-j)$ sorted in increasing order. The random variable $Z_i$ 
-is then the minimum of $\tau_j(i)$ independant random variables with 
+is then the minimum of $\tau(i)$ independant random variables with 
 geometric distribution of parameter $(1 - q^{-1})$ and thus its 
 distribution is geometric of parameter $(1 - q^{-\tau(i)})$.
 Its expected value is then $\frac 1 {q^{\tau(i) - 1}}$ and the first
@@ -664,7 +665,7 @@ $d$. The result follows.
 \label{subsec:proof}
 
 During the proof, $A$ and $B$ will always refer to monic polynomials of 
-degree $d$ and $R_j$ (resp. $U_j$ and $V_j$) denote their $j$-th 
+degree $d$ and $R_j$ (resp. $U_j$ and $V_j$) to their $j$-th 
 subresultant (resp. their $j$-th cofactors). If $P$ is a polynomial and 
 $n$ is a positive integer, we use the notation $P[n]$ to refer to the 
 coefficient of $X^n$ in $P$. We set $r_j = R_j[j]$.
@@ -801,7 +802,7 @@ We assume that $\ring = \A$. Then the map $\psi_j : \Omega_j^\times
 \begin{proof}
 Proposition \ref{prop:bijection} applied with the quotient rings $\ring 
 = \A/\pi^n\A$ shows that $(\psi_j \text{ mod } \pi^n)$ is a bijection 
-for all $n$. This proves the corollary.
+for all $n$. This proves the Corollary.
 \end{proof}
 
 \noindent 
@@ -826,7 +827,7 @@ couples $(A,B)$ for which $r_j(A,B)$ does not vanish if and only if $j
 \in J$. We want to prove that $\Omega_\ring(J)$ has cardinality 
 $q^{2d-\Card J} (q-1)^{\Card J}$. To do this, we introduce several 
 additional notations. First, we fix $J$ and write $J = \{n_1, \ldots, 
-n_\ell\}$ with $n_1 > n_2 > \cdots > n_\ell$. we also set $n_{\ell+1} = 
+n_\ell\}$ with $n_1 > n_2 > \cdots > n_\ell$. We also set $n_{\ell+1} = 
 0$ by convention. Then, given $n$ and $m$ two integers with $m < n$, let 
 $V_{(m,n)}$ denote the set of polynomials of the form
 $a_m X^m + a_{m+1} X^{m+1} \cdots + a_n X^n$
@@ -848,7 +849,7 @@ V_{(n_1,n_2)} \times \cdots \times V_{(n_\ell,n_{\ell+1})} \smallskip \\
 \end{array}$$ 
 is injective. In order to establish the claim, we remark that the 
 knowledge of $S_{i-1}(A,B)$ and $S_i(A,B)[n_{i+1}{:}]$ (for some $i$) 
-are enough to reconstruct the quotient of the Euclidean division of 
+is enough to reconstruct the quotient of the Euclidean division of 
 $S_i(A,B)$ by $S_{i-1}(A,B)$. Thus, one can recover $S_i(A,B)$ from 
 $S_{i-2}(A,B)$, $S_{i-1}(A,B)$ and $S_i(A,B)[n_{i+1}{:}]$. We deduce 
 from this that $\Lambda_J(A,B)$ determines uniquely all $S_i(A,B)$'s 
@@ -887,7 +888,7 @@ We fix $j \in \{0, \ldots, d-1\}$.
 We define a random variable $V_j^{(0)}$ as the greatest (nonnegative) 
 integer $v$ such that all scalar subresultants $r_{j'}$ have positive 
 valuation for $j'$ varying in the open range $(j-v, j+v)$ (with the
-convention that $r_{j'} = 0$ whenever $j < 0$). It is clear from the 
+convention that $r_{j'} = 0$ whenever $j' < 0$). It is clear from the 
 definition that $r_{j-v}$ or $r_{j+v}$ (with $v = V_j^{(0)}$) has 
 valuation $0$. Moreover, assuming first that $\val(r_{j+v}) = 0$, we 
 get by Proposition \ref{prop:relations}:
@@ -899,7 +900,7 @@ A^{(1)} = \frac 1 {r_{j+v} X^{j-v-1}} \cdot R_{j+v}[j{-}v{-}1\:{:}], \smallskip 
 \text{and} &
 B^{(1)} = A^{(1)} + \frac 1 {\pi X^{j-v-1}} \cdot R_{j+v-1}[j{-}v{-}1\:{:}].
 \end{array}$$
-We notice that $B^{(1)}$ has actually all its coefficients in $\A$ 
+We notice that all the coefficients of $B^{(1)}$ lie in $\A$ 
 because $r_{j'}$ has positive valuation for $j' \in (j-v, j+v)$.
 Furthermore, Corollary \ref{cor:bijection} shows that the 
 couple $(A^{(1)}, B^{(1)})$ is distributed according to the Haar measure 
@@ -907,7 +908,7 @@ on $(\A_{2v-1}[X])^2$. If $\val(r_{j+v}) = 0$, one can argue similarly
 by replacing $R_{j+v}$ and $R_{j+v-1}$ by the cofactors $U_{j-v}$ and 
 $U_{j-v+1}$ respectively. Replacing $(A,B)$ by $(A^{(1)}, B^{(1)})$, we 
 can now define a new random variable $V_j^{(1)}$ and, continuing this 
-way, we construct an infinite sequence $V_j^{(m)}$ such that:
+way, we construct an infinite sequence $V_j^{(m)}$ such that
 $V_j = \sum_{m \geq 0} V_j^{(m)}$.
 
 We now introduce a double sequence $(X_i^{(m)})_{0 \leq i < d, m 
@@ -920,10 +921,10 @@ $Y_j^{(0)} = \sum_{i=1}^d \min(X_{j-i}^{(0)}, \ldots, X_{j+i}^{(0)})$.
 In the same way, keeping in mind that $A^{(1)}$ and $B^{(1)}$ have both 
 degree $2V_j^{(0)} - 1$, we find that $V_j^{(1)}$ has the same 
 distribution than $\sum_{i=1}^{V_j^{(0)} - 1} \min(X_{j-i}^{(1)}, 
-\ldots, X_{j+i}^{(1)})$, which can be rewritten as:
+\ldots, X_{j+i}^{(1)})$, which can be rewritten as
 $Y_j^{(1)} = \sum_{i=1}^d \min(X_{j-i}^{(0)}, X_{j-i}^{(1)}, \ldots, 
-X_{j+i}^{(0)}, X_{j+i}^{(1)})$
-and the equidistribution of $(A^{(1)}, B^{(1)})$ shows that the 
+X_{j+i}^{(0)}, X_{j+i}^{(1)})$. More precisely,
+the equidistribution of $(A^{(1)}, B^{(1)})$ shows that the 
 joint distribution $(V_j^{(0)}, V_j^{(1)})$ is the same as those
 of $(Y_j^{(0)}, Y_j^{(1)})$. Repeating the argument, we see that
 $(V_j^{(m)})_{m \geq 0}$ is distributed as $(Y_j^{(m)})_{m \geq 0}$
@@ -1166,7 +1167,7 @@ Dropping entirely~(a') seems nevertheless to be more difficult. Let us
 move to assumption~(b) and first remark that it is satisfied with high 
 probability if $N$ is large compared to $2 \cdot \log_d p$. Thus, 
 replacing eventually $N$ by $3 \cdot \log_d p$ (which does not affect 
-the complexity), the assumption~(b) is harmless in average --- but maybe
+the complexity), the assumption~(b) is harmless on average --- but maybe
 not on particularly bad instances. We finally underline that, if we are
 just interested in computing the $j$-th subresultant for a particular
 $j$, then we just need to assume the non-vanishing of the scalar
@@ -1254,10 +1255,10 @@ known at precision $O(\pi^N)$. We have proved that if we are using the
 model of interval arithmetic, then the subresultant pseudo-remainder
 sequence algorithm will output $\Res(A,B)$ at precision 
 $O(\pi^{N-N_{\text{int}}})$ where $N_{\text{int}}$ grows linearly 
-with respect to $d$ in average. On the other hand, if we are using 
+with respect to $d$ on average. On the other hand, if we are using 
 ultrametric floating point arithmetic, then the same algorithm will
 output $\Res(A,B)$ at precision $O(\pi^{N-N_{\text{float}}})$ where 
-$N_{\text{float}}$ grows linearly with respect to $\log d$ in average.
+$N_{\text{float}}$ grows linearly with respect to $\log d$ on average.
 We emphasize furthermore that this result is \emph{proved}! From this
 point of view, floating point arithmetics seems to behave better in
 the ultrametric setting: we may hope to get proved results relatively
