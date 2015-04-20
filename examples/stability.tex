@@ -27,6 +27,7 @@
 \DeclareMathOperator{\Grass}{Grass}
 \DeclareMathOperator{\Lat}{Lat}
 \DeclareMathOperator{\round}{round}
+\DeclareMathOperator{\rank}{rank}
 
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
@@ -67,6 +68,10 @@
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
+\conferenceinfo{ISSAC'15,}{July 6--9, 2015, Bath, United Kingdom.}
+\copyrightetc{Copyright \copyright~2015 ACM \the\acmcopyr}
+\crdata{978-1-4503-3435-8/15/07}
+
 \begin{document}
 
 \newtheorem{theo}{Theorem}[section]
@@ -106,20 +111,24 @@ We also analyze determinants, characteristic polynomials and LU factorization us
 We supplement our observations with numerical experiments.
 \end{abstract}
 
-\vspace{1mm}
- \noindent
- {\bf Categories and Subject Descriptors:} \\
-\noindent I.1.2 [{\bf Computing Methodologies}]:{~} Symbolic and Algebraic
-  Manipulation -- \emph{Algebraic Algorithms}
+\category{I.1.2}{Computing Methodologies}{Symbolic and Algebraic Manipulation -- \emph{Algebraic Algorithms}}
+\terms{Algorithms, Theory}
+\keywords{$p$-adic precision, linear algebra, ultrametric analysis}
 
- \vspace{1mm}
- \noindent
- {\bf General Terms:} Algorithms, Theory
-
- \vspace{1mm}
- \noindent
- {\bf Keywords:} $p$-adic precision, linear algebra, ultrametric analysis
-\medskip
+%\vspace{1mm}
+% \noindent
+% {\bf Categories and Subject Descriptors:} \\
+%\noindent I.1.2 [{\bf Computing Methodologies}]:{~} Symbolic and Algebraic
+%  Manipulation -- \emph{Algebraic Algorithms}
+%
+% \vspace{1mm}
+% \noindent
+% {\bf General Terms:} Algorithms, Theory
+%
+% \vspace{1mm}
+% \noindent
+% {\bf Keywords:} $p$-adic precision, linear algebra, ultrametric analysis
+%\medskip
 
 \section{Introduction}
 
@@ -140,13 +149,13 @@ with $p$-adic numbers --- was designed only recently in
 
 In \cite{caruso-roe-vaccon:14a}, we advocate the use of lattices
 to track the precision of vectors and points on $p$-adic manifolds.
-The main result of \emph{loc.~cit.}, recalled here as Proposition \ref{prop:precision},
+The main result of \emph{loc.~cit.}, recalled in Proposition \ref{prop:precision},
 allows for the propagation of precision using differentials.  While
-allowing arbitrary lattices in representing precision carries a high
+representing precision by lattices carries a high
 cost in space and time requirements, the reduced precision loss
-can sometimes make up for these costs as part of a larger algorithm.
-In this paper we apply the ideas of \cite{caruso-roe-vaccon:14a} to
-a variety of linear algebraic tasks.
+can sometimes overwhelm these costs within a larger algorithm.
+In this paper, we apply the ideas of \cite{caruso-roe-vaccon:14a} to
+certain linear algebraic tasks.
 
 \smallskip
 
@@ -207,11 +216,10 @@ Section \ref{ssec:det} finds the precision of the determinant of a
 matrix, and Section \ref{ssec:charpoly} applies the resulting formula to
 characteristic polynomials.  We define the precision polygon of a matrix, which
 gives a lower bound on the precision of the characteristic polynomial.
-The precision polygon lies above the Hodge polygon of the matrix, and
+This polygon lies above the Hodge polygon of the matrix;
 we give statistics on the difference and the amount of diffuse precision.
-Finally, we find the precision of LU factorization, determine the conditions under which
-Proposition \ref{prop:precision} may be applied, and again describe experiments
-with lattice-based precision analysis.
+Finally, we apply Proposition \ref{prop:precision} to LU factorization and
+describe experiments with lattice-based precision analysis.
 
 Section \ref{ssec:grassgeo} reviews the geometry of Grassmannians,
 which we apply in Section \ref{ssec:grassdiff} to differentiating
@@ -225,10 +233,10 @@ In the appendix, we give a proof of Proposition \ref{prop:boundLambdaf}.
 
 \noindent
 {\bf Notation.}
-Throughout the paper, the letter $K$ will refer to a complete discrete 
+Throughout the paper, $K$ will refer to a complete discrete 
 valuation field. Usual examples are finite extensions of $\Qp$ and 
-Laurent series fields over a field. We denote by $\val : K \to \Z \cup 
-\{+\infty\}$ the valuation on $K$ normalized by $\val(K^\star) = \Z$, by 
+Laurent series fields over a field. We denote by $\val : K \twoheadrightarrow \Z \cup 
+\{+\infty\}$ the valuation on $K$, by 
 $\OK$ the ring of integers and by $\pi \in K$ an element of valuation 
 $1$. We let $\Vert \cdot \Vert$ be the norm associated to $\val$.
 
@@ -236,23 +244,26 @@ $1$. We let $\Vert \cdot \Vert$ be the norm associated to $\val$.
 \label{sec:theory}
 
 The aim of this section is to briefly summarize the content of 
-\cite{caruso-roe-vaccon:14a} and fill in certain details. % Add usual way to track precision.
+\cite{caruso-roe-vaccon:14a} and fill in certain details.
 
 \subsection{Lattices as precision data}
 \label{ssec:latticeprec}
 
-Roughly speaking, the main proposal of \cite{caruso-roe-vaccon:14a} is 
-to use lattices to track precision when computing with elements lying in 
-vector spaces over $K$.
+In \cite{caruso-roe-vaccon:14a}, we suggest the 
+use of lattices to represent the precision of elements in 
+$K$-vector spaces.  We shall contrast this approach with the
+\emph{coordinate-wise method} used in Sage and Magma,
+where the precision of an element is specified by giving the precision
+of each coordinate separately.
 
-More explicitly, let us consider a finite 
+Consider a finite 
 dimensional\footnote{The framework of \cite{caruso-roe-vaccon:14a} is 
 actually those of Banach spaces. However, we will not need infinite 
-dimensional spaces in the present paper.} normed vector space $E$ 
+dimensional spaces here.} normed vector space $E$ 
 defined over $K$. We use the notation $\Vert \cdot \Vert_E$ for the norm 
 on $E$ and $B^-_E(r)$ (resp. $B^{\phantom -}_E(r)$) for the open (resp. 
-closed) ball of radius $r$ centered at the origin. A lattice $L \subset 
-E$ is, by definition, a sub-$\O_K$-module which generates $E$ over $K$. 
+closed) ball of radius $r$ centered at the origin. A \emph{lattice} $L \subset 
+E$ is a sub-$\O_K$-module which generates $E$ over $K$. 
 Since we are working in a ultrametric world, the balls $B^{\phantom 
 -}_E(r)$ and $B^-_E(r)$ are examples of lattices. Actually, lattices 
 should be thought of as special neighborhoods of $0$ and therefore are good 
@@ -276,18 +287,21 @@ f(v_0 + H) = f(v_0) + f'(v_0) (H).
 \end{equation}
 \end{prop}
 
-Proposition \ref{prop:precision} can be rephrased in terms of precision 
-as follows: if the input $v_0$ is known at precision $H$, then $f(v_0)$ 
-is known up to $f'(v_0)(H)$ and this precision is optimal. Optimality is 
-reflected by the equality sign in Eq.~\eqref{eq:firstorder}. % define coordinate-wise and lattice-wise here.
+This proposition enables the \emph{lattice method} of tracking precision,
+where the precision of the input is specified as a lattice $H$ and precision
+is tracked via differentials of the steps within a given algorithm.
+The equality sign in Eq.~\eqref{eq:firstorder} shows that this method
+yields the optimum possible precision.
 
-In \cite{caruso-roe-vaccon:14a}, we also explained that if the function 
+In \cite{caruso-roe-vaccon:14a}, we also explained that if 
 $f$ is locally analytic, then the constant $\delta$ appearing in
-Proposition \ref{prop:precision} can be made explicit in terms of the
-growing function $\Lambda(f)$ of $f$ defined by:
-$$\textstyle \Lambda(f)(v) = 
+Proposition \ref{prop:precision} can be expressed in terms of the
+growing function $\Lambda(f)$ defined by
+\[
+\textstyle \Lambda(f)(v) = 
 \log \big( \sup_{h \in B^-_E(e^v)} \Vert 
-f(h) \Vert \big)$$
+f(h) \Vert \big)
+\]
 with the convention that $\Lambda(f)(v) = +\infty$ if $f$ does not
 converge on $B^-_E(e^v)$.
 We refer to \cite[Proposition 3.12]{caruso-roe-vaccon:14a} for the
@@ -307,17 +321,14 @@ Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
 \end{prop}
 
 In \cite[Appendix A]{caruso-roe-vaccon:14a}, the theory is extended 
-to manifolds over $K$ and covers in this way a very large family of
-situations (\emph{e.g.} computation with vector spaces as discussed
-in \S \ref{sec:vectorspaces}). In this extended framework, the precision 
+to manifolds over $K$, where the precision 
 datum at some point $x$ is a lattice in the tangent space at $x$. 
 Propositions \ref{prop:precision} and \ref{prop:precision2} have
-analogues as well, simply obtained by working in charts.
+analogues obtained by working in charts.  We use this extension
+to compute with vector spaces in \S \ref{sec:vectorspaces}.
 
-In this paper, we will compare the use of lattices to track precision
-with the standard coordinate-wise methods.  The following definition
-will be useful in discussing the differences.  Suppose $E$ is equipped
-with a basis $(e_1, \ldots, e_n)$ and write $\pi_i : E \to Ke_i$ for the projections.
+We will use the following definition in contrasting lattice and coordinate-wise methods. 
+Suppose $E$ is equipped with a basis $(e_1, \ldots, e_n)$ and write $\pi_i : E \to Ke_i$ for the projections.
 
 \begin{deftn} \label{def:diffused}
 If $H \subset E$ is a lattice, let
@@ -326,11 +337,12 @@ H_0 = \pi_1(H) \oplus \cdots \oplus \pi_n(H).
 \]
 Set $k = \text{length}(H_0/H)$.  Then we say that $H$ has $k$
 \emph{diffused digits of precision}.
-\end{deftn} % Add explanation here - smallest lattice containing H here.
+\end{deftn}
 If $H$ represents the actual precision of some object, then
-$H_0$ is the best coordinate-wise approximation to $H$.
-The diffused precision is not visible coordinate-wise in the
-specified basis of $E$.
+$H_0$ is the smallest diagonal lattice containing $H$.  Since
+coordinate-wise methods cannot yield a precision better than $H_0$,
+$k$ provides a lower bound on the number of $p$-adic digits
+gained by lattice methods over standard methods.
 
 \subsection{A bound on a growing function}
 \label{ssec:boundLambdaf}
@@ -372,13 +384,18 @@ $({-}\infty, \nu]$\footnote{We note that this assumption is fulfilled if
 we take $\Lambda_g = \Lambda(g)$ because we have assumed that $g(0)$ 
 does not vanish.}. We introduce the functions $\tau_\nu$ and $\Lambda_f$ 
 defined by:
-$$\begin{array}{rll}
-&\tau_\nu(x) = x & \text{if } x \leq \nu \\
-& \hphantom{\tau_\nu(x)} = {+} \infty & \text{otherwise} \medskip \\
-\text{and} &
-\multicolumn{2}{l}{\Lambda_f(x) = 
-  \tau_\nu \circ (\id + \Lambda_g \circ \Lambda_h)(x + \alpha)}
-\end{array}$$
+\begin{align*}
+\tau_\nu(x) &= \smash{\left\{\begin{array}{ll} x & \mbox{ if } x \le \nu, \\
++\infty & \mbox{ otherwise;} \end{array}\right.} \\[8pt]
+\mbox{and } \Lambda_f(x) &= \tau_\nu \circ (\id + \Lambda_g \circ \Lambda_h)(x + \alpha),
+\end{align*}
+%$$\begin{array}{rll}
+%&\tau_\nu(x) = x & \text{if } x \leq \nu \\
+%& \hphantom{\tau_\nu(x)} = {+} \infty & \text{otherwise} \medskip \\
+%\text{and} &
+%\multicolumn{2}{l}{\Lambda_f(x) = 
+%  \tau_\nu \circ (\id + \Lambda_g \circ \Lambda_h)(x + \alpha)}
+%\end{array}$$
 where $\alpha$ is a real number satisfying $\Vert n! \Vert \geq 
 e^{-\alpha n}$ for all $n$. If $p$ is the characteristic of the residue field,
 a suitable value for $\alpha$ is $\alpha = - 
@@ -645,6 +662,11 @@ performing (that is $n$) whereas, in the second case, the growth seems
 to be only logarithmic. It would be nice to have a precise formulation 
 (and proof) of this heuristic.
 
+Note that multiplication of many random matrices plays a central
+role in the theory of random walks on homogeneous spaces \cite{Benoist:2012}.
+Better stability in computing such products helps estimate
+Lyapunov exponents in that context.
+
 \subsection{Determinant}
 \label{ssec:det}
 
@@ -653,9 +675,9 @@ is classical: at a point $M$ it is the linear map
 \[
 \detp(M) : dM \mapsto \tr(\com(M) \cdot dM),
 \]
-where $\com(M)$ stands for the comatrix of $M$, which is $\det(M) M^{-1}$ when $M$ is invertible. If $M$ is not 
-invertible, $\detp(M)$ is not surjective and we cannot apply Proposition 
-\ref{prop:precision}. Therefore, we suppose that $M$ is invertible for the rest of this section.
+where $\com(M)$ stands for the comatrix of $M$, which is $\det(M) M^{-1}$ when $M$ is invertible. If $\rank(M) < n - 1$,
+then $\detp(M)$ is not surjective and we cannot apply Proposition 
+\ref{prop:precision}. Therefore, we suppose that $\rank(M) \ge n-1$ for the rest of this section.
 
 As with matrix multiplication, we first determine the image of
 the standard lattice $\mathcal L_0 = M_{n,n}(\O_K)$ under $\detp(M)$.
@@ -702,9 +724,9 @@ generalized eigenvalue. For now on, we make this assumption.
 Recall that the \emph{Newton polygon} $\NP(f)$ of a polynomial $f(X) = 
 \sum_{i} a_i X^i$ is the lower convex hull of the points $(i, 
 \val(a_i))$ and the \emph{Newton polygon} $\NP(M)$ of a matrix $M$ is 
-$\NP(\charpoly(M))$.  The \emph{Hodge polygon} of $M$ is the lower 
+$\NP(\charpoly(M))$.  The \emph{Hodge polygon} $\HP(M)$ of $M$ is the lower 
 convex hull of the points $(i, \sum_{j = 1}^{n-i} \sigma_j(M))$. For 
-any matrix $M$, the Newton polygon lies above the Hodge polygon 
+any matrix $M$, the polygon $\NP(M)$ lies above $\HP(M)$ 
 \cite{kedlaya:padicDiffEq}*{Thm. 4.3.11}.
 
 Such polygons arise naturally in tracking the precision of polynomials 
@@ -712,10 +734,9 @@ Such polygons arise naturally in tracking the precision of polynomials
 lattice $\mathcal{L}_P$ in $K_{<n}[X]$ consisting of polynomials whose 
 Newton polygons lie above $P$.  This lattice is generated by monomials 
 $a_iX^i$, where $\val(a_i)$ is the ceiling of the height of $P$ at $i$.  
-One uses these polygons to do a certain kind of coordinate-wise 
-precision tracking for polynomials, bounding the actual precision 
-lattice. We now introduce another polygon, bounded 
-between these two, that will provide an estimate on the precision of $\charpoly(M)$.
+These polygons are used in a coordinate-wise precision tracking for polynomial
+arithmetic. We now introduce another polygon, bounded 
+between $\NP(M)$ and $\HP(M)$, that will provide an estimate on the precision of $\charpoly(M)$.
 
 \begin{deftn}
 The \emph{precision polygon} $\PP(M)$ of $M$ is the lower convex hull of 
@@ -724,7 +745,7 @@ the Newton polygon of the entries of $\com(X{-}M)$.
 
 It is clear from the definition $\mathcal L_{\PP(M)} \subset 
 \charp(M)(\mathcal{L}_0)$ where $\mathcal{L}_0$ is the standard lattice 
-$M_{n,n}(\OK)$. More precisely $\PP(M)$ is the smallest polygon $P$ for 
+$M_{n,n}(\OK)$. More precisely, $\PP(M)$ is the smallest polygon $P$ for 
 which the inclusion $\mathcal L_P \subset \charp(M)(\mathcal{L}_0)$ holds. By 
 Proposition \ref{prop:precision}, the precision polygon determines the minimal 
 precision losses possible when encoding polynomial precision using polygons.
@@ -750,7 +771,7 @@ at the abscissa $n{-}1$. By definition so does $T_1(\HP(M))$. The fact
 that $\PP(M)$ and $T_1(\HP(M))$ meet at abscissa $0$ follows from
 Proposition \ref{prop:detmatrix}.
 
-It remains to prove the comparison with Newton polygon.
+It remains to prove the comparison with the Newton polygon.
 Set $f = \charpoly(M)$, set $m_{i,j}$ as the $(i,j)$-th entry of $M$, 
 $f_{i,j}$ as the $(i,j)$-th entry of $\com(X{-}M)$ and $\mu_{i,j} = 
 \val(m_{i,j})$. We write $f[k]$ 
@@ -797,9 +818,9 @@ contained within $\O_{K, <n}[X]$ with index at least $\sum_{i=1}^{n-1}
 $\mathcal{E}$ via the transformation $X \mapsto 1 + X$, but $\PP(1 + M)$ 
 is now flat with height $0$.
 
-In conclusion, for randomly chosen matrices, approximating $\mathcal{E}$ 
+For randomly chosen matrices, approximating $\mathcal{E}$ 
 using the Hodge polygon loses only a small amount of precision. However,
-if the $\sigma_i(M)$'s are known to be large or if $M$ is a translate of
+if the $\sigma_i(M)$'s are large or if $M$ is a translate of
 such a matrix, using lattice precision can be very useful.
 
 \subsection{LU factorization}
@@ -809,7 +830,7 @@ such a matrix, using lattice precision can be very useful.
 %the framework of \S \ref{ssec:boundLambdaf} applies directly.
 In this section, we denote by $\Vert \cdot \Vert$ the subordinate matrix norm on $M_n(K)$
 and, given a positive real number $C$, we let $B(C)$ be the closed ball 
-in $M_n(K)$ centered at the origin of radius $C$. We consider in addition
+in $M_n(K)$ centered at the origin of radius $C$. We consider
 the following subsets of $M_n(K)$:
 
 \noindent $\bullet$
@@ -896,7 +917,7 @@ $D'(M)$ is lower-triangular in this basis. Projecting $D'(M)$ onto each
 coordinate, we find the best coordinate-wise loss of precision we can 
 hope for the computation of $D$ is given by $\sum_u \left( \max_v \left( 
 \val(D'(M)_{u,v}) \right) \right)$. This number should be compared to
-$\val(\det(D'(M)))$, which is the lattice-method loss of precision. 
+$\val(\det(D'(M)))$, which is precision lost in the lattice method. 
 %With the language of Definition \ref{def:diffused},
 The number of diffused digits of precision of $D'(M)(M_{n,n}(\OK))$ is 
 then the difference between these two numbers.
@@ -1098,22 +1119,22 @@ $dw \in \Hom(W,F/W)$ such that $dw \circ \varphi = d \tilde w$.
 {\bf Inverse images.}
 We now consider the inverse image mapping $\II$ sending a 
 pair $(f,W) \in \mathcal W = \Hom(E,F) \times \Grass(F,d)$ to 
-$f^{-1}(W)$. As before, this map does not take its values in a single 
-Grassmannian and we need to stratify $\mathcal W$ in order to get 
-differentiable functions. For each integer $r \in [0,n]$, we introduce 
+$f^{-1}(W)$. As before, this map does not take values in a single 
+Grassmannian, so we need to stratify $\mathcal W$ in order to get 
+differentiable functions. For each integer $s \in [0,n]$, we introduce 
 the submanifold $\mathcal W_s$ of $\mathcal W$ consisting of those 
 pairs $(f,W)$ such that $\dim f^{-1}(W) = s$. For all $s$, $\II$ 
 induces a continuous function
-$\II_r : \mathcal W_r \to \Grass(E,s)$.
-Pick $(f,W) \in \mathcal W_r$. Set $V = f^{-1}(W)$ and denote by $w : F 
+$\II_s : \mathcal W_s \to \Grass(E,s)$.
+Pick $(f,W) \in \mathcal W_s$. Set $V = f^{-1}(W)$ and denote by $w : F 
 \to F/W$ the canonical projection.
 Similarly to what we have done for direct images, one can prove that
-the tangent space of $\mathcal W_r$ at some point $(f,W) \in \mathcal
-W_r$ is the subspace of $\Hom(E,F) \times \Hom(W,F/W)$ consisting of 
+the tangent space of $\mathcal W_s$ at some point $(f,W) \in \mathcal
+W_s$ is the subspace of $\Hom(E,F) \times \Hom(W,F/W)$ consisting of 
 pairs $(df,dw)$ such that
 $d \tilde v = (w \circ df + dw \circ f)_{|W}$
 factors through the linear mapping $\varphi : E/V \to F/W$ induced by 
-$f$. Furthermore $\II_r$ is differentiable at $(f,W)$ and its 
+$f$. Furthermore $\II_s$ is differentiable at $(f,W)$ and its 
 differential is the linear mapping that takes $(df,dw)$ as above to the 
 unique element $dv \in \Hom(V,E/V)$ satisfying $\varphi \circ dv =
 d\tilde v$.
@@ -1121,7 +1142,7 @@ d\tilde v$.
 Direct images and inverse images are related by duality
 as follows: if $f : E \to F$ is any linear map and $W$ is a subspace
 of $F$, then $f^\star(W^\perp) = f^{-1}(W)^\perp$. We 
-can thus deduce the differentials of $\DI_r$ from those of $\II_s$ and 
+can thus deduce the differentials of $\DI_s$ from those of $\II_s$ and 
 \emph{vice versa}.
 
 %\begin{rem}
@@ -1145,7 +1166,7 @@ can be computed as before. The
 tangent space of $\mathcal C_d$ at a given point $(V_1, V_2)$ consists 
 of pairs $(dv_1, dv_2) \in \Hom(V_1, E/V_1)
 \times \Hom(V_2, E/V_2)$ such that $dv_1 \equiv dv_2 \pmod{V_1 + V_2}$ 
-on the intersection $V_1 \cap V_2$ and the differential of $\Sigma_r$
+on the intersection $V_1 \cap V_2$, and the differential of $\Sigma$
 at $(V_1, V_2)$ maps $(dv_1, dv_2)$ to $dv \in \Hom(V, E/V)$ (with $V
 = V_1 + V_2$) defined by $dv(v_1 + v_2) = dv_1(v_1) + dv_2(v_2)$ ($v_1
 \in V_1$, $v_2 \in V_2$).
