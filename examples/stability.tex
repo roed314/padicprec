@@ -387,6 +387,9 @@ $({-}\infty, \nu]$\footnote{We note that this assumption is fulfilled if
 we take $\Lambda_g = \Lambda(g)$ because we have assumed that $g(0)$ 
 does not vanish.}. We introduce the functions $\tau_\nu$ and $\Lambda_f$ 
 defined by:
+
+\vspace{-0.2cm}
+
 \begin{align*}
 \tau_\nu(x) &= \smash{\left\{\begin{array}{ll} x & \mbox{ if } x \le \nu, \\
 +\infty & \mbox{ otherwise;} \end{array}\right.} \\[8pt]
@@ -437,8 +440,11 @@ We have $\Lambda(f) \leq \Lambda_f$.
 \end{tikzpicture}
 \hfill \null
 
+\vspace{-0.1cm}
+
 \caption{Admissible region for the graph of $\Lambda(f)$}
 \label{fig:area}
+
 \end{figure}
 
 Figure \ref{fig:area} illustrates Proposition \ref{prop:boundLambdaf}. 
@@ -452,9 +458,7 @@ that the Taylor expansion of $f(z)$ starts with the term
 $g(0) z$. Hence, on a neighborhood of ${-}\infty$, we have 
 $\Lambda(f)(x) = x + \log \Vert g(0) \Vert$. Using convexity, we 
 get:
-\[
-\Lambda(f)(x) \geq x + \log \Vert g(0) \Vert,
-\]
+$\Lambda(f)(x) \geq x + \log \Vert g(0) \Vert$
 %  \quad \forall x \in \R.$$
 for all $x \in \R$.  In other words, the graph of $\Lambda(f)$ lies above the brown line.
 Furthermore, we know that the slopes of $\Lambda(f)$ are all integral
@@ -506,11 +510,9 @@ underlying vector spaces. The function $\Lambda(h) : \R \to \R$ then maps $x$ to
 \section{Matrices}
 \label{sec:matrices}
 
-Let $M_{m,n}(K)$ denote the space of $m \times n$ matrices over $K$.  We will repeatedly
-use the Smith decomposition for $M \in M_{m,n}(K)$:
-\[
-M = U_M \cdot \Delta_M \cdot V_M,
-\]
+Let $M_{m,n}(K)$ denote the space of $m \times n$ matrices over $K$.  
+We will repeatedly use the Smith decomposition for $M \in M_{m,n}(K)$,
+which is $M = U_M \cdot \Delta_M \cdot V_M$
 with $U_M$ and $V_M$ unimodular and $\Delta_M$ diagonal.  Write $\sigma_i(M)$
 for the valuation of the $(i,i)$-th entry of $\Delta_M$, and by convention set
 $\sigma_i(M) = +\infty$ if $i > \min(m,n)$.  Order the $\sigma_i(M)$ so that $\sigma_i(M) \le \sigma_{i+1}(M)$.
@@ -952,7 +954,7 @@ Results for a sample of $2000$ instances}
 \end{center}
 \renewcommand{\arraystretch}{1}
 
-\vspace{-0.4cm}
+\vspace{-0.3cm}
 
 \caption{Loss of precision for LU factorization}
 \label{fig:LU}
