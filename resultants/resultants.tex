@@ -1,8 +1,11 @@
-\documentclass{sig-alternate}
+%\documentclass{sig-alternate}
 %\documentclass{lms}
+\documentclass{article}
 \usepackage[utf8]{inputenc}
 
-\usepackage{amsmath,amssymb}
+\usepackage{vmargin}
+
+\usepackage{amsmath,amssymb,amsthm}
 %\usepackage{amsrefs}
 \usepackage[usenames,dvipsnames]{color}
 \usepackage{stmaryrd}
@@ -81,14 +84,15 @@
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
-\title{Resultants and subresultants of p-adic polynomials}
+\title{Resultants and subresultants of $p$-adic polynomials}
 
-\numberofauthors{1}
-\author{
-\alignauthor Xavier Caruso\\
-  \affaddr{Universit\'e Rennes 1}\\
-  \email{\normalsize \textsf{xavier.caruso@normalesup.org}}
-}
+%\numberofauthors{1}
+%\author{
+%\alignauthor Xavier Caruso\\
+%  \affaddr{Universit\'e Rennes 1}\\
+%  \email{\normalsize \textsf{xavier.caruso@normalesup.org}}
+%}
+\author{Xavier Caruso}
 
 \maketitle
 
@@ -102,22 +106,6 @@ On the way, we completely determine the distribution of the valuation of
 the subresultants of two random monic $p$-adic polynomials having the
 same degree.
 \end{abstract}
-
-\vspace{1mm}
- \noindent
- {\bf Categories and Subject Descriptors:} \\
-\noindent I.1.2 [{\bf Computing Methodologies}]:{~} Symbolic and Algebraic
-  Manipulation -- \emph{Algebraic Algorithms}
-
- \vspace{1mm}
- \noindent
- {\bf General Terms:} Algorithms, Theory
-
- \vspace{1mm}
- \noindent
- {\bf Keywords:} $p$-adic precision, subresultants, random $p$-adic 
-polynomials
-\medskip
 
 \section{Introduction}
 
@@ -177,7 +165,7 @@ of two random monic polynomial of fixed degree over $\Z_2$.}
 %
 Figure \ref{fig:precision} illustrates the instability of extended Euclide's 
 algorithm when it is called on random inputs which are monic $2$-adic 
-polynomials of fixed degree. Looking at the last line, we see that 
+polynomials of fixed degree. \todo{(Donner l'algorithme.)} Looking at the last line, we see that 
 extended Euclide's algorithm outputs the B\'ezout coefficients of two 
 monic $2$-adic polynomials of degree $100$ with an average loss of 
 $161.1$ significant digits by coefficient whereas a stable 
@@ -193,10 +181,8 @@ seems to be independant of it. In other words, the instability of
 Euclide's algorithm is becoming more and more critical when the degree 
 of the input increases.
 
-\medskip
+\paragraph{Content of the paper}
 
-\noindent
-{\bf Content of the paper.}
 The aim of this article is twofold. We first provide in \S 
 \ref{sec:unstable} a theoretical study of the instability phenomenon 
 described above and give strong evidences that the loss of precision 
@@ -215,7 +201,43 @@ $\Zp$ (satisfying an additional mild assumption). This basically allows
 to stably compute \textsc{gcd}s assuming that the degree of the 
 \textsc{gcd} is known in advance.
 
+\paragraph{Notations}
+
+Figure~\ref{fig:notations} summerizes the main notations used in
+this paper. The definitions of many of them will be recalled in 
+\S \ref{subsec:setting}.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{rcl}
+$\ring$ &--- & a commutative ring (without any further assumption) \\
+$\A$ &---& a complete discrete valuation ring \\
+$\pi$ &---& a uniformizer of $\A$ \\
+$K$ &---& the fraction field of $\A$ \\
+$k$ &---& the residue field of $\A$ \smallskip \\
+
+$\ring_{<n}[X]$ &---& the free $\ring$-module consisting of
+polynomials over $\ring$ of degree $<n$ \\
+$\ring_{\leq n}[X]$ &---& the free $\ring$-module consisting of
+polynomials over $\ring$ of degree $\leq n$ \\
+$\ring_n[X]$ &---& the affine space consisting of \emph{monic}
+polynomials over $\ring$ of degree $n$. \smallskip \\
+
+$\Res^{d_A,d_B}(A,B)$ &---& The resultant of $A$ and
+$B$ ``computed in degree $(d_A,d_B)$'' \\
+$\Res_j^{d_A,d_B}(A,B)$ &---& The $j$-th subresultant of $A$ and
+$B$ ``computed in degree $(d_A,d_B)$'' \\
+\end{tabular}
+\end{center}
+
+\vspace{-0.2cm}
+
+\caption{Notations used in the paper}
+\label{fig:notations}
+\end{figure}
+
 \section{The setting}
+\label{subsec:setting}
 
 The aim of this section is to introduce the setting we shall work in 
 throughout this paper (which is a bit more general than those considered 
@@ -223,53 +245,123 @@ in the introduction).
 
 \subsection{Complete discrete valuation rings}
 
-\noindent
-\textbf{Definitions.}
-Let $\A$ be a \emph{discrete valuation ring} (DVR for short), that is a 
-domain equipped with a map $\val : \A \to \Z \cup \{+\infty\}$ --- the 
-so-called \emph{valuation} --- satisfying the four axioms: (1)~$\val(x) 
-= +\infty$ iff $x = 0$, (2)~$\val(xy) = \val(x) + \val(y)$ and 
-(3)~$\val(x+y) \geq \min(\val(x), \val(y))$, (4)~any element of 
-valuation $0$ is invertible. In the sequel, we shall assume that the
-valuation is normalized so that it takes the value $1$. We recall that a 
-DVR admits a unique maximal ideal $\m$, consisting of elements of 
-positive valuation. Furthermore, this ideal is principal and generated 
-by any element of valuation $1$. Such an element is called a 
+\begin{deftn}
+A \emph{discrete valuation ring} (DVR for short) is a domain $\A$
+equipped with a map $\val : \A \to \Z \cup \{+\infty\}$ --- the 
+so-called \emph{valuation} --- satisfying the four axioms: 
+\begin{enumerate}
+\item $\val(x) = +\infty$ iff $x = 0$
+\item $\val(xy) = \val(x) + \val(y)$
+\item $\val(x+y) \geq \min(\val(x), \val(y))$
+\item any element of valuation $0$ is invertible.
+\end{enumerate}
+\end{deftn}
+
+Throughout this paper, we fix a discrete valuation ring $\A$ and assume 
+that the valuation on it is normalized so that it takes the value $1$. 
+We recall that $\A$ admits a unique maximal ideal $\m$, consisting of 
+elements of positive valuation. Furthermore, this ideal is principal and 
+generated by any element of valuation $1$. Such an element is called a 
 \emph{uniformizer}. Let us fix one of them and denote it by $\pi$. The 
-\emph{residue field} of $W$ is the quotient $W/\m = W/\pi W$ and we 
+\emph{residue field} of $\A$ is the quotient $\A/\m = \A/\pi\A$ and we 
 shall denote it by $k$.
 
 The valuation defines a distance $d$ on $\A$ by letting $d(x,y) = 
-e^{-\val(x-y)}$ for all $x, y \in \A$. We say that $\A$ is \emph{complete}
-if it is complete with respect to the previous distance. Assuming that
-$\A$ is complete, any element $x \in \A$ can be written uniquely as a 
-convergent series:
+e^{-\val(x-y)}$ for all $x, y \in \A$. We say that $\A$ is 
+\emph{complete} if it is complete with respect to $d$, in the sense that 
+every Cauchy sequence converges. Assuming that $\A$ is complete, any 
+element $x \in \A$ can be written uniquely as a convergent series:
 \begin{equation}
 \label{eq:expandCDVR}
 x = x_0 + x_1 \pi + x_2 \pi^2 + \cdots + x_n \pi^n + \cdots
 \end{equation}
-where the $x_i$'s lie in a fixed set of representatives of classes
-modulo $\pi$. Therefore, as an additive group, $W$ is isomorphic to 
+where the $x_i$'s lie in a fixed set $S$ of representatives of classes
+modulo $\pi$. Therefore, as an additive group, $\A$ is isomorphic to 
 the set of sequences $\N \to k$. On the contrary, the multiplicative
 structure may vary.
 Let $K$ denote the fraction field of $\A$. The valuation $v$ extends 
 uniquely to $K$ by letting $\val(\frac x y) = \val(x) - \val(y)$. 
-Moreover, it follows from the axiom~(4) that $K$ is obtain from $\A$ by 
+Moreover, it follows from axiom 4 that $K$ is obtain from $\A$ by 
 inverting $\pi$. Thus, any element of $K$ can be uniquely written as an 
-infinite sum $x = \sum_{i=v}^\infty x_i \pi^i$ where $v$ is some 
-relative integer and the $x_i$'s are as above. The valuation of $x$ can 
-be easily read on this writing: it is the smallest integer $v$ such that 
-$x_i \not\equiv 0 \pmod \pi$.
+infinite sum:
+\begin{equation}
+\label{eq:expandCDVF}
+x = \sum_{i=i_0}^\infty x_i \pi^i
+\end{equation}
+where $i_0$ is some relative integer and the $x_i$'s are as above. The 
+valuation of $x$ can be easily read off this writing: it is the smallest 
+integer $i$ such that $x_i \not\equiv 0 \pmod \pi$.
 
-The two main examples of complete discrete valuation rings are the 
-ring of $p$-adic integers $\Zp$ and the ring of formal series 
-$k[[x]]$ over a field $k$. Their fraction fields are $\Q_p$ and
-$k((x))$ respectively.
+\subsubsection*{Examples}
+
+A first quite important class of examples of discrete valuation rings 
+are rings of formal power series over a field. They are equipped with 
+the standard valuation defined as follows: $\val(\sum_{i \geq 0} a_i 
+t^i)$ is the smallest integer $i$ with $a_i \geq 0$. The corresponding 
+distance on $k[[t]]$ is complete. Indeed, denoting by $f[i]$ the term in 
+$t^i$ in a series $f \in k[[t]]$, we observe that a sequence $(f_n)_{n 
+\geq 0}$ is Cauchy if and only if the sequences $(f_n[i])_{n \geq 0}$ 
+are all ultimately constant. A Cauchy sequence $(f_n)_{n \geq 0}$ 
+therefore converges to $\sum_{i \geq 0} a_i t^i$ where $a_i$ is the 
+limit of $f_n[i]$ when $n$ goes to $+\infty$.
+The DVR $k[[t]]$ has a distinguished uniformizer, namely $t$. Its 
+maximal ideal is then the principal ideal $(t)$ and its residue field
+is canonically isomorphic to $k$. 
+If one chooses $\pi = t$ and constant polynomials as representatives of 
+classes modulo $t$, the expansion \eqref{eq:expandCDVR} is nothing but 
+the standard writing of formal series.
+The fraction field of $k[[t]]$ is the ring of Laurent series over $k$
+and, once again, the expansion \eqref{eq:expandCDVF} corresponds to the
+usual writing of Laurent series.
 
 \medskip
 
-\noindent
-\textbf{Precision.}
+The above example is quite important because it models all complete 
+discrete valuation rings of equal characteristic, \emph{i.e.} whose 
+fraction field and residue field have the same characteristic. On the 
+contrary, in the mixed characteristic case (\emph{i.e.} when the 
+fraction field has characteristic $0$ and the residue field has positive 
+characteristic), the picture is not that simple.
+Nevertheless, one can construct several examples and, among them, the 
+most important is certainly the ring of $p$-adic integers $\Zp$ (where 
+$p$ is a fixed prime number). It is defined as the projective limit of 
+the finite rings $\Z/p^n\Z$ for $n$ varying in $\N$. In concrete terms, 
+an element of $\Zp$ is a sequence $(x_n)_{n \geq 0}$ with $x_n \in 
+\Z/p^n\Z$ and $x_{n+1} \equiv x_n \pmod{p^n}$. The addition (resp. 
+multiplication) on $\Zp$ is the usual coordinate-wise addition (resp. 
+multiplication) on the sequences. The $p$-adic valuation of $(x_n)_{n 
+\geq 0}$ as above is defined as the smallest integer $i$ such that $x_i 
+\neq 0$. We can easily check that $\Zp$ equipped with the $p$-adic 
+valuation satisfies the four above axioms and hence is a DVR. A
+uniformizer of $\Zp$ is $p$ and its residue field is $\Z/p\Z$. A
+canonical set of representatives of classes modulo $p$ is $\{0, 1,
+\ldots, p-1\}$.
+
+Given a $p$-adic integer $x = (x_n)_{n \geq 0}$, the $i$-th digit of 
+$x_n$ in $p$-basis is well defined as soon as $i<n$ and the 
+compatibility condition $x_{n+1} \equiv x_n \pmod{p^n}$ implies that 
+it does not depend on $n$. As a consequence, a $p$-adic integer can 
+alternatively be represented as a ``number'' written in $p$-basis having 
+an infinite number of digits, that is a formal sum of the shape:
+\begin{equation}
+\label{eq:expandZp}
+a_0 + a_1 p + a_2 p^2 + \cdots + a_n p^n + \cdots
+\quad \text{with } a_i \in \{0, 1, \ldots, p-1\}.
+\end{equation}
+Additions and multiplications can be performed on the above writing
+according to the rules we all studied at school (and therefore taking
+care of caries). Similarly to the equal characteristic case, we prove
+that $\Zp$ is complete with respect to the distance associated to the 
+$p$-adic valuation. The writing \eqref{eq:expandZp} corresponds to the 
+expansion \eqref{eq:expandCDVR} provided that we have chosen $\pi = p$ 
+and $S = \{0, 1, \ldots, p-1\}$.
+The fraction field of $\Zp$ is denoted by $\Qp$.
+
+\subsubsection*{Symbolic computations on DVR}
+
+\todo{Détailler cette partie}
+% parler notamment de précision absolue et de précision relative
+
 The memory of a computer being necessarily finite, it cannot be possible 
 to find a way to represent exhaustively all elements of $\A$. 
 Very often, mimicing what we do for real numbers, we choose to truncate 
@@ -291,50 +383,80 @@ balls in $\A$ which are more tractable.
 A first issue when dealing with numerical computations of \textsc{gcd}s 
 of polynomials over $\A$ is that the \textsc{gcd} function is not 
 continuous: it takes the value $1$ on an open dense subset without being 
-constant. This of course annihilate any hope of computing \textsc{gcd}s 
+constant. This of course annihilates any hope of computing \textsc{gcd}s 
 of polynomials when only approximations of them are known. Fortunately, 
 there exists a standard way to recover continuity in this context: it 
 consists in replacing \textsc{gcd}s by the so-called subresultants which 
 are playing an analoguous role. For this reason, in what follows, we will 
 exclusively consider the problem of computing subresultants.
 
-\medskip
+\subsubsection*{Definitions and notations}
 
-\noindent
-\textbf{Notations.} We refer to \cite[\S 3.3]{cohen} and \cite[\S 4.1]{winkler}
-for a nice 
-introduction to resultants and subresultants and seek to fix notations
-in this paragraph. For now, we work over a 
-general ring $\ring$. We denote by $\ring_{<n}[X]$ (resp. $\ring_{\leq 
-n}[X]$) the set of polynomials of degree less than $n$ (resp. less than 
-or equal to $n$) with coefficients in $\ring$. Both $\ring_{<n}[X]$ and 
-$\ring_{\leq n}[X]$ are free $\ring$-modules of finite rank.
-
+We recall briefly basic definitions and results about resultants and 
+subresultants. For a more complete exposition, we refer to \cite[\S 
+3.3]{cohen} and \cite[\S 4.1]{winkler}.
 Let $A$ and $B$ be two polynomials with coefficients in $\ring$ and 
 $d_A$ and $d_B$ be two integer greater than or equal to the degree of 
-$A$ and $B$ respectively. Given an integer $j \in \{0, \ldots, \min 
-(d_A, d_B)-1\}$, we denote by $\Res_j^{d_A, d_B}(A,B)$ the $j$-th 
-\emph{subresultant} of $(A,B)$ ``computing in degree $(d_A, d_B)$'' and 
-by $U_j^{d_A, d_B}(A,B)$ and $V_j^{d_A, d_B}(A,B)$ the corresponding 
-\emph{cofactors}. In what follows, we will freely drop the exponent 
-$(d_A,d_B)$ when $d_A$ and $d_B$ are the degrees of $A$ and $B$ 
-respectively.
+$A$ and $B$ respectively. We consider the Sylvester application:
+$$\begin{array}{rcl}
+\psi : \quad
+\ring_{< d_B}[X] \times \ring_{< d_A}[X] & \to &
+\ring_{< d_A+d_B}[X] \smallskip \\
+(U,V) & \mapsto & AU + BV
+\end{array}$$
+The Sylvester matrix is the matrix of $\psi$ in the canonical ordered
+basis, which are
+$$\begin{array}{rrl}
+& ((X^{d_B-1},0), \ldots, (X,0), (1,0), (0,X^{d_A-1}), \ldots, (0,1))
+& \text{for the source} \smallskip \\
+\text{and} & (X^{d_A+d_B-1}, \ldots, X, 1) &
+\text{for the target.}
+\end{array}$$
+The \emph{resultant} of $A$ and $B$ (computed in degree $d_A, d_B$) is the 
+determinant of the $\psi$; we denote it by $\Res^{d_A,d_B}(A,B)$. We 
+observe that it vanishes if $d_A > \deg A$ or $d_B > \deg B$. In what 
+follows, we will freely drop the exponent $d_A, d_B$ if $d_A$ and $d_B$ 
+are the degrees of $A$ and $B$ respectively.
+Using Cramer formulae, we can build polynomials $U^{d_A, d_B}(A,B) \in
+\ring_{< d_B}[X]$ and $V^{d_A, d_B}(A,B) \in \ring_{< d_A}[X]$ whose 
+coefficients are, up to a sing, maximal minors of the Sylvester matrix 
+such that:
+$$A \cdot U^{d_A, d_B}(A,B) + B \cdot V^{d_A, d_B}(A,B) = 
+\Res^{d_A, d_B}(A,B).$$
+There polynomials are called the \emph{cofactors} of $A$ and $B$
+(computed in degree $d_A, d_B$).
 
-We recall briefly that $\Res_j^{d_A, d_B}(A,B)$ (resp. $U_j^{d_A, 
-d_B}(A,B)$, resp. $V_j^{d_A, d_B}(A,B)$) is a polynomial with 
-coefficients in $\ring$ of degree at most $j$ (resp. $d-j-1$, resp. 
-$d-j-1$) whose coefficients can be expressed, up to a sign, as minors
-of the Sylvester matrix. These polynomials satisfy in addition the
-relation:
-$$A \cdot U_j^{d_A,d_B}(A,B) + B \cdot V_j^{d_A,d_B}(A,B) = 
-\Res^{d_A,d_B}_j(A,B).$$
-The $j$-th coefficient of $R_j^{d_A,d_B}(A,B)$ is sometimes called the
-$j$-th \emph{scalar subresultant} of $(A,B)$.
-When $j=0$, the polynomial $\Res^{d_A,d_B}_0(A,B)$ is a constant which
-is nothing but the resultant of $(A,B)$. In the sequel, we shall denote
-it simply $\Res^{d_A,d_B}(A,B)$ (thus removing the index $0$).
-The relation between subresultants and \textsc{gcd}s is given by the
-following well-known theorem.
+\medskip
+
+The subresultants are defined in the similar fashion. Given an
+integer $j$ in the range $[0, d)$ where $d = \min(d_A, d_B)$, we
+consider the ``truncated'' Sylvester application:
+$$\begin{array}{rcl}
+\psi_j : \quad
+\ring_{< d_B-j}[X] \times \ring_{< d_A-j}[X] & \to &
+\ring_{< d_A+d_B-j}[X]/\ring_{< j}[X] \smallskip \\
+(U,V) & \mapsto & AU + BV.
+\end{array}$$
+Its determinant (in the canonical basis) is the $j$-th \emph{principal 
+subresultant} of $A$ and $B$ (computed in degree $d_A, d_B$). Just 
+as before, we can construct polynomials $U_j^{d_A, d_B}(A,B) \in
+\ring_{< d_B-j}[X]$ and $V_j^{d_A, d_B}(A,B) \in \ring_{< d_A-j}[X]$
+whose coefficients are, up to a sign, minors of the Sylvester 
+matrix\footnote{Indeed, observe that the matrix of $\psi_j$ is a
+submatrix of the Sylvester matrix.} such that:
+$$A \cdot U_j^{d_A, d_B}(A,B) + B \cdot V_j^{d_A, d_B}(A,B) 
+\equiv \det \psi_j \pmod {\ring_{< j}[X]}.$$
+We set $R_j^{d_A, d_B}(A,B) = A \cdot U_j^{d_A, d_B}(A,B) + B \cdot 
+V_j^{d_A, d_B}(A,B)$: it is the $j$-th \emph{subresultant} of $A$
+and $B$ (computed in degree $d_A, d_B$). The above congruence implies
+that $R_j^{d_A, d_B}(A,B)$ has degree at most $j$ and that its
+coefficient of degree $j$ is the $j$-th principal subresultant of $A$
+and $B$. As before, we freely drop the exponent $d_A, d_B$ when
+$d_A$ and $d_B$ are equal to the degrees of $A$ and $B$ respectively.
+When $j=0$, the application $\psi_j$ is nothing but $\psi$. Therefore,
+$\Res_0^{d_A, d_B}(A,B) = \Res^{d_A, d_B}(A,B)$ and, similarly, the
+cofactors agree: we have $U_0^{d_A, d_B}(A,B) = U^{d_A, d_B}(A,B)$
+and $V_0^{d_A, d_B}(A,B) = V^{d_A, d_B}(A,B)$.
 
 \begin{theo}
 We assume that $\ring$ is a field. Let $A$ and $B$ be two polynomials
@@ -351,10 +473,10 @@ where $f(A)$ and $f(B)$ denotes the polynomials deduced from $A$
 and $B$ respectively by applying $f$ coefficient-wise. This property
 is sometimes referred to as the \emph{functoriality} of subresultants.
 
-\medskip
+\subsubsection*{The subresultant pseudo-remainder sequence}
 
-\noindent
-\textbf{The subresultant pseudo-remainder sequence.}
+% Expliquer qu'on ne donne qu'un résultat, pas un algorithme
+
 When $\ring$ is a domain, there exists a standard nice Euclide-like
 reinterpreation of subresultants, which provides in particular an 
 efficient algorithm for computing them. Since it will play an important 
@@ -369,11 +491,12 @@ $$\left\{\begin{array}{ll}
 S_{-1} = A, \, S_0 = B, \, c_{-1} = 1 \smallskip \\
 \displaystyle S_{i+1} = (-s_i)^{\delta_i + 1}
 s_{i-1}^{-1} \: c_i^{-\delta_i} \cdot (S_{i-1} \,\%\, S_i)
-& \text{for } i \geq 1 \smallskip \\
+& \text{for } i \geq 0 \smallskip \\
 \displaystyle c_{i+1} = s_{i+1}^{\delta_{i+1}} \cdot c_i^{1-\delta_{i+1}}
-& \text{for } i \geq 0. 
+& \text{for } i \geq -1. 
 \end{array}\right.$$
-Here $n_i = \deg S_i$ and $s_i$ is the leading coefficient of 
+Here $n_i = \deg S_i$ \todo{define $\delta_i$ and change the notation} 
+and $s_i$ is the leading coefficient of 
 $S_i$ if $i \geq 0$ and $s_{-1} = 1$ by convention. These sequences 
 are finite and the above recurrence applies until $S_i$ has reached 
 the value $0$.
@@ -400,7 +523,7 @@ Mimicing ideas behind extended Euclide's algorithm, one can define the
 this way at the same time the cofactors.
 \end{rem}
 
-Important simplifications occur in the common case where all scalar 
+Important simplifications occur in the common case where all principal 
 subresultants do not vanish. Under this additional assumption, one can 
 prove that the degrees of the $S_i$'s decrease by one at each step, 
 meaning that we $\deg S_i = d_B - i$ for all $i$. The sequence 
@@ -412,15 +535,18 @@ $$S_{i+1} = s_i^2 \cdot s_{i-1}^{-2}
 To conclude with, we remark that Proposition \ref{prop:prem} simply 
 states that $R_j = S_{d_B-j}$ in this case.
 
-\section{Euclide-like algorithms\\are unstable}
+\section{Euclide-like algorithms are unstable}
 \label{sec:unstable}
 
 %The aim of this section is to study the loss of precision 
 
+% Expliquer que les pertes avec l'algorithme des pseudo-restes
+% sont les mêmes que ceux avec l'algorithme d'Euclide
+
 \subsection{A lower bound on losses of precision}
 
 We consider two fixed polynomials $A$ and $B$ with coefficients in $\A$ 
-whose coefficients are known with precision $O(p^N)$ for some positive
+whose coefficients are known with precision $O(\pi^N)$ for some positive
 integer $N$. For simplicity, we assume further that $A$ and $B$ are both
 monic and share the same degree $d$. 
 For any integer $j$ between $0$ and $d-1$, we denote by $R_j$ the $j$-th 
@@ -428,7 +554,7 @@ subresultant of $A$ and $B$.
 
 In this subsection, we estimate the loss of precision if we compute the 
 $R_j$'s using the recurrence formula given by Proposition \ref{prop:prem}. 
-In what follows, we are going use a \emph{flat precision model}: this 
+In what follows, we are going to use a \emph{flat precision model}: this 
 means that a polynomial $P(X)$ is represented as:
 $$P(X) = \sum_{i=1}^n a_i X^i + O(\pi^N)
 \quad \text{with } a_i \in K \text{ and } N \in \Z.$$
@@ -443,13 +569,14 @@ simplified framework where computations can be performed and experiments
 show that it rather well reflects the behaviour of the loss of precision 
 in Euclide-like algorithms.
 
-Let $V_j$ be the valuation of the scalar $j$-th subresultant of $(A,B$) 
-and $W_j$ be the smallest valuation of a coefficient of $R_j$. We of 
-course have $V_j \geq W_j$ and we set $\delta_j = V_j - W_j$.
+Let $V_j$ be the valuation of the principal $j$-th subresultant of $A,B$ 
+and $W_j$ be the minimum of the valuations of the coefficients of $R_j$. 
+We of course have $V_j \geq W_j$ and we set $\delta_j = V_j - W_j$.
+\todo{Change these notations.}
 
 \begin{prop}
 \label{prop:precEuclide}
-Let $A$ and $B$ as above. We assume that all scalar subresultants of 
+Let $A$ and $B$ as above. We assume that all principal subresultants of 
 $(A,B)$ do not vanish. Then, in the flat precision model, the 
 subresultant pseudo-remainder sequence computes $R_j$ at precision 
 $O(\pi^{N_j})$ with:
@@ -462,14 +589,14 @@ By our assumptions, the subresultant pseudo-remainder sequence
 is defined by the recurrence:
 $$R_{j-1} = r_j^2 \cdot r_{j+1}^{-2} \cdot 
 (R_{j+1} \,\%\, R_j).$$
-Using that $R_j$ and $R_{j-1}$ have the expected degrees, the
+Using that $R_{j+1}$ and $R_j$ have the expected degrees, the
 remainder $(R_{j+1} \,\%\, R_j)$ is computed as follows:
 $$\begin{array}{rrcl}
 \text{we set:} & S & = & R_{j+1} - r_{j+1} \cdot r_j^{-1} \cdot R_j \smallskip \\
 \text{and we have:} & R_{j+1} \,\%\, R_j & = & S - s \cdot r_j^{-1} \cdot R_j
 \end{array}$$
 where $s$ is the coefficient of degree $j$ of $S$. Let us first estimate 
-the precision of $S$. Recall for that the relative precision is defined 
+the precision of $S$. Recall that the relative precision is defined 
 as the difference between the (absolute) precision and the valuation: 
 intuitively, it is the number of significant digits. It is easy to check 
 that the relative precision of a product is the minimum of those of the 
@@ -583,12 +710,12 @@ For all $j \in \{0, \ldots, d-1\}$, we have:
 \begin{enumerate}[\hspace{0.3cm}(1)]
 \setlength\itemsep{0.1em}
 \item $\E[V_j] = 
-\displaystyle \sum_{i=1}^{d-j} \frac 1 {q^{\sigma(i)} - 1}$ \\
+\displaystyle \sum_{i=1}^{d-j} \frac 1 {q^{\sigma(i)} - 1}$;
 in particular $\frac 1 {q-1} \leq \E[V_j] < \frac q {(q-1)^2}$
 \item $\frac {q^j - 1}{q^{j+1} - 1} \leq \E[\delta_j] \leq \E[V_j]$
 \item $\sigma[V_j]^2 = 
 \displaystyle \sum_{i=1}^{d-j} \frac {(2i-1) \cdot q^{\sigma(i)}}
-{(q^{\sigma(i)} - 1)^2}$ \\
+{(q^{\sigma(i)} - 1)^2}$;
 in particular $\frac{\sqrt q}{q-1} \leq \sigma[V_j] < 
 \frac {q \:\sqrt{q+1}} {(q-1)^2}$
 \item $\P[V_j \geq m] \leq q^{-m + O(\sqrt m)}$
@@ -600,7 +727,7 @@ in particular $\frac{\sqrt q}{q-1} \leq \sigma[V_j] <
 By Theorem \ref{th:lawVj}, the expected value of $V_j$ is equal to 
 $\sum_{i=0}^d \E[Z_i]$ with $Z_i = \min(X_{j-i}, \ldots, X_{j+i})$ ($j$ 
 is fixed during all the proof). Our conventions imply that $Z_i$ 
-vanishes if $i > d-j$. On the contrary, if $i \leq d-j$, let us define 
+vanishes if $i \geq d-j$. On the contrary, if $i < d-j$, let us define 
 $\tau(1), \ldots, \tau(d-j)$ as the numbers $\sigma(1), \ldots, 
 \sigma(d-j)$ sorted in increasing order. The random variable $Z_i$ 
 is then the minimum of $\tau(i)$ independant random variables with 
@@ -614,9 +741,11 @@ $$\E[V_j] < \sum_{i=0}^\infty \frac 1{q^i - 1}
 \leq \sum_{i=0}^\infty \frac 1{q^i - q^{i-1}} = \frac q {(q-1)^2}.$$
 
 The first inequality of claim~(2) is obtained from the relation 
-$\E[\delta_j] = \sum_{m=1}^\infty \P[\delta_j \geq m]$ using the 
-estimation of Theorem \ref{th:deltaj}. The second inequality is 
-clear because $\delta_j \leq V_j$.
+$$\E[\delta_j] 
+= \sum_{m=1}^\infty m \cdot \P[\delta_j = m]
+= \sum_{m=1}^\infty \P[\delta_j \geq m]$$ 
+using the estimation of Theorem \ref{th:deltaj}. The second inequality 
+is clear because $\delta_j \leq V_j$.
 
 The variance of $V_j$ is related to the covariance of $Z_i$'s thanks to 
 the formula
@@ -686,7 +815,7 @@ The following relations hold:
 \item $U_{j-1} V_j - U_j V_{j-1} = (-1)^j r_j^2$;
 \item $U_j[d{-}j{-}1] = -V_j[d{-}j{-}1] = (-1)^j r_{j+1}$;
 \item $\Res^{j,j-1}_k(R_j, R_{j-1}) = r_j^{2(j-k-1)} \: R_k$ for $k < j$;
-\item $\Res^{d-j,d-j-1}_k(U_{j-1}, U_j) = r_j^{2(d-j-k-1)} \: U_{d-1-k}$\\
+\item $\Res^{d-j,d-j-1}_k(U_{j-1}, U_j) = r_j^{2(d-j-k-1)} \: U_{d-1-k}$
 for $k < d-j$.
 \end{itemize}
 Moreover $r_j$ depends only on the $2j$ coefficients of highest 
@@ -701,7 +830,7 @@ $A = X^d + \sum_{i=0} a_i X^i$ and
 $B = X^d + \sum_{i=0} b_i X^i$.
 All relations then follows from the extended subresultants 
 pseudo-remainder sequence algorithm (noting in addition that all
-scalar subresultants are nonzero).
+principal subresultants are nonzero).
 \end{proof}
 
 For any fixed index $j \in \{1, \ldots, d-1\}$, we consider the 
@@ -721,7 +850,7 @@ $$\begin{array}{ll}
 Let $\mathcal E_j^\times$ be the subset of $\mathcal E_j$ defined by 
 requiring that $\mathcal R_j[j]$ is invertible in $\ring$. In the same 
 way, we define $\Omega_j^\times$ as the subset of $\ring_d[X]^2$ 
-consisting of couples $(A,B)$ whose $j$-th scalar subresultants (in 
+consisting of couples $(A,B)$ whose $j$-th principal subresultants (in 
 degree $(d,d)$) is invertible in $\ring$.
 
 \begin{prop}
@@ -831,7 +960,7 @@ n_\ell\}$ with $n_1 > n_2 > \cdots > n_\ell$. We also set $n_{\ell+1} =
 0$ by convention. Then, given $n$ and $m$ two integers with $m < n$, let 
 $V_{(m,n)}$ denote the set of polynomials of the form
 $a_m X^m + a_{m+1} X^{m+1} \cdots + a_n X^n$
-with $a_i \in \ring$ and $a_n \neq 0$. Clearly, $V_{n,m}$ has
+with $a_i \in \ring$ and $a_n \neq 0$. Clearly, $V_{(m,n)}$ has
 cardinality $(q-1) q^{n-m}$. If $P$ is any polynomial of 
 degree $n$ and $m < n$ is an integer, we further define $P[m{:}] \in 
 V_{(m,n)}$ as the polynomial obtained from $P$ by removing its monomials 
@@ -886,7 +1015,7 @@ equal to $\frac{q(q^j - 1)}{q^{j+1}-1}$.
 \textbf{Proof of Theorem \ref{th:lawVj}.}
 We fix $j \in \{0, \ldots, d-1\}$. 
 We define a random variable $V_j^{(0)}$ as the greatest (nonnegative) 
-integer $v$ such that all scalar subresultants $r_{j'}$ have positive 
+integer $v$ such that all principal subresultants $r_{j'}$ have positive 
 valuation for $j'$ varying in the open range $(j-v, j+v)$ (with the
 convention that $r_{j'} = 0$ whenever $j' < 0$). It is clear from the 
 definition that $r_{j-v}$ or $r_{j+v}$ (with $v = V_j^{(0)}$) has 
@@ -974,7 +1103,7 @@ be a point in $K^n$ at which the differential of $f$ is surjective.
 Then, for all sufficiently large $N$, the following equality holds:
 \begin{equation}
 \label{eq:padicprec}
-f(x + p^N \A^n) = f(x) + f'(x)(p^N \A^n)
+f(x + \pi^N \A^n) = f(x) + f'(x)(\pi^N \A^n)
 \end{equation}
 where $f'(x)$ stands for the differential of $f$ at $x$.
 \end{lem}
@@ -985,10 +1114,10 @@ This reflects the optimality of the method and, as we shall see later,
 is also the origin of the ``stabilization process'' mentionned above.
 Moreover, if the function $f$ appearing in Lemma \ref{lem:padicprec} 
 has more regularity, one can exhibit a lower bound on $N$ ensuring
-that Eq.~\eqref{eq:padicprec} holds. In \cite{padicprec}, the case of locally 
-analytic functions is considered. For our purpose, it will be enough 
-to restrict ourselves to \emph{integral polynomial} functions, that
-are functions of the shape:
+that Eq.~\eqref{eq:padicprec} holds. In \cite{padicprec}, the case of 
+locally analytic functions is considered. For our purpose, it will be 
+enough to restrict ourselves to \emph{integral polynomial} functions, 
+that are functions of the shape:
 $$f(x) = \big(F_1(x), \ldots, F_m(x)\big)
 \quad \text{with } x = (x_1, \ldots, x_n)$$
 where $F_1, \ldots, F_m$ are multivariate polynomials in $n$ variables
@@ -1002,7 +1131,7 @@ Then, for all $N > v$, Eq.~\eqref{eq:padicprec} holds.
 \end{prop}
 
 \begin{proof}
-It is a direct corollary of \cite[Proposition 3.12]{}.
+It is a direct corollary of \cite[Proposition 3.12]{padicprec}.
 \end{proof}
 
 \subsection{The stabilization process}
@@ -1030,7 +1159,7 @@ in the source and the target of $f_j$ respectively.
 For all $(A,B) \in K_d[X]^2$, we have:
 $$r_j^2 \cdot \mathcal L_j 
 \subset f'_j(A,B)(\mathcal L) \subset \mathcal L_j$$
-where $r_j$ is the $j$-th scalar subresultant of $(A,B)$.
+where $r_j$ is the $j$-th principal subresultant of $(A,B)$.
 \end{lem}
 
 \begin{proof}
@@ -1038,7 +1167,7 @@ The second inclusion is clear because $f_j$ is a polynomial function.
 Let us prove the first inclusion. One may of course assume that $r_j$ 
 does not vanish, otherwise there is nothing to prove. Now, we remark 
 that $f_j$ factors through the function $\psi_j$ introduced in \S 
-\ref{subsec:proof}. By continuity, the $j$-th scalar subresultant 
+\ref{subsec:proof}. By continuity, the $j$-th principal subresultant 
 function does not vanish on a neighborhood of $(A,B)$. By Proposition 
 \ref{prop:bijection}, $\psi_j$ is injective on this neighborhood. 
 Therefore so is $f_j$. Furthermore, a close look at the proof of 
@@ -1063,8 +1192,8 @@ discussion about it):
 
 \begin{tabular}{rl}
 & (a)~$A$ and $B$ are monic of the same degree $d$ \\
-{\bf (H)}: & (b)~all scalar subresultants of $(A,B)$ \\
-& \phantom{(b)~}do not vanish modulo $\pi^{N/2}$.
+{\bf (H)}: & (b)~all principal subresultants of $(A,B)$ 
+do not vanish modulo $\pi^{N/2}$.
 \end{tabular}
 
 \medskip
@@ -1074,7 +1203,7 @@ The subresultants $R_j = \Res_j(A,B)$ can then be computed recursively:
 setting $R_d = B$, we have $R_{d-1} = A-B$ and the recurrence
 $R_{j-2} = r_{j-1}^2 \cdot r_j^{-2} \cdot (R_j \,\%\, R_{j-1})$.
 Moreover Lemma \ref{lem:diff} and Proposition \ref{prop:padicprec} imply
-that any perturbation of $(R_j, R_{j-1})$ by an element of $p^N r_j^2 
+that any perturbation of $(R_j, R_{j-1})$ by an element of $\pi^N r_j^2 
 \mathcal L_j$ will not affect the values of the next $R_k$'s modulo 
 $\pi^N$. Indeed, given $k > j$, let $f_{j,k} : (R_j, R_{j-1}) \mapsto 
 (R_k, R_{k+1})$ be the function modeling the above recurrence. We have
@@ -1102,8 +1231,7 @@ This suggests the following algorithm.
 
 \smallskip\noindent 4.\ \hspace{0.3cm}{\bf lift} $(R_j, R_{j-1})$ at precision $O(\pi^{N+2(v_j + v_{j-1})})$
 
-\smallskip\noindent 5.\ \hspace{0.3cm}{\bf compute} $R_{j-2} = r_{j-1}^2 \cdot r_j^{-2} \cdot (R_j \,\%\, R_{j-1})$\\
-\phantom{6.\ }\hspace{0.3cm}at precision $O(\pi^{N+2 v_{j-1}})$
+\smallskip\noindent 5.\ \hspace{0.3cm}{\bf compute} $R_{j-2} = r_{j-1}^2 \cdot r_j^{-2} \cdot (R_j \,\%\, R_{j-1})$ at precision $O(\pi^{N+2 v_{j-1}})$
 
 \smallskip\noindent 6.\ {\bf return} $R_{d-1} + O(\pi^N), \ldots,
 R_0 + O(\pi^N)$
@@ -1162,15 +1290,15 @@ that, in line 1, we have to set
 $$R_{d-1} = (-1)^{\deg A - \deg B} (A \,\%\, B)$$
 (instead of $R_{d-1} = A-B$).
 We remark that this value can be computed at precision $O(\pi^N)$
-because the leading coefficient of $B$ is assume to be invertible.
-Dropping entirely~(a') seems nevertheless to be more difficult. Let us 
+because the leading coefficient of $B$ is assumed to be invertible.
+Dropping entirely~(a') seems nevertheless more difficult. Let us 
 move to assumption~(b) and first remark that it is satisfied with high 
 probability if $N$ is large compared to $2 \cdot \log_d p$. Thus, 
 replacing eventually $N$ by $3 \cdot \log_d p$ (which does not affect 
 the complexity), the assumption~(b) is harmless on average --- but maybe
 not on particularly bad instances. We finally underline that, if we are
 just interested in computing the $j$-th subresultant for a particular
-$j$, then we just need to assume the non-vanishing of the scalar
+$j$, then we just need to assume the non-vanishing of the principal
 subresultants in the range $[j{+}1, d{-}1]$.
 
 Beyond this, one may wonder if one can use similar technics to compute 
@@ -1189,7 +1317,7 @@ which combines the precision technology developed in this paper with the
 previous question because ``half-\textsc{gcd}'' methods make an 
 intensive use of cofactors in order to speed up the computation.
 
-\section{Conclusion: p-adic floats?}
+\section{Conclusion: $p$-adic floats?}
 
 When computing with real numbers, computers very often use floating 
 point arithmetic. 
@@ -1265,7 +1393,7 @@ the ultrametric setting: we may hope to get proved results relatively
 cheaply.
 
 \begin{thebibliography}{99}
-\footnotesize
+%\footnotesize
 \bibitem{andrews}
   G.~Andrews,
   \emph{The Theory of Partitions},

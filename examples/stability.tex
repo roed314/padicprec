@@ -541,8 +541,9 @@ that we are \emph{gaining} precision in those cases.
 
 Set $a_i = \sigma_i(A)$ and $b_i = \sigma_i(B)$, and define $M_{r,t}((a_i),(b_j))$ 
 as the sublattice of $M_{r,t}(\O_K)$ consisting of matrices $M = (M_{i,j})$ 
-such that $\val(M_{i,j}) \geq \min(a_i,b_j)$ for all $(i,j)$.  Write $a^{(m)}$ (resp. $b^{(m)}$)
-for the number of $a_i$'s (resp. $b_i$'s) which are at least $m$.
+such that $\val(M_{i,j}) \geq \min(a_i,b_j)$ for all $(i,j)$.  
+%Write $a^{(m)}$ (resp. $b^{(m)}$)
+%for the number of $a_i$'s (resp. $b_i$'s) which are at least $m$.
 
 \begin{prop}
 \label{prop:mulmatrix}
@@ -555,7 +556,7 @@ With the above notation, we have
 \text{\emph{length}}\Big(\frac{M_{r,t}(\O_K)}{\mathcal P'_{r,s,t}(A,B)(\mathcal L_0) }
 \Big) =
 \displaystyle 
-\sum_{m=1}^\infty a^{(m)} b^{(m)}.
+\sum_{i,j} \min(a_i,b_j)
 \end{array}
 \]
 \end{prop}
@@ -569,12 +570,13 @@ and therefore the first summand in $M$ varies in the subspace of
 $M_{r,t}(\O_K)$ consisting of matrices whose entries on the $i$-th
 row have valuation at least $a_i$. Arguing similarly for the second
 summand, we deduce the first statement of the Proposition. The second
-statement is left to the reader.
+statement is now clear.
 \end{proof}
 
-From the perspective of precision, the second statement of Proposition \ref{prop:mulmatrix}
-means that the computation of $AB$ gains $\sum_{m=1}^\infty 
-a^{(m)} b^{(m)}$ significant digits in absolute precision\footnote{We 
+From the perspective of precision, the second statement of Proposition 
+\ref{prop:mulmatrix} means that the computation of $AB$ gains 
+$\sum_{i,j} \min(a_i,b_j)$ significant digits in absolute 
+precision\footnote{We
 note that, on the other side, the valuation of the entries of $AB$ may 
 increase, meaning that we are also losing some significant digits if we 
 are reasoning in relative precision.} as soon as $N > \min(a_r, b_t)$ 
