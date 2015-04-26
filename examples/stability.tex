@@ -252,9 +252,10 @@ The aim of this section is to briefly summarize the content of
 In \cite{caruso-roe-vaccon:14a}, we suggest the 
 use of lattices to represent the precision of elements in 
 $K$-vector spaces.  We shall contrast this approach with the
-\emph{coordinate-wise method} used in Sage and Magma,
+\emph{coordinate-wise method} used in Sage, % and Magma,
 where the precision of an element is specified by giving the precision
-of each coordinate separately.
+of each coordinate separately and is updated after each basic
+operation.
 
 Consider a finite 
 dimensional\footnote{The framework of \cite{caruso-roe-vaccon:14a} is 
@@ -291,7 +292,9 @@ This proposition enables the \emph{lattice method} of tracking precision,
 where the precision of the input is specified as a lattice $H$ and precision
 is tracked via differentials of the steps within a given algorithm.
 The equality sign in Eq.~\eqref{eq:firstorder} shows that this method
-yields the optimum possible precision.
+yields the optimum possible precision. 
+We refer to \cite[\S 4.1]{caruso-roe-vaccon:14a} for a more complete 
+exposition.
 
 In \cite{caruso-roe-vaccon:14a}, we also explained that if 
 $f$ is locally analytic, then the constant $\delta$ appearing in
@@ -949,10 +952,11 @@ Results for a sample of $2000$ instances}
 \end{center}
 \renewcommand{\arraystretch}{1}
 
-\vspace{-0.3cm}
+\vspace{-0.4cm}
 
 \caption{Loss of precision for LU factorization}
 \label{fig:LU}
+
 \end{figure}
 %
 
@@ -1261,9 +1265,9 @@ algorithm.
 
 \noindent 5.\ {\bf return} $L_n$
 
-\vspace{-1ex}\noindent\hrulefill
+%\vspace{-1ex}\noindent\hrulefill
 
-\medskip
+%\medskip
 
 \noindent
 The expression \emph{high precision} on line 3 means that the precision on 
@@ -1299,10 +1303,13 @@ Results for a sample of $1000$ executions (with $N \gg n$)}
 \end{center}
 \renewcommand{\arraystretch}{1}
 
-\vspace{-0.3cm}
+\vspace{-0.4cm}
 
 \caption{Average loss of precision in Algorithm 2}
 \label{fig:vectorspace}
+
+\vspace{-0.2cm}
+
 \end{figure}
 %
 Figure \ref{fig:vectorspace} shows the losses of precision when
