@@ -220,14 +220,15 @@ This polygon lies above the Hodge polygon of the matrix;
 we give statistics on the difference and the amount of diffuse precision.
 Finally, we apply Proposition \ref{prop:precision} to LU factorization and
 describe experiments with lattice-based precision analysis.
-
 Section \ref{ssec:grassgeo} reviews the geometry of Grassmannians,
 which we apply in Section \ref{ssec:grassdiff} to differentiating
 the direct image, inverse image, sum and intersection maps
 between Grassmannians.  We then report in Section \ref{grassimpl}
 on tracking the precision of subspace arithmetic in practice.
-
 In the appendix, we give a proof of Proposition \ref{prop:boundLambdaf}.
+
+The code used to make experiments presented in this paper is 
+available at \url{https://github.com/CETHop/padicprec}.
 
 \smallskip
 
@@ -239,6 +240,9 @@ Laurent series fields over a field. We denote by $\val : K \twoheadrightarrow \Z
 \{+\infty\}$ the valuation on $K$, by 
 $\OK$ the ring of integers and by $\pi \in K$ an element of valuation 
 $1$. We let $\Vert \cdot \Vert$ be the norm associated to $\val$.
+
+\medskip
+
 
 \section{The theory of p-adic precision}
 \label{sec:theory}
@@ -334,12 +338,9 @@ We will use the following definition in contrasting lattice and coordinate-wise 
 Suppose $E$ is equipped with a basis $(e_1, \ldots, e_n)$ and write $\pi_i : E \to Ke_i$ for the projections.
 
 \begin{deftn} \label{def:diffused}
-If $H \subset E$ is a lattice, let
-\[
-H_0 = \pi_1(H) \oplus \cdots \oplus \pi_n(H).
-\]
-Set $k = \text{length}(H_0/H)$.  Then we say that $H$ has $k$
-\emph{diffused digits of precision}.
+Let $H \subset E$ be a lattice. The number of 
+\emph{diffused digits of precision} of $H$ is the length of
+$H_0/H$ where $H_0 = \pi_1(H) \oplus \cdots \oplus \pi_n(H)$.
 \end{deftn}
 If $H$ represents the actual precision of some object, then
 $H_0$ is the smallest diagonal lattice containing $H$.  Since
