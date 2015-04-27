@@ -1,0 +1,18 @@
+We put out code on github and added a reference to it in the
+introduction of the paper.
+
+We precised the definition of the "coordinate-wise method" (at
+the beginning of section 2.1) and "lattice method" (just after 
+Proposition 2.1) for tracking p-adic precision.
+
+We added some comments after Definition 2.3 in order to make
+clear the relationship between the notion of diffused digits
+of precision and the coordinate-wise precision data.
+
+We clarified the statement of Proposition 3.1.
+
+We added a remark at the end of Section 3.1 relating our work
+to the theory of random walks on homogeneous spaces.
+
+We fixed a mistake in Section 3.2 about the locus of diffe-
+rentiability of the determinant.
