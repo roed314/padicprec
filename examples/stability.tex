@@ -103,19 +103,19 @@ DOI: http://dx.doi.org/10.1145/2755996.2756655}
 \newtheorem{ex}[theo]{Example}
 \newtheorem{deftn}[theo]{Definition}
 
-\title{p-adic stability in linear algebra}
+\title{p-Adic Stability In Linear Algebra}
 
 \numberofauthors{3}
 \author{
 \alignauthor Xavier Caruso\\
   \affaddr{Universit\'e Rennes 1}\\
-  \email{\normalsize \textsf{xavier.caruso@normalesup.org}}
+  \affaddr{\textsf{xavier.caruso@normalesup.org}}
 \alignauthor David Roe \\
   \affaddr{University of British Columbia}\\
-  \email{\normalsize \textsf{roed.math@gmail.com}}
+  \affaddr{\textsf{roed.math@gmail.com}}
 \alignauthor Tristan Vaccon\\
   \affaddr{Universit\'e Rennes 1}\\
-  \email{\normalsize \textsf{tristan.vaccon@univ-rennes1.fr}}
+  \affaddr{\textsf{tristan.vaccon@univ-rennes1.fr}}
 }
 
 \maketitle
@@ -131,7 +131,7 @@ We supplement our observations with numerical experiments.
 
 \category{I.1.2}{Computing Methodologies}{Symbolic and Algebraic Manipulation -- \emph{Algebraic Algorithms}}
 \terms{Algorithms, Theory}
-\keywords{$p$-adic precision, linear algebra, ultrametric analysis}
+\keywords{$p$-adic precision; linear algebra; ultrametric analysis}
 
 %\vspace{1mm}
 % \noindent
@@ -1015,8 +1015,8 @@ Grassmannian $\Grass(E,d)$ can be viewed as the quotient of the set
 of linear embeddings $f: V \hookrightarrow E$ modulo the action (by 
 precomposition) of $\GL(V)$: the mapping $f$ represents its image 
 $f(V)$. It follows from this description that the tangent space of 
-$\Grass(E,d)$ is canonically isomorphic to $$\Hom(V, E) / \End(V) 
-\simeq \Hom(V, E/V).$$
+$\Grass(E,d)$ is canonically isomorphic to $\Hom(V, E) / \End(V)$,
+which is $\Hom(V, E/V)$.
 
 \smallskip
 
@@ -1204,6 +1204,8 @@ $(V_1, V_2) \mapsto V_1 \cap V_2$ (left to the reader).
 \subsection{Implementation and experiments}
 \label{grassimpl}
 
+\smallskip
+
 \noindent
 {\bf Standard representation of vector spaces.}  %%%%%%%%% Repetitive
 One commonly represents subspaces of $K^n$  
@@ -1241,7 +1243,7 @@ One can represent $V$ with the same $I$ and the matrix
 $H_V = \Big(\begin{matrix} -G'_V \\ I_{n-d} \end{matrix}\Big)$.
 A similar formula exists for general $I$.
 
-\smallskip
+\medskip
 
 \noindent
 {\bf Operations on vector spaces.}
@@ -1286,9 +1288,9 @@ algorithm.
 
 \noindent 5.\ {\bf return} $L_n$
 
-%\vspace{-1ex}\noindent\hrulefill
+\vspace{-1ex}\noindent\hrulefill
 
-%\medskip
+\medskip
 
 \noindent
 The expression \emph{high precision} on line 3 means that the precision on 
@@ -1547,7 +1549,9 @@ $\Lambda_g(b) = \min_{x \in \R} \Lambda_g(x) \leq \Lambda_g \circ
 \Lambda_h(a)$, from which we derive 
 $a + \Lambda_g(b) \leq a + \Lambda_g \circ \Lambda_h(a) = b$.
 
+{\raggedright
 \bibliographystyle{plain}
 \bibliography{../roebib/Biblio,extras}
+}
 
 \end{document}
