@@ -1,0 +1,1051 @@
+\documentclass{beamer}
+%\documentclass[handout]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,francais]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{times}
+\usepackage{verbatim}
+\usepackage{array}
+\usepackage{stmaryrd}
+\usepackage{calc}
+
+\newtheorem{prop}{Proposition}
+
+\definecolor{bleu}{rgb}{0.8,0.8,0.6}
+\definecolor{bleufonce}{rgb}{0,0,0.4}
+\definecolor{rouge}{rgb}{0.7,0.2,0.2}
+\definecolor{rougefonce}{rgb}{0.4,0,0}
+\definecolor{vert}{rgb}{0.6,0.9,0.6}
+\definecolor{vertfonce}{rgb}{0.1,0.4,0.1}
+\definecolor{beige}{rgb}{0.9,0.9,0.7}
+\definecolor{textcolor}{rgb}{0.8,0.8,0.6}
+\definecolor{io}{rgb}{0.8,0.8,0.2}
+\definecolor{comment}{rgb}{0.5,0.5,1}
+\definecolor{command}{rgb}{0.3,1,0.3}
+
+\newcommand\Wider[2][3.2em]{%
+\makebox[\linewidth][c]{%
+  \begin{minipage}{\dimexpr\textwidth+#1\relax}
+  \raggedright#2
+  \end{minipage}%
+  }%
+}
+
+\newenvironment<>{varblock}[2][\textwidth]{
+    \begin{center}
+      \begin{minipage}{#1}
+        \setlength{\textwidth}{#1}
+        \setbeamercolor{block title}{fg=white,bg=jaune}
+          \begin{actionenv}#3
+            \def\insertblocktitle{#2}
+            \par
+            \usebeamertemplate{block begin}}
+  {\par
+      \usebeamertemplate{block end}
+    \end{actionenv}
+  \end{minipage}
+\end{center}}
+
+\newcommand{\ph}{\vphantom{A^A_A}}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Zp}{\Z_p}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Qp}{\Q_p}
+\newcommand{\C}{\mathbb C}
+\renewcommand{\Xi}{\mathcal C}
+
+\newcommand{\E}{\mathbb E}
+\newcommand{\val}{\text{\rm val}}
+
+\setbeamercolor{background canvas}{bg=black}
+\setbeamercolor{normal text}{fg=textcolor}
+\setbeamercolor{structure}{fg=textcolor}
+\setbeamercolor{frametitle}{bg=black,fg=white}
+\setbeamertemplate{navigation symbols}{}%remove navigation symbols
+
+\begin{document}
+
+\title{Précision $p$-adique}
+\author{Xavier Caruso}
+\date{July 24, 2014}
+
+\begin{frame}[plain]
+\setbeamercolor{titre}{bg=black,fg=white}
+
+\vspace{0.4cm}
+
+\hfill
+{\Large \bf \color{white} Précision $p$-adique}
+\hfill \null
+
+\vspace{0.5cm}
+
+\hfill
+{\footnotesize
+%\begin{tabular}{>{\centering}p{3em}|>{\centering}p{4em}|>{\centering}p{3em}}
+\begin{tabular}{>{\centering}p{3cm}>{\centering}p{3.5cm}>{\centering}p{3.5cm}l}
+Xavier Caruso & David Roe & Tristan Vaccon & \\
+Université Rennes 1 & Univ. British Columbia & 
+Université Rennes 1 & \vspace{-0.1cm} \\
+%\texttt
+{\tiny xavier.caruso@normalesup.org} &
+%\texttt
+{\tiny roed.math@gmail.com} & 
+%\texttt
+{\tiny tristan.vaccon@univ-rennes1.fr} &
+\end{tabular}
+}
+\hfill \null
+
+\vspace{0.2cm}
+
+{\color{bleu} \hfill \hrulefill \hfill \null}
+
+\vspace{0.5cm}
+
+\hfill
+{\small \color{vert}
+{\bf P}arameter spaces for 
+{\bf E}fficient
+{\bf A}rithmetic%
+}
+\hfill \null
+
+\hfill
+{\small \color{vert}
+and {\bf C}urve security
+{\bf E}valuation%
+}
+\hfill \null
+
+\vspace{0.5cm}
+
+\hfill
+11 juin 2015
+\hfill \null
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\huge \color{white}
+\bf Exemples
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemple 1 : la factorisation LU} \pause
+
+On se donne $M \in M_n(\Z_p)$. \pause
+
+\smallskip
+
+On cherche à calculer des matrices :
+$$L = 
+\left( \!\!
+\raisebox{-0.5\height + 0.2em}{
+\begin{tikzpicture}[xscale=0.5,yscale=-0.5]
+\node (A11) at (1,1) { $1$ };
+\node (Ann) at (3.5,3.5) { $1$ };
+\node (A12) at (2,1) { $0$ };
+\node (A1n) at (3.5,1) { $0$ };
+\node (Amn) at (3.5,2.5) { $0$ };
+\node (A21) at (1,2) { $\star$ };
+\node (An1) at (1,3.5) { $\star$ };
+\node (Anm) at (2.5,3.5) { $\star$ };
+\draw[dotted] (A11)--(Ann);
+\draw[dotted] (A12)--(A1n)--(Amn)--(A12);
+\draw[dotted] (A21)--(An1)--(Anm)--(A21);
+\end{tikzpicture}}
+\right)
+\quad \text{et} \quad
+U = 
+\left( \!\!
+\raisebox{-0.5\height + 0.2em}{
+\begin{tikzpicture}[xscale=0.5,yscale=-0.5]
+\node (A11) at (1,1) { $\star$ };
+\node (Ann) at (3.5,3.5) { $\star$ };
+\node (A1n) at (3.5,1) { $\star$ };
+\node (A21) at (1,2) { $0$ };
+\node (An1) at (1,3.5) { $0$ };
+\node (Anm) at (2.5,3.5) { $0$ };
+\draw[dotted] (A11)--(A1n)--(Ann)--(A11);
+\draw[dotted] (A21)--(An1)--(Anm)--(A21);
+\end{tikzpicture}}
+\right)$$
+telles que $M = LU$. 
+
+\bigskip \pause
+
+{\bf \color{white} Deux méthodes} \pause
+
+\begin{itemize}
+\item Pivot de Gauss
+
+\smallskip 
+
+\uncover<7->{
+{\scriptsize
+{\bf Avantage :} bonne complexité
+
+\vspace{-0.1cm}
+
+{\bf Inconvénient :} mauvaise stabilité numérique
+}}
+
+\pause
+
+\item Formules à la Cramer
+
+\smallskip 
+
+\uncover<7->{
+{\scriptsize
+{\bf Avantage :} bonne stabilité numérique
+
+\vspace{-0.1cm}
+
+{\bf Inconvénient :} mauvaise complexité
+}}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Exemple 2 : les coefficients de Bézout} \pause
+
+On se donne $A, B \in \Zp[X]$ unitaires de degré $n$.
+
+\smallskip
+
+On cherche à calculer des polynômes $U$ et $V$ tels que :
+
+\vspace{-0.2cm}
+
+$$A\:U + B\:V = 1$$
+
+\smallskip \pause
+
+{\bf \color{white} Deux méthodes}
+
+\begin{itemize}
+\item Algorithme d'Euclide
+
+\smallskip
+
+{\scriptsize
+{\bf Avantage :} bonne complexité
+
+\vspace{-0.1cm}
+
+{\bf Inconvénient :} mauvaise stabilité numérique
+}
+
+\item Formules à la Cramer
+
+\smallskip
+
+{\scriptsize
+{\bf Avantage :} bonne stabilité numérique
+
+\vspace{-0.1cm}
+
+{\bf Inconvénient :} mauvaise complexité
+}
+\end{itemize}
+
+\medskip \pause
+
+{\color{vert}
+{\bf Objectif de cet exposé}
+
+\smallskip \pause
+
+Donner une méthode pour 
+stabiliser les algorithmes rapides.}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\huge \color{white}
+\bf Une théorie de 
+
+la précision $p$-adique
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Suivi classique de la précision} \pause
+
+\Wider{
+\begin{tikzpicture}
+\draw[transparent] (0,0.4) rectangle (12,8);
+
+\begin{scope}[beige, rounded corners=10pt] 
+\fill (0.1,1) rectangle (3.9,7.8);
+\fill (4.1,1) rectangle (7.9,7.8);
+\fill (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+
+\begin{scope}[textcolor,thick]
+\draw[->] (2.5,0.9) to[out=-25,in=-155] (5.5,0.9);
+\node at (4,0.75) { $f_1$ };
+\draw[->] (6.5,0.9) to[out=-25,in=-155] (9.5,0.9);
+\node at (8,0.75) { $f_2$ };
+\end{scope}
+
+\only<3->{
+  \draw[black,fill=green!50] (2,4.5) circle (0.8cm);
+}
+\only<4->{
+\draw[black,fill=green!50,xshift=6cm,yshift=4.5cm,rotate=50] 
+  (0,0) ellipse (0.8cm and 1.5cm);
+\draw[black,fill=green!50,xshift=10cm,yshift=4.5cm,rotate=-20] 
+  (0,0) ellipse (0.5cm and 2cm);
+}
+
+\only<5->{
+  \draw[black,fill=blue!50,opacity=0.8] (6,4.5) circle (1.5cm);
+}
+
+\begin{scope}
+\clip (8.1,1) rectangle (11.9,7.8);
+\only<6->{
+  \draw[black,fill=blue!50,opacity=0.8,xshift=10cm,yshift=4.5cm,rotate=20] 
+    (0,0) ellipse (1.53cm and 3cm);
+}
+\only<7->{
+  \draw[black,fill=red!50,opacity=0.8] (10,4.5) circle (3cm);
+}
+\end{scope}
+
+\begin{scope}[textcolor!200,very thick, rounded corners=10pt] 
+\draw (0.1,1) rectangle (3.9,7.8);
+\draw (4.1,1) rectangle (7.9,7.8);
+\draw (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+
+\end{tikzpicture}
+}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Suivi de la précision pour les $p$-adiques paresseux} \pause
+
+\Wider{
+\begin{tikzpicture}
+\draw[transparent] (0,0.4) rectangle (12,8);
+
+\begin{scope}[beige, rounded corners=10pt] 
+\fill (0.1,1) rectangle (3.9,7.8);
+\fill (4.1,1) rectangle (7.9,7.8);
+\fill (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+
+\begin{scope}[thick]
+\draw[->] (2.5,0.9) to[out=-25,in=-155] (5.5,0.9);
+\node at (4,0.75) { $f_1$ };
+\draw[->] (6.5,0.9) to[out=-25,in=-155] (9.5,0.9);
+\node at (8,0.75) { $f_2$ };
+\end{scope}
+
+\only<4->{
+  \draw[black,fill=green!50,xshift=6cm,yshift=4.5cm,rotate=50] 
+    (0,0) ellipse (0.8cm and 1.5cm);
+  \draw[black,fill=green!50,xshift=2cm,yshift=4.5cm,rotate=-20] 
+    (0,0) ellipse (0.5cm and 2cm);
+}
+\only<3->{
+  \draw[black,fill=green!50] (10,4.5) circle (0.8cm);
+}
+
+\only<5->{
+  \draw[black,fill=blue!50,opacity=0.8] (6,4.5) circle (0.8cm);
+}
+
+\only<6->{
+  \draw[black,fill=blue!50,opacity=0.8,xshift=2cm,yshift=4.5cm,rotate=20] 
+    (0,0) ellipse (0.6cm and 0.3cm);
+}
+\only<7->{
+  \draw[black,fill=red!50,opacity=0.8] (2,4.5) circle (0.3cm);
+}
+
+\begin{scope}[textcolor!200,very thick, rounded corners=10pt] 
+\draw (0.1,1) rectangle (3.9,7.8);
+\draw (4.1,1) rectangle (7.9,7.8);
+\draw (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+
+\end{tikzpicture}
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Boules et réseaux}
+
+\begin{overlayarea}{\textwidth}{10.2cm}
+\only<2->{
+  On rappelle que $\Qp$ est muni de la norme $|x| = 
+  p^{-\val(x)}$.
+}
+
+\smallskip
+
+\only<3->{
+On considère $E = \Qp^n$ muni de la norme infinie, notée $\Vert \cdot \Vert$ :
+
+\smallskip
+
+\hspace{0.5cm}
+$\Vert (x_1, \ldots, x_n) \Vert = \max(|x_1|, \ldots, |x_n|).$
+}
+
+\medskip
+
+\only<5->{
+On pose 
+$B(r) = \big\{ \,\, x \in E, \, \Vert x \Vert \leq r \,\, \big\}$
+}
+
+\smallskip
+
+\only<8->{Ces boules sont stables par addition !}
+
+\medskip
+
+\only<10->{
+Par définition, un \emph{réseau} $H$ de $E$ est
+
+l'image de $B(1)$ par un isomorphisme
+
+linéaire $\varphi : E \to E$.
+}
+
+\smallskip
+
+\only<12->{
+Les réseaux sont exactement les 
+
+sous-$\Zp$-modules de $E$ engendrés
+
+par une base de $E$ sur $\Qp$.
+}
+
+\smallskip
+
+\only<13->{
+{\bf Remarque importante :}
+
+Les réseaux sont des objets exacts
+}
+\end{overlayarea}
+
+\vspace{-9cm}
+
+\hfill
+\begin{tikzpicture}
+\draw[transparent] (0,0) rectangle (4,6);
+
+\only<4->{
+\begin{scope}[beige, rounded corners=10pt] 
+\fill (0.1,0.2) rectangle (3.9,5.8);
+\end{scope}
+
+\only<6>{
+  \draw[black,fill=green!50] (2,3) circle (1cm);
+  \fill[vertfonce] (2,3) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (2.15,2.9) { $0$ };
+  \node[vertfonce,scale=0.8] at (2,1.7) { $B(1)$ };
+}
+\only<7-8>{
+  \draw[black,fill=green!50] (1.2,4.5) circle (1cm);
+  \fill[vertfonce] (1.2,4.5) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (1.35,4.4) { $x$ };
+  \node[vertfonce,scale=0.8] at (1.2,3.2) { $x+B(1)$ };
+}
+\only<9-10>{
+  \draw[black,fill=green!50] (2,3) circle (1cm);
+  \fill[vertfonce] (2.5,3.5) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (2.65,3.4) { $x$ };
+  \node[vertfonce,scale=0.8] at (2,1.7) { $x+B(1) = B(1)$ };
+}
+\only<11->{
+  \begin{scope}[xshift=2cm,yshift=3cm,rotate=20]
+  \draw[black,fill=green!50] (0,0) ellipse (0.7cm and 1.5cm);
+  \draw[black,->] (-1,0)--(1,0);
+  \draw[black,->] (0,-2)--(0,2);
+  \end{scope}
+}
+\begin{scope}[textcolor!200,very thick, rounded corners=10pt] 
+\draw (0.1,0.2) rectangle (3.9,5.8);
+\end{scope}}
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Le lemme de précision} \pause
+
+On se donne :
+
+\medskip
+
+\begin{tabular}{rl}
+$E, F$ & deux $\Qp$-espaces vectoriels normés de dimension finie, \\
+$U$ & un ouvert de $E$, \\
+$f$ & une application différentiable de $U$ dans $F$.
+\end{tabular}
+\bigskip
+
+\pause
+
+Soit $x \in U$. 
+\emph{On suppose que $f'(x) : E \to F$ est surjective.}
+
+\medskip \pause
+
+Alors
+\uncover<5->{
+$\forall \rho > 0,
+\, \exists r_0 > 0, 
+\, \forall r < r_0$ :}
+
+pour tout réseau $H$
+\only<4>{\og assez petit \fg}%
+\only<5->{tel que $B^-(\rho r) \subset H \subset B(r)$ :}
+
+\vspace{-0.2cm}
+
+$$f(x+H) = f(x) + f'(x)(H).$$
+
+\vspace{0.3cm} \pause \pause
+
+{\bf Remarque} :
+
+La dépendance de $r_0$ vis-à-vis de $\rho$ est explicite,
+
+au moins si $f$ a plus de régularité.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Le lemme de précision}
+
+\Wider{
+\begin{tikzpicture}
+\draw[transparent] (0,0.4) rectangle (12,8);
+
+\begin{scope}[beige, rounded corners=10pt] 
+\fill (0.1,1) rectangle (3.9,7.8);
+\fill (4.1,1) rectangle (7.9,7.8);
+\fill (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+
+\begin{scope}[thick]
+\draw[->] (2.5,0.9) to[out=-25,in=-155] (5.5,0.9);
+\node at (4,0.75) { $f_1$ };
+\draw[->] (6.5,0.9) to[out=-25,in=-155] (9.5,0.9);
+\node at (8,0.75) { $f_2$ };
+\end{scope}
+
+\draw[black,fill=green!50] (2,4.5) circle (0.8cm);
+\draw[black,fill=green!50,xshift=6cm,yshift=4.5cm,rotate=50] 
+  (0,0) ellipse (0.8cm and 1.5cm);
+\draw[black,fill=green!50,xshift=10cm,yshift=4.5cm,rotate=-20] 
+  (0,0) ellipse (0.5cm and 2cm);
+
+\only<2->{
+  \node[vertfonce,scale=0.8] at (2,3.4) { $x + H$ };
+  \fill[vertfonce] (2,4.5) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (2.15,4.4) { $x$ };
+}
+\only<3->{
+  \node[vertfonce,scale=0.8] at (6,3) { $f_1(x) + f'_1(x)(H)$ };
+  \fill[vertfonce] (6.5,4.4) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (6.5,4.15) { $f_1(x)$ };
+}
+\only<4->{
+  \node[vertfonce,scale=0.8] at (10,2.2) { $f(x) + f'(x)(H)$ };
+  \node[vertfonce,scale=0.6] at (10,1.85) { avec $f = f_2 \circ f_1$ };
+  \fill[vertfonce] (10.6,6) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (10.5,5.75) { $f(x)$ };
+}
+
+\begin{scope}[textcolor!200,very thick, rounded corners=10pt] 
+\draw (0.1,1) rectangle (3.9,7.8);
+\draw (4.1,1) rectangle (7.9,7.8);
+\draw (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+\end{tikzpicture}
+}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Suivi adaptatif de la précision} \pause
+
+\Wider{
+\begin{tikzpicture}
+\draw[transparent] (0,0.4) rectangle (12,8);
+
+\begin{scope}[beige, rounded corners=10pt] 
+\fill (0.1,1) rectangle (3.9,7.8);
+\fill (4.1,1) rectangle (7.9,7.8);
+\fill (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+
+\begin{scope}[thick]
+\draw[->] (2.5,0.9) to[out=-25,in=-155] (5.5,0.9);
+\node at (4,0.75) { $f_1$ };
+\draw[->] (6.5,0.9) to[out=-25,in=-155] (9.5,0.9);
+\node at (8,0.75) { $f_2$ };
+\end{scope}
+
+\draw[black,fill=green!50] (2,4.5) circle (0.8cm);
+\draw[black,fill=green!50,xshift=6cm,yshift=4.5cm,rotate=50] 
+  (0,0) ellipse (0.8cm and 1.5cm);
+\draw[black,fill=green!50,xshift=10cm,yshift=4.5cm,rotate=-20] 
+  (0,0) ellipse (0.5cm and 2cm);
+
+\node[vertfonce,scale=0.8] at (2,3.4) { $x + H$ };
+\node[vertfonce,scale=0.8] at (6,3) { $f_1(x) + f'_1(x)(H)$ };
+\node[vertfonce,scale=0.8] at (10,2.2) { $f(x) + f'(x)(H)$ };
+\node[vertfonce,scale=0.6] at (10,1.85) { avec $f = f_2 \circ f_1$ };
+
+\only<3-5>{
+  \draw[black,fill=blue!50,opacity=0.8] (2.2,4.3) circle (0.4cm);
+}
+\only<4-5>{
+  \draw[black,fill=blue!50,opacity=0.8,xshift=6.3cm,yshift=4.25cm,rotate=50] 
+    (0,0) ellipse (0.4cm and 0.75cm);
+}
+\only<5>{
+  \draw[black,fill=red!50,opacity=0.8]
+    (6.3,4.25) ellipse (0.75cm);
+}
+
+\only<7-9>{
+  \draw[black,fill=blue!50,opacity=0.8] (5.5,5) circle (0.4cm);
+}
+\only<8-9>{
+  \draw[black,fill=blue!50,opacity=0.8,xshift=9.9cm,yshift=4.25cm,rotate=-30] 
+    (0,0) ellipse (0.25cm and 0.45cm);
+}
+\only<9>{
+  \draw[black,fill=red!50,opacity=0.8] (9.9,4.25) circle (0.45cm);
+}
+\only<10>{}
+\begin{scope}[textcolor!200,very thick, rounded corners=10pt] 
+\draw (0.1,1) rectangle (3.9,7.8);
+\draw (4.1,1) rectangle (7.9,7.8);
+\draw (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+\end{tikzpicture}
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Suivi adaptatif de la précision}
+
+{\bf \color{white} Avantages}
+
+\medskip \pause
+
+Les erreurs ne s'ajoutent \textbf{vraiment} pas
+
+\smallskip \pause
+
+{\scriptsize
+Contrairement à ce qui se passe avec un suivi classique, 
+
+\vspace{-0.15cm}
+
+bien qu'on soit dans un cadre ultramétrique}
+
+\medskip \pause
+
+Concrètement, cette méthode de suivi permet dans 
+
+les calculs de remplacer des \emph{sommes} par des \emph{max}
+
+\bigskip \pause
+
+{\bf \color{white} Une heuristique}
+
+\medskip \pause
+
+Sur des entrées aléatoires, un suivi adaptatif remplace un
+comportement \emph{linéaire} en un comportement \emph{logarithmique}.
+
+\medskip \pause
+
+Si $x_1, \ldots, x_n$ des nombres $p$-adiques aléatoires, alors :
+
+\begin{itemize}
+\item
+$\E \big[ \val(x_1) + \cdots + \val(x_n) \big] = \frac n{p-1}$
+\item
+$\E \big[ \max(\val(x_1), \ldots, \val(x_n)) \big] \sim \log_p n$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\huge \color{white}
+\bf Retour à la
+
+factorisation LU
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Découpage en étapes} \pause
+
+\begin{tikzpicture}[xscale=2.2]
+\node (M) at (0,0) { $M$ };
+\node (LU) at (4,0) { $(L,U)$ };
+\draw[|->] (M)--(LU) node[midway, above] { $f$ };
+
+\uncover<3->{
+\node (LU0) at (0,-1) { $(L_0,U_0)$ };
+\node (LU1) at (1.1,-1) { $(L_1,U_1)$ };
+\node (LU2) at (2.2,-1) { $(L_2,U_2)$ };
+\node (LUi) at (3.1,-1) { $\cdots$ };
+\node (LUn) at (4,-1) { $(L_n,U_n)$ };
+\draw[transform canvas={xshift=0.6mm}] (M)--(LU0);
+\draw[transform canvas={xshift=-0.6mm}] (M)--(LU0);
+\draw[transform canvas={xshift=0.6mm}] (LU)--(LUn);
+\draw[transform canvas={xshift=-0.6mm}] (LU)--(LUn);
+\begin{scope}[|->]
+\draw (LU0)--(LU1) node[midway, above] { $f_1$ };
+\draw (LU1)--(LU2) node[midway, above] { $f_2$ };
+\draw (LU2)--(LUi) node[midway, above] { $f_3$ };
+\draw (LUi)--(LUn) node[midway, above] { $f_n$ };
+\end{scope}}
+\end{tikzpicture}
+
+\medskip \pause \pause
+
+où $(L_i, U_i)$ est défini par $L_i U_i = M$ et :
+$$L_i = 
+\left( \!\!
+\raisebox{-0.5\height + 0.2em}{
+\begin{tikzpicture}[xscale=0.5,yscale=-0.5]
+\draw[vertfonce](4,0.5)--(4,7.5);
+\draw[vertfonce](0.5,4)--(7.5,4);
+\node (A11) at (1,1) { $1$ };
+\node (Aii) at (3.5,3.5) { $1$ };
+\node (A12) at (2,1) { $0$ };
+\node (A1n) at (7,1) { $0$ };
+\node (Aij) at (4.5,3.5) { $0$ };
+\node (Ain) at (7,3.5) { $0$ };
+\node (A21) at (1,2) { $\star$ };
+\node (An1) at (1,7) { $\star$ };
+\node (Aji) at (3.5,4.5) { $\star$ };
+\node (Ajn) at (7,4.5) { $\star$ };
+\node (Ann) at (7,7) { $\star$ };
+\draw[dotted] (A11)--(Aii);
+\draw[dotted] (A12)--(A1n)--(Ain)--(Aij)--(A12);
+\draw[dotted] (A21)--(An1)--(Ann)--(Ajn)--(Aji)--(A21);
+\end{tikzpicture}}
+\right),
+\quad
+U_i = 
+\left( \!\!
+\raisebox{-0.5\height + 0.2em}{
+\begin{tikzpicture}[xscale=0.5,yscale=-0.5]
+\draw[vertfonce](4,0.5)--(4,7.5);
+\draw[vertfonce](0.5,4)--(7.5,4);
+\node (A11) at (1,1) { $\star$ };
+\node (A1n) at (7,1) { $\star$ };
+\node (Aii) at (3.5,3.5) { $\star$ };
+\node (Ain) at (7,3.5) { $\star$ };
+\node (A21) at (1,2) { $0$ };
+\node (An1) at (1,7) { $0$ };
+\node (Anm) at (6,7) { $0$ };
+\node (Ajj) at (4.5,4.5) { $1$ };
+\node (Ann) at (7,7) { $1$ };
+\node (Ajk) at (5.5,4.5) { $0$ };
+\node (Ajn) at (7,4.5) { $0$ };
+\node (Amn) at (7,6) { $0$ };
+\draw[dotted] (Ajj)--(Ann);
+\draw[dotted] (A11)--(A1n)--(Ain)--(Aii)--(A11);
+\draw[dotted] (A21)--(An1)--(Anm)--(A21);
+\draw[dotted] (Ajk)--(Ajn)--(Amn)--(Ajk);
+\end{tikzpicture}}
+\right)$$
+
+\pause
+
+Autrement dit, $(L_i, U_i)$ est le couple obtenu par l'algorithme de 
+Gauss après réduction de la $i$-ième ligne.
+
+\medskip \null
+\end{frame}
+
+\begin{frame}
+\frametitle{Calcul différentiel} \pause
+
+On pose 
+$g_i = f_i \circ f_{i-1} \circ \cdots \circ f_1 \pause 
+: M \mapsto (L_i, U_i)$.
+
+\medskip \pause
+
+{\bf \color{white}
+Le calcul de $g_i'(M)$}
+
+\vspace{-0.7cm} \pause
+
+\begin{align*}
+M & = L_i \cdot U_i \bigskip \\
+\uncover<6->{dM & = L_i \cdot d U_i + d L_i \cdot U_i \\}
+\uncover<7->{%
+L_i^{-1} \cdot dM \cdot U_i^{-1} & = 
+{\only<7>{\color{transparent}}
+\underbrace{\color{textcolor}d U_i \cdot U_i^{-1}}_{%
+\left( \!\!
+\raisebox{-0.5\height + 0.2em}{
+\begin{tikzpicture}[xscale=0.2,yscale=-0.2]
+\node[scale=0.4] (A11) at (1,1) { $\star$ };
+\node[scale=0.4] (A1n) at (6,1) { $\star$ };
+\node[scale=0.4] (Aii) at (3.5,3.5) { $\star$ };
+\node[scale=0.4] (Ain) at (6,3.5) { $\star$ };
+\node[scale=0.4,transparent] (Ann) at (6,6) { $\star$ };
+\draw[dotted] (A11)--(A1n)--(Ain)--(Aii)--(A11);
+\end{tikzpicture}}
+\right)}} + 
+{\only<7-8>{\color{transparent}}
+\underbrace{\color{textcolor}L_i^{-1} \cdot d L_i}_{%
+\left( \!\!
+\raisebox{-0.5\height + 0.2em}{
+\begin{tikzpicture}[xscale=0.2,yscale=-0.2]
+\node[scale=0.4,transparent] (A11) at (1,1) { $\star$ };
+\node[scale=0.4] (A21) at (1,2) { $\star$ };
+\node[scale=0.4] (An1) at (1,6) { $\star$ };
+\node[scale=0.4] (Aji) at (3.5,4.5) { $\star$ };
+\node[scale=0.4] (Ajn) at (6,4.5) { $\star$ };
+\node[scale=0.4] (Ann) at (6,6) { $\star$ };
+\draw[dotted] (A21)--(An1)--(Ann)--(Ajn)--(Aji)--(A21);
+\end{tikzpicture}}
+\right)}}}
+\end{align*}
+
+\pause \pause \pause \pause \pause
+
+{\bf \color{white}
+Conséquences} \pause
+
+\smallskip
+
+En notant $\rho_i$ la norme du $i$-ième mineur principal de $M$, on a
+
+\begin{itemize}
+\item $\Vert g_i'(M) \Vert \leq \max(1, \rho_1, \ldots, \rho_i)^3$ \smallskip
+\item $\Vert g_i'(M)^{-1} \Vert \leq \max(1, \rho_1, \ldots, \rho_i)$
+\end{itemize}
+
+\vspace{-1.7cm} \pause
+
+{\color{red!50} 
+\null \hspace{6.8cm}
+{\bf NB :} On a un \emph{max},
+
+\vspace{-0.5cm}
+
+\null \hspace{6.8cm}
+\phantom{{\bf NB :} }pas un produit}
+
+\vspace{0.5cm} \null
+\end{frame}
+
+\begin{frame}
+\frametitle{La méthode du suivi adaptatif} \pause
+
+$\rho_i = | \det M_{\{1,\ldots,i\}, \{1, \ldots, i\}} |$
+\hfill ; \hfill $r_i = \max(1, \rho_1, \ldots, \rho_i)$ \pause
+\hfill ; \hfill $H = M_n(\Z_p)$
+
+\bigskip \pause
+
+\Wider{
+\begin{tikzpicture}
+\draw[transparent] (0,1) rectangle (12,7.8);
+
+\begin{scope}[beige, rounded corners=10pt] 
+\fill (0.5,1) rectangle (5.5,7.8);
+\fill (6.5,1) rectangle (11.5,7.8);
+\end{scope}
+
+\draw[thick,->] (5.6,4.4)--(6.4,4.4)
+  node[midway,above] { $f_i$ };
+
+\draw[black,fill=green!50,xshift=3cm,yshift=4.4cm,rotate=-70] 
+  (0,0) ellipse (0.7cm and 2.2cm);
+\draw[black,fill=green!50,xshift=9cm,yshift=4.4cm,rotate=50] 
+  (0,0) ellipse (0.8cm and 1.5cm);
+
+\node[vertfonce,scale=0.8] at (3,7.2) { $g_{i-1}(M) + g'_{i-1}(M)(H)$ };
+\node[vertfonce,scale=0.8] at (9,7.2) { $g_i(M) + g'_i(M)(H)$ };
+
+\only<5->{
+  \draw[bleufonce] (3,4.4) circle (0.6cm);
+  \draw[bleufonce,<->] (3,4.4)--(3,5) node[midway,right,scale=0.5] { $r_{i-1}^{-1}$ };
+}
+\only<6->{
+  \draw[rougefonce] (3,4.4) circle (2.3cm);
+  \draw[rougefonce,<->] (3,4.4)--(1.16,3.02) node[midway,above left,scale=0.5] { $r_{i-1}^3$ };
+}
+\only<7->{
+  \draw[bleufonce] (9,4.4) circle (0.6cm);
+  \draw[bleufonce,<->] (9,4.4)--(9,5) node[midway,right,scale=0.5] { $r_i^{-1}$ };
+  \draw[rougefonce] (9,4.4) circle (2.3cm);
+  \draw[rougefonce,<->] (9,4.4)--(7.16,3.02) node[midway,above left,scale=0.5] { $r_i^3$ };
+}
+\only<8-9>{
+  \draw[black,fill=blue!50,opacity=0.8] (3.2,4.2) circle (0.2cm);
+}
+\only<9>{
+  \draw[black,fill=blue!50,opacity=0.8] (9.1,4.4) circle (0.45cm);
+}
+
+\only<-10>{
+  \begin{scope}[textcolor!200,very thick, rounded corners=10pt] 
+  \draw (0.5,1) rectangle (5.5,7.8);
+  \draw (6.5,1) rectangle (11.5,7.8);
+  \end{scope}
+}
+\end{tikzpicture}
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Schéma de l'algorithme stabilisé} \pause
+
+{\color{black!20}
+\makebox[1.5cm][l]{\bf Entrée :} 
+une matrice $M \in M_n(\Zp)$ connu à précision $O(p^N)$
+
+\smallskip
+
+\makebox[1.5cm][l]{\bf Sortie :} 
+la décomposition LU de $M$
+}
+
+\bigskip \pause
+
+$L_0 \leftarrow M$; \, $U_0 \leftarrow I_n$
+
+\smallskip \pause
+
+$v_0 \leftarrow 0$ \pause
+\hfill {\color{comment} // $v_i = - \log_p r_i$
+avec les notations précédentes}
+
+\smallskip \pause
+
+{\color{rouge} pour} $i = 1, 2, \ldots, n$ {\color{rouge} :}
+
+\smallskip \pause
+
+\hspace{0.6cm}
+{\color{comment}
+// On calcule $(L_i, U_i)$ à partir $(L_{i-1}, U_{i-1})$}
+
+\smallskip \pause
+
+\hspace{0.6cm}
+$\mu_i \leftarrow \val((L_{i-1})_{i,i})$
+
+\hspace{0.6cm}
+$\nu_i \leftarrow \nu_{i-1} + \mu_i$ \pause
+\hfill {\color{comment} 
+// $\nu_i = \val(\det M_{\{1,\ldots,i\}, \{1,\ldots,i\}}) = - \log_p \rho_i$}
+
+\pause
+
+\hspace{0.6cm}
+$v_i \leftarrow \min(v_{i-1}, \nu_i)$
+
+\smallskip \pause
+
+\hspace{0.6cm}
+{\color{command} relever} 
+$(L_{i-1}, U_{i-1})$ à précision $O(p^{N-3 v_i - 2 \min(0,\mu_i)})$
+
+\smallskip \pause
+
+\hspace{0.6cm}
+{\color{command} calculer}
+$(L_i, U_i)$ par l'algorithme de Gauss \pause
+
+\hfill {\color{comment} // $(L_i, U_i)$ est connu au moins à précision
+$O(p^{N-3 v_i})$}
+
+\medskip \pause
+
+{\color{command} retourner}
+$(L_n, U_n)$ à précision $O(p^{N+v_n})$
+\end{frame}
+
+\begin{frame}
+\frametitle{That's all folks}
+
+
+\Wider{
+\begin{tikzpicture}
+\begin{scope}[beige, rounded corners=10pt] 
+\fill (0.5,1) rectangle (5.5,7.8);
+\fill (6.5,1) rectangle (11.5,7.8);
+\end{scope}
+
+\draw[thick,->] (5.6,4.4)--(6.4,4.4)
+  node[midway,above] { $f_i$ };
+
+\draw[black,fill=green!50,xshift=3cm,yshift=4.4cm,rotate=-70] 
+  (0,0) ellipse (0.7cm and 2.2cm);
+\draw[black,fill=green!50,xshift=9cm,yshift=4.4cm,rotate=50] 
+  (0,0) ellipse (0.8cm and 1.5cm);
+
+\node[vertfonce,scale=0.8] at (3,7.2) { $g_{i-1}(M) + g'_{i-1}(M)(H)$ };
+\node[vertfonce,scale=0.8] at (9,7.2) { $g_i(M) + g'_i(M)(H)$ };
+
+  \draw[bleufonce] (3,4.4) circle (0.6cm);
+  \draw[bleufonce,<->] (3,4.4)--(3,5) node[midway,right,scale=0.5] { $r_{i-1}^{-1}$ };
+  \draw[rougefonce] (3,4.4) circle (2.3cm);
+  \draw[rougefonce,<->] (3,4.4)--(1.16,3.02) node[midway,above left,scale=0.5] { $r_{i-1}^3$ };
+  \draw[bleufonce] (9,4.4) circle (0.6cm);
+  \draw[bleufonce,<->] (9,4.4)--(9,5) node[midway,right,scale=0.5] { $r_i^{-1}$ };
+  \draw[rougefonce] (9,4.4) circle (2.3cm);
+  \draw[rougefonce,<->] (9,4.4)--(7.16,3.02) node[midway,above left,scale=0.5] { $r_i^3$ };
+  \draw[black,fill=blue!50,opacity=0.8] (3.2,4.2) circle (0.2cm);
+  \draw[black,fill=blue!50,opacity=0.8,xshift=9.1cm, yshift=4.4cm, rotate=15]
+    (0,0) ellipse (0.4cm and 0.5cm);
+
+  \begin{scope}[textcolor!200,very thick, rounded corners=10pt] 
+  \draw (0.5,1) rectangle (5.5,7.8);
+  \draw (6.5,1) rectangle (11.5,7.8);
+  \end{scope}
+
+\fill[black, opacity=0.8] (0,0.5) rectangle (12,8);
+
+\begin{scope}[xshift=6cm, yshift=4cm, rotate=5]
+  \fill[green!50] (0,0) ellipse (5cm and 2cm);
+  \fill[blue!50, opacity=0.8] (1,-1) circle (0.5cm);
+  \fill[blue!50, opacity=0.8] (-2,-0.5) circle (0.7cm);
+  \fill[blue!50, opacity=0.8] (0.5,1.2) circle (0.5cm);
+  \fill[blue!50, opacity=0.8] (2,0.1) circle (0.2cm);
+  \fill[blue!50, opacity=0.8] (3.5,-0.2) circle (0.15cm);
+  \node[vertfonce,rotate=5,xscale=1.8,yscale=2.5] at (0,0) { \bf Merci de votre attention ! };
+\end{scope}
+\end{tikzpicture}}
+\end{frame}
+
+\end{document}
