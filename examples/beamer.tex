@@ -1,0 +1,265 @@
+\documentclass{beamer}
+%\documentclass[handout]{beamer}
+
+\usetheme{Copenhagen}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{times}
+\usepackage{verbatim}
+\usepackage{array}
+\usepackage{stmaryrd}
+
+\newtheorem{prop}{Proposition}
+
+\definecolor{bleu}{rgb}{0,0,0.6}
+\definecolor{bleufonce}{rgb}{0,0,0.4}
+\definecolor{rouge}{rgb}{0.7,0.2,0.2}
+\definecolor{vert}{rgb}{0.1,0.3,0.1}
+\definecolor{vert2}{rgb}{0.2,0.4,0.2}
+\definecolor{violet}{rgb}{0.5,0,0.5}
+\definecolor{jaune}{rgb}{0.4,0.4,0.2}
+
+\newcommand\Wider[2][3em]{%
+\makebox[\linewidth][c]{%
+  \begin{minipage}{\dimexpr\textwidth+#1\relax}
+  \raggedright#2
+  \end{minipage}%
+  }%
+}
+
+\newenvironment<>{varblock}[2][\textwidth]{
+    \begin{center}
+      \begin{minipage}{#1}
+        \setlength{\textwidth}{#1}
+        \setbeamercolor{block title}{fg=white,bg=jaune}
+          \begin{actionenv}#3
+            \def\insertblocktitle{#2}
+            \par
+            \usebeamertemplate{block begin}}
+  {\par
+      \usebeamertemplate{block end}
+    \end{actionenv}
+  \end{minipage}
+\end{center}}
+
+\newcommand{\ph}{\vphantom{A^A_A}}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\C}{\mathbb C}
+\renewcommand{\Xi}{\mathcal C}
+
+\begin{document}
+
+\title{p-Adic Stability in Linear Algebra}
+\author{Xavier Caruso, David Roe, Tristan Vaccon}
+\date{July 6, 2015}
+
+
+\begin{frame}[plain]
+\setbeamercolor{titre}{fg=bleu,bg=bleu!10}
+
+\hfill
+\begin{beamercolorbox}[sep=1em,wd=7.5cm,rounded=true]{titre}
+\large \bf \centering
+p-Adic Stability
+
+in Linear Algebra
+\end{beamercolorbox}
+\hfill \null
+
+\hfill
+{\footnotesize
+\begin{tabular}{>{\centering}p{3cm}>{\centering}p{3.5cm}>{\centering}p{3.5cm}l}
+Xavier Caruso & David Roe & Tristan Vaccon & \\
+Université Rennes 1 & Univ. British Columbia &
+Université Rennes 1 & \vspace{-0.1cm} \\
+%\texttt
+{\tiny xavier.caruso@normalesup.org} &
+%\texttt
+{\tiny roed.math@gmail.com} &
+%\texttt
+{\tiny tristan.vaccon@univ-rennes1.fr} &
+\end{tabular}
+}
+\hfill \null
+
+\vspace{0.2cm}
+
+{\color{bleu} \hfill \hrulefill \hfill \null}
+
+\vspace{0.5cm}
+
+\hfill
+{\small \color{vert}
+{\bf I}nternational 
+{\bf S}ymposium on%
+}
+\hfill \null
+
+\hfill
+{\small \color{vert}
+{\bf S}ymbolic 
+and {\bf A}lgebraic
+{\bf C}omputation%
+}
+\hfill \null
+
+\vspace{0.5cm}
+
+\hfill
+July 6, 2015
+\hfill \null
+
+\end{frame}
+
+\setbeamercolor{frametitle}{bg=bleufonce}
+
+\begin{frame}
+\frametitle{Computation of determinants} \pause
+
+{\bf Question:} Compute the determinant of
+$$\left(
+\raisebox{-0.95cm}{
+\begin{tikzpicture}[xscale=3, yscale=0.8]
+
+\only<2-4>{
+  \node at (0,0) { $\ldots1014240$ };
+}
+\only<5-7>{
+  \node at (0,0) { \color{red} $\ldots1014240$ };
+}
+\only<2-7>{
+  \node at (1,0) { $\ldots4324032$ };
+  \node at (2,0) { $\ldots0101111$ };
+}
+\only<2-5>{
+  \node at (0,-1) { $\ldots4132310$ };
+  \node at (1,-1) { $\ldots4020033$ };
+  \node at (2,-1) { $\ldots4421144$ };
+}
+\only<6-7>{
+  \node at (0,-1) { \color{black!30} $\ldots0000000$ };
+  \node at (1,-1) { $\ldots3414440$ };
+  \node at (2,-1) { $\ldots4223420$ };
+}
+\only<2-6>{
+  \node at (0,-2) { $\ldots2202130$ };
+  \node at (1,-2) { $\ldots2220114$ };
+  \node at (2,-2) { $\ldots4204122$ };
+}
+\only<7>{
+  \node at (0,-2) { \color{black!30} $\ldots0000000$ };
+  \node at (1,-2) { $\ldots0224020$ };
+  \node at (2,-2) { $\ldots2313110$ };
+}
+\only<8-12>{
+  \node at (0,0) { $\ldots1014240$ };
+  \node at (1,0) { $\ldots4324032$ };
+  \node at (2,0) { $\ldots0101111$ };
+  \node at (0,-1) { \color{black!30} $\ldots0000000$ };
+  \node at (0,-2) { \color{black!30} $\ldots0000000$ };
+  \node at (2,-1) { $\ldots4223420$ };
+}
+\only<8,11-12>{
+  \node at (1,-1) { $\ldots3414440$ };
+}
+\only<9-10>{
+  \node at (1,-1) { \color{red} $\ldots3414440$ };
+}
+\only<8-9>{
+  \node at (1,-2) { $\ldots0224020$ };
+  \node at (2,-2) { $\ldots2313110$ };
+}
+\only<10-12>{
+  \node at (1,-2) { \color{black!30} $\ldots0000000$ };
+  \node at (2,-2) { $\ldots3014000$ };
+}
+
+\only<13,23->{
+  \node at (0,0) { $\ldots1014240$ };
+  \node at (1,0) { $\ldots4324032$ };
+  \node at (2,0) { $\ldots0101111$ };
+  \node at (0,-1) { $\ldots4132310$ };
+  \node at (1,-1) { $\ldots4020033$ };
+  \node at (2,-1) { $\ldots4421144$ };
+  \node at (0,-2) { $\ldots2202130$ };
+  \node at (1,-2) { $\ldots2220114$ };
+  \node at (2,-2) { $\ldots4204122$ };
+}
+\only<14>{
+  \node at (0,0) { $\ldots4324032$ };
+}
+\only<15-22>{
+  \node at (0,0) { \color{red} $\ldots4324032$ };
+}
+\only<14-22>{
+  \node at (1,0) { $\ldots1014240$ };
+  \node at (2,0) { $\ldots0101111$ };
+}
+\only<14-15>{
+  \node at (0,-1) { $\ldots4020033$ };
+  \node at (1,-1) { $\ldots4132310$ };
+  \node at (2,-1) { $\ldots4421144$ };
+}
+\only<16-17>{
+  \node at (0,-1) { \color{black!30} $\ldots0000000$ };
+  \node at (1,-1) { $\ldots4043200$ };
+  \node at (2,-1) { $\ldots1221300$ };
+}
+\only<14-16>{
+  \node at (0,-2) { $\ldots2220114$ };
+  \node at (1,-2) { $\ldots2202130$ };
+  \node at (2,-2) { $\ldots4204122$ };
+}
+\only<17>{
+  \node at (0,-2) { \color{black!30} $\ldots0000000$ };
+  \node at (1,-2) { $\ldots2223100$ };
+  \node at (2,-2) { $\ldots1100400$ };
+}
+\only<18-22>{
+  \node at (0,0) { $\ldots4324032$ };
+  \node at (1,0) { $\ldots1014240$ };
+  \node at (2,0) { $\ldots0101111$ };
+  \node at (0,-1) { \color{black!30} $\ldots0000000$ };
+  \node at (0,-2) { \color{black!30} $\ldots0000000$ };
+  \node at (2,-1) { $\ldots1221300$ };
+}
+\only<18,21-22>{
+  \node at (1,-1) { $\ldots4043200$ };
+}
+\only<19-20>{
+  \node at (1,-1) { \color{red} $\ldots4043200$ };
+}
+\only<18-19>{
+  \node at (1,-2) { $\ldots2223100$ };
+  \node at (2,-2) { $\ldots1100400$ };
+}
+\only<20-22>{
+  \node at (1,-2) { \color{black!30} $\ldots0000000$ };
+  \node at (2,-2) { $\ldots3014000$ };
+}
+
+\end{tikzpicture}
+}\right)$$
+
+\medskip \pause
+
+{\bf Answer:}
+
+\begin{center}
+\begin{tabular}{rr}
+just expand: & $\ldots4400000$\medskip \\
+\uncover<4->{Hermite + expand:} & \uncover<12->{$\ldots34400000$}\medskip \\
+\uncover<13->{Smith + expand:} & \uncover<22->{$\ldots234400000$}
+\end{tabular}
+\end{center}
+
+\uncover<23->{\color{red} What is the correct precision?}
+
+\end{frame}
+
+\end{document}
