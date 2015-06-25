@@ -1,8 +1,6 @@
 \documentclass{beamer}
 %\documentclass[handout]{beamer}
 
-\usetheme{Copenhagen}
-
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{amsmath,amssymb}
@@ -11,7 +9,28 @@
 \usepackage{times}
 \usepackage{verbatim}
 \usepackage{array}
+\usepackage{multirow}
 \usepackage{stmaryrd}
+\usepackage{comment}
+
+\definecolor{textcolor}{rgb}{0.1,0.1,0.2}
+\definecolor{alert}{rgb}{0.7,0.1,0.1}
+\definecolor{bleu}{rgb}{0.1,0.1,0.5}
+\definecolor{violet}{rgb}{0.5,0.1,0.5}
+
+\definecolor{bleufonce}{rgb}{0,0,0.4}
+\definecolor{rougefonce}{rgb}{0.4,0,0}
+\definecolor{vertfonce}{rgb}{0.1,0.4,0.1}
+\definecolor{beige}{rgb}{0.9,0.9,0.7}
+
+
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=textcolor}
+\setbeamercolor{structure}{fg=textcolor}
+\setbeamercolor{frametitle}{bg=white,fg=black}
+\setbeamertemplate{navigation symbols}{}%remove navigation symbols
+
+\setbeamercolor{postit}{fg=vertfonce,bg=yellow!50}
 
 \newtheorem{prop}{Proposition}
 
@@ -46,11 +65,13 @@
   \end{minipage}
 \end{center}}
 
-\newcommand{\ph}{\vphantom{A^A_A}}
+\newcommand{\ph}{\vphantom{$A^A_A$}}
 \newcommand{\Z}{\mathbb Z}
 \newcommand{\Q}{\mathbb Q}
+\newcommand{\Zp}{\Z_p}
+\newcommand{\Qp}{\Q_p}
+\newcommand{\R}{\mathbb R}
 \newcommand{\C}{\mathbb C}
-\renewcommand{\Xi}{\mathcal C}
 
 \begin{document}
 
@@ -116,47 +137,203 @@ July 6, 2015
 
 \end{frame}
 
-\setbeamercolor{frametitle}{bg=bleufonce}
+\begin{frame}
+\frametitle{What are $p$-adic numbers?} \pause
+
+{\color{alert} $p$} refers to a prime number
+
+\bigskip \pause
+
+{\color{alert} $p$-adic numbers} are numbers written in $p$-basis
+of the shape:
+
+\vspace{-0.3cm}
+
+$$a = \ldots a_i \ldots a_2 \: a_1 \: a_0 \, , \, a_{-1} \: a_{-2} \ldots 
+\: a_{-n}$$
+
+\vspace{-0.1cm}
+
+with $0 \leq x_i < p$ for all $i$.
+
+\medskip \pause
+
+The {\color{alert} valuation} $v_p(a)$ of $a$ is the smallest $v$
+such that $a_v \neq 0$.
+
+\medskip \pause
+
+Addition and multiplication on these numbers are defined by
+applying SchoolBook algorithms.
+
+\medskip \pause
+
+The $p$-adic numbers form the field {\color{alert} $\Qp$}.
+
+\bigskip \pause
+
+A $p$-adic number with no digit after the comma is a
+
+{\color{alert} $p$-adic integer}.
+
+\medskip \pause
+
+The $p$-adic integers form a subring {\color{alert} $\Zp$} of $\Qp$.
+\end{frame}
+
+\begin{comment}
+\begin{frame}
+\frametitle{Why should we use/study them?} \pause
+
+\Wider[1cm]{
+\begin{itemize}
+\item they are already ubiquitous in number theory
+
+\smallskip \pause
+
+{\scriptsize
+Some interesting questions (coming from number theory) involve
+$p$-adic numbers
+
+\emph{e.g.} local-global principle, $p$-adic Galois representations
+
+\smallskip
+
+$p$-adic cohomologies (on which Kedlaya-type counting points algorithms 
+are based)
+} 
+
+\medskip \pause
+
+\item they allow to define more functions in positive characteristic
+
+\smallskip \pause
+
+{\scriptsize
+{\bf Typical naive example:}
+
+they can be used to give a sense to
+the function $\frac{x^p - x} p$ over a field of char. $p$.
+
+\smallskip \pause
+
+Related ideas were used to 
+\begin{enumerate}[$\bullet$] \scriptsize
+\item \scriptsize compute ... \pause
+\item \scriptsize compute isogenies between elliptic curves
+\end{enumerate}
+}
+
+\medskip \pause
+
+\item they sometimes offer good stability (compared to $\R$)
+
+\smallskip \pause
+
+{\scriptsize
+We start with a problem defined over $\Z$,
+we solve it in $\Zp$ and do reconstruction.
+
+\vspace{-0.1cm} \pause
+
+\emph{e.g.} inversion of the Hilbert matrix $(\frac 1{i+j-1})_{1 \leq i,j 
+\leq n}$
+}
+
+\medskip \pause
+
+\item and many other reasons...
+
+\end{itemize}}
+\end{frame}
+\end{comment}
 
 \begin{frame}
-\frametitle{Computation of determinants} \pause
+\frametitle{$\Zp$ on a computer} \pause
+
+A $p$-adic integer carries an infinite amount of information.
+
+\medskip \pause
+
+Therefore it cannot fit in the memory of a computer and we need to
+work with \emph{truncated} $p$-adic integers\pause,
+
+\emph{i.e.} we only specify the $N$ last digits $a_0, \ldots, a_{N-1}$.
+
+\bigskip \pause
+
+These truncated $p$-adic integers are often denoted by:
+
+\vspace{-0.3cm}
+
+$$a_{N-1} \ldots a_2 \: a_1 \: a_0 + O(p^N)
+\quad \text{or} \quad
+\ldots a_{N-1} \ldots a_2 \: a_1 \: a_0.$$ \pause
+
+\vspace{-0.3cm}
+
+The {\color{alert} absolute precision} is $N$.
+
+\smallskip \pause
+
+The {\color{alert} relative precision} is $N - v_p(a) \pause = \text{
+\# significant digits}$.
+
+\bigskip \pause
+
+{\bf Arithmetic operations on truncations}
+
+\vspace{-0.5cm} \pause
+
+$$\begin{array}{l}
+\big( a + O(p^{N_a}) \big) + \big( b + O(p^{N_b}) \big) =
+a + b + O(p^{\min(N_a, N_b)}) \medskip \pause \\
+\big( a + O(p^{N_a}) \big) \times \big( b + O(p^{N_b}) \big) 
+= ab + O(p^{\min(N_a + v_p(b), N_b + v_p(a))})
+\end{array}$$
+\end{frame}
+
+
+\begin{frame}
+\frametitle{But... \only<2->{studying precision is actually not quite trivial}} 
+\pause \pause
 
 {\bf Question:} Compute the determinant of
 $$\left(
 \raisebox{-0.95cm}{
 \begin{tikzpicture}[xscale=3, yscale=0.8]
 
-\only<2-4>{
+\only<3-5>{
   \node at (0,0) { $\ldots1014240$ };
 }
-\only<5-7>{
-  \node at (0,0) { \color{red} $\ldots1014240$ };
+\only<6-8>{
+  \node at (0,0) { \color{alert} $\ldots1014240$ };
 }
-\only<2-7>{
+\only<3-8>{
   \node at (1,0) { $\ldots4324032$ };
   \node at (2,0) { $\ldots0101111$ };
 }
-\only<2-5>{
+\only<3-6>{
   \node at (0,-1) { $\ldots4132310$ };
   \node at (1,-1) { $\ldots4020033$ };
   \node at (2,-1) { $\ldots4421144$ };
 }
-\only<6-7>{
+\only<7-8>{
   \node at (0,-1) { \color{black!30} $\ldots0000000$ };
   \node at (1,-1) { $\ldots3414440$ };
   \node at (2,-1) { $\ldots4223420$ };
 }
-\only<2-6>{
+\only<3-7>{
   \node at (0,-2) { $\ldots2202130$ };
   \node at (1,-2) { $\ldots2220114$ };
   \node at (2,-2) { $\ldots4204122$ };
 }
-\only<7>{
+\only<8>{
   \node at (0,-2) { \color{black!30} $\ldots0000000$ };
   \node at (1,-2) { $\ldots0224020$ };
   \node at (2,-2) { $\ldots2313110$ };
 }
-\only<8-12>{
+\only<9-13>{
   \node at (0,0) { $\ldots1014240$ };
   \node at (1,0) { $\ldots4324032$ };
   \node at (2,0) { $\ldots0101111$ };
@@ -164,22 +341,22 @@ $$\left(
   \node at (0,-2) { \color{black!30} $\ldots0000000$ };
   \node at (2,-1) { $\ldots4223420$ };
 }
-\only<8,11-12>{
+\only<9,12-13>{
   \node at (1,-1) { $\ldots3414440$ };
 }
-\only<9-10>{
-  \node at (1,-1) { \color{red} $\ldots3414440$ };
+\only<10-11>{
+  \node at (1,-1) { \color{alert} $\ldots3414440$ };
 }
-\only<8-9>{
+\only<9-10>{
   \node at (1,-2) { $\ldots0224020$ };
   \node at (2,-2) { $\ldots2313110$ };
 }
-\only<10-12>{
+\only<11-13>{
   \node at (1,-2) { \color{black!30} $\ldots0000000$ };
   \node at (2,-2) { $\ldots3014000$ };
 }
 
-\only<13,23->{
+\only<14,24->{
   \node at (0,0) { $\ldots1014240$ };
   \node at (1,0) { $\ldots4324032$ };
   \node at (2,0) { $\ldots0101111$ };
@@ -190,37 +367,37 @@ $$\left(
   \node at (1,-2) { $\ldots2220114$ };
   \node at (2,-2) { $\ldots4204122$ };
 }
-\only<14>{
+\only<15>{
   \node at (0,0) { $\ldots4324032$ };
 }
-\only<15-22>{
-  \node at (0,0) { \color{red} $\ldots4324032$ };
+\only<16-18>{
+  \node at (0,0) { \color{alert} $\ldots4324032$ };
 }
-\only<14-22>{
+\only<15-23>{
   \node at (1,0) { $\ldots1014240$ };
   \node at (2,0) { $\ldots0101111$ };
 }
-\only<14-15>{
+\only<15-16>{
   \node at (0,-1) { $\ldots4020033$ };
   \node at (1,-1) { $\ldots4132310$ };
   \node at (2,-1) { $\ldots4421144$ };
 }
-\only<16-17>{
+\only<17-18>{
   \node at (0,-1) { \color{black!30} $\ldots0000000$ };
   \node at (1,-1) { $\ldots4043200$ };
   \node at (2,-1) { $\ldots1221300$ };
 }
-\only<14-16>{
+\only<15-17>{
   \node at (0,-2) { $\ldots2220114$ };
   \node at (1,-2) { $\ldots2202130$ };
   \node at (2,-2) { $\ldots4204122$ };
 }
-\only<17>{
+\only<18>{
   \node at (0,-2) { \color{black!30} $\ldots0000000$ };
   \node at (1,-2) { $\ldots2223100$ };
   \node at (2,-2) { $\ldots1100400$ };
 }
-\only<18-22>{
+\only<19-23>{
   \node at (0,0) { $\ldots4324032$ };
   \node at (1,0) { $\ldots1014240$ };
   \node at (2,0) { $\ldots0101111$ };
@@ -228,17 +405,17 @@ $$\left(
   \node at (0,-2) { \color{black!30} $\ldots0000000$ };
   \node at (2,-1) { $\ldots1221300$ };
 }
-\only<18,21-22>{
+\only<19,22-23>{
   \node at (1,-1) { $\ldots4043200$ };
 }
-\only<19-20>{
-  \node at (1,-1) { \color{red} $\ldots4043200$ };
+\only<20-21>{
+  \node at (1,-1) { \color{alert} $\ldots4043200$ };
 }
-\only<18-19>{
+\only<19-20>{
   \node at (1,-2) { $\ldots2223100$ };
   \node at (2,-2) { $\ldots1100400$ };
 }
-\only<20-22>{
+\only<21-23>{
   \node at (1,-2) { \color{black!30} $\ldots0000000$ };
   \node at (2,-2) { $\ldots3014000$ };
 }
@@ -253,13 +430,695 @@ $$\left(
 \begin{center}
 \begin{tabular}{rr}
 just expand: & $\ldots4400000$\medskip \\
-\uncover<4->{Hermite + expand:} & \uncover<12->{$\ldots34400000$}\medskip \\
-\uncover<13->{Smith + expand:} & \uncover<22->{$\ldots234400000$}
+\uncover<5->{Hermite + expand:} & \uncover<13->{$\ldots34400000$}\medskip \\
+\uncover<14->{Smith + expand:} & \uncover<23->{$\ldots234400000$}
 \end{tabular}
 \end{center}
 
-\uncover<23->{\color{red} What is the correct precision?}
+\uncover<24->{\color{violet} \bf What is the correct precision?}
 
 \end{frame}
+
+\begin{frame}
+\begin{center}
+\bf \huge
+The precision Lemma
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lattices} \pause
+
+Let $E$ be a finite dimensional $\Qp$-vector space.
+
+\medskip \pause
+
+A {\color{alert} lattice} $H$ of $E$ is a sub-$\Zp$-module of 
+$E$ generated by a $\Qp$-basis of $E$.
+
+\bigskip \pause
+
+\begin{overlayarea}{\textwidth}{9cm}
+{\bf Geometrical interpretation}
+
+\medskip \pause
+
+\only<5->{
+  Recall that $\Qp$ is endowed with the 
+
+  ultrametric norm $|x| = p^{-v_p(x)}$
+}
+
+\medskip
+
+\only<7->{
+  Endow $E$ with a norm
+}
+
+\only<8->{
+  \vspace{-1mm}
+
+  {\scriptsize (compatible with that on $\Qp$)}
+}
+
+\medskip
+
+\only<9->{
+The unit ball $B_E(1)$ is a lattice
+}
+
+\smallskip
+
+\only<11->{
+{\scriptsize
+and other lattices are deduced from it by
+
+\vspace{-1mm}
+
+applying a linear isomorphism
+$\varphi : E \stackrel{\sim}{\longrightarrow} E$.
+}}
+
+\medskip
+
+\only<13->{
+Lattices might then be thought as 
+
+special neighborhoods of $0$.
+}
+\end{overlayarea}
+
+\vspace{-9.6cm}
+
+\hfill
+\begin{tikzpicture}
+\draw[transparent] (0,0) rectangle (4,6);
+
+\only<6->{
+\begin{scope}[beige, rounded corners=10pt]
+\fill (0.1,0.2) rectangle (3.9,5.8);
+\end{scope}
+
+\only<10-11>{
+  \draw[black,fill=green!50] (1,2) rectangle (3,4);
+  \fill[vertfonce] (2,3) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (2.15,2.9) { $0$ };
+  \node[vertfonce,scale=0.8] at (2,1.7) { $B_E(1)$ };
+}
+\only<12->{
+  \begin{scope}[xshift=2cm,yshift=3cm,rotate=20]
+  \draw[black,fill=green!50] (-0.7,-1.5) rectangle (0.7,1.5);
+  \draw[black,->] (-1,0)--(1,0);
+  \draw[black,->] (0,-2)--(0,2);
+  \end{scope}
+}
+\begin{scope}[textcolor,very thick, rounded corners=10pt]
+\draw (0.1,0.2) rectangle (3.9,5.8);
+\end{scope}}
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Statement of the Lemma} \pause
+
+We consider:
+
+\medskip
+
+\begin{tabular}{rl}
+$E, F$ & two finite dimensional $\Qp$-vector spaces, \\
+$U$ & an open subset in $E$, \\
+$f$ & a differentiable function $U \to F$.
+\end{tabular}
+
+\medskip \pause
+
+Let $x \in U$.
+\emph{We assume that $f'(x) : E \to F$ is surjective.}
+\medskip \pause
+
+Then, for all lattice $H \subset E$ ``sufficiently small'':
+
+\vspace{-0.2cm}
+
+$$f(x+H) = f(x) + f'(x)(H).$$
+
+\bigskip \pause
+
+{\color{vertfonce}
+The correct meaning of ``sufficiently small'' is rather subtle.
+
+\smallskip \pause
+
+Nevertheless, it can be made completely explicit...
+
+at least if $f$ has more regularity.
+}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Illustration} \pause
+
+\Wider{
+\begin{tikzpicture}
+\draw[transparent] (0,0.4) rectangle (12,8);
+
+\begin{scope}[beige, rounded corners=10pt]
+\fill (0.1,1) rectangle (3.9,7.8);
+\fill (4.1,1) rectangle (7.9,7.8);
+\fill (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+
+\begin{scope}[thick]
+\draw[->] (2.5,0.9) to[out=-25,in=-155] (5.5,0.9);
+\node at (4,0.75) { $f_1$ };
+\draw[->] (6.5,0.9) to[out=-25,in=-155] (9.5,0.9);
+\node at (8,0.75) { $f_2$ };
+\end{scope}
+
+\only<3->{
+  \draw[black,fill=green!50] (1.2,3.7) rectangle (2.8,5.3);
+  \node[vertfonce,scale=0.8] at (2,3.4) { $x + H$ };
+  \fill[vertfonce] (2,4.5) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (2.15,4.4) { $x$ };
+}
+\only<4->{
+  \draw[black,fill=green!50,xshift=6cm,yshift=4.5cm,rotate=50]
+    (-0.8,-1.5) rectangle (0.8,1.5);
+  \node[vertfonce,scale=0.8] at (6,2.6) { $f_1(x) + f'_1(x)(H)$ };
+  \fill[vertfonce] (6.5,4.4) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (6.5,4.15) { $f_1(x)$ };
+}
+\only<5->{
+  \draw[black,fill=green!50,xshift=10cm,yshift=4.5cm,rotate=-20]
+    (-0.5,-2) rectangle (0.5,2);
+  \node[vertfonce,scale=0.8] at (10,2.2) { $f(x) + f'(x)(H)$ };
+  \node[vertfonce,scale=0.6] at (10,1.85) { with $f = f_2 \circ f_1$ };
+  \fill[vertfonce] (10.6,6) circle (0.5mm);
+  \node[vertfonce,scale=0.7] at (10.5,5.75) { $f(x)$ };
+}
+
+\begin{scope}[textcolor,very thick, rounded corners=10pt]
+\draw (0.1,1) rectangle (3.9,7.8);
+\draw (4.1,1) rectangle (7.9,7.8);
+\draw (8.1,1) rectangle (11.9,7.8);
+\end{scope}
+\end{tikzpicture}
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{One application: determinant} \pause
+
+\begin{overlayarea}{\textwidth}{9cm}
+{\bf Question:} Compute the determinant of
+$$\left(
+\raisebox{-0.95cm}{
+\begin{tikzpicture}[xscale=3, yscale=0.8]
+\node at (0,0) { $\ldots1014240$ };
+\node at (1,0) { $\ldots4324032$ };
+\node at (2,0) { $\ldots0101111$ };
+\node at (0,-1) { $\ldots4132310$ };
+\node at (1,-1) { $\ldots4020033$ };
+\node at (2,-1) { $\ldots4421144$ };
+\node at (0,-2) { $\ldots2202130$ };
+\node at (1,-2) { $\ldots2220114$ };
+\node at (2,-2) { $\ldots4204122$ };
+\end{tikzpicture}
+}\right)$$
+
+\medskip
+
+{\bf Answer:}
+
+\begin{center}
+\begin{tabular}{rr}
+just expand: & $\ldots4400000$\medskip \\
+Hermite + expand: & $\ldots34400000$\medskip \\
+Smith + expand: & $\ldots234400000$
+\end{tabular}
+\end{center}
+
+{\color{violet} \bf What is the correct precision?}
+\end{overlayarea}
+
+\vspace{-9.2cm} \pause
+
+\begin{tikzpicture}
+\fill[white,opacity=0.95] (0,0) rectangle (10,9.2);
+\end{tikzpicture}
+
+\vspace{-9.2cm} 
+
+Consider the function $\det : M_n(\Qp) \to \Qp$.
+
+\medskip \pause
+
+Given $M \in M_n(\Qp)$, it is well known that:
+
+\vspace{-0.2cm}
+
+$$\begin{array}{rcl}
+det'(M) : \quad M_n(\Qp) & \to & \Qp \\
+dM & \mapsto & \text{Tr}(\text{Com}(M) \cdot dM)
+\end{array}$$
+
+\smallskip \pause
+
+{\bf Proposition}
+
+\smallskip \pause
+
+Write the Smith decomposition of $M$:
+
+\vspace{-0.2cm}
+
+$$\begin{array}{rl}
+M = P \cdot \text{Diag}(p^{n_1}, \cdots, p^{n_d}) \cdot Q, &
+P, Q \in \text{GL}_n(\Zp) \\
+& n_1 \leq \cdots \leq n_d
+\end{array}$$
+
+\vspace{-0.1cm} \pause
+
+The image of $H_0 = M_n(\Zp)$ under $\det'(M)$ is
+$p^{n_1 + \cdots + n_{d-1}} \Zp$.
+
+\bigskip \pause
+
+{\bf Corollary}
+
+\smallskip \pause
+
+Using Smith decomposition for computing determinant gives the
+optimal precision.
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\bf \huge 
+The art of 
+
+tracking precision
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lattices as precision data} \pause
+
+\hfill
+\begin{beamercolorbox}[sep=0.3em,wd=5cm,rounded=true]{postit}
+\centering
+$f(x+H) = f(x) + f'(x)(H)$
+\end{beamercolorbox}
+
+\vspace{-0.8cm} \pause
+
+Our proposal was to use 
+
+lattices to encode precision
+
+\smallskip \pause
+
+{\footnotesize
+Given a set of $d$ variables $x_1, \ldots, x_d \in \Qp$ 
+(\emph{e.g.} a matrix),
+
+replace $x_1 + O(p^{N_1}), \ldots, x_d + O(p^{N_d})$
+by $(x_1, \ldots, x_d) + O(H)$
+}
+
+\medskip \pause
+
+{\small \color{violet}
+{\bf Advantage:} sharp on precision \pause
+
+{\bf Drawback:} time/space consuming
+}
+
+\medskip \pause
+
+This encompasses the usual way
+
+of representing precision
+
+\smallskip \pause
+
+{\footnotesize
+\begin{tabular}{r@{\,\,}l}
+& $x_1 + O(p^{N_1}), \ldots, x_d + O(p^{N_d})$ \\
+= & {\color{alert} diagonal lattice} 
+$\left< p^{N_1} x_1^\star, \ldots, p^{N_d} x_d^\star \right>$.
+\end{tabular}
+}
+
+\bigskip \pause
+
+{\bf Definition.}
+The {\color{alert} number of diffused 
+
+digits} of a lattice $H$ is the length of
+
+$H_{\text{diag}}/H$ where $H_{\text{diag}}$ is the minimal 
+
+\emph{diagonal} 
+lattice containing $H$.
+
+\vspace{-5.4cm}
+
+\hfill
+\begin{tikzpicture}
+\draw[transparent] (0,0) rectangle (4.5,5.5);
+
+\only<10->{
+\begin{scope}[beige, rounded corners=10pt]
+\fill (0.2,0.2) rectangle (4.3,5.3);
+\end{scope}
+
+\begin{scope}[xshift=2.25cm,yshift=2.75cm,rotate=35]
+\draw[black,fill=green!50] (-0.7,-1.5) rectangle (0.7,1.5);
+\end{scope}
+
+\only<11->{
+  \begin{scope}[xshift=2.25cm,yshift=2.75cm]
+  \draw[black,fill=red!50,opacity=0.8] (-1.44,-1.64) rectangle (1.44,1.64);
+  \end{scope}
+}
+\begin{scope}[textcolor,very thick, rounded corners=10pt]
+\draw (0.2,0.2) rectangle (4.3,5.3);
+\end{scope}}
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{An example: product of matrices} \pause
+
+\hfill
+\begin{tikzpicture}
+\begin{scope}
+\clip[rounded corners=10pt] (0,0) rectangle (10,-3.4);
+\fill[green!30] (0,0) rectangle (10,-3.4);
+\fill[vertfonce] (0,0) rectangle (10,-1.1);
+\end{scope}
+\draw[very thick,rounded corners=10pt] (0,0) rectangle (10,-3.4);
+\begin{scope}[color=white]
+\node[right] at (0.1,-0.32) { \ph \bf Input: };
+\node[right] at (1.6,-0.32) { \ph $A_1, \ldots, A_n \in M_2(\Zp)$ known at precision $O(p^N)$ };
+\node[right] at (0.1,-0.8) { \ph \bf Output: };
+\node[right] at (1.6,-0.8) { \ph the product $A_1 A_2 \cdots A_n$ };
+\end{scope}
+\node[right,color=vertfonce] at (0.1, -1.5) { \ph 1. };
+\node[right] at (0.6, -1.5) { \ph $A = \text{identity matrix of size $2$ at precision } O(p^N)$ };
+\node[right,color=vertfonce] at (0.1, -2) { \ph 2. };
+\node[right] at (0.6, -2) { \ph {\color{bleufonce} for} $i$ in $1, 2, \ldots n$: };
+\node[right,color=vertfonce] at (0.1, -2.5) { \ph 3. };
+\node[right] at (1.1, -2.5) { \ph $A = A \cdot A_i$ };
+\node[right,color=vertfonce] at (0.1, -3) { \ph 4. };
+\node[right] at (0.6, -3) { \ph {\color{rougefonce} return} $A$ };
+\end{tikzpicture}
+\hfill \null
+
+\vfill \pause 
+
+\begin{overlayarea}{\textwidth}{4.2cm}
+
+\hfill
+\begin{tikzpicture}
+\draw[transparent] (0,-0.62) rectangle (10,3.5);
+\begin{scope}[beige, rounded corners=10pt]
+\fill (0.2,0.2) rectangle (4.3,3.3);
+\fill (5.7,0.2) rectangle (9.8,3.3);
+\end{scope}
+\begin{scope}[textcolor,very thick,rounded corners=10pt]
+\draw (0.2,0.2) rectangle (4.3,3.3);
+\draw (5.7,0.2) rectangle (9.8,3.3);
+\end{scope}
+\draw[very thick,->] (4.5,1.75)--(5.5,1.75)
+  node[above, midway] { $\times A_i$ };
+\node[brown, below right, scale=0.5] at (0.3,3.2) { $M_2(\Qp)$ };
+\node[brown, below right, scale=0.5] at (5.8,3.2) { $M_2(\Qp)$ };
+\only<4->{
+  \begin{scope}[xshift=2.25cm,yshift=1.75cm]
+  \draw[black,fill=green!50,opacity=0.8] (-1,-1) rectangle (1,1);
+  \end{scope}
+}
+\only<5-6>{
+  \begin{scope}[xshift=7.75cm,yshift=1.75cm]
+  \draw[black,fill=green!50,opacity=0.8] (-1,-1) rectangle (1,1);
+  \end{scope}
+}
+\only<6>{
+  \node[left] at (10,-0.3) { no diffused digits };
+}
+\only<8-10>{
+  \begin{scope}[xshift=7.75cm,yshift=1.75cm]
+  \draw[black,fill=green!50,opacity=0.8] 
+    (-1,-0.8)--(-0.8,1)--(1,0.8)--(0.8,-1)--cycle;
+  \end{scope}
+}
+\only<9-10>{
+  \begin{scope}[xshift=7.75cm,yshift=1.75cm]
+  \draw[black,fill=red!50,opacity=0.8] (-1,-1) rectangle (1,1);
+  \end{scope}
+}
+\only<10>{
+  \node[left] at (10,-0.3) { \color{violet} diffused digits };
+}
+\end{tikzpicture}
+\hfill \null
+
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{An example: product of matrices}
+
+\hfill
+\begin{tikzpicture}
+\begin{scope}
+\clip[rounded corners=10pt] (0,0) rectangle (10,-3.4);
+\fill[green!30] (0,0) rectangle (10,-3.4);
+\fill[vertfonce] (0,0) rectangle (10,-1.1);
+\end{scope}
+\draw[very thick,rounded corners=10pt] (0,0) rectangle (10,-3.4);
+\begin{scope}[color=white]
+\node[right] at (0.1,-0.32) { \ph \bf Input: };
+\node[right] at (1.6,-0.32) { \ph $A_1, \ldots, A_n \in M_2(\Zp)$ known at precision $O(p^N)$ };
+\node[right] at (0.1,-0.8) { \ph \bf Output: };
+\node[right] at (1.6,-0.8) { \ph the product $A_1 A_2 \cdots A_n$ };
+\end{scope}
+\node[right,color=vertfonce] at (0.1, -1.5) { \ph 1. };
+\node[right] at (0.6, -1.5) { \ph $A = \text{identity matrix of size $2$ at precision } O(p^N)$ };
+\node[right,color=vertfonce] at (0.1, -2) { \ph 2. };
+\node[right] at (0.6, -2) { \ph {\color{bleufonce} for} $i$ in $1, 2, \ldots n$: };
+\node[right,color=vertfonce] at (0.1, -2.5) { \ph 3. };
+\node[right] at (1.1, -2.5) { \ph $A = A \cdot A_i$ };
+\node[right,color=vertfonce] at (0.1, -3) { \ph 4. };
+\node[right] at (0.6, -3) { \ph {\color{rougefonce} return} $A$ };
+\end{tikzpicture}
+\hfill \null
+
+\vfill \pause 
+
+\begin{overlayarea}{\textwidth}{4.2cm}
+
+\hfill
+\begin{tikzpicture}
+\draw[transparent] (0,-0.62) rectangle (10,3.5);
+\begin{scope}[beige, rounded corners=10pt]
+\fill (0.2,0.2) rectangle (4.3,3.3);
+\fill (5.7,0.2) rectangle (9.8,3.3);
+\end{scope}
+\begin{scope}[textcolor,very thick,rounded corners=10pt]
+\draw (0.2,0.2) rectangle (4.3,3.3);
+\draw (5.7,0.2) rectangle (9.8,3.3);
+\end{scope}
+\node[brown, below right, scale=0.5] at (0.3,3.2) { $M_2(\Qp)$ };
+\node[brown, below right, scale=0.5] at (5.8,3.2) { $M_2(\Qp)$ };
+\node[scale=0.8] at (2.25,-0.1) { without lattice };
+\node[scale=0.8] at (7.75,-0.1) { with lattice };
+\draw[black,dotted,xshift=2.25cm,yshift=1.75cm]
+     (-1,-1) rectangle (1,1);
+\draw[black,dotted,xshift=7.75cm,yshift=1.75cm]
+     (-1,-1) rectangle (1,1);
+\only<2>{\node at (5,-0.2) { $i = 0$ };}
+\only<3>{\node at (5,-0.2) { $i = 1$ };}
+\only<4>{\node at (5,-0.2) { $i = 2$ };}
+\only<2-4>{
+  \draw[black,fill=green!50,opacity=0.8,xshift=7.75cm,yshift=1.75cm] 
+     (-1,-1) rectangle (1,1);
+  \draw[black,fill=green!50,opacity=0.8,xshift=2.25cm,yshift=1.75cm]
+     (-1,-1) rectangle (1,1);
+}
+\only<5-6>{
+  \node at (5,-0.2) { $i = 3$ };
+  \draw[black,fill=green!50,opacity=0.8,xshift=7.75cm,yshift=1.75cm]
+    (-1,-0.8)--(-0.8,1)--(1,0.8)--(0.8,-1)--cycle;
+}
+\only<5>{
+  \draw[black,fill=green!50,opacity=0.8,xshift=2.25cm,yshift=1.75cm]
+    (-1,-0.8)--(-0.8,1)--(1,0.8)--(0.8,-1)--cycle;
+}
+\only<6-7>{
+  \draw[black,fill=green!50,opacity=0.8,xshift=2.25cm,yshift=1.75cm]
+     (-1,-1) rectangle (1,1);
+}
+\only<7>{
+  \node at (5,-0.2) { $i = 4$ };
+  \draw[black,fill=green!50,opacity=0.8,xshift=7.75cm,yshift=1.75cm]
+    (-1,0.8)--(-0.8,-1)--(1,-0.8)--(0.8,1)--cycle;
+}
+\only<8-9>{
+  \node at (5,-0.2) { $i = 5$ };
+  \draw[black,fill=green!50,opacity=0.8,xshift=7.75cm,yshift=1.75cm,rotate=-20]
+    (-0.7,-0.6) rectangle (0.7,0.6);
+}
+\only<8>{
+  \draw[black,fill=green!50,opacity=0.8,xshift=2.25cm,yshift=1.75cm,rotate=10]
+    (-0.9,-0.7) rectangle (0.9,0.7);
+}
+\only<9>{
+  \draw[black,fill=green!50,opacity=0.8,xshift=2.25cm,yshift=1.75cm]
+    (-1,-0.8) rectangle (1,0.8);
+}
+\only<10>{
+  \node at (5,-0.2) { $i = 10$ };
+  \draw[black,fill=green!50,opacity=0.8,xshift=7.75cm,yshift=1.75cm,rotate=17]
+    (-0.6,-0.6) rectangle (0.6,0.6);
+  \draw[black,fill=green!50,opacity=0.8,xshift=2.25cm,yshift=1.75cm]
+    (-0.9,-0.8) rectangle (0.9,0.8);
+}
+\only<11>{
+  \node at (5,-0.2) { $i = 100$ };
+  \draw[black,fill=green!50,opacity=0.8,xshift=7.75cm,yshift=1.75cm,rotate=45]
+    (-0.2,-0.3) rectangle (0.2,0.3);
+  \draw[black,fill=green!50,opacity=0.8,xshift=2.25cm,yshift=1.75cm]
+    (-0.7,-0.65) rectangle (0.7,0.65);
+}
+\end{tikzpicture}
+\hfill \null
+
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{An example: product of matrices}
+
+\hfill
+\begin{tikzpicture}
+\begin{scope}
+\clip[rounded corners=10pt] (0,0) rectangle (10,-3.4);
+\fill[green!30] (0,0) rectangle (10,-3.4);
+\fill[vertfonce] (0,0) rectangle (10,-1.1);
+\end{scope}
+\draw[very thick,rounded corners=10pt] (0,0) rectangle (10,-3.4);
+\begin{scope}[color=white]
+\node[right] at (0.1,-0.32) { \ph \bf Input: };
+\node[right] at (1.6,-0.32) { \ph $A_1, \ldots, A_n \in M_2(\Zp)$ known at precision $O(p^N)$ };
+\node[right] at (0.1,-0.8) { \ph \bf Output: };
+\node[right] at (1.6,-0.8) { \ph the product $A_1 A_2 \cdots A_n$ };
+\end{scope}
+\node[right,color=vertfonce] at (0.1, -1.5) { \ph 1. };
+\node[right] at (0.6, -1.5) { \ph $A = \text{identity matrix of size $2$ at precision } O(p^N)$ };
+\node[right,color=vertfonce] at (0.1, -2) { \ph 2. };
+\node[right] at (0.6, -2) { \ph {\color{bleufonce} for} $i$ in $1, 2, \ldots n$: };
+\node[right,color=vertfonce] at (0.1, -2.5) { \ph 3. };
+\node[right] at (1.1, -2.5) { \ph $A = A \cdot A_i$ };
+\node[right,color=vertfonce] at (0.1, -3) { \ph 4. };
+\node[right] at (0.6, -3) { \ph {\color{rougefonce} return} $A$ };
+\end{tikzpicture}
+\hfill \null
+
+\vfill \pause
+
+\begin{overlayarea}{\textwidth}{4.2cm}
+
+\vspace{0.2cm}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|}
+\hline
+\multirow{2}{*}{\hspace{0.2cm}$n$\hspace{0.2cm}} &
+\multicolumn{2}{c|}{Average 
+\makebox[2.7cm]{\only<2>{gain of absolute}\only<3>{loss\,\,of\,\,\,{\color{alert} relative}}}
+precision on $A_{1,1}$} \\
+\cline{2-3}
+& \hspace{0.4cm} without lattice \hspace{0.4cm} & with lattice \\
+\hline
+$10$ & 
+\only<2>{???}\only<3>{$\hphantom{00}2.8$} & 
+\only<2>{???}\only<3>{$2.4$} \\
+$100$ & 
+\only<2>{???}\only<3>{$\hphantom{0}16.7$} & 
+\only<2>{???}\only<3>{$5.0$} \\
+$1000$ &
+\only<2>{???}\only<3>{$157.8$} & 
+\only<2>{???}\only<3>{$7.9$} \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{overlayarea}
+\end{frame}
+
+\begin{frame}
+\frametitle{Our paper also studies...} \pause
+
+\Wider[1cm]{
+\begin{itemize}
+\item Characteristic polynomials
+
+\smallskip \pause
+
+{\footnotesize
+$\bullet$ Computation of the differential 
+
+\smallskip \pause
+
+$\bullet$ Definition of a polygon related to precision
+
+\vspace{-1mm}
+
+{\color{white} $\bullet$}
+and comparison with the Hodge and the Newton polygon
+}
+
+\bigskip \pause
+
+\item LU factorization
+
+\smallskip \pause
+
+{\footnotesize
+$\bullet$ Computation of the differential \pause
+
+$\bullet$ Heuristic estimation of the number of diffused digits
+}
+
+\bigskip \pause
+
+\item Vector spaces and subspaces
+
+\smallskip \pause
+
+{\footnotesize
+$\bullet$ Stable version of row elimination for computing
+
+{\color{white} $\bullet$}
+sums, intersections, direct images, inverse images
+
+\smallskip \pause
+
+$\bullet$ Computation of differentials (defined over subvarieties
+of grassmannians) \pause
+
+$\bullet$ Lattice {\sc vs} standard method for tracking precision
+}
+\end{itemize}}
+\end{frame}
+
 
 \end{document}
