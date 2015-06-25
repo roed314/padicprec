@@ -1,7 +1,9 @@
 p = 2
 prec = 1000; d = 2
-nb = 500
-repeat = 100
+nb = 1000
+repeat = 1000
+
+print "n =", nb
 
 R = Zp(p, prec=2*prec)
 MS = MatrixSpace(R,d)
@@ -55,11 +57,12 @@ for _ in range(repeat):
     #practice += min([ x.precision_absolute() for x in M.list() ]) - prec
     valuation += M[0,0].valuation()
     practice += M[0,0].precision_absolute() - prec
-    #theory2 += Lattice[0][0,0].valuation()
-    theory2 += min([ min([ x.valuation() for x in L.list() ]) for L in Lattice ])
+    theory2 += Lattice[0][0,0].valuation()
+    #theory2 += min([ min([ x.valuation() for x in L.list() ]) for L in Lattice ])
 
-theory /= d^2
-valuation = 0
-print "Theory:", RR((theory-valuation)/repeat)
-print "Theory 2:", RR((theory2-valuation)/repeat)
-print "Practice:", RR((practice-valuation)/repeat)
+#theory /= d^2
+#valuation = 0
+#print "Theory:", RR((theory-valuation)/repeat)
+print "Valuation:", RR(valuation/repeat)
+print "Theory:", RR(theory2/repeat)
+print "Practice:", RR(practice/repeat)
