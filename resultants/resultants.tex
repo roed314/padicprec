@@ -36,7 +36,7 @@
 \newtheorem{prop}[theo]{Proposition}
 \newtheorem{cor}[theo]{Corollary}
 \newtheorem{quest}[theo]{Question}
-%\theoremstyle{definition}
+\theoremstyle{definition}
 \newtheorem{rem}[theo]{Remark}
 \newtheorem{ex}[theo]{Example}
 \newtheorem{deftn}[theo]{Definition}
@@ -109,27 +109,28 @@ same degree.
 
 \section{Introduction}
 
-As wonderfully illustrated by the success of Kedlaya-type counting points 
-algorithms \cite{kedlaya}, $p$-adic technics are gaining nowadays more and more 
-popularity in computer science, and more specifically in symbolic 
-computation. A crucial issue when dealing with $p$-adics is those of 
-stability. Indeed, just like real numbers, $p$-adic numbers are by nature 
-infinite and thus need to be truncated in order to fit in the memory of a 
-computer. The level of truncation is called the \emph{precision}. Usual 
-softwares implementing $p$-adics (\emph{e.g.} \textsc{magma} \cite{magma}, 
-\textsc{pari} \cite{pari}, \textsc{sage} \cite{sage}) 
-generally tracks the precision as follows: an individual precision is 
-attached to any $p$-adic variable and this precision is updated after 
-each basic arithmetic operation (addition and multiplication). This way 
-of tracking precision can be seen as the analogue of the arithmetic 
-intervals in the real setting.
+As wonderfully illustrated by the success of Kedlaya-type counting 
+points algorithms \cite{kedlaya}, $p$-adic technics are gaining nowadays 
+more and more popularity in computer science, and more specifically in 
+symbolic computation. A crucial issue when dealing with $p$-adics is 
+those of stability. Indeed, just like real numbers, $p$-adic numbers are 
+by nature infinite and thus need to be truncated in order to fit in the 
+memory of a computer. The level of truncation is called the 
+\emph{precision}. Usual softwares implementing $p$-adics (\emph{e.g.} 
+\textsc{magma} \cite{magma}, \textsc{pari} \cite{pari}, \textsc{sage} 
+\cite{sage}) generally tracks the precision as follows: an individual 
+precision is attached to any $p$-adic variable and this precision is 
+updated after each basic arithmetic operation (addition and 
+multiplication). This way of tracking precision can be seen as the 
+analogue of the arithmetic intervals in the real setting. We refer
+to \S \ref{subsubsec:computDVR} for more details.
 
-In the paper \cite{padicprec}, the authors propose a new framework to control 
-$p$-adic precision. The aim of this paper is to illustrate the technics 
-of \emph{loc. cit.} on the concrete example of computation of 
+In the paper \cite{padicprec}, the authors propose a new framework to 
+control $p$-adic precision. The aim of this paper is to illustrate the 
+technics of \emph{loc. cit.} on the concrete example of computation of 
 \textsc{gcd}s and subresultants of $p$-adic polynomials. There is 
-actually a real need to do this due to the combination of two reasons: on 
-the one hand, computating \textsc{gcd}s is a very basic operation for 
+actually a real need to do this due to the combination of two reasons: 
+on the one hand, computating \textsc{gcd}s is a very basic operation for 
 which it cannot be acceptable to have important instability whereas, on 
 the other hand, easy experimentations show that all standard algorithms 
 for this task (\emph{e.g.} extended Euclide's algorithm) are \emph{very} 
@@ -141,9 +142,9 @@ unstable.
 \begin{tabular}{|c||c|c|}
 \hline
 \multirow{2}{*}{\hspace{0.2cm}Degree\hspace{0.2cm}\null} & 
-\multicolumn{2}{c|}{\hspace{0.3cm}Loss of precision (in number of digits)\hspace{0.3cm}\null}\\
+\multicolumn{2}{c|}{\hspace{0.1cm}Loss of precision (in number of significant digits)\hspace{0.1cm}\null}\\
 \cline{2-3}
-& \hspace{0.3cm}Euclide algorithm\hspace{0.3cm}\null & expected \\
+& \hspace{0.5cm}Euclide algorithm\hspace{0.5cm}\null & expected \\
 \hline
 $5$ & $\phantom{00}6.3$ & $3.1$ \\
 $10$ & $\phantom{0}14.3$ & $3.2$ \\
@@ -166,7 +167,7 @@ of two random monic polynomial of fixed degree over $\Z_2$.}
 Figure \ref{fig:precision} illustrates the instability of the classical
 extended Euclide's algorithm (\emph{cf} Algorithm \ref{algo:Euclide})
 when it is called on random inputs which are monic $2$-adic 
-polynomials of fixed degree. Looking at the last line, we see that 
+polynomials of fixed degree (see also Example \ref{ex:Euclide}). Looking at the last line, we see that 
 extended Euclide's algorithm outputs the B\'ezout coefficients of two 
 monic $2$-adic polynomials of degree $100$ with an average loss of 
 $161.1$ significant digits by coefficient whereas a stable 
@@ -183,8 +184,30 @@ Euclide's algorithm is becoming more and more critical when the degree
 of the input increases.
 %
 \begin{algorithm}
-\todo{Write it}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \Input{Two polynomials $A, B \in \Qp[X]$ (whose coefficients are known at given precision)}
+  \Output{A triple $D, U, V$ such that $D = AU + BV = \gcd(A,B)$}
 
+  \BlankLine
+
+  $R_1 \leftarrow A$; $U_1 \leftarrow 1$; $V_1 \leftarrow 0$;
+
+  $R_2 \leftarrow B$; $U_2 \leftarrow 0$; $V_2 \leftarrow 1$;
+
+  $k \leftarrow 2$;
+
+  \While{$R_k \neq 0$}
+    {$Q, R_{k+1} \leftarrow$ quotient and remainder in the Euclidean
+     division of $R_{k-1}$ by $R_k$;
+
+     $U_{k+1} \leftarrow U_{k-1} - Q U_k$;
+
+     $V_{k+1} \leftarrow V_{k-1} - Q V_k$;
+
+     $k \leftarrow k+1$;}
+
+  \Return{$R_{k-1}, U_{k-1}, V_{k-1}$};
 \caption{Extended Euclide's algorithm}
 \label{algo:Euclide}
 \end{algorithm}
@@ -300,7 +323,7 @@ where $i_0$ is some relative integer and the $x_i$'s are as above. The
 valuation of $x$ can be easily read off this writing: it is the smallest 
 integer $i$ such that $x_i \not\equiv 0 \pmod \pi$.
 
-\subsubsection*{Examples}
+\subsubsection{Examples}
 
 A first class of examples of discrete valuation rings 
 are rings of formal power series over a field. They are equipped with 
@@ -365,27 +388,130 @@ expansion \eqref{eq:expandCDVR} provided that we have chosen $\pi = p$
 and $S = \{0, 1, \ldots, p-1\}$.
 The fraction field of $\Zp$ is denoted by $\Qp$.
 
-\subsubsection*{Symbolic computations on DVR}
+\subsubsection{Symbolic computations over DVR}
+\label{subsubsec:computDVR}
 
-\todo{Détailler cette partie}
-% parler notamment de précision absolue et de précision relative
-% expliquer comment la précision se comporte vis-à-vis des opérations
-% traiter un exemple de calcul de pgcd avec l'algorithme d'Euclide
+The memory of a computer being necessarily finite, it is not possible to 
+represent exhaustively all elements of $\A$. Very often, mimicing 
+what we do for real numbers, we choose to truncate the expansion 
+\eqref{eq:expandCDVR} at some finite level. Concretely, this means 
+that we work with approximations of elements of $\A$ of the form
+\begin{equation}
+\label{eq:approx}
+x = \sum_{i=0}^{N-1} x_i \pi^i + O(\pi^N) \quad \text{with } N \in \N
+\end{equation}
+where the notation $O(\pi^N)$ means that the $x_i$'s with $i \geq N$ are 
+not specified.
 
-The memory of a computer being necessarily finite, it cannot be possible 
-to find a way to represent exhaustively all elements of $\A$. 
-Very often, mimicing what we do for real numbers, we choose to truncate 
-the expansion \eqref{eq:expandCDVR} at some finite level. Concretely,
-this means that we work with approximations of elements of $\A$ of the
-form
-$\sum_{i=0}^{N-1} x_i \pi^i + O(\pi^N)$
-where $N$ is some integer called the \emph{precision} of $x$ and 
-the term $O(\pi^N)$ means that the $x_i$'s with $i \geq N$ are not 
-specified. Hence, the notation above does not represent a unique
-element of $\A$ but all elements lying in the ball having center
-$\sum_{i=0}^{N-1} x_i \pi^i$ and radius $e^{-N v(\pi)}$. In other
-words, on a computer, we do not work with elements of $\A$ but with
-balls in $\A$ which are more tractable.
+\begin{rem}
+\label{rem:balls}
+From a theoretical point of view, the expression~\eqref{eq:approx}
+does not represent a single element $x$ of $\A$ but an open ball in
+$\A$, namely the ball of radius $e^{-N}$ centered at $\sum_{i=0}^{N-1} 
+x_i \pi^i$ (or actually any element congruent to it modulo $\pi^N$).
+In other words, on a computer, we cannot work with actual $p$-adic
+numbers and we replace them by balls which are more tractable (at
+least, they can be encoded by a finite amount of information).
+\end{rem}
+
+The integer $N$ appearing in Eq.~\eqref{eq:approx} is the so-called 
+\emph{absolute precision} of $x$. The \emph{relative precision} of $x$ 
+is defined as the difference $N-v$ where $v$ denotes the valuation of 
+$x$. Continuing the comparison with real numbers, the relative precision 
+corresponds to the number of significant digits since $x$ can be 
+alternatively written:
+$$x = p^v \sum_{j=0}^{N-v-1} y_j \pi^j + O(\pi^N)
+\quad \text{with } y_j = x_{j+v} \text{ and } y_0 \neq 0.$$
+Of course, it may happen that all the $x_i$'s ($0 \leq i < N$) vanish,
+in which case the valuation of $x$ is undetermined. In this particular
+case, the relative precision of $x$ is undefined.
+
+There exist simple formulas to following precision after each single
+elementary computation. For instance, basic arithmetic operations can
+be handled using:
+\begin{align}
+\big(a + O(\pi^{N_a})\big) + \big(b + O(\pi^{N_b})\big) 
+& = a + b + O(\pi^{\min(N_a,N_b)}), 
+\label{eq:precadd} \\
+\big(a + O(\pi^{N_a})\big) - \big(b + O(\pi^{N_b})\big) 
+& = a - b + O(\pi^{\min(N_a,N_b)}), 
+\label{eq:precsub} \\
+\big(a + O(\pi^{N_a})\big) \times \big(b + O(\pi^{N_b})\big) 
+& = ab + O(\pi^{\min(N_a + \val(b), N_b + \val(a))}).
+\label{eq:precmul} \\
+\big(a + O(\pi^{N_a})\big) \div \big(b + O(\pi^{N_b})\big) 
+& = \frac a b + O(\pi^{\min(N_a - \val(b), N_b + \val(a) - 2 \val(b))}).\footnotemark
+\label{eq:precdiv} 
+\end{align}
+
+\footnotetext{We observe that these formulas can be rephrased as follows: 
+the absolute (resp. relative) precision on the result of a sum or a
+substraction (resp. a product or a division) is the minimum of the 
+absolute (resp. relative) precisions on .}
+
+\noindent
+Combining these formulas, one can track the precision while executing 
+any given algorithm. This is the analogue of the standard \emph{interval 
+arithmetic} over the reals. Many usual softwares (as \textsc{sage}, 
+\textsc{magma}) implement $p$-adic numbers this way. We shall see later
+that this often results in overestimating the losses of precision.
+
+\begin{ex}
+\label{ex:Euclide}
+As an illustration, let us examine the behaviour of the precision
+on the sequence $(R_i)$ while Algorithm~\ref{algo:Euclide} is
+executed with the input:
+\begin{align*}
+A & = X^5 + 
+      \big(27 + O(2^5)\big) X^4 +
+      \big(11 + O(2^5)\big) X^3 +
+      \big(5 + O(2^5)\big) X^2 +
+      \big(18 + O(2^5)\big) X +
+      \big(25 + O(2^5)\big) \\
+B & = X^5 + 
+      \big(24 + O(2^5)\big) X^4 +
+      \big(25 + O(2^5)\big) X^3 +
+      \big(12 + O(2^5)\big) X^2 +
+      \big(3 + O(2^5)\big) X +
+      \big(10 + O(2^5)\big).
+\end{align*}
+The remainder in the Euclidean division of $A$ by $B$ is $R_3 = A-B$.
+We do not loose precision while performing this substraction and the
+result we get is:
+$$R_3 = 
+      \big(3 + O(2^5)\big) X^4 +
+      \big(18 + O(2^5)\big) X^3 +
+      \big(25 + O(2^5)\big) X^2 +
+      \big(15 + O(2^5)\big) X +
+      \big(15 + O(2^5)\big).$$ 
+In order to compute $R_4$, we have now to perform the Euclidean division 
+of $R_2 = B$ by $R_3$. Noting that the leading coefficient of $R_2$ has 
+valuation $0$ and using Eq~\eqref{eq:precadd}--\eqref{eq:precdiv}, we 
+deduce that this operation does not loose precision again. We get:
+$$R_4 = 
+      \big(26 + O(2^5)\big) X^3 +
+      \big(17 + O(2^5)\big) X^2 +
+      \big(4 + O(2^5)\big) X +
+      \big(16 + O(2^5)\big).$$
+We observe now that the leading coefficient of $R_4$ has valuation $1$. 
+According to Eq.~\eqref{eq:precdiv}, divising by this coefficient ---
+and therefore \emph{a fortioti} computing the euclidean division of 
+$R_3$ by $R_4$ --- will result in loosing at least one digit in
+relative precision. The result we find is:
+$$R_5 = 
+      \underbrace{\big(\textstyle \frac 3 4 + O(2^2)\big)}_{\text{rel. prec.} = 4} X^2 +
+      \underbrace{\big(6 + O(2^3)\big)}_{\text{rel. prec.} = 2} X +
+      \underbrace{\big(3 + O(2^3)\big)}_{\text{rel. prec.} = 3}.$$
+Continuing this process, we obtain:
+$$R_6 = 
+      \big(20 + O(2^5)\big) X +
+      \big(12 + O(2^5)\big) 
+\quad \text{and} \quad
+R_7 =
+      \textstyle \frac 7 4 + O(2).$$
+The relative precision on the final result $R_7$ is then $3$, which is
+less than the initial precision which was $5$.
+\end{ex}
 
 \subsection{Subresultants}
 \label{subsec:subres}
@@ -489,8 +615,6 @@ $d_A$ and $d_B$ remained fixed, this issue cannot happen.
 
 \subsubsection*{The subresultant pseudo-remainder sequence}
 
-% Expliquer qu'on ne donne qu'un résultat, pas un algorithme
-
 When $\ring$ is a domain, there exists a standard nice Euclide-like
 reinterpreation of subresultants, which provides in particular an 
 efficient algorithm for computing them. Since it will play an important 
@@ -519,7 +643,7 @@ until $S_i$ has reached the value $0$.
 With the above notations, we have:
 $$\begin{array}{rcll}
 \Res_j(A,B) & = & S_i & \text{if } j = n_{i-1} - 1 \smallskip \\
-& = & 0 & \text{if } n_i < j < n_{i-1} - 1 < j \\
+& = & 0 & \text{if } n_i < j < n_{i-1} - 1 \\
 & = & \!\big(\frac{s_i}{s_{i-1}}\big)^{\varepsilon_i-1} \cdot S_i & 
 \text{if } j = n_i
 \end{array}$$
@@ -527,36 +651,73 @@ for all $i$ such that $S_i$ is defined.
 \end{prop}
 
 \begin{rem}
-The Proposition \ref{prop:prem} gives a formula for \emph{all} subresultants. We
-note moreover that, in the common case where $n_{i-1} = n_i - 1$, the
-two formulas giving $\Res_{n_i}(A,B)$ agree.
+The Proposition \ref{prop:prem} provides a formula for \emph{all} 
+subresultants. We note moreover that, in the common case where $n_{i-1} 
+= n_i - 1$, the two formulas giving $\Res_{n_i}(A,B)$ agree.
 
 Mimicing ideas behind extended Euclide's algorithm, one can define the 
 ``extended subresultant pseudo-remainder sequence'' as well and obtains
 recursive formulae for cofactors at the same time.
 \end{rem}
 
-Important simplifications occur in the common case where all principal 
-subresultants do not vanish. Under this additional assumption, one can 
-prove that the degrees of the $S_i$'s decrease by one at each step, 
-meaning that we $\deg S_i = d_B - i$ for all $i$. The sequence 
-$(S_i)$ then stops at $i = d_B$. Moreover, the $\varepsilon_i$'s and the 
-$c_i$'s are now all ``trivial'' since we have $\varepsilon_i = 1$ and $c_i
-= s_i$ for all $i$. The recurrence formula then becomes:
+Important simplifications occur in the ``normal'' case, which is the 
+case where all principal subresultants do not vanish. Under this 
+additional assumption, one can prove that the degrees of the $S_i$'s 
+decrease by one at each step, meaning that we $\deg S_i = d_B - i$ for 
+all $i$. The sequence $(S_i)$ then stops at $i = d_B$. Moreover, the 
+$\varepsilon_i$'s and the $c_i$'s are now all ``trivial'' since we have 
+$\varepsilon_i = 1$ and $c_i = s_i$ for all $i$. The recurrence formula 
+then becomes:
 $$S_{i+1} = s_i^2 \cdot s_{i-1}^{-2}
 \cdot (S_{i-1} \,\%\, S_i) \quad \text{for } i \geq 1.$$
 and Proposition \ref{prop:prem} now simply states that $R_j = S_{d_B-j}$ 
 in this case.
 
+\begin{algorithm}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \Input{Two polynomials $A, B \in K_d[X]$ (given at finie precision)}
+  \Output{The complete sequence of subresultants of $A$ and $B$.}
+
+  \BlankLine
+
+  $R_d \leftarrow B$; $r_d \leftarrow 1$;
+
+  $R_{d-1} \leftarrow B-A$;
+
+  \For{$j = (d-1), (d-2), \ldots, 1$}
+    {$r_j \leftarrow$ coefficient in $X^j$ of $R_j$;
+
+     \lIf{$r_j = 0$}{\textbf{raise} NotImplementedError;}
+
+     $R_{j-1} \leftarrow \texttt{prem}(R_{j+1}, R_j) / r_{j+1}^2$
+    }
+
+  \Return{$R_{d-1}, \ldots, R_0$};
+\caption{Subresultant pseudo remainder sequence algorithm}
+\label{algo:subres}
+\end{algorithm}
+
+Proposition \ref{prop:prem} of course yields an algorithm for computing 
+subresultants. In the normal case and assuming further for simplicity 
+that the input polynomials are monic of same degree, it is 
+Algorithm~\ref{algo:subres}. Note that this algorithm uses the primitive 
+\texttt{prem} which computes the pseudo-remainder: if $A$ and $B$ are 
+two polynomials, by definition $\texttt{prem}(A,B) = \lc(B)^{\deg B-\deg 
+A+1} (A \% B)$ where $\lc(B)$ denotes the leading coefficient of $B$. 
+Unfortunately, when working over a complete discrete valuation field 
+$K$, the stability of Algorithm~\ref{algo:subres} is comparable --- and 
+actually even a bit worse --- than standard Euclide algorithm. The main 
+interest of using Algorithm~\ref{algo:subres} is to avoid denominators 
+(\emph{i.e.} always work over $\A$ instead $K$) but its use almost does 
+not affect the behaviour of the \emph{relative} precision. We shall 
+explain later (\emph{cf} \S~\ref{subsec:stabilization}) a method for 
+stabilizing Algorithm~\ref{algo:subres}.
+
 \section{Euclide-like algorithms are unstable}
 \label{sec:unstable}
 
 \todo{Write a short introduction}
-
-\todo{
-Expliquer que les pertes avec l'algorithme des pseudo-restes
-sont les mêmes que ceux avec l'algorithme d'Euclide.
-}
 
 \subsection{A lower bound on losses of precision}
 
@@ -842,7 +1003,7 @@ By functoriality of subresultants, we may assume that $\ring =
 are the two generic monic polynomials 
 $A = X^d + \sum_{i=0} a_i X^i$ and
 $B = X^d + \sum_{i=0} b_i X^i$.
-All relations then follows from the extended subresultants 
+All relations then follow from the extended subresultants 
 pseudo-remainder sequence algorithm (noting in addition that all
 principal subresultants are nonzero). \todo{Give details.}
 \end{proof}
@@ -1102,61 +1263,133 @@ inspiration comes from \cite{padicprec}.
 
 \subsection{Crash course on ultrametric precision}
 
-In this subsection, we briefly report on the results of \cite{padicprec}. In 
-\emph{loc. cit.}, the authors draw the lines of a general framework to handle a 
+In this subsection, we briefly report on the results of \cite{padicprec} 
+where the authors draw the lines of a general framework to handle a 
 sharp (often optimal) track of ultrametric precision.
-\todo{Give more details here.}
 
+\subsubsection*{The notion of lattice}
 
- In order to do so, 
-they proposed to attach a single precision datum --- which is a lattice 
-in a huge vector space --- to the set of all variables, instead of 
-attaching a precision datum to each individual variable as we do 
-usually. This proposal is supported by the following lemma in ultrametric
-analysis.
+As underlined in Remark~\ref{rem:balls}, the usual way of tracking 
+precision consists in replacing elements of $\A$ --- which cannot fit 
+entirely in the memory of a computer --- by balls around them. Using 
+this framework, a software manipulating $d$ variables in $\A$ will work 
+with $d$ ``independant'' balls. The main proposal of \cite{padicprec} is 
+to get rid of this ``independance'' and model precision using a unique
+object contained in a $d$-dimensional vector space. In order to be more
+precise, we need the following definition.
 
-\begin{lem}
+\begin{deftn}
+A $\A$-lattice in a finite dimensional vector space $E$ over $K$ is
+a $\A$-submodule of $E$ generated by a $K$-basis of $E$.
+\end{deftn}
+
+Although the defintion of a lattice is similar to that of $\Z$-lattice 
+in $\R^d$, the geometrical representation of it is quite different since 
+the elements of $\A$ themselves are not equidistributed in $K$ but form 
+a ball inside $K$ (they are exactly elements of norm $\leq 1$). More 
+generally, assume that $E$ is equipped with a ultrametric norm $\Vert 
+\cdot \Vert_E$ compatible with that on $K$ (\emph{i.e.} $\Vert \lambda x 
+\Vert_E = |\lambda| \cdot \Vert x \Vert_E$ for $\lambda \in K$, $x \in 
+E$). (A typical example is $E = K^n$ equipped with the sup norm.) One
+checks that the subsets
+$$B_E(r) = \big\{ \,\, x \in E \quad|\quad \Vert x \Vert_E \leq r \,\,\big\}$$
+are all lattices in $E$. Moreover, any lattice is deduced from $B_E(1)$ 
+by applying a bijective linear endomorphism of $E$. Therefore, lattices 
+should be thought as special neighborhoods of $0$. As a consequence, 
+cosets of the form $x + H$, where $H$ is a lattice, appear as 
+interesting candidates to model precision. This feeling is consolidated 
+by the following result which roughly speaking claims that such cosets 
+behave quite nicely under differentiable maps.
+
+\begin{lem}[\cite{padicprec}, Lemma 3.4]
 \label{lem:padicprec}
-Let $f : K^n \to K^m$ be a strictly differentiable function. Let $x$
-be a point in $K^n$ at which the differential of $f$ is surjective.
-Then, for all sufficiently large $N$, the following equality holds:
+Let $E$ and $F$ be two normed finite dimensional $K$-vector spaces.
+Let $f : E \to F$ be a function of class $C^1$ and let $x$
+be a point in $K^n$ at which the differential of $f$, denoted by
+$f'(x)$, is surjective.
+Then, for all $\rho \in (0,1]$, there exists $\delta > 0$ such that
+the following equality holds:
 \begin{equation}
 \label{eq:padicprec}
-f(x + \pi^N \A^n) = f(x) + f'(x)(\pi^N \A^n)
+f(x + H) = f(x) + f'(x)(H)
 \end{equation}
-where $f'(x)$ stands for the differential of $f$ at $x$.
+for any lattice $H$ satisfying $B_E(\rho r) \subset H \subset B_E(r)$
+for some $r < \delta$.
 \end{lem}
 
-An important feature of Lemma \ref{lem:padicprec} is that 
-Eq.~\eqref{eq:padicprec} is an equality, and not only an inclusion. 
-This reflects the optimality of the method and, as we shall see later, 
-is also the origin of the ``stabilization process'' mentionned above.
-Moreover, if the function $f$ appearing in Lemma \ref{lem:padicprec} 
-has more regularity, one can exhibit a lower bound on $N$ ensuring
-that Eq.~\eqref{eq:padicprec} holds. In \cite{padicprec}, the case of 
-locally analytic functions is considered. For our purpose, it will be 
-enough to restrict ourselves to \emph{integral polynomial} functions, 
-that are functions of the shape:
-$$f(x) = \big(F_1(x), \ldots, F_m(x)\big)
-\quad \text{with } x = (x_1, \ldots, x_n)$$
-where $F_1, \ldots, F_m$ are multivariate polynomials in $n$ variables
-with coefficients in $\A$. Under this assumption, we have:
+In what follows, we will mainly use Lemma \ref{lem:padicprec} with
+$\rho = 1$. It states in this particular case that 
+\begin{equation}
+\label{eq:padicprec2}
+f(x + B_E(r)) = f(x) + f'(x)(B_E(r))
+\end{equation}
+as soon as $r$ is small enough. It is moreover possible to provide
+an explicit upper bound on $r$ assuming that $f$ has more regularity.
+The case of locally analytic functions is treated in \cite{padicprec}
+in full generality. Nevertheless, for the application we have in mind, 
+it will be enough to restrict ourselves to the simpler case of 
+\emph{integral polynomial} functions. In order to proceed, we assume 
+that $E$ is endowed with distingushed ``orthonormal'' 
+basis\footnote{One can prove that such a basis always exists.}, that is 
+a basis $(e_1, \ldots, e_n)$ with the property that $\Vert \sum_{i=1}^n 
+x_i e_i \Vert_E = \max_{1\leq i \leq n} |x_i|$ for all 
+families of $\lambda_i$'s lying in $K$. In other words, the choice of
+this distingushed ``orthonormal'' basis defines a norm-preserving 
+isomorphism between $E$ and $K^n$ endowed with the sup norm. We assume
+similarly that we are given a distingushed ``orthonormal'' basis
+$(f_1, \ldots, f_m)$ of $F$. Then any function $f : E \to F$ can
+be written in our distinguished system of coordinates as follows:
+$$f(x) = \sum_{j=1}^m F_j(x_1, \ldots, x_n) f_j
+\quad \text{with} \quad x = \sum_{i=1}^n x_i e_i.$$
+
+\begin{deftn}
+The function $f$ is \emph{integral polynomial} if all $F_j$'s are
+polynomials functions with coefficients in $\A$.
+\end{deftn}
+
+Obviously, all integral polynomial functions are of class $C^1$ (and
+even locally analytic), so that Lemma~\ref{lem:padicprec} applies to 
+them.
+
+\begin{ex}
+Let us examine more closely the case of polynomial spaces since it will 
+be considered repeadtly in the sequel. We take $E = K_{<n}[X]$ and $F = 
+K_{<m}[X]$ and endow both with the Gauss norm, which is defined by:
+\begin{align*}
+\Vert a_0 + a_1 X + \cdots + a_{n-1} X^{n-1} \Vert_E & 
+  = \max \big(|a_0|, |a_1|, \ldots, |a_{n-1}|\big) \\
+\Vert b_0 + b_1 X + \cdots + b_{m-1} X^{m-1} \Vert_F & 
+  = \max \big(|b_0|, |b_1|, \ldots, |b_{m-1}|\big)
+\end{align*}
+It is clear from these definitions that the canonical basis $(1, X, 
+\ldots, X^{n-1})$ and $(1, X, \ldots, X^{m-1})$ of $E$ and $F$ 
+respectively are ``orthonormal''. Moreover the coordinates in these
+basis are the $a_i$'s and the $b_i$'s respectively. Hence, an integral
+polynomial function $f : E \to F$ is nothing but a function mapping a
+a polynomial $P$ to a polynomial $Q$ whose coefficients are given by
+polynomial expressions which involve only the coefficients of $P$ and 
+some constants in $\A$.
+\end{ex}
 
 \begin{prop}
 \label{prop:padicprec}
-Let $f : K^n \to K^m$ be an integral polynomial function and $x \in
-\A^n$. Let $v$ be an integer such that $f'(x)(\A^n) \supset p^v \A^m$.
-Then, for all $N > v$, Eq.~\eqref{eq:padicprec} holds.
+Let $f : E \to F$ be an integral polynomial function and $x \in B_E(1)$. 
+Then, Eq.~\eqref{eq:padicprec2} holds as soon as 
+$B_F(r) \subset f'(x)(B_E(1))$.
 \end{prop}
 
 \begin{proof}
 It is a direct corollary of \cite[Proposition 3.12]{padicprec}.
 \end{proof}
 
+\subsubsection*{Application to precision}
+
+
 \todo{Add a subsection to explain the stabilization process in
 general.}
 
 \subsection{The stabilization process}
+\label{subsec:stabilization}
 
 In order to get a stabilized version of the subresultant 
 pseudo-remainder sequence algorithm, we are going to estimate 
