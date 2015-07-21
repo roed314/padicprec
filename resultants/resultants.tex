@@ -18,6 +18,8 @@
 \usepackage{multirow}
 \renewcommand*{\theHsection}{\thesection}
 
+\definecolor{beige}{rgb}{0.9,0.9,0.7}
+
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
 \DeclareMathOperator{\GL}{GL}
@@ -54,6 +56,9 @@
 \newcommand{\m}{\mathfrak m}
 
 \newcommand{\M}{\text{\tt M}}
+
+\renewcommand{\min}{\text{\rm min}}
+\renewcommand{\max}{\text{\rm max}}
 
 \newcommand{\ring}{\mathfrak A}
 \newcommand{\fracring}{\mathfrak K}
@@ -1267,7 +1272,7 @@ In this subsection, we briefly report on the results of \cite{padicprec}
 where the authors draw the lines of a general framework to handle a 
 sharp (often optimal) track of ultrametric precision.
 
-\subsubsection*{The notion of lattice}
+\subsubsection{The notion of lattice}
 
 As underlined in Remark~\ref{rem:balls}, the usual way of tracking 
 precision consists in replacing elements of $\A$ --- which cannot fit 
@@ -1295,11 +1300,35 @@ checks that the subsets
 $$B_E(r) = \big\{ \,\, x \in E \quad|\quad \Vert x \Vert_E \leq r \,\,\big\}$$
 are all lattices in $E$. Moreover, any lattice is deduced from $B_E(1)$ 
 by applying a bijective linear endomorphism of $E$. Therefore, lattices 
-should be thought as special neighborhoods of $0$. As a consequence, 
-cosets of the form $x + H$, where $H$ is a lattice, appear as 
-interesting candidates to model precision. This feeling is consolidated 
-by the following result which roughly speaking claims that such cosets 
-behave quite nicely under differentiable maps.
+should be thought as special neighborhoods of $0$ (see Figure~\ref{fig:lattice}).
+%
+\begin{figure}
+\hfill
+\begin{tikzpicture}
+\begin{scope}[beige, rounded corners=10pt]
+\fill (0.1,0.2) rectangle (3.9,5.8);
+\end{scope}
+
+\begin{scope}[xshift=2cm,yshift=3cm,rotate=20]
+\draw[black,fill=green!50] (-0.7,-1.5) rectangle (0.7,1.5);
+\draw[black,->] (-1,0)--(1,0);
+\draw[black,->] (0,-2)--(0,2);
+\end{scope}
+
+\begin{scope}[very thick, rounded corners=10pt]
+\draw (0.1,0.2) rectangle (3.9,5.8);
+\end{scope} 
+\end{tikzpicture}
+\hfill \null
+
+\caption{Picture of a lattice in the ultrametric world}
+\label{fig:lattice}
+\end{figure}
+%
+As a consequence, cosets of the form $x + H$, where $H$ is a lattice, 
+appear as interesting candidates to model precision. This feeling is 
+consolidated by the following result which roughly speaking claims that 
+such cosets behave quite nicely under differentiable maps.
 
 \begin{lem}[\cite{padicprec}, Lemma 3.4]
 \label{lem:padicprec}
@@ -1382,11 +1411,199 @@ $B_F(r) \subset f'(x)(B_E(1))$.
 It is a direct corollary of \cite[Proposition 3.12]{padicprec}.
 \end{proof}
 
-\subsubsection*{Application to precision}
+\subsubsection{Application to precision}
 
+Let us now briefly explain how one can use Lemma~\ref{lem:padicprec} for 
+tracking precision. 
 
-\todo{Add a subsection to explain the stabilization process in
-general.}
+\paragraph{Tracking precision \emph{locally}}
+
+Assume first that we want to perform a given rather simple operation --- 
+corresponding, say, to an elementary step (\emph{e.g.} an iteration of 
+the main loop) of the algorithm we are executing --- modeled by a 
+stricty differentiable function $g$ defined on an open subset $U$ of a 
+normed $K$-vector space $E$ and taking values in another normed 
+$K$-vector space $F$.
+Our input is an approximated element of $U$ which is represented 
+as a coset $C$ with respect to some lattice $H$, that is a subset of $U$ 
+of the form $C = x+H$ for some $x \in U$. We would like to insist on the 
+following: the value of $x$ is a priori \emph{not} given; only is given 
+the subset $C$. However, since $H$ is stable under addtion, we have $C = 
+x+H$ \emph{any} element $x \in C$.\footnote{This assertion means that 
+any element of the ``rectangle'' $C$ is a center of it... which might be 
+surprising if we are accustomed to real numbers.} As explained in \S 
+\ref{subsubsec:computDVR}, assuming that $g$ is given as an algebraic 
+expression, the naive solution for evaluating $g(C)$ consists in using 
+formulas \eqref{eq:precadd}--\eqref{eq:precdiv}. However, this often 
+results in an overestimation on the precision, in the following sense: 
+this method leads to some inclusion
+$$g(C) = g(x+H) \subset y + H_{\text{naive}}$$
+where $y \in F$ and $H_{\text{naive}}$ is a lattice which is generally 
+much more larger that the best one, namely $g'(x)(H)$ according to
+Lemma~\ref{lem:padicprec} (assuming that the assumptions of this Lemma
+are fullfiled). In order to avoid this and be sharp on
+precision, another solution consists in splitting the computation of 
+$g(C)$ into two parts as follows:
+\begin{enumerate}[(A)]
+\item \label{item:gpx} compute $g'(x)(H)$, and
+\item \label{item:gx} compute $g(x)$ for some $x \in C$.
+\end{enumerate}
+Part~\eqref{item:gpx} is not easy to handle in full generality: in order 
+to be efficient, a special close analysis taking advantage of the 
+particular problem under consideration is often necessary. For the 
+example considered in the paper (which is that of subresultants), we will 
+use a \emph{theoretical} argument in order to exhibit a good approximation 
+of $g'(x)(H)$, that are lattices $H_\min$ and $H_\max$ such that:
+\begin{equation}
+\label{eq:Hminmax}
+H_\min \subset g'(x)(H) \subset H_\max
+\end{equation}
+for a negligible cost. Up to allowing in some cases a \emph{very slight} 
+leak of precision, this would be enough for the application we have in 
+mind. We refer to \S \ref{subsec:stabilization} for more details about
+this part.
+
+For now on, we assume that $H_\min$ and $H_\max$ satisfying 
+Eq.~\eqref{eq:Hminmax} have been computed and we focus on 
+part~\eqref{item:gx}, which also requires some discussion. Indeed, 
+computing $g(x)$ is not straightforward because $x$ itself lies in a 
+$K$-vector space and therefore cannot be stored and manipulated on a 
+computer. Nevertheless, one can take advantage of the fact that $x$ may 
+be chosen arbitratily in $C$. More precisely, we pick a sublattice $H'$ 
+of $H$ and consider the new approximated element $x+H' \subset x+H$. 
+Concretely, this means that we arbitrarily increase the precision on the 
+given input $x$. Now, applying the naive method with $x+H'$, we compute 
+some $y \in F$ and some lattice $H'_{\text{naive}} \subset F$ with the 
+property that:
+$$g(x+H') \subset y + H'_{\text{naive}}.$$
+If furthemore $H'$ is chosen in such a way that $H'_{\text{naive}} 
+\subset H_\min$, the two cosets $y + g'(x)(H)$ and $g(C)$ have a 
+non-empty intersection because $g(x)$ lies in both. Therefore they 
+must coincide. We deduce that $y \in g(C)$. This exactly means that
+$y$ is an acceptable value for $g(x)$ and we are done.
+Moreover, estimating the dependance of $H'_{\text{naive}}$ in terms 
+of $H'$ is usually rather easy (remember that $f$ is supposed to model
+a simple operation). Hence since $H_\min$ is known --- as
+we had assumed --- finding $H'$ satisfying the required assumption is
+generally not difficult. 
+The whole method is illustrating on Figure~\ref{fig:adaptative}.
+
+\begin{figure}
+\hfill
+\begin{tikzpicture}[scale=1.2]
+
+\begin{scope}[beige, rounded corners=10pt]
+\fill (0.1,0.2) rectangle (3.9,5.8);
+\fill (6.1,0.2) rectangle (9.9,5.8);
+\end{scope}
+
+\draw[->,very thick] (4.1,3)--(5.9,3)
+  node[midway,above] { $g$ };
+
+\begin{scope}[xshift=2cm,yshift=3.5cm,rotate=20]
+\draw[black,fill=green!50] (-0.8,-1.8) rectangle (0.8,1.8);
+\node[scale=0.75] at (0,0) { $x{+}H$ };
+\end{scope}
+\draw[black,fill=purple!50] (2,2.8) rectangle (2.8,2);
+\node[scale=0.75] at (2.4,2.4) { $x{+}H'$ };
+
+\begin{scope}[xshift=8cm,yshift=3cm]
+\draw[black,fill=orange!50] (-1.7,-2.3) rectangle (1.7,1.8);
+\node[above left,scale=0.75] at (1.7,-2.3) { $g(x){+}H_\max$ };
+\draw[black,fill=green!50,rotate=-40] (-1,-1.3) rectangle (1,1.3);
+\node[scale=0.75] at (0.15,1.2) { $g(x){+}{}$ };
+\node[scale=0.75] at (0.1,0.9) { $g'(x)(H)$ };
+\draw[black,fill=red!50] (-0.8,-0.8) rectangle (0.4,0.4);
+\node[scale=0.75] at (-0.2,0.1) { $g(x){+}H_\min$ };
+\draw[black,fill=purple!50] (-0.7,-0.7) rectangle (0.3,-0.3);
+\node[scale=0.75] at (-0.2,-0.5) { $y{+}H'_{\text{naive}}$ };
+\end{scope}
+
+\begin{scope}[very thick, rounded corners=10pt]
+\draw (0.1,0.2) rectangle (3.9,5.8);
+\draw (6.1,0.2) rectangle (9.9,5.8);
+\end{scope} 
+\end{tikzpicture}
+\hfill \null
+
+\caption{Method for tracking precision based on Lemma~\ref{lem:padicprec}}
+\label{fig:adaptative}
+\end{figure}
+
+\paragraph{Tracking precision \emph{globally}}
+
+As already said, we shall use the above method for tracking precision 
+while executing a single step in a complete algorithm. Let us now 
+address the problem of ``glueing''. We consider an algorithm \texttt{F} 
+consisting in a succession of $n$ steps $\texttt{G}_0, \ldots,
+\texttt{G}_{n-1}$. It is modeled by a strictly differentiable function $f : 
+U \to F$ where $U$ is an open subset in a normed $K$-vector space $E$ 
+and $F$ is a normed $K$-vector space. The input of \texttt{F} is an 
+approximated element in $U$ represented as a coset $C = x+H$ where $x 
+\in U$ and $H$ is a lattice.
+We also introduce notations for each individual step. For all $i$, we
+assume that $\texttt{G}_i$ is modeled by a strictly differentiable
+function $g_i : U_i \to U_{i+1}$ where $U_i$ is an open subset is 
+some normed $K$-vector space $E_i$ and, by convention, $U_0 = U$, $E_0 
+= E$ and $U_n = E_n = F$. We thus have:
+  
+$$f = g_{n-1} \circ g_{n-2} \circ \cdots \circ g_1 \circ g_0.$$
+For all $i$, we set $f_i = g_{i-1} \circ \cdots \circ g_0$. It is the 
+function modeling the execution of the $i$ first steps of our algorithm. 
+We further define $x_i = f_i(x)$ and $H_i = f_i'(x)(H)$. The chain rule 
+for composing differentials readily implies the recurrence
+\begin{equation}
+\label{eq:giprime}
+H_{i+1} = g_i'(x_i)(H_i)
+\end{equation}
+For simplicity, we make the following assumptions:
+\begin{itemize}
+\item the $\Zp$-submodule $H_i$ is a lattice in $E_i$ such that $x_i + 
+H_i \subset U_i$;
+\item the triple $(g_i, x_i, H_i)$ satisfies the assumptions of 
+Lemma~\ref{lem:padicprec};
+\item for all $i$, we have succeeded in finding (good enough) explicit 
+lattices $H_{\min,i}$ and $H_{\max,i}$ such that $H_{\min,i} \subset H_i 
+\subset H_{\max,i}$;
+\item for all $i$, we have succeeded in finding an explicit lattice
+$H'_i$ such that, while tracking naively precision, we end up with an
+inclusion
+$$g_i(x_i + H'_i) = x_{i+1} + H_{\text{naive},i+1}$$
+with $H_{\text{naive},i+1} \subset H_{\min,i+1}$.
+\end{itemize}
+We note that the first and the second assumptions are quite strong 
+because it implies in particular that the sequence of $\dim E_i$ is 
+non-increasing. However, it really simplifies the forthcoming discussion 
+and will be harmless for the application developed in this paper. As
+already mentionned, the construction of $H_{\min,i}$ and $H_{\max,i}$
+will generally follow from a \emph{theoretical} argument depending on
+the setting, while exhibiting $H'_i$ will often be straightforward.
+Anyway, we are now in position to apply the method for 
+tracking precision locally we have discussed earlier to all $g_i$'s. 
+This leads to a \emph{stabilized} version of the algorithm \texttt{G} 
+whose skeleton is depicted in Algorithm~\ref{algo:stabilizedG}.
+%
+\begin{algorithm}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \Input{$x$ given at precision $O(H)$}
+  \Output{$g(x)$ given at precision $O(H_{\max,n})$}
+  
+  \BlankLine
+
+  $x_0 \leftarrow x$;
+
+  \For{$i = 0, \ldots, n-1$}
+    {\textbf{lift} $x_i$ to precision $O(H'_i)$;
+
+     $x_{i+1} \leftarrow \texttt{F}_i(x_i)$;}
+
+  \Return{$x_n + O(H_{\max,n})$};
+\caption{Stabilized version of \texttt{G}}
+\label{algo:stabilizedG}
+\end{algorithm}
+%
+
 
 \subsection{The stabilization process}
 \label{subsec:stabilization}
