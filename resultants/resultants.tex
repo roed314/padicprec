@@ -534,8 +534,8 @@ exclusively consider the problem of computing subresultants.
 \subsubsection*{Definitions and notations}
 
 We recall briefly basic definitions and results about resultants and 
-subresultants. For a more complete exposition, we refer to \cite[\S 
-3.3]{cohen} and \cite[\S 4.1]{winkler}.
+subresultants. For a more complete exposition, we refer to \cite[\S
+4.2]{real}, \cite[\S 3.3]{cohen} and \cite[\S 4.1]{winkler}.
 Let $A$ and $B$ be two polynomials with coefficients in $\ring$ and 
 $d_A$ and $d_B$ be two integers greater than or equal to the degree of 
 $A$ and $B$ respectively. We consider the Sylvester application:
@@ -679,7 +679,34 @@ then becomes:
 $$S_{i+1} = s_i^2 \cdot s_{i-1}^{-2}
 \cdot (S_{i-1} \,\%\, S_i) \quad \text{for } i \geq 1.$$
 and Proposition \ref{prop:prem} now simply states that $R_j = S_{d_B-j}$ 
-in this case.
+in this case. In other words, still assuming that all principal 
+subresultants do not vanish, the sequence of subresultants obeys to 
+the recurrence:
+\begin{align}
+\label{eq:recRj}
+R_{d+1} = A, \quad R_d = B, & \qquad
+R_{j-1} = r_j^2 \cdot r_{j+1}^{-2}
+\cdot (R_{j+1} \,\%\, R_j) 
+\end{align}
+where $r_j$ is the leading coefficient of $R_j$ for $j \leq d$ and $r_{d+1}
+= 1$ by convention. Moreover, a similar 
+recurrence exists for cofactors as well:
+\begin{align}
+U_{d+1} = 1, \quad U_d = 0, & \qquad
+U_{j-1} = r_j^2 \cdot r_{j+1}^{-2}
+\cdot (U_{j+1} - Q_j U_j) \label{eq:recUj} \\
+V_{d+1} = 0, \quad U_d = 1, &\qquad
+V_{j-1} = r_j^2 \cdot r_{j+1}^{-2}
+\cdot (V_{j+1} - Q_j V_j) \label{eq:recVj}
+\end{align}
+where $Q_j$ is quotient in the Euclidean division of $R_{j+1}$ by $R_j$.
+Proposition \ref{prop:prem} of course yields an algorithm for computing 
+subresultants. In the normal case and assuming further for simplicity 
+that the input polynomials are monic of same degree, it is 
+Algorithm~\ref{algo:subres}, which uses the primitive 
+\texttt{prem} which computes the pseudo-remainder: if $A$ and $B$ are 
+two polynomials, by definition $\texttt{prem}(A,B) = \lc(B)^{\deg B-\deg 
+A+1} (A \% B)$ where $\lc(B)$ denotes the leading coefficient of $B$.
 
 \begin{algorithm}
   \SetKwInOut{Input}{Input}
@@ -706,20 +733,11 @@ in this case.
 \label{algo:subres}
 \end{algorithm}
 
-Proposition \ref{prop:prem} of course yields an algorithm for computing 
-subresultants. In the normal case and assuming further for simplicity 
-that the input polynomials are monic of same degree, it is 
-Algorithm~\ref{algo:subres}. Note that this algorithm uses the primitive 
-\texttt{prem} which computes the pseudo-remainder: if $A$ and $B$ are 
-two polynomials, by definition $\texttt{prem}(A,B) = \lc(B)^{\deg B-\deg 
-A+1} (A \% B)$ where $\lc(B)$ denotes the leading coefficient of $B$. 
 Unfortunately, when working over a complete discrete valuation field 
-$K$, the stability of Algorithm~\ref{algo:subres} is comparable --- and 
-actually even a bit worse --- than standard Euclide algorithm. The main 
-interest of using Algorithm~\ref{algo:subres} is to avoid denominators 
-(\emph{i.e.} always work over $\A$ instead $K$) but this stability
-are comparable --- actually even worse --- than that of 
-Algorithm~\ref{algo:Euclide}.
+$K$, the stability of Algorithm~\ref{algo:subres} is as bad as that of 
+standard Euclide algorithm. The main interest of using 
+Algorithm~\ref{algo:subres} is to avoid denominators, \emph{i.e.} we
+always work over $\A$ instead $K$.
 
 \begin{ex}
 \label{ex:subres}
@@ -1066,14 +1084,24 @@ degree of $A$ and $B$.
 \end{prop}
 
 \begin{proof}
-By functoriality of subresultants, we may assume that $\ring = 
-\Z[a_0, \ldots, a_{d-1}, b_0, \ldots, b_{d-1}]$ and that $A$ and $B$
-are the two generic monic polynomials 
-$A = X^d + \sum_{i=0} a_i X^i$ and
-$B = X^d + \sum_{i=0} b_i X^i$.
-All relations then follow from the extended subresultants 
-pseudo-remainder sequence algorithm (noting in addition that all
-principal subresultants are nonzero). \todo{Give details.}
+
+By functoriality of subresultants, we may assume that $\ring = \Z[a_0, 
+\ldots, a_{d-1}, b_0, \ldots, b_{d-1}]$ and that $A$ and $B$ are the two 
+generic monic polynomials $A = X^d + \sum_{i=0} a_i X^i$ and $B = X^d + 
+\sum_{i=0} b_i X^i$. Under this additional assumption, all principal
+subresultant are nonzero. Therefore, the sequences $(R_j)_j$, $(U_j)_j$
+and $(V_j)_j$ satisfy the recurrences \eqref{eq:recRj}--\eqref{eq:recVj}.
+The two first announced relations follow easily. Let now focus on the
+third one. We set $\tilde R_j = R_j$ and $\tilde R_k = r_j^{2(j-k-1)} 
+\: R_k$ for $k < j$. An easy decreasing induction on $k$ shows that this 
+sequence obeys to the recurrence:
+$$\tilde R_{k-1} = \tilde r_k^2 \cdot \tilde r_{k+1}^{-2} \cdot 
+(\tilde R_{k+1} \,\%\, \tilde R_k)$$
+where $\tilde r_j = 1$ and $\tilde r_k$ is the coefficient of $\tilde 
+R_k$ of degree $k$ for all $k < j$. Comparing with \eqref{eq:recRj},
+this implies that $\tilde R_k$ is the $k$-th subresultant of the pair 
+$(R_j, R_{j-1})$ and we are done. The last equality is proved in a 
+similar fashion using Eq.~\eqref{eq:recUj}.
 \end{proof}
 
 For any fixed index $j \in \{1, \ldots, d-1\}$, we consider the 
@@ -1957,6 +1985,10 @@ cheaply.
   G.~Andrews,
   \emph{The Theory of Partitions},
   Cambridge University Press (1976)
+\bibitem{real}
+  S.~Basu, R.~Pollack, M.-F.~Roy
+  \emph{Algorithms in Real Algebraic Geometry},
+  Springer-Verlag (2008), second edition
 \bibitem{pari}
   C.~Batut, K.~Belabas, D.~Benardi, H.~Cohen, M.~Olivier, 
   \emph{User’s guide to PARI-GP} (1985--2013)
@@ -1996,7 +2028,6 @@ cheaply.
   F.~Winkler,
   \emph{Polynomial Algorithms in Computer Algebra},
   Springer Wien New Work (1996)
-\bibitem{}
 \end{thebibliography}
 
 
