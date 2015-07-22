@@ -54,6 +54,7 @@
 \newcommand{\R}{\mathbb R}
 \renewcommand{\O}{\mathcal O}
 \newcommand{\m}{\mathfrak m}
+\newcommand{\calL}{\mathcal L}
 
 \newcommand{\M}{\text{\tt M}}
 
@@ -85,7 +86,6 @@
 
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
-\def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
@@ -196,23 +196,23 @@ of the input increases.
 
   \BlankLine
 
-  $R_1 \leftarrow A$; $U_1 \leftarrow 1$; $V_1 \leftarrow 0$;
+  $S_1 \leftarrow A$; $U_1 \leftarrow 1$; $V_1 \leftarrow 0$
 
-  $R_2 \leftarrow B$; $U_2 \leftarrow 0$; $V_2 \leftarrow 1$;
+  $S_2 \leftarrow B$; $U_2 \leftarrow 0$; $V_2 \leftarrow 1$
 
-  $k \leftarrow 2$;
+  $k \leftarrow 2$
 
-  \While{$R_k \neq 0$}
-    {$Q, R_{k+1} \leftarrow$ quotient and remainder in the Euclidean
-     division of $R_{k-1}$ by $R_k$;
+  \While{$S_k \neq 0$}
+    {$Q, S_{k+1} \leftarrow$ quotient and remainder in the Euclidean
+     division of $S_{k-1}$ by $S_k$
 
-     $U_{k+1} \leftarrow U_{k-1} - Q U_k$;
+     $U_{k+1} \leftarrow U_{k-1} - Q U_k$
 
-     $V_{k+1} \leftarrow V_{k-1} - Q V_k$;
+     $V_{k+1} \leftarrow V_{k-1} - Q V_k$
 
-     $k \leftarrow k+1$;}
+     $k \leftarrow k+1$}
 
-  \Return{$R_{k-1}, U_{k-1}, V_{k-1}$};
+  \Return{$S_{k-1}, U_{k-1}, V_{k-1}$}
 \caption{Extended Euclide's algorithm}
 \label{algo:Euclide}
 \end{algorithm}
@@ -480,41 +480,41 @@ B & = X^5 +
       \big(3 + O(2^5)\big) X +
       \big(10 + O(2^5)\big).
 \end{align*}
-The remainder in the Euclidean division of $A$ by $B$ is $R_3 = A-B$.
+The remainder in the Euclidean division of $A$ by $B$ is $S_3 = A-B$.
 We do not loose precision while performing this substraction and the
 result we get is:
-$$R_3 = 
+$$S_3 = 
       \big(3 + O(2^5)\big) X^4 +
       \big(18 + O(2^5)\big) X^3 +
       \big(25 + O(2^5)\big) X^2 +
       \big(15 + O(2^5)\big) X +
       \big(15 + O(2^5)\big).$$ 
-In order to compute $R_4$, we have now to perform the Euclidean division 
-of $R_2 = B$ by $R_3$. Noting that the leading coefficient of $R_2$ has 
+In order to compute $S_4$, we have now to perform the Euclidean division 
+of $S_2 = B$ by $S_3$. Noting that the leading coefficient of $S_2$ has 
 valuation $0$ and using Eq~\eqref{eq:precadd}--\eqref{eq:precdiv}, we 
 deduce that this operation does not loose precision again. We get:
-$$R_4 = 
+$$S_4 = 
       \big(26 + O(2^5)\big) X^3 +
       \big(17 + O(2^5)\big) X^2 +
       \big(4 + O(2^5)\big) X +
       \big(16 + O(2^5)\big).$$
-We observe now that the leading coefficient of $R_4$ has valuation $1$. 
+We observe now that the leading coefficient of $S_4$ has valuation $1$. 
 According to Eq.~\eqref{eq:precdiv}, divising by this coefficient ---
 and therefore \emph{a fortioti} computing the euclidean division of 
-$R_3$ by $R_4$ --- will result in loosing at least one digit in
+$S_3$ by $S_4$ --- will result in loosing at least one digit in
 relative precision. The result we find is:
-$$R_5 = 
+$$S_5 = 
       \underbrace{\big(\textstyle \frac 3 4 + O(2^2)\big)}_{\text{rel. prec.} = 4} X^2 +
       \underbrace{\big(6 + O(2^3)\big)}_{\text{rel. prec.} = 2} X +
       \underbrace{\big(3 + O(2^3)\big)}_{\text{rel. prec.} = 3}.$$
 Continuing this process, we obtain:
-$$R_6 = 
+$$S_6 = 
       \big(20 + O(2^5)\big) X +
       \big(12 + O(2^5)\big) 
 \quad \text{and} \quad
-R_7 =
+S_7 =
       \textstyle \frac 7 4 + O(2).$$
-The relative precision on the final result $R_7$ is then $3$, which is
+The relative precision on the final result $S_7$ is then $3$, which is
 less than the initial precision which was $5$.
 \end{ex}
 
@@ -630,14 +630,17 @@ pseudo-remainder sequence} which is defined as follows. We pick $A$ and
 $B$ as above and assume that $d_A = \deg A$. Denoting by $(P \,\%\, Q)$ 
 the remainder in the Euclidean division of $P$ by $Q$, we define two 
 recursive sequences $(S_i)$ and $(c_i)$ as follows:
-$$\left\{\begin{array}{ll}
+\begin{equation}
+\label{eq:subressequence}
+\left\{\begin{array}{ll}
 S_{-1} = A, \, S_0 = B, \, c_{-1} = 1 \smallskip \\
 \displaystyle S_{i+1} = (-s_i)^{\varepsilon_i + 1}
 s_{i-1}^{-1} \: c_i^{-\varepsilon_i} \cdot (S_{i-1} \,\%\, S_i)
 & \text{for } i \geq 0 \smallskip \\
 \displaystyle c_{i+1} = s_{i+1}^{\varepsilon_{i+1}} \cdot c_i^{1-\varepsilon_{i+1}}
 & \text{for } i \geq -1. 
-\end{array}\right.$$
+\end{array}\right.
+\end{equation}
 Here $n_i = \deg S_i$, $\varepsilon_i = n_{i+1} - n_i$ and $s_i$ is the 
 leading coefficient of $S_i$ if $i \geq 0$ and $s_{-1} = 1$ by 
 convention. These sequences are finite and the above recurrence applies 
@@ -686,19 +689,19 @@ in this case.
 
   \BlankLine
 
-  $R_d \leftarrow B$; $r_d \leftarrow 1$;
+  $R_d \leftarrow B$; $r_d \leftarrow 1$
 
-  $R_{d-1} \leftarrow B-A$;
+  $R_{d-1} \leftarrow B-A$
 
   \For{$j = (d-1), (d-2), \ldots, 1$}
-    {$r_j \leftarrow$ coefficient in $X^j$ of $R_j$;
+    {$r_j \leftarrow$ coefficient in $X^j$ of $R_j$
 
-     \lIf{$r_j = 0$}{\textbf{raise} NotImplementedError;}
+     \lIf{$r_j = 0$}{\textbf{raise} NotImplementedError}
 
      $R_{j-1} \leftarrow \texttt{prem}(R_{j+1}, R_j) / r_{j+1}^2$
     }
 
-  \Return{$R_{d-1}, \ldots, R_0$};
+  \Return{$R_{d-1}, \ldots, R_0$}
 \caption{Subresultant pseudo remainder sequence algorithm}
 \label{algo:subres}
 \end{algorithm}
@@ -714,17 +717,76 @@ Unfortunately, when working over a complete discrete valuation field
 $K$, the stability of Algorithm~\ref{algo:subres} is comparable --- and 
 actually even a bit worse --- than standard Euclide algorithm. The main 
 interest of using Algorithm~\ref{algo:subres} is to avoid denominators 
-(\emph{i.e.} always work over $\A$ instead $K$) but its use almost does 
-not affect the behaviour of the \emph{relative} precision. We shall 
-explain later (\emph{cf} \S~\ref{subsec:stabilization}) a method for 
-stabilizing Algorithm~\ref{algo:subres}.
+(\emph{i.e.} always work over $\A$ instead $K$) but this stability
+are comparable --- actually even worse --- than that of 
+Algorithm~\ref{algo:Euclide}.
 
-\section{Euclide-like algorithms are unstable}
+\begin{ex}
+\label{ex:subres}
+Applying Algorithm~\ref{algo:subres} with the input $(A,B)$ of 
+Example~\ref{ex:Euclide}, we obtain:
+\begin{align*}
+R_4 & = 
+  \big(29 + O(2^5)\big) X^4 + 
+  \big(14 + O(2^5)\big) X^3 + 
+  \big(5 + O(2^5)\big) X^2 + 
+  \big(17 + O(2^5)\big) X + 
+  \big(17 + O(2^5)\big) \\
+R_3 & = 
+  \big(4 + O(2^5)\big) X^3 + 
+  \big(13 + O(2^5)\big) X^2 + 
+  \big(4 + O(2^5)\big) X + 
+  \big(16 + O(2^5)\big) \\
+R_2 & = 
+  \big(5 + O(2^5)\big) X^2 + 
+  \big(20 + O(2^5)\big) X + 
+  O(2^5) \\
+R_1 & = 
+  \big(1 + O(2)\big) X + 
+  \big(1 + O(2)\big) \\
+R_0 & = 1 + O(2)
+\end{align*}
+We observe in particular that the absolute precision on $R_0$ is $1$, 
+although it should be at least $5$ since $R_0$ is given by an integral
+polynomial expression in terms of the coefficients of $A$ and $B$. We
+note moreover that the relative precision on $R_0$ (which is $1$ as
+well) is worse that the relative precision we got on $S_7$ (which was
+$3$) while executing Algorithm~\ref{algo:Euclide} (\emph{cf} 
+Example~\ref{ex:Euclide}).
+\end{ex}
+
+\section{Unstability of Euclide-like algorithms}
 \label{sec:unstable}
 
-\todo{Write a short introduction}
+In this section, we provide strong evidences for explaining the average 
+loss of precision observed while executing Algorithm~\ref{algo:subres} 
+(see Figure~\ref{fig:precision}).
+Concretely, in \S \ref{subsec:lowerbound} we establish\footnote{in a 
+model of precision which is slightly weaker that the usual one; we refer 
+to \S \ref{subsec:lowerbound} for a complete discussion about this.} a 
+lower bound of the losses of precision which depends on extra 
+parameters, that are the valuations of the principal subresultants. 
+The next subsections (\S\S \ref{subsec:proba} and \ref{subsec:proof})
+aim at studying the behaviour of these valuations on random inputs;
+they thus have a strong probabilistic flavour.
+
+\begin{rem}
+The locution \emph{Euclide-like algorithms} (which appears in the 
+title of the Section) refers to the family of
+algorithms computed $\gcd$ or subresultants by means of successive
+Euclidean divisions. We believe that the stability of algorithms in
+this family is comparable since we are precisely loosing precision
+while performing Euclidean divisions.
+Among all algorithms in this family, we chose to concentrale ourselves
+on Algorithm~\ref{algo:subres} because it is simpler due to the fact
+that it only manipulates polynomials with coefficients in $\A$.
+Nevertheless, our method extends to many other Euclide-like algorithms
+including Algorithm~\ref{algo:Euclide}; this is left as an exercice to
+the reader.
+\end{rem}
 
 \subsection{A lower bound on losses of precision}
+\label{subsec:lowerbound}
 
 We consider two fixed polynomials $A$ and $B$ with coefficients in $\A$ 
 whose coefficients are known with precision $O(\pi^N)$ for some positive
@@ -808,6 +870,7 @@ should not loose any precision when computing resultants because they
 are given by polynomial expressions.
 
 \subsection{Behaviour on random inputs}
+\label{subsec:proba}
 
 Proposition \ref{prop:precEuclide} gives an estimation of the loss
 of precision in Euclide-like algorithms in terms of the quantities
@@ -1248,7 +1311,7 @@ parameter $(1 - q^{-1})$. We now conclude the proof by noting that
 $Y_j$ equals $\sum_{i=1}^d \min(X_{j-i}, \ldots, X_{j+i})$ (recall
 that the $X_i^{(m)}$'s only take the values $0$ and $1$).
 
-\section{The method of adaptative lifts}
+\section{Stabilization}
 \label{sec:stable}
 
 We have seen in the previous sections that Euclide's algorithm (and 
@@ -1256,7 +1319,7 @@ their variants) are unstable in practice. On the other hand,
 one can compute subresultants in a very stable way by evaluating
 the corresponding minors of the Sylvester matrix. Doing so, we do
 not loose any significant digit. Of course, the downside is the
-quite bad efficiency.
+rather bad efficiency.
 
 In this section, we design an algorithm which combines the two
 advantages: it has the same complexity than Euclide's algorithm
@@ -1267,10 +1330,11 @@ sequence algorithm by applying a ``stabilization process'', whose
 inspiration comes from \cite{padicprec}.
 
 \subsection{Crash course on ultrametric precision}
+\label{subsec:crashcourse}
 
-In this subsection, we briefly report on the results of \cite{padicprec} 
-where the authors draw the lines of a general framework to handle a 
-sharp (often optimal) track of ultrametric precision.
+In this subsection, we briefly report on and complete the results of 
+\cite{padicprec} where the authors draw the lines of a general framework 
+to handle a sharp (often optimal) track of ultrametric precision.
 
 \subsubsection{The notion of lattice}
 
@@ -1580,7 +1644,7 @@ will generally follow from a \emph{theoretical} argument depending on
 the setting, while exhibiting $H'_i$ will often be straightforward.
 Anyway, we are now in position to apply the method for 
 tracking precision locally we have discussed earlier to all $g_i$'s. 
-This leads to a \emph{stabilized} version of the algorithm \texttt{G} 
+This leads to a \emph{stabilized} version of the algorithm \texttt{F} 
 whose skeleton is depicted in Algorithm~\ref{algo:stabilizedG}.
 %
 \begin{algorithm}
@@ -1591,47 +1655,77 @@ whose skeleton is depicted in Algorithm~\ref{algo:stabilizedG}.
   
   \BlankLine
 
-  $x_0 \leftarrow x$;
+  $x_0 \leftarrow x$
 
   \For{$i = 0, \ldots, n-1$}
-    {\textbf{lift} $x_i$ to precision $O(H'_i)$;
+    {\textbf{lift} $x_i$ to precision $O(H'_i)$
 
-     $x_{i+1} \leftarrow \texttt{F}_i(x_i)$;}
+     $x_{i+1} \leftarrow \texttt{G}_i(x_i)$}
 
-  \Return{$x_n + O(H_{\max,n})$};
-\caption{Stabilized version of \texttt{G}}
+  \Return{$x_n + O(H_{\max,n})$}
+\caption{Stabilized version of \texttt{F}}
 \label{algo:stabilizedG}
 \end{algorithm}
 %
 
 
-\subsection{The stabilization process}
+\subsection{Application to subresultants}
 \label{subsec:stabilization}
 
-In order to get a stabilized version of the subresultant 
-pseudo-remainder sequence algorithm, we are going to estimate 
-the loss --- and the gain --- of precision at each step of this 
-algorithm using Proposition \ref{prop:padicprec}. In order to do
-so, we introduce the functions
+We now apply the theory presented in \S \ref{subsec:crashcourse} above 
+to the problem of computing subresultants, \emph{i.e.} the abstract 
+Algorithm \texttt{F} is now instantiated to Algorithm~\ref{algo:subres}. 
+We split this algorithm into steps in the obvious manner, each step 
+corresponding to an iteration of the main loop. We thus consider the
+functions:
+
+$$\begin{array}{rrclc}
+&g_d \, : \, K_d[X] \times K_d[X] &\to &K_d[X] \times K_{\leq d-1}[X] 
+\smallskip \\
+&(A,B) & \mapsto & (B, A-B) \bigskip \\
+\text{and} &g_j \, : \, 
+K_{\leq j+1}[X] \times K_{\leq j}[X]
+& \to & K_{\leq j}[X] \times K_{\leq j-1}[X] \smallskip \\
+&(R_{j+1}, R_j) & \mapsto & (R_j, R_{j-1})
+& 
+\end{array}$$
+where $R_{j-1}$ is defined as usual by
+$R_{j-1} = r_j^2 \cdot r_{j+1}^{-2} \cdot 
+(R_{j+1} \,\%\, R_j)$
+where $r_j$ (resp. $r_{j+1}$) stands for the coefficient of degree $j$ 
+in $R_j$ (resp. of degree $j+1$ in $R_{j+1}$). We remark that $g_j$ is 
+only defined on the subset consisting of pairs $(R_{j+1}, R_j)$ for 
+which $R_{j+1}$ has degree $j+1$; this reflects the fact that 
+Algorithm~\ref{algo:subres} fails on inputs for which at least one 
+principal
+subresultant vanishes. The composite function $f = g_1 \circ \cdots 
+\circ g_d$ (be careful with the order of the indices) models (a slight 
+variant of) Algorithm~\ref{algo:subres}. For all $j$, we set $f_j = 
+g_{j+1} \circ \cdots \circ g_d$ for all $j$. It is the function:
 $$\begin{array}{rcl}
 f_j \, : \, K_d[X] \times K_d[X] & \to & K_{\leq j}[X] \times 
 K_{\leq j-1}[X] \smallskip \\
 (A,B) & \mapsto & (\Res_j(A,B), \Res_{j-1}(A,B)).
 \end{array}$$
 
-\noindent
-{\bf Differential computation.}
-The first step consists in estimating the differential of $f_j$. 
-Set $\mathcal L = \A_d[X] \times \A_d[X]$ and $\mathcal L_j = 
-\A_{\leq j}[X] \times \A_{\leq j-1}[X]$; they are standard lattices
-in the source and the target of $f_j$ respectively.
+For simplicity, we assume in addition that the precision on the input 
+$(A,B)$ is \emph{flat}, meaning that all coefficients of $A$ and $B$ are 
+known with the same absolute precision $N$. In the language of \S 
+\ref{subsec:crashcourse}, this flat precision corresponds to the lattice 
+$H = \pi^N \calL$ where $\calL = \A_{<d}[X] \times \A_{<d}[X]$ is the 
+standard lattice in $K_d[X] \times K_d[X]$. Following \S 
+\ref{subsec:crashcourse}, our first task consists in finding two 
+lattices $H_{\min,j}$ and $H_{\max,j}$ having the property that 
+$H_{\min,j} \subset f'_j(A,B)(H) \subset H_{\max,j}$.
 
 \begin{lem}
 \label{lem:diff}
 For all $(A,B) \in K_d[X]^2$, we have:
 $$r_j^2 \cdot \mathcal L_j 
 \subset f'_j(A,B)(\mathcal L) \subset \mathcal L_j$$
-where $r_j$ is the $j$-th principal subresultant of $(A,B)$.
+where $r_j$ is the $j$-th principal subresultant of $(A,B)$ and
+$\calL_j = \A_{\leq j}[X] \times \A_{\leq j-1}[X]$ is the standard
+lattice in $K_{\leq j}[X] \times K_{\leq j-1}[X]$.
 \end{lem}
 
 \begin{proof}
@@ -1643,7 +1737,7 @@ that $f_j$ factors through the function $\psi_j$ introduced in \S
 function does not vanish on a neighborhood of $(A,B)$. By Proposition 
 \ref{prop:bijection}, $\psi_j$ is injective on this neighborhood. 
 Therefore so is $f_j$. Furthermore, a close look at the proof of 
-Proposition \ref{prop:bijection} indicates that a left inverse of $f_i$ 
+Proposition \ref{prop:bijection} indicates that a left inverse of $f_j$ 
 is the function mapping $(S_j, S_{j-1})$ to
 $$(-1)^j \cdot r_j^{-2} \cdot 
 (V_j R_{j-1}{-}V_{j-1} R_j,\: -U_j R_{j-1}{+}U_{j-1} R_j)$$
@@ -1652,71 +1746,62 @@ $(j-1)$-th) cofactors of $(A,B)$. Differenting this, we get the
 announced result.
 \end{proof}
 
-\noindent
-{\bf The algorithm.}
-The input of our algorithm is a couple of polynomials $(A,B)$ with 
-coefficients in $\A$ whose coefficients are known at precision 
-$O(\pi^N)$ for some given positive integer $N$. We make the following 
-hypothesis (and refer to \S \ref{subsec:questions} for a brief 
-discussion about it):
+Lemma \ref{lem:diff} ensures that one can safely take $H_{\min,j} = 
+r_j^2 \cdot \pi^N \calL_j$ and $H_{\max,j} = \pi^N \calL_j$. It finally 
+remains to construct the lattice $H'_j \subset K_{\leq j}[X] \times 
+K_{\leq j-1}[X]$. For this, we remark that a naive track of precision 
+leads to a loss of at most $2 \cdot \val(r_{j+1})$ digits while 
+executing the step $\texttt{G}_j$ (see also proof of Proposition 
+\ref{prop:precEuclide} for similar considerations). Therefore, one can 
+take $H'_j = r_j^2 r_{j+1}^2 \pi^N \calL_j$.
+
+\begin{algorithm}
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \Input{Two polynomials $A, B \in K_d[X]$ given at flat precision $O(\pi^n)$}
+  \Output{The sequence of subresultants of $A$ and $B$ given at flat precision $O(\pi^n)$}
+
+  \BlankLine
+
+  $R_d \leftarrow B$; $r_d \leftarrow 1$
+
+  $R_{d-1} \leftarrow B-A$
+
+  \For{$j = (d-1), (d-2), \ldots, 1$}
+    {$r_j \leftarrow$ coefficient in $X^j$ of $R_j$
+
+     \lIf{$v_j \geq \frac N 2$}{\textbf{raise} NotImplementedError}
+
+     \textbf{lift} $(R_{j+1}, R_j)$ at precision $O(\pi^{N+2\val(r_j) + 2\val(r_{j+1}))})$
+
+     $R_{j-1} \leftarrow \texttt{prem}(R_{j+1}, R_j) / r_{j+1}^2$
+    }
+
+  \Return{$R_{d-1} + O(\pi^N), \ldots, R_0 + O(\pi^N)$}
+\caption{Stabilized version of Algorithm~\ref{algo:subres}}
+\label{algo:stabsubres}
+\end{algorithm}
+
+\begin{prop}
+Algorithm \ref{algo:stabsubres} computes all subresultants of
+$(A,B)$ at precision $O(\pi^N)$ under the following 
+assumption\footnote{If this assumption is not fullfiled, the
+algorithms fails and returns an error.}
 
 \medskip
 
 \begin{tabular}{rl}
-& (a)~$A$ and $B$ are monic of the same degree $d$ \\
-{\bf (H)}: & (b)~all principal subresultants of $(A,B)$ 
+{\bf (H)}: & all principal subresultants of $(A,B)$ 
 do not vanish modulo $\pi^{N/2}$.
 \end{tabular}
 
 \medskip
 
 \noindent
-The subresultants $R_j = \Res_j(A,B)$ can then be computed recursively:
-setting $R_d = B$, we have $R_{d-1} = A-B$ and the recurrence
-$R_{j-2} = r_{j-1}^2 \cdot r_j^{-2} \cdot (R_j \,\%\, R_{j-1})$.
-Moreover Lemma \ref{lem:diff} and Proposition \ref{prop:padicprec} imply
-that any perturbation of $(R_j, R_{j-1})$ by an element of $\pi^N r_j^2 
-\mathcal L_j$ will not affect the values of the next $R_k$'s modulo 
-$\pi^N$. Indeed, given $k > j$, let $f_{j,k} : (R_j, R_{j-1}) \mapsto 
-(R_k, R_{k+1})$ be the function modeling the above recurrence. We have
-$f_k = f_{j,k} \circ f_j$ and thus we can write:
-\begin{align*}
-f_{j,k}\big((R_j, R_{j-1}) + \pi^N r_j^2 \mathcal L_j\big) 
-& \subset f_k\big((A,B) + \pi^N \mathcal L\big) \\
-& \subset (R_k, R_{k+1}) + \pi^N \mathcal L_k.
-\end{align*}
-This suggests the following algorithm.
-
-\noindent\hrulefill
-
-\noindent {\bf Algorithm 1:} {\tt subresultants\_stable}
-
-\noindent{\bf Input:} an integer $N$, a couple $(A,B)$ satisfying {\bf (H)}
-
-\noindent{\bf Output:} the subresultants of $(A,B)$ at precision $O(\pi^N)$
-
-\smallskip\noindent 1.\ Set $R_d = B$, $v_d = 0$ and $R_{d-1} = A-B$
-
-\smallskip\noindent 2.\ {\bf for} $j=d,\dots,2$
-
-\smallskip\noindent 3.\ \hspace{0.3cm}{\bf compute} $v_{j-1} = \val(\lc(R_{j-1}))$
-
-\smallskip\noindent 4.\ \hspace{0.3cm}{\bf lift} $(R_j, R_{j-1})$ at precision $O(\pi^{N+2(v_j + v_{j-1})})$
-
-\smallskip\noindent 5.\ \hspace{0.3cm}{\bf compute} $R_{j-2} = r_{j-1}^2 \cdot r_j^{-2} \cdot (R_j \,\%\, R_{j-1})$ at precision $O(\pi^{N+2 v_{j-1}})$
-
-\smallskip\noindent 6.\ {\bf return} $R_{d-1} + O(\pi^N), \ldots,
-R_0 + O(\pi^N)$
-
-\vspace{-1ex}\noindent\hrulefill
-
-\begin{prop}
-Algorithm 1 is correct and runs in
-$$O(d^2 \cdot \M(N + \max(V_0, \ldots, V_{d-1}))$$
-bit operations where $V_j$ denotes the valuation of $r_j$ and 
-$\M(n)$ is the number of bit operations needed to perform an 
-arithmetic operation (addition, product) in $\A$ at precision 
-$O(\pi^n)$.
+It runs in $O(d^2 \cdot \M(N + \max(V_0, \ldots, V_{d-1}))$ bit 
+operations where $V_j$ denotes the valuation of $r_j$ and $\M(n)$ is the 
+number of bit operations needed to perform an arithmetic operation 
+(addition, product) in $\A$ at precision $O(\pi^n)$.
 \end{prop}
 
 \begin{rem}
@@ -1727,14 +1812,12 @@ field $k$.
 \end{rem}
 
 \begin{proof}
-Regarding to the correctness, it remains only to justify that $R_{j-2}$ 
-can be computed at the given precision in line 5 but this follows 
-from a naive track of precision (\emph{cf} proof of Proposition
-\ref{prop:precEuclide} for a similar computation).
+Correctness has been already proved (the assumption {\bf (H)} ensures
+that Proposition~\ref{prop:padicprec} applies to each $g_j$).
 As usual Euclide's algorithm, Algorithm 1 requires $O(d^2)$ operations 
 in the base ring $\A$. Moreover, we observe that the maximal precision 
 at which we are computing is upper bounded by $N + 2 \max(V_0, \ldots, 
-V_{d-1})$. The proposition follows.
+V_{d-1})$. This justifies the announced complexity.
 \end{proof}
 
 According to Corollary \ref{cor:Vj}, the expected value of the variable 
@@ -1743,35 +1826,39 @@ complexity of Algorithm 1 is $O(d^2 \cdot \M(N + \log d))$ bit
 operations. In all usual cases (\emph{cf} Remark \ref{rem:M}), this
 complexity is also $\tilde O(d^2 N \cdot \log |k|)$ bit operations.
 
-\subsection{Open questions}
+To conclude with, let us comment on briefly the hypothesis {\bf (H)}. We 
+first remark that it is satisfied with high probability if $N$ is large 
+compared to $2 \cdot \log_d p$. Thus, replacing eventually $N$ by $3 
+\cdot \log_d p$ (which does not affect the complexity), the 
+assumption~(b) is harmless on average --- but maybe not on particularly 
+bad instances. Let us also underline that, if we are just interested in 
+computing the $j$-th subresultant for a particular $j$, then we just 
+need to assume the non-vanishing of the principal subresultants in the 
+range $[j{+}1, d{-}1]$.
+
+\subsubsection*{Open questions}
 \label{subsec:questions}
 
-Of course, the first question we would like to raise is to possibility 
-to drop the hypothesis {\bf (H)}. It is actually rather easy to relax
-the part~(a) of the hypothesis, replacing it by:
+The first hypothesis we would like to relax is of course {\bf (H)}. 
+Actually, it seems quite plausible that one can produce a stabilized 
+version of the ``complete''\footnote{\emph{I.e.} dealing with abnormal 
+sequences as well.} subresultant pseudo-remainder sequence algorithm 
+following the same strategy. Nevertheless, this extension will not 
+completely straightforward because one will need to understand precisely 
+how the coefficients $c_i$'s (appearing in Eq.~\ref{eq:subressequence}) 
+alter the behaviour of the precision.
 
-\medskip
-
-(a')~$\lc(B)$ is invertible in $\A$ and $\deg A \geq \deg B$.
-
-\medskip
-
-\noindent
-Assuming only this weaker assumption, Algorithm 1 still works except 
-that, in line 1, we have to set
-$$R_{d-1} = (-1)^{\deg A - \deg B} (A \,\%\, B)$$
-(instead of $R_{d-1} = A-B$).
-We remark that this value can be computed at precision $O(\pi^N)$
-because the leading coefficient of $B$ is assumed to be invertible.
-Dropping entirely~(a') seems nevertheless more difficult. Let us 
-move to assumption~(b) and first remark that it is satisfied with high 
-probability if $N$ is large compared to $2 \cdot \log_d p$. Thus, 
-replacing eventually $N$ by $3 \cdot \log_d p$ (which does not affect 
-the complexity), the assumption~(b) is harmless on average --- but maybe
-not on particularly bad instances. We finally underline that, if we are
-just interested in computing the $j$-th subresultant for a particular
-$j$, then we just need to assume the non-vanishing of the principal
-subresultants in the range $[j{+}1, d{-}1]$.
+As it was presented, Algorithm~\ref{algo:stabsubres} only accepts inputs 
+consisting of a pair of \emph{monic} polynomials having the same degree. 
+It is actually not difficult to make it work with all couples of 
+polynomials $(A,B)$ such that $\lc(B)$ is invertible in $\A$ and $\deg A 
+\geq \deg B$. Indeed, it is enough for that to replace line 2 by:
+$$R_{d-1} \leftarrow (-1)^{\deg A - \deg B} (A \,\%\, B).$$
+We remark that this can be computed at precision $O(\pi^N)$ thanks to 
+the assumption on the leading coefficient of $B$.
+However, writing an extension of Algorithm~\ref{algo:stabsubres} that 
+accepts all inputs seems much more tricky and this is the first question 
+we would like to address.
 
 Beyond this, one may wonder if one can use similar technics to compute 
 not only subresultants but cofactors as well. For those indexes $j$ such 
