@@ -1,0 +1,141 @@
+\documentclass{sig-alternate-2013}
+
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath,amssymb}
+\usepackage{amsthmnoproof}
+\usepackage{amsrefs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{stmaryrd}
+\usepackage{enumerate}
+\usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
+\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
+\usepackage{comment}
+\usepackage{multirow}
+\usepackage{tikz}
+
+\newcommand{\noopsort}[1]{}
+\DeclareMathOperator{\NP}{NP}
+\DeclareMathOperator{\HP}{HP}
+\DeclareMathOperator{\PP}{PP}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\tr}{Tr}
+\DeclareMathOperator{\com}{Com}
+\DeclareMathOperator{\Grass}{Grass}
+\DeclareMathOperator{\Lat}{Lat}
+\DeclareMathOperator{\round}{round}
+\DeclareMathOperator{\rank}{rank}
+
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Zp}{\Z_p}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Qp}{\Q_p}
+\newcommand{\Fp}{\mathbb{F}_p}
+\newcommand{\R}{\mathbb R}
+\renewcommand{\O}{\mathcal O}
+\newcommand{\OK}{\mathcal{O}_K}
+\newcommand{\XX}{\mathbf X}
+\newcommand{\trans}{{}^{\text t}}
+\newcommand{\T}{\mathcal{T}}
+
+\renewcommand{\prec}{\text{\rm prec}}
+
+\newcommand{\id}{\textrm{id}}
+\newcommand{\Epi}{\textrm{Epi}}
+\renewcommand{\c}{\text{\rm c}}
+
+\newcommand{\detp}{\det{'}}
+\newcommand{\low}{\text{\rm low}}
+\newcommand{\up}{\text{\rm up}}
+\newcommand{\DI}{\text{\rm DI}}
+\newcommand{\II}{\text{\rm II}}
+\DeclareMathOperator{\charpoly}{char}
+\newcommand{\charp}{\charpoly'}
+
+\newcommand{\lb}{\ensuremath{\llbracket}}
+\newcommand{\rb}{\ensuremath{\rrbracket}}
+\newcommand{\lp}{(\!(}
+\newcommand{\rp}{)\!)}
+\newcommand{\col}{\: : \:}
+
+\def\todo#1{\ \!\!{\color{red} #1}}
+\definecolor{purple}{rgb}{0.6,0,0.6}
+\def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
+
+\def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
+
+
+\permission{%
+}
+
+
+
+\begin{document}
+
+\newtheorem{theo}{Theorem}[section]
+\newtheorem{lem}[theo]{Lemma}
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{cor}[theo]{Corollary}
+\newtheorem{quest}[theo]{Question}
+\newtheorem{conj}[theo]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rem}[theo]{Remark}
+\newtheorem{ex}[theo]{Example}
+\newtheorem{deftn}[theo]{Definition}
+
+\title{Multiplication, division and factorization\\of p-adic polynomials}
+
+\numberofauthors{3}
+\author{
+\alignauthor Xavier Caruso\\
+  \affaddr{Universit\'e Rennes 1}\\
+  \affaddr{\textsf{xavier.caruso@normalesup.org}}
+\alignauthor David Roe \\
+  \affaddr{University of British Columbia}\\
+  \affaddr{\textsf{roed.math@gmail.com}}
+\alignauthor Tristan Vaccon\\
+  \affaddr{Universit\'e Rennes 1}\\
+  \affaddr{\textsf{tristan.vaccon@univ-rennes1.fr}}
+}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\category{I.1.2}{Computing Methodologies}{Symbolic and Algebraic Manipulation -- \emph{Algebraic Algorithms}}
+\terms{Algorithms, Theory}
+\keywords{}
+
+%\vspace{1mm}
+% \noindent
+% {\bf Categories and Subject Descriptors:} \\
+%\noindent I.1.2 [{\bf Computing Methodologies}]:{~} Symbolic and Algebraic
+%  Manipulation -- \emph{Algebraic Algorithms}
+%
+% \vspace{1mm}
+% \noindent
+% {\bf General Terms:} Algorithms, Theory
+%
+% \vspace{1mm}
+% \noindent
+% {\bf Keywords:} $p$-adic precision, linear algebra, ultrametric analysis
+%\medskip
+
+\section{Introduction}
+
+\section{Modular multiplication}
+
+\section{Euclidean division}
+
+\section{Slope factorization}
+
+\end{document}
