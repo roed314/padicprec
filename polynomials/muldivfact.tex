@@ -139,10 +139,14 @@
 
 \section{Euclidean division}
 
+\begin{theo} \label{theo:EDivisionNP}
+Here should be the theorem for the Newton polygons during a Euclidean division.
+\end{theo}
+
 \section{Slope factorization}
+\subsection{Main theorem}
 
-
-\begin{theo}
+\begin{theo} \label{theo:slope-factor}
 Under some assumptions... $\textrm{coeff}(P,d)=1,$ $\NP (A_0)' <0$ (???)
 
 \begin{align*}
@@ -160,23 +164,58 @@ V_{i+1} &= (2 V_i -V_i^2 B_{i+1} ) \% A_{i+1}.
 $A_i$ convergences to $A_\infty$ such that $\NP (A_\infty)= \NP (A_0)$ and $A_\infty$ divides $P.$
 \end{theo}
 
+\begin{rem}
+Using $P \mapsto P^*=X^{deg(P)}P \left( \frac{1}{X} \right), $ the assumptions in \ref{theo:slope-factor} do not induce any loss in generality.
+\end{rem}
+
+\subsection{Useful formulae}
+
 \begin{lem}
 Some definitions :
-\begin{align*}
-R_i &= A_{i+1} -A_i, \\
-S_i &= P \% A_i.
-\end{align*}
+\begin{align}
+R_i &= A_{i+1} -A_i, \label{eqdef:Ri}\\
+S_i &= P \% A_i, \label{eqdef:Si} \\
+Q_i &= V_i P \div A_i. \label{eqdef:Qi}. 
+\end{align}
 Some formulae :
-\begin{align*}
-B_i-B_{i+1} &= R_i B_{i+1} \div A_i, \\
-S_i-S_{i+1} &= R_i B_{i+1} \div A_i, \\
-S_{i} &= (B_i R_i + (1-V_i B_i) S_{i-1}+(1-V_i B_i)(S_i-S_{i-1})) \% A_{i}, \\
-V_{i+1}-V_i &= (V_i (1-V_i B_i)+V_i^2(B_i-B_{i+1})) \% A_{i}, \\
-1-Q_i &= (1-V_i B_i)+((R_i-V_i S_i) \div A_i), \\
-R_{i+1} &= ((V_{i+1}-V_i)S_{i+1}+(1-Q_i)R_i) \% A_{i+1}, \\
-1-V_{i+1}B_{i+1} &= ((1-V_i B_i)+V_i (B_i-B_{i+1}))^2.
-\end{align*}
+\begin{align}
+B_i-B_{i+1} &= R_i B_{i+1} \div A_i, \label{eqdef:Biminus} \\
+S_i-S_{i+1} &= R_i B_{i+1} \div A_i,  \label{eqdef:Siminus} \\
+S_{i} &= (B_i R_i + (1-V_i B_i) S_{i-1}+(1-V_i B_i)(S_i-S_{i-1})) \% A_{i}, \label{eqdef:Si2}  \\
+V_{i+1}-V_i &= (V_i (1-V_i B_i)+V_i^2(B_i-B_{i+1})) \% A_{i}, \label{eqdef:Viminus}\\
+1-Q_i &= (1-V_i B_i)+((R_i-V_i S_i) \div A_i), \label{eqdef:Qiminus}\\
+R_{i+1} &= ((V_{i+1}-V_i)S_{i+1}+(1-Q_i)R_i) \% A_{i+1}, \label{eq:Riplus}\\
+1-V_{i+1}B_{i+1} &= ((1-V_i B_i)+V_i (B_i-B_{i+1}))^2. \label{eq:ViBiplus}
+\end{align}
 \end{lem}
+\begin{proof}
+We first remark that by definition,
+\begin{align*}
+P &= A_i B_i + S_i, \\
+P V_i&= A_i Q_i + R_i.
+\end{align*}
+Since $P= A_i B_i + S_i= A_{i+1} B_{i+1} + S_{i+1},$ we have \[R_i B_{i+1}= (B_i -B_{i+1})A_i + (S_i+S_{i+1}).\]
+Hence, by consideration of degree, what we have written is the Euclidean division of $R_i B_{i+1}$ by $A_i$ and we obtain \eqref{eqdef:Biminus} and \eqref{eqdef:Siminus}.
+
+From $V_i P =  A_i Q_i + R_i=V_i (A_i B_i + S_i),$ we get \begin{equation}(V_i B_i -Q_i) A_i=R_i-V_i S_i. \label{eq:ViBiQi} \end{equation} Thus, \[ R_i=V_i S_i \% A_i.\]
+Hence, $B_i R_i =S_i (V_iB_i-1)+S_i \% A_i,$ and $S_i=B_i R_i-S_i (V_iB_i-1) \% A_i.$ \eqref{eqdef:Si2} follows directly.
+
+By definition of $V_i,$ we get $V_{i+1}-V_i=V_i (1-V_i B_{i+1}) \% A_{i+1}.$ \eqref{eqdef:Viminus} follows immediately.
+
+We can write $1-Q_i=(1-V_i B_i)+(V_i B_i - Q_i).$ Using \eqref{eq:ViBiQi}, we get \eqref{eqdef:Qiminus}.
+
+We have $V_i P=A_i Q_i+R_i=(A_{i+1}-R_i)Q_i+R_i,$ and $V_{i+1} P=A_{i+1} Q_{i+1}+R_{i+1}.$ As a consequence, 
+\begin{align*}
+R_{i+1} &= (V_{i+1}-V_i)P+(1-Q_i)R_i \\
+ &= (V_{i+1}-V_i)S_{i+1}+(1-Q_i)R_i) \% A_{i+1},
+\end{align*} and \eqref{eq:Riplus} is proved.
+
+Finally, \begin{align*}
+1-V_{i+1}B_{i+1} &= 1-2V_i B_{i+1}+V_i^2 B_{i+1}^2 \% A_{i+1}, \\
+&= (1-V_i B_{i+1})^2 \% A_{i+1}, \\
+&= ((1-V_i B_i)+V_i (B_i-B_{i+1}))^2 \% A_{i+1},
+\end{align*} which concludes the proof.
+\end{proof}
 
 \begin{deftn}
 Notation:
@@ -206,7 +245,9 @@ Notation:
 \end{tikzpicture}
 \end{deftn}
 
-\paragraph{Initial Newton polygons}
+\subsection{Proof of the Main Theorem}
+
+\subsubsection{Initial Newton polygons}
 
 \begin{lem}
 $\NP(R_0)=\NP(S_0)$:
@@ -271,7 +312,7 @@ $\NP (1-V_0B_0 \% A_0)$:
 \end{lem}
 
 
-\paragraph{Unchanged Newton polygons}
+\subsubsection{Unchanged Newton polygons}
 
 
 
@@ -316,7 +357,7 @@ $\NP (B_i)$:
 \end{tikzpicture}
 \end{lem}
 
-\paragraph{Newton polygons inside the loop}
+\subsubsection{Newton polygons inside the loop}
 
 \begin{lem}
 \begin{align*}
