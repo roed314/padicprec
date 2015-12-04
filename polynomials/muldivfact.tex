@@ -165,12 +165,34 @@ $A_i$ convergences to $A_\infty$ such that $\NP (A_\infty)= \NP (A_0)$ and $A_\i
 \end{theo}
 
 \begin{rem}
-Using $P \mapsto P^*=X^{deg(P)}P \left( \frac{1}{X} \right), $ the assumptions in \ref{theo:slope-factor} do not induce any loss in generality.
+Using $P \mapsto P^*=X^{deg(P)}P \left( \frac{1}{X} \right), $ the assumptions in Theorem \ref{theo:slope-factor} do not induce any loss in generality.
+\end{rem}
+
+\begin{rem}
+Non necessity to have $A_0$ as the first slope. It is possible to use minorations.
+
+\begin{tikzpicture}
+\draw[->] (0,-1) -- (0,2);
+
+
+\draw[->] (-0.05,0) -- (4,0);
+
+\node[left] at (0,0) {$0$};
+
+\draw (1.5,-.1) -- (1.5,.1);
+\node[above] at (1.5,0) {$d$};
+
+
+\draw (0,1)-- (1.5,0) -- (3,-.375)-- (3.5,.625);
+\draw[green] (0,1.5)-- (1,0.33)-- (1.5,0) --(2,-.125)-- (3,0)-- (3.5,1);
+
+\node[below] at (.75,-0.2) {$\lambda_0$};
+\end{tikzpicture}
 \end{rem}
 
 \subsection{Useful formulae}
 
-\begin{lem}
+\begin{lem} \label{lem:formulae}
 Some definitions :
 \begin{align}
 R_i &= A_{i+1} -A_i, \label{eqdef:Ri}\\
@@ -308,8 +330,11 @@ $\NP (1-V_0B_0 \% A_0)$:
 \end{tikzpicture}
 
 
-
+\label{lem:initial_NP}
 \end{lem}
+\begin{proof}
+Clear by Theorem \ref{theo:EDivisionNP}, and the fact that $coeff(P,d)=1.$
+\end{proof}
 
 
 \subsubsection{Unchanged Newton polygons}
@@ -317,7 +342,7 @@ $\NP (1-V_0B_0 \% A_0)$:
 
 
 
-\begin{lem}
+\begin{lem} \label{lem_unchanged_NP}
 $\NP (V_i)$ for $i>0$ ($V_0=1$):
 \[\NP(V_i)=0+(d-1)\slp( \lambda_1). \]
 
@@ -355,20 +380,68 @@ $\NP (B_i)$:
 \node[below] at (.5,-0.25) {$\lambda_1$};
 \node[below] at (2,-0.25) {$\lambda_2$};
 \end{tikzpicture}
+
+$\NP (A_i)$:
+\[\NP(A_i)=-d \lambda_0+d \slp( \lambda_0). \]
+
+\begin{tikzpicture}
+\draw[->] (0,-1) -- (0,2);
+
+
+\draw[->] (-0.05,0) -- (2,0);
+
+\node[left] at (0,0) {$0$};
+
+\draw (1.5,-.1) -- (1.5,.1);
+\node[above] at (1.5,0) {$d$};
+
+
+\node[left] at (0,1.5) {$-d \lambda_0$};
+
+\draw (0,1.5)-- (1.5,0) ;
+\node[below] at (.75,0.5) {$\lambda_0$};
+\end{tikzpicture}
 \end{lem}
 
 \subsubsection{Newton polygons inside the loop}
 
-\begin{lem}
+\begin{lem} \label{lem:iteration_inside_the_loop}
 \begin{align*}
 \NP (R_i), \NP(S_i) & \geq -\lambda_0+2^i(\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0), \\
 \NP (1-V_i B_i) & \geq 2^i (\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0),\\
-\NP (B_i-B_{i+1}) & \geq 2^i (\lambda_1-\lambda_0)+(\lambda_1-\lambda_0)+(l_1-1) \slp (\lambda_1)+\RS, \\
-\NP (S_i-S_{i+1}) & \geq -\lambda_0 d+2^i (\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0),\\
-\NP (V_i-V_{i+1}) & \geq 2^i (\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0),\\
-\NP (1-Q_i) & \geq  2^i (\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0).\\
 \end{align*}
 \end{lem}
 
+We prove the last two lemmas by induction.
+
+\begin{proof}
+The case $i=0$ is clear thanks to Theorem \ref{theo:EDivisionNP} and Lemma \ref{lem:initial_NP}.
+
+Now, we assume that for some $i \geq 0$ the formulae defined in the Lemmae \ref{lem_unchanged_NP} and \ref{lem:iteration_inside_the_loop} are satisfied. 
+We prove them for $i+1$.
+
+Firstly, thanks to the minoration on $\NP (R_i)$ and the fact that $R_i=A_{i+1}-A_i$, we have $\NP (A_{i+1}= \NP (A_i).$
+Since $B_{i+1} = P \div A_{i+1},$ we have $\NP (B_{i+1}) = \NP (B_i).$
+We apply \eqref{eqdef:Biminus} to obtain 
+\[\NP (B_i-B_{i+1})  \geq 2^i (\lambda_1-\lambda_0)+(\lambda_1-\lambda_0)+(l_1-1) \slp (\lambda_1)+\RS. \]
+Then, we can apply \eqref{eqdef:Siminus} to obtain 
+\[\NP (S_i-S_{i+1})  \geq -\lambda_0 d+2^i (\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0).\]
+
+As a consequence, we get that $\NP (S_{i+1}) \geq \NP (S_i)$ (pointwise).
+
+Now, we can apply \eqref{eqdef:Viminus} to obtain that 
+\[\NP (V_i-V_{i+1}) \geq 2^i (\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0).\]
+As a consequence, we get that $\NP(V_i)=\NP(V_{i+1}).$
+Similarly, we use \eqref{eqdef:Qiminus} to obtain that
+\[\NP (1-Q_i)  \geq  2^i (\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0).\]
+
+This is enough to conclude on the Newton polygon of $R_{i+1}.$
+Indeed, thanks to \eqref{eq:Riplus}, we obtain that 
+\[\NP (R_i) \geq -\lambda_0+2^i(\lambda_1-\lambda_0)+(d-1) \slp (\lambda_0). \]
+We can proceed similarly for $1-V_{i+1} B_{i+1}$ using \eqref{eq:ViBiplus}.
+
+Finally, we can apply \eqref{eqdef:Si2} for $i+1,$
+\[S_{i+1} = (B_{i+1} R_{i+1} + (1-V_{i+1} B_{i+1}) S_{i}+(1-V_{i+1} B_{i+1})(S_{i+1}-S_{i})) \% A_{i+1},\] to obtain the desired minoration on $\NP (S_{i+1}).$ This concludes the proof.
+\end{proof}
 
 \end{document}
