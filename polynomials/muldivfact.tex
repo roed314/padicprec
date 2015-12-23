@@ -50,6 +50,7 @@
 \newcommand{\T}{\mathcal{T}}
 
 \renewcommand{\prec}{\text{\rm prec}}
+\newcommand{\NF}{\text{\rm NF}}
 
 \newcommand{\id}{\textrm{id}}
 \newcommand{\Epi}{\textrm{Epi}}
@@ -135,13 +136,145 @@
 
 \section{Introduction}
 
-\section{Modular multiplication}
+\noindent
+{\bf Notations.}
+Throughout this paper, we fix a complete discrete valuation field $K$; 
+we denote by $\val : K \to \Z \cup \{+\infty\}$ the valuation on it and 
+by $W$ its ring of integers (\emph{i.e.} the set of elements with 
+nonnegative valuation). We assume that $\val$ is normalized so that it
+is surjective and denote by $\pi$ a uniformizer of $K$, that is an 
+element of valuation $1$. Denoting by $S \subset W$ a fixed set of 
+representatives of the classes modulo $\pi$ and assuming $0 \in S$, 
+one can prove that each element in $x \in K$ can be represented 
+uniquely as a convergent series:
+\begin{equation}
+\label{eq:CDVFseries}
+x = \sum_{i=\val(x)}^{+\infty} a_i \pi^i
+\quad \text{with} \quad a_i \in S.
+\end{equation}
+The two most important examples are the field of $p$-adic numbers $K = 
+\Qp$ and the field of Laurent series $K = k((t))$ over a field $k$. The 
+valuation on them are the $p$-adic valuation and the usual valuation of 
+a Laurent series respectively. Their ring of integers are therefore 
+$\Zp$ and $k[[t]]$ respectively. A distinguished uniformizer is $p$ 
+and $t$ whereas a possible set $S$ is $\{0, \ldots, p-1\}$ and $k$
+respectively.
+The reader who is not familiar with complete discrete valuation fields
+may assume (without sacrifying too much to the generality) that $K$ is
+one of the two aforementioned examples.
+
+In what follows, the notation $K[X]$ refers to the ring of univariate 
+polynomials with coefficients in $K$. The subspace of polynomials of 
+degree at most $n$ (resp. exactly $n$) is denoted by $K_{\leq n}[X]$ 
+(resp. $K_{=n}[X]$).
+
+\section{Precision data}
+
+Elements in $K$ (and \emph{a fortiori} in $K[X]$) carry an infinite 
+amount of information. They thus cannot be stored entirely in the
+memory of a computer and have to be truncated. Elements of $K$ are
+usually represented by truncating Eq.\eqref{eq:CDVFseries} as
+follows:
+\begin{equation}
+\label{eq:CDVFseriesO}
+x = \sum_{i=v}^{N-1} a_i \pi^i + O(\pi^N)
+\end{equation}
+where $N$ is an integer called the \emph{absolute precision} and 
+the notation $O(\pi^N)$ means that the coefficients $a_i$ for $i
+\geq N$ are discarded. If $N > v$ and $a_v \neq 0$, the integer $v$ 
+is the valuation of $x$ and the difference $N-v$ is called the
+\emph{relative precision}.
+Alternatively, one may thing that the writing~\eqref{eq:CDVFseriesO}
+represents a subset of $K$ which consists of all elements in $K$ for
+which the $a_i$'s in the range $[v,N-1]$ are those specified. From the
+metric point of view, this is a ball (centered at any point inside it).
+
+It worths be noting that tracking precision using this representation is 
+rather easy. For example, if $x$ and $y$ are known with absolute (resp. 
+relative) precision $N_x$ and $N_y$ respectively, one can compute the 
+sum $x+y$ (resp. the product $xy$) at absolute (resp. relative) 
+precision $\min(N_x,N_y)$. Computations with $p$-adic and Laurent
+series are often handle this way on symbolic computation softwares.
+
+\subsection{Precision for polynomials}
+
+The situation is much more subtle when we are working with a collection 
+of elements of $K$ (\emph{e.g.} a polynomial) and not just a single one.
+Indeed, several precision data may be considered and, as we shall see
+later, each of them has is own interest. Below we detail three of them
+for the special case of polynomials.
+
+\medskip
+
+\noindent
+{\bf Jagged precision.}
+The most naive precision we may consider is the so-called \emph{jagged 
+precision}. It consists in attaching an individual precision (of the
+shape $O(\pi^{N_i})$) to each coefficient separatedly.
+
+\medskip
+
+\noindent
+{\bf Newton precision.} \todo{Write a one-line introduction.}
+
+\begin{deftn}
+A \emph{Newton function of degree $n$} is a convex function 
+$f : [0,n] \to \R$ which is piecewise affine and whose epigraph
+$\Epi(f)$ have integral extremal points.
+\end{deftn}
+
+\begin{rem}
+The datum of $f$ is equivalent to that of $\Epi(f)$ and they can
+easily represented and manipulated on a computer.
+\end{rem}
+
+We recall that one can attach a Newton function to each polynomial.
+If $P(X) = \sum_{i=0}^n a_n X^n \in K_n[X]$, we define its Newton
+polygon $\NP(P)$ as the convex hull of the points $(i,\val(a_i))$ 
+($1 \leq i \leq n$) together with the point at infinity $(0,+\infty)$
+and then its Newton function $\NF(P) : [0,n] \to \R$ as the unique
+function whose epigraph is $\NP(P)$. It is well known \todo{(Give a
+reference?)} that:
+$$\begin{array}{r@{\,\,}c@{\,\,}l}
+\NP(P+Q) & \subset & \text{Conv}\big(\NP(P) \cup \NP(Q)\big) \smallskip \\
+\NP(PQ) & = & \NP(P) + \NP(Q)
+\end{array}$$
+where $\text{Conv}$ denotes the convex hull and the plus sign stands 
+for the Minkowski sum. This translates to:
+$$\begin{array}{r@{\,\,}c@{\,\,}l}
+\NF(P+Q) \geq \NF(P) \oplus \NF(Q) \smallskip \\
+\NF(PQ) = \NF(P) \odot \NF(Q)
+\end{array}$$
+where the operations $\oplus$ and $\odot$ are defined accordingly.
+It turns out that there exist efficient algorithms for computing these 
+operations.
+
+In a similar fashion, Newton functions can be used to model precision: 
+given a Newton function $f$ of degree $n$, we agree that a polynomial 
+of degree at most $n$ is given at precision $O(f)$ when, for all $i$,
+its $i$-th coefficient is given at precision $O\big(\pi^{\lceil f(i)
+\rceil}\big)$ (where $\lceil \cdot \rceil$ is the ceiling function).
+In the sequel, we shall write
+$O(f) = \sum_{i=0}^n O\big(\pi^{\lceil f(i) \rceil}\big) \cdot X^i$
+and use the notation $\sum_{i=0}^n a_i X^i + O(f)$
+to refer to a polynomial given at precision $O(f)$.
+
+We observe in particular that Newton precision data are particular
+instances of jagged precision. The main interest of using them is the
+efficiency.
+
+\medskip
+
+\noindent
+{\bf Lattice precision.}
 
 \section{Euclidean division}
 
 \begin{theo} \label{theo:EDivisionNP}
 Here should be the theorem for the Newton polygons during a Euclidean division.
 \end{theo}
+
+\section{Modular multiplication}
 
 \section{Slope factorization}
 \subsection{Main theorem}
