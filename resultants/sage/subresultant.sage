@@ -44,6 +44,33 @@ def my_rem_integral(self, right):
     return self.parent()(a[:db])
 
 
+def subresultants_unstable(A, B):
+    """
+    Returns all subresultants of A and B (until one of them vanishes).
+
+    NB: For now, A and B must be monic, have integral coefficients 
+    and share the same degree.
+    """
+    d = A.degree()
+    if B.degree() != d:
+        raise NotImplementedError("A and B does not have same degree")
+    if A.leading_coefficient() != 1 or B.leading_coefficient() != 1:
+        raise NotImplementedError("A or B is not monic")
+    if val_poly(A) < 0 or val_poly(B) < 0:
+        raise NotImplementedError("A or B does not have integral coefficients")
+    R0 = A; R1 = -my_rem_integral(A,B)
+    sres = [ ]
+    while R1 != 0:
+        sres.append(R1)
+        d -= 1
+        if R1[d] == 0:
+            raise NotImplementedError
+        R = my_rem_integral(R0, R1)
+        R *= ~(R0.leading_coefficient())^2
+        R0, R1 = R1, R
+    return sres
+
+
 def subresultants_stable(A, B):
     """
     Returns all subresultants of A and B (until one of them vanishes).
