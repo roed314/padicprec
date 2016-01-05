@@ -69,6 +69,7 @@
 \newcommand{\nfdiv}{\nfop\div}
 
 \newcommand{\id}{\textrm{id}}
+\newcommand{\app}{\textrm{app}}
 \newcommand{\Epi}{\textrm{Epi}}
 \renewcommand{\c}{\text{\rm c}}
 
@@ -681,6 +682,7 @@ for computing these factorizations. \todo{Compare with previous
 results...}
 
 \subsection{A Newton iteration}
+\label{ssec:Newtoniter}
 
 In the previous references, the factor $A$ defined above is always 
 obtained \emph{via} a Newton iteration which takes place over a finite 
@@ -706,8 +708,11 @@ Moreover, setting:
 $$\kappa = \NF(P)(d{+}1) + \NF(P)(d{-}1) - 2 \cdot \NF(P)(d)$$
 (with $\NF(P)(-1) = \NF(P)(n{+}1) = +\infty$ if necessary),
 we have $\kappa > 0$ and the following rate of convergence:
-$$\forall i \geq 0, \quad
-\NF(A_\infty - A_i) \geq \NF(P)_{|[0,d]} \,+\, 2^i \kappa.$$
+\begin{equation}
+\label{eq:rateconv}
+\forall i \geq 0, \quad
+\NF(A_\infty - A_i) \geq \NF(P)_{|[0,d{-}1]} \,+\, 2^i \kappa.
+\end{equation}
 \end{theo}
 
 %\begin{rem}
@@ -805,6 +810,8 @@ T_{i+1} &\equiv 1-2V_i B_{i+1}+V_i^2 B_{i+1}^2 \pmod {A_{i+1}} \\
 which concludes the proof.
 \end{proof}
 
+\subsubsection{Tristan's proof}
+
 \begin{deftn}
 Notation:
 \[P=-d \lambda_0+d \slp(\lambda_0) + l_1 \slp (\lambda_1)+\RS \]
@@ -832,8 +839,6 @@ Notation:
 \node[right] at (3.5,0.25) {$\RS$};
 \end{tikzpicture}
 \end{deftn}
-
-\subsubsection{Tristan's proof}
 
 {\bf Initial Newton polygons}
 
@@ -1027,16 +1032,21 @@ unchanged. Therefore, the theorem holds for $P$ if and only if it holds
 for $cP$. As a consequence we may assume that $P$ is normalized so that 
 $\NF(P)(d) = d \lambda_0$. We define the function $\varphi : \R^+ \to \R 
 \cup \{+\infty\}$ by:
-$$\begin{array}{r@{\,\,}ll}
+\begin{equation}
+\label{eqdef:functionphi}
+\begin{array}{r@{\,\,}ll}
 \varphi(x) & = \NP(P)(x) & \text{for } x \leq d \smallskip \\
 & = \lambda_0 (x-d) + \NP(P)(d) & \text{for } x > d.
-\end{array}$$
+\end{array}
+\end{equation}
 For a polynomial $Q \in K[X]$ of degree $n$, we further define:
-\begin{align*}
-b_\varphi(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \varphi(x) \\
+\begin{align}
+b_\varphi(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \varphi(x) 
+\label{eqdef:bphi} \\
 \text{and} \quad
 b_0(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \lambda_0 x.
-\end{align*}
+\label{eqdef:b0}
+\end{align}
 Set also $b_\varphi(0) = b_0(0) = +\infty$ by convention.
 With the normalization of $P$ we have chosen above, we have $b_0(P)
 = b_\varphi(P) = 0$ and $b_\varphi(Q) \leq b_0(Q)$ for all polynomial
@@ -1113,7 +1123,7 @@ definitions that $R_0 = S_0 = P \mod A_0 = (P{-}A_0) \mod A_0$.
 Noting that $P{-}A_0 = \sum_{i=d+1}^n a_i X^i$, we obtain
 $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
 \geq \kappa$. Finally observe that:
-$$T_0 = 1 - B_0 = (A_0 - P) \div A_0.$$
+$$T_0 = (1 - B_0) \mod A_0 = \big((A_0 - P) \div A_0\big) \mod A_0.$$
 Therefore $b_0(T_0) \geq \kappa$ results from $b_\varphi(A{-}P_0) \geq 
 \kappa$ thanks to Lemma~\ref{lem:bphib0}. 
 We have then established~\eqref{eq:induction} when $i = 0$.
@@ -1145,54 +1155,30 @@ the index $i+1$ and the induction goes.
 
 From the inequalities $b_\varphi(R_i) \geq 2^i \kappa$, we deduce that 
 the sequence $(A_i)$ is Cauchy and therefore converges. Its limit 
-$A_\infty$ certain satisfies $\NF(A_\infty) = \varphi_{|[0,d]}$ because 
+$A_\infty$ certainly satisfies $\NF(A_\infty) = \varphi_{|[0,d]}$ because 
 all the $A_i$'s do. Moreover we know that $b_\varphi(S_i) \geq 2^i 
 \kappa$ from what we derive that the sequence $(S_i)$ goes to $0$.
 Coming back to the definition of $S_i$, we find $P \mod A_\infty = 0$,
-\emph{i.e.} $A_\infty$ divides $P$.
+\emph{i.e.} $A_\infty$ divides $P$. Finally, Eq.~\eqref{eq:rateconv}
+giving the rate of convergence follows from the writing:
+$$A_\infty - A_i = R_i + R_{i+1} + \cdots + R_j + \cdots$$
+together with the facts that $b_\varphi(R_j) \geq 2^i \kappa$ and $\deg 
+R_j \leq d{-}1$ for all $j \geq i$.
 
-
-\begin{comment}
-
-Induction hypothesis:
-
-Assume lambda_i > 0 
-(we need a slightly different argument for i=0)
-
-* NF(A_(i+1)) = NF(A_i)
-* B_(i+1) = P // A_(i+1)
-     => b_mu(B_(i+1)) >= 0  (because b_phi(P) >= 0)
-* b_phi(R_i B_(i+1)) >= lambda_i
-     => b_phi(Delta S_i) >= lambda_i
-    and b_mu(Delta B_i) >= lambda_i
-
-* b_phi(B_i R_i) >= lambda_i
-  b_phi(S_i T_i) >= lambda_i
-     => b_phi(S_i) >= lambda_i
-     => b_phi(S_(i+1)) >= lambda_i
-
-* b_phi(V_i T_i) >= lambda_i
-  b_phi(V_i^2 Delta B_i) >= lambda_i
-     => b_phi(Delta V_i) >= lambda_i
-
-* b_phi(T_i) >= lambda_i
-  b_phi(V_i S_i) >= lambda_i
-     => b_mu(V_i S_i // A_i) >= lambda_i
-     => b_mu(1 - Q_i) >= lambda_i
-
-* b_phi(Delta V_i) >= lambda_i
-  b_phi(S_(i+1)) >= lambda_i
-  b_mu(1 - Q_i) >= lambda_i
-  b_phi(R_i) >= lambda_i
-     => b_phi(R_(i+1)) >= 2*lambda_i
-
-* b_phi(T_i) >= lambda_i
-  b_phi(V_i Delta B_i) => lambda_i
-     => b_phi(T_(i+1)) >= 2*lambda_i
-
-And induction goes.
-\end{comment}
-
+\begin{rem}
+\label{rem:slope-factor}
+It follows from the proof above that the conclusion of 
+Theorem~\ref{theo:slope-factor} is still correct as soon as $A_0$ 
+and $V_0$ satisfies:
+$$b_\varphi\big(V_0 P \mod A_0\big) > 0
+\quad \text{and} \quad
+b_0\big((1 - V_0 B_0) \mod A_0\big) > 0$$
+except that the constant $\kappa$ giving the rate of convergence
+should be now defined as:
+$$\kappa = \min \big( 
+b_\varphi\big(V_0 P \mod A_0\big), \,
+b_0\big((1 - V_0 B_0) \mod A_0\big)\big).$$
+\end{rem}
 
 \subsection{A slope factorization algorithm}
 
@@ -1200,7 +1186,7 @@ Let $P \in K_n[X]$ and $d$ be the abscissa of an extremal point of
 $\NP(P)$. Previously (\emph{cf} Theorem~\ref{theo:slope-factor}), we 
 have defined a sequence $(A_i, V_i)$ converging to $(A,V)$ where $A$ is 
 a factor of $P$ whose Newton function is $\NF(P)_{|[0,d]}$ and $V$ is the inverse of $B = P/A$ modulo $A$.
-We now assume that $P$ is known up to some finite precision: $P = P_0 + 
+We now assume that $P$ is known up to some finite precision: $P = P_\app + 
 O(\hspace{0.5mm}\cdots)$ where the object inside the $O$ depends on the 
 chosen precision model. We address the two following questions:
 (1)~what is the precision on the factor $A$, and
@@ -1211,19 +1197,69 @@ $A$ and $B$: if $a_d$ is the coefficient of $P$ of degree $d$, we set
 $A^{(1)} = a_d^{-1} A$ and $B^{(1)} = a_d B$
 so that $A^{(1)}$ is monic and $P = A^{(1)} B^{(1)}$. We shall also 
 always assume that $P$ is monic in the sense that its leading
-coefficient is \emph{exactly} $1$; the precision datum on $P$ then 
-concerns only the coefficients up to degree $n{-}1$. Similarly, noting
+coefficient is \emph{exactly}~$1$; the precision datum on $P$ then 
+only concerns the coefficients up to degree $n{-}1$. Similarly, noting
 that $A^{(1)}$ and $B^{(1)}$ are monic as well, they only carry a
 precision datum up to degree $d{-}1$ and $n{-}d{-}1$ respectively.
 
 \medskip
 
 \noindent
-{\bf About the first question.}
-We first assume that we are working with lattice precision.
-The answer to the first question is then given by the theory of 
-\cite{padicprec} and is controlled by the differential of the
-application sending $P$ to $A^{(1)}$.
+{\bf Newton precision.}
+We assume that the precision on the input $P$ has the shape 
+$O(\varphi_P)$ where $\varphi_P$ is a Newton function of degree 
+$n{-}1$. From now on, we assume that the precision $O(\varphi_P)$ 
+is nondegenerate in the sense of Definition~\ref{def:nondeg}. This
+ensures in particular that the Newton polygon of $P$ is well defined. 
+We import the notations $\varphi$, $b_\varphi$ and $b_0$ from \S 
+\ref{ssec:Newtoniter} and refer to 
+Eqs.~\eqref{eqdef:functionphi}--\eqref{eqdef:b0} for the definitions.
+
+\begin{prop}
+We keep all the above notations and assumptions. We set:
+$$\delta = \min_{x \in [0,n{-}1]} \varphi_P(x) - \varphi(x)$$
+and assume that $\delta > 0$. 
+Then the factor $A^{(1)}$ is known with precision at least 
+$O(\varphi_{A^{(1)}})$ with
+$\varphi_{A^{(1)}} = \varphi_{|[0,d{-}1]} - \varphi(d) + \delta$.
+\end{prop}
+
+\begin{proof}
+Let $\delta_P \in K[X]$ be such that $\NP(\delta_P) \geq \varphi_P$.
+Let $A_\app^{(1)}$ and $A^{(1)}$ be the monic factors of $P_\app$
+and $P_\app + \delta P$ respectively whose Newton functions are
+$\varphi_{|[0,d]} - \varphi(d)$.
+
+We define the sequences $(A_i)$ and $(V_i)$ by the recurrence: 
+\begin{align*} 
+A_0 & = A_\app, \quad V_{0} = V_\app \medskip \\ A_{i+1} 
+&= A_i + \big(V_i (P_\app + \delta_P) \:\mod\: A_i\big), \smallskip \\ 
+V_{i+1} &= (2 V_i -V_i^2 B_{i+1} ) \mod A_{i+1} \\ 
+&  \hspace{1cm}\text{where } B_{i+1} = (P_\app + \delta_P) \div A_{i+1}. 
+\end{align*} 
+where $A_\app$ and $V_\app$ are those related to $P_\app$. Note that 
+$A_\app = a_d \cdot A^{(1)}_\app$ if $a_d$ denotes the coefficient of 
+$X^d$ in $P$. By Remark~\ref{rem:slope-factor}, we know that the 
+sequence $(A_i)$ converges to $A = a_d \cdot A^{(1)}$ and furthermore:
+$$\NP(A - A_\app) \geq \varphi_{[0,d{-}1]} + 
+b_\varphi\big((V_\app \cdot \delta P) \mod A_\app\big)$$ 
+since $(V_\app P_\app) \mod A_\app = (1 - V_\app B_\app) \mod A_\app = 
+0$. Using repeatedly Lemma~\ref{lem:bphib0}, we obtain:
+$$b_\varphi\big((V_\app \cdot \delta P) \mod A_\app\big)
+  \geq b_0(V_\app) + b_\varphi(\delta P) \\
+  \geq b_\varphi(\delta P) \geq \delta.$$
+Thus $\NP(A - A_\app) \geq \varphi_{[0,d{-}1]} + \delta$. Dividing
+by $a_d$, we find
+$\NP(A^{(1)} - A^{(1)}_\app) \geq \varphi_{A^{(1)}}$ and we are done.
+\end{proof}
+
+\medskip
+
+\noindent
+{\bf Lattice precision.}
+In the case of lattice precision, the answer to the first question is 
+then given by the theory of \cite{padicprec} and is controlled by the 
+differential of the application sending $P$ to $A^{(1)}$.
 
 \begin{prop}
 \label{prop:precA1}
@@ -1253,15 +1289,5 @@ get $dP \equiv B^{(1)} \: dA^{(1)} \pmod {A^{(1)}}$.
 The claimed result follows after having noticed that $dA^{(1)}$
 has degree at most $d{-}1$.
 \end{proof}
-
-\todo{Derive from Proposition~\ref{prop:precA1} a theoretical
-result on Newton precision.}
-
-\medskip
-
-\noindent
-{\bf About the second question.}
-We now study the problem of the effective computation of $A^{(1)}$.
-
 
 \end{document}
