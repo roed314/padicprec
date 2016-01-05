@@ -35,10 +35,11 @@ Proof:
 2) By definition, we have:
      NP(Q_1) \subset t_1(Epi(phi))
      NP(Q_2) \subset t_2(C)
-   where t_i is the translation of vector (0, b_mu(Q_i)).
+   where t_1 is the translation of vector (0, b_phi(Q_1)).
+     and t_2 is the translation of vector (0, b_mu(Q_2)).
    Thus:
      NP(Q_1*Q_2) \subset t(Epi(phi) + C)
-   where t is the translation of vector (0, b_mu(Q_1) + b_mu(Q_2)).
+   where t is the translation of vector (0, b_phi(Q_1) + b_mu(Q_2)).
    But Epi(phi) + C = Epi(phi) and we are done.
 3) and 4) follow from Theorem 3.2
 
