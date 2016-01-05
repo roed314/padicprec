@@ -351,14 +351,15 @@ by $B$.
 
 \begin{deftn}
 Let $\varphi$ and $\psi$ be two Newton functions of degree $n$ and
-$d$ respectively. Letting $\mu = \psi(d) - \psi(d-1)$ and $\Delta$
+$d$ respectively. Set $\mu = \psi(d) - \psi(d-1)$. Letting $\Delta$
 be the greatest affine function of slope $\mu$ with $\Delta \leq
-\varphi$, we define:
-$$\begin{array}{rcl}
-\varphi \nfmod \psi \, : \, [0, d-1] & \to & \R \cup \{+\infty\} \smallskip \\
-x & \mapsto & \psi(x) + \Delta(d) - \psi(d) \medskip \\
-\varphi \nfdiv \psi \, : \, [0, n-d] & \to & \R \cup \{+\infty\} \smallskip \\
-x & \mapsto & \inf_{h \geq 0} \psi(x+d+h) - \mu h.
+\varphi_{|[d,n]}$ and $\delta = \Delta(d) - \psi(d)$, we define:
+$$\begin{array}{r@{\,\,}rcl}
+\varphi \nfmod \psi & 
+\multicolumn{3}{@{}l}{= \varphi_{|[0,d{-}1]} \nfplus \big( 
+\psi_{|[0,d{-}1]} + \delta\big)} \medskip \\
+\varphi \nfdiv \psi & : \, [0, n-d] & \to & \R \cup \{+\infty\} \smallskip \\
+& x & \mapsto & \inf_{h \geq 0} \psi(x+d+h) - \mu h.
 \end{array}$$
 \end{deftn}
 
@@ -395,9 +396,8 @@ Figure~\ref{fig:NewtonEuclide} illustrates the definition: if $\varphi$
 and $\psi$ are the functions represented on the diagram, the epigraph of 
 $\varphi \nfmod \psi$ is the blue area whereas that of $\varphi \nfdiv \psi$ 
 is the green area translated by $(-d,0)$.
-It is an easy exercise (left to the reader) to design algorithms for
-computing $\varphi \nfmod \psi$ and $\varphi \nfdiv \psi$ for a cost
-which is at most $n + O(1)$.
+It is an easy exercise (left to the reader) to design quasi-linear
+algorithms for computing $\varphi \nfmod \psi$ and $\varphi \nfdiv \psi$.
 
 \begin{theo}
 \label{theo:EDivisionNP}
@@ -413,28 +413,24 @@ Then:
 \end{align}
 \end{theo}
 
-\begin{rem}
-Keeping the notations of the Theorem and decomposing $A$ as a sum 
-$A_{<d} + A_{\geq d}$ where $A_{<d}$ (resp. $A_{\geq d}$) consists of
-monomials of $A$ of degree $< d$ (resp of degree $\geq d$), we have:
-$$A \div B = A_{\geq d} \div B 
+\begin{proof}
+Write $A = A_{<d} + A_{\geq d}$ where $A_{<d}$ (resp. $A_{\geq d}$)
+consists of monomials of $A$ of degree at least $d$ (resp. less than
+$d$). Noting that:
+$$A \mod B = A_{<d} + (A_{\geq d} \mod B)
 \quad \text{and} \quad
-A \mod B = A_{<d} + (A_{\geq d} \mod B).$$
-Using the above relations and applying Theorem~\ref{theo:EDivisionNP}
-with $A_{\geq d}$ and $B$ (instead of $A$ and $B$ respectively) may lead
-to a better lower bound on the Newton function of $A \div B$ and $A \mod
-B$.
-\end{rem}
+A \div B = A_{\geq d} \div B$$
+we may assume that $A = A_{\geq d}$.
 
-\begin{proof}[of Theorem~\ref{theo:EDivisionNP}]
-Let us first prove Eq.~\eqref{eq:AmodB}. 
+Let us now prove Eq.~\eqref{eq:AmodB}. 
 Replacing $B$ by $c^{-1} B$ where $c$ denotes the leading coefficient
 of $B$, we may assume that $B$ is monic. Using linearity, we may further
 assume that $A$ is a monomial. Set $R_n = X^n \mod B$. The relation
 we have to prove is:
-$$\NF(R_n)(x) \geq \NF(B)(x) - \mu(n-d).$$
-When $n < d$, we have $R_n = 0$ and the assertion of the Theorem holds. 
-For larger $n$, we proceed by induction. We have the relation
+$$\NF(R_n)(x) \geq \NF(B)(x) - \mu(n-d)
+\quad \text{for } n\geq d.$$
+We proceed by induction. The initialisation is clear because $R_d$
+agrees with $(-B)$ up to degree $d{-}1$. We have the relation
 $R_{n+1} = X R_n - c_n B$
 where $c_n$ is the coefficient in $X^{d-1}$ of $R_n$. Thanks to the
 induction hypothesis, we have:
@@ -443,12 +439,12 @@ induction hypothesis, we have:
 & = - \mu(n{+}1{-}d)
 \end{align*}
 since $\mu = -\NF(B)(d{-}1)$ because $B$ is monic. Therefore
-$\NF(c_n B)(x) \geq \NF(B)(x) - \mu(n+1-d)$ for all $x$. On the 
+$\NF(c_n B)(x) \geq \NF(B)(x) - \mu(n{+}1{-}d)$ for all $x$. On the 
 other hand, for all $x$, we have:
 $$\NF(X R_n)(x) = \NF(R_n)(x{-}1) \geq \NF(R_n)(x) - \mu$$
-from what we get $\NF(X R_n)(x) \geq \NF(B)(x) - \mu(n+1-d)$. As a
+from what we get $\NF(X R_n)(x) \geq \NF(B)(x) - \mu(n{+}1{-}d)$. As a
 consequence
-$\NF(R_{n+1})(x) \geq \NF(B)(x) - \mu(n+1-d)$
+$\NF(R_{n+1})(x) \geq \NF(B)(x) - \mu(n{+}1{-}d)$
 and the induction follows.
 Eq.~\eqref{eq:AdivB} is now derived from:
 $$\NF(A \div B) \nftimes \NF(B) \geq \NF(A) \nfplus \NF(A \mod B)$$
@@ -507,7 +503,7 @@ We have to show that $\NF(\delta Q) \geq \varphi \nfdiv \NF(B)$ and
 $\NF(\delta R) \geq \varphi \nfmod \NF(B)$.
 Set $\delta X = \delta A - Q_0 \delta B$. 
 Using Theorem~\ref{theo:EDivisionNP}, we obtain $\NF(Q_0) \geq
-\NF(A) \div \NF(B)$ and consequently $\NF(\delta X) \geq \varphi$.
+\NF(A) \nfdiv \NF(B)$ and consequently $\NF(\delta X) \geq \varphi$.
 On the other hand, an easy computation yields
 $$\delta X = (B + \delta B) \cdot \delta Q + \delta R$$
 so that $\delta Q = \delta X \div (B + \delta B)$ and 
@@ -703,9 +699,15 @@ A_{i+1} &= A_i + (V_i P \:\mod\: A_i), \smallskip \\
 V_{i+1} &= (2 V_i -V_i^2 B_{i+1} ) \mod A_{i+1} \\
 & \hspace{2cm}\text{where } B_{i+1} = P \div A_{i+1}.
 \end{align*}
-Then the sequence $(A_i)$ convergences to a divisor $A$ of $P$ 
+Then the sequence $(A_i)$ converges to a divisor $A_\infty$ of $P$ 
 of degree $d$ whose leading coefficient is $a_d$ and whose Newton 
 function agrees with $\NF(P)$ on $[0,d]$.
+Moreover, setting:
+$$\kappa = \frac{\NF(P)(d{+}1) + \NF(P)(d{-}1)} 2 - \NF(P)(d)$$
+(with $\NF(P)(-1) = \NF(P)(n{+}1) = +\infty$ if necessary),
+we have $\kappa > 0$ and the following rate of convergence:
+$$\forall i \geq 1, \quad
+\NF(A_\infty - A_i) \geq \NF(P)_{|[0,d]} \,+\, 2^i \kappa.$$
 \end{theo}
 
 %\begin{rem}
@@ -764,7 +766,7 @@ S_{i} &= (B_i R_i + T_i S_{i-1} - T_i \: \Delta S_{i-1}) \mod A_{i}, \label{eqde
 \Delta V_i &= (V_i T_i - V_i^2 \: \Delta B_i) \mod A_{i}, \label{eqdef:Viminus}\\
 1-Q_i &= T_i + (R_i-V_i S_i) \div A_i, \label{eqdef:Qiminus}\\
 R_{i+1} &= (\Delta V_i \: S_{i+1}+(1{-}Q_i)R_i) \mod A_{i+1}, \label{eq:Riplus}\\
-T_{i+1} &\equiv T_i + V_i \: (\Delta B_i)^2 \pmod{A_{i+1}}. \label{eq:ViBiplus}
+T_{i+1} &\equiv (T_i + V_i \: \Delta B_i)^2 \pmod{A_{i+1}}. \label{eq:ViBiplus}
 \end{align}
 \end{lem}
 
@@ -796,7 +798,7 @@ and \eqref{eq:Riplus} is proved. Finally
 \begin{align*}
 T_{i+1} &\equiv 1-2V_i B_{i+1}+V_i^2 B_{i+1}^2 \pmod {A_{i+1}} \\
 &\equiv (1-V_i B_{i+1})^2 \pmod {A_{i+1}} \\
-&\equiv T_i + V_i (\Delta B_i)^2 \pmod {A_{i+1}}
+&\equiv (T_i + V_i \: \Delta B_i)^2 \pmod {A_{i+1}}
 \end{align*}
 which concludes the proof.
 \end{proof}
