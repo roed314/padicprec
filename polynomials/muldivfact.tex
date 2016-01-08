@@ -69,6 +69,7 @@
 \newcommand{\nfdiv}{\nfop\div}
 
 \newcommand{\id}{\textrm{id}}
+\newcommand{\app}{\textrm{app}}
 \newcommand{\Epi}{\textrm{Epi}}
 \renewcommand{\c}{\text{\rm c}}
 
@@ -290,16 +291,16 @@ precision $O\big((\varphi_P \nftimes \NF(Q)) \nfplus (\NF(P) \nftimes
 
 \begin{deftn}
 \label{def:nondeg}
-Let $P = P_0 + O(\varphi_P)$. We say that the Newton precision 
+Let $P = P_\app + O(\varphi_P)$. We say that the Newton precision 
 $O(\varphi_P)$ on $P$ is \emph{nondegenerate} if $\varphi_P \geq 
-\NF(P_0)$ and $\varphi_P(x) > y$ for all extremal point $(x,y)$ of 
-$\NP(P_0)$.
+\NF(P_\app)$ and $\varphi_P(x) > y$ for all extremal point $(x,y)$ of 
+$\NP(P_\app)$.
 \end{deftn}
 
 We notice that, under the conditions of the above definition, the
 Newton polygon of $P$ is well defined. Indeed, if $\delta P$ is any
 polynomial whose Newton function is not less than $\varphi_P$, we
-have $\NP(P_0 + \delta P) = \NP(P_0)$.
+have $\NP(P_\app + \delta P) = \NP(P_\app)$.
 
 \medskip
 
@@ -321,15 +322,15 @@ $V$.
 We fix an integer $n$. A lattice precision datum for a polynomial of 
 degree $n$ is a lattice $H$ lying in the vector space $K_{\leq n}[X]$. 
 We shall sometimes denote it $O(H)$ in order to emphasize that it should 
-be considered as a precision datum. The notation $P(X) + O(H)$ then 
-refers to any polynomial in the $W$-affine space $P(X) + H$. Tracking
-lattice precision can be done using differentials as shown in
+be considered as a precision datum. The notation $P_\app(X) + O(H)$ then 
+refers to any polynomial in the $W$-affine space $P_\app(X) + H$. 
+Tracking lattice precision can be done using differentials as shown in
 \cite[Lemma~3.4 and Proposition~3.12]{padicprec}: if $f : K_{\leq n}[X] 
 \to K_{\leq m}[X]$ denotes any strictly differentiable function with
 surjective differential, under mild assumption on $H$, we have:
-$$f(P(X)+H) = f(P(X)) + f'(P(X))(H)$$
-where $f'(P(X))$ denotes the differential of $f$ at $P(X)$. The
-equality sign reflets the optimality of the method.
+$$f(P_\app(X)+H) = f(P_\app(X)) + f'(P_\app(X))(H)$$
+where $f'(P_\app(X))$ denotes the differential of $f$ at $P_\app(X)$. 
+The equality sign reflets the optimality of the method.
 
 As already mentioned, the jagged precision model is a particular case of 
 the lattice precision. Indeed, a precision of the shape $\sum_{i=0}^n 
@@ -351,14 +352,15 @@ by $B$.
 
 \begin{deftn}
 Let $\varphi$ and $\psi$ be two Newton functions of degree $n$ and
-$d$ respectively. Letting $\mu = \psi(d) - \psi(d-1)$ and $\Delta$
-be the greatest affine function of slope $\mu$ with $\Delta \leq
-\varphi$, we define:
-$$\begin{array}{rcl}
-\varphi \nfmod \psi \, : \, [0, d-1] & \to & \R \cup \{+\infty\} \smallskip \\
-x & \mapsto & \psi(x) + \Delta(d) - \psi(d) \medskip \\
-\varphi \nfdiv \psi \, : \, [0, n-d] & \to & \R \cup \{+\infty\} \smallskip \\
-x & \mapsto & \inf_{h \geq 0} \psi(x+d+h) - \mu h.
+$d$ respectively. Set $\lambda = \psi(d) - \psi(d-1)$. Letting $\Delta$
+be the greatest affine function of slope $\lambda$ with $\Delta \leq
+\varphi_{|[d,n]}$ and $\delta = \Delta(d) - \psi(d)$, we define:
+$$\begin{array}{r@{\,\,}rcl}
+\varphi \nfmod \psi & 
+\multicolumn{3}{@{}l}{= \varphi_{|[0,d{-}1]} \nfplus \big( 
+\psi_{|[0,d{-}1]} + \delta\big)} \medskip \\
+\varphi \nfdiv \psi & : \, [0, n-d] & \to & \R \cup \{+\infty\} \smallskip \\
+& x & \mapsto & \inf_{h \geq 0} \psi(x+d+h) - \lambda h.
 \end{array}$$
 \end{deftn}
 
@@ -395,60 +397,51 @@ Figure~\ref{fig:NewtonEuclide} illustrates the definition: if $\varphi$
 and $\psi$ are the functions represented on the diagram, the epigraph of 
 $\varphi \nfmod \psi$ is the blue area whereas that of $\varphi \nfdiv \psi$ 
 is the green area translated by $(-d,0)$.
-It is an easy exercise (left to the reader) to design algorithms for
-computing $\varphi \nfmod \psi$ and $\varphi \nfdiv \psi$ for a cost
-which is at most $n + O(1)$.
+It is an easy exercise (left to the reader) to design quasi-linear
+algorithms for computing $\varphi \nfmod \psi$ and $\varphi \nfdiv \psi$.
 
 \begin{theo}
 \label{theo:EDivisionNP}
-Let $A, B \in K[X]$ with $B \neq 0$. Let $d$ be the degree of $B$.
-Let $\mu = \NF(B)(d) - \NF(B)(d{-}1)$ be the last slope of $B$ and 
-$y = \Delta(x)$ be the
-equation of the highest line of slope $\mu$ lying below $\NP(A)$.
-Then:
+Given $A, B \in K[X]$ with $B \neq 0$, we have:
 \begin{align}
-\NF(A \mod B) & \geq \NF(B) \nfmod \NF(A) \label{eq:AmodB} \\
+\NF(A \mod B) & \geq \NF(A) \nfmod \NF(B) \label{eq:AmodB} \\
 \text{and} \hspace{4mm}
-\NF(A \div B) & \geq \NF(B) \nfdiv \NF(A) \label{eq:AdivB}
+\NF(A \div B) & \geq \NF(A) \nfdiv \NF(B) \label{eq:AdivB}
 \end{align}
 \end{theo}
 
-\begin{rem}
-Keeping the notations of the Theorem and decomposing $A$ as a sum 
-$A_{<d} + A_{\geq d}$ where $A_{<d}$ (resp. $A_{\geq d}$) consists of
-monomials of $A$ of degree $< d$ (resp of degree $\geq d$), we have:
-$$A \div B = A_{\geq d} \div B 
+\begin{proof}
+Write $A = A_{<d} + A_{\geq d}$ where $A_{<d}$ (resp. $A_{\geq d}$)
+consists of monomials of $A$ of degree at least $d$ (resp. less than
+$d$). Noting that:
+$$A \mod B = A_{<d} + (A_{\geq d} \mod B)
 \quad \text{and} \quad
-A \mod B = A_{<d} + (A_{\geq d} \mod B).$$
-Using the above relations and applying Theorem~\ref{theo:EDivisionNP}
-with $A_{\geq d}$ and $B$ (instead of $A$ and $B$ respectively) may lead
-to a better lower bound on the Newton function of $A \div B$ and $A \mod
-B$.
-\end{rem}
+A \div B = A_{\geq d} \div B$$
+we may assume that $A = A_{\geq d}$.
 
-\begin{proof}[of Theorem~\ref{theo:EDivisionNP}]
-Let us first prove Eq.~\eqref{eq:AmodB}. 
+Let us now prove Eq.~\eqref{eq:AmodB}. 
 Replacing $B$ by $c^{-1} B$ where $c$ denotes the leading coefficient
 of $B$, we may assume that $B$ is monic. Using linearity, we may further
 assume that $A$ is a monomial. Set $R_n = X^n \mod B$. The relation
 we have to prove is:
-$$\NF(R_n)(x) \geq \NF(B)(x) - \mu(n-d).$$
-When $n < d$, we have $R_n = 0$ and the assertion of the Theorem holds. 
-For larger $n$, we proceed by induction. We have the relation
+$$\NF(R_n)(x) \geq \NF(B)(x) - \lambda(n-d)
+\quad \text{for } n\geq d.$$
+We proceed by induction. The initialisation is clear because $R_d$
+agrees with $(-B)$ up to degree $d{-}1$. We have the relation
 $R_{n+1} = X R_n - c_n B$
 where $c_n$ is the coefficient in $X^{d-1}$ of $R_n$. Thanks to the
 induction hypothesis, we have:
 \begin{align*}
-\val(c_n) \geq \NF(R_n)(d{-}1) & \geq \NF(B)(d{-}1) - \mu(n{-}d) \\
-& = - \mu(n{+}1{-}d)
+\val(c_n) \geq \NF(R_n)(d{-}1) & \geq \NF(B)(d{-}1) - \lambda(n{-}d) \\
+& = - \lambda(n{+}1{-}d)
 \end{align*}
-since $\mu = -\NF(B)(d{-}1)$ because $B$ is monic. Therefore
-$\NF(c_n B)(x) \geq \NF(B)(x) - \mu(n+1-d)$ for all $x$. On the 
+since $\lambda = -\NF(B)(d{-}1)$ because $B$ is monic. Therefore
+$\NF(c_n B)(x) \geq \NF(B)(x) - \lambda(n{+}1{-}d)$ for all $x$. On the 
 other hand, for all $x$, we have:
-$$\NF(X R_n)(x) = \NF(R_n)(x{-}1) \geq \NF(R_n)(x) - \mu$$
-from what we get $\NF(X R_n)(x) \geq \NF(B)(x) - \mu(n+1-d)$. As a
+$$\NF(X R_n)(x) = \NF(R_n)(x{-}1) \geq \NF(R_n)(x) - \lambda$$
+from what we get $\NF(X R_n)(x) \geq \NF(B)(x) - \lambda(n{+}1{-}d)$. As a
 consequence
-$\NF(R_{n+1})(x) \geq \NF(B)(x) - \mu(n+1-d)$
+$\NF(R_{n+1})(x) \geq \NF(B)(x) - \lambda(n{+}1{-}d)$
 and the induction follows.
 Eq.~\eqref{eq:AdivB} is now derived from:
 $$\NF(A \div B) \nftimes \NF(B) \geq \NF(A) \nfplus \NF(A \mod B)$$
@@ -472,10 +465,10 @@ using the estimation on $\NF(A\mod B)$ we have just proved
 We consider here the case where the precision is given by Newton
 functions. Concretely, we pick $A, B \in K[X]$ two polynomials which 
 are known at precision $O(\varphi_A)$ and $O(\varphi_B)$ respectively:
-$$A = A_0 + O(\varphi_A)
+$$A = A_\app + O(\varphi_A)
 \quad \text{and} \quad
-B = B_0 + O(\varphi_B)$$
-Here $A_0$ and $B_0$ are some approximations of $A$ and $B$ respectively 
+B = B_\app + O(\varphi_B)$$
+Here $A_\app$ and $B_\app$ are some approximations of $A$ and $B$ respectively 
 and $\varphi_A$ and $\varphi_B$ denotes two Newton functions of degree 
 $\deg A$ and $\deg B$ respectively.
 We are interesting in determining the precision on $A \mod B$ and $A
@@ -499,15 +492,15 @@ Let $\delta A$ (resp. $\delta B$) be a polynomial whose Newton
 function is not less than $\varphi_A$ (resp. $\varphi_B$) and define
 $\delta Q$ and $\delta R$ by:
 \begin{align*}
-Q_0 + \delta Q & = (A_0 + \delta A) \div (B_0 + \delta B) \\
-R_0 + \delta R & = (A_0 + \delta A) \mod (B_0 + \delta B)
+Q_\app + \delta Q & = (A_\app + \delta A) \div (B_\app + \delta B) \\
+R_\app + \delta R & = (A_\app + \delta A) \mod (B_\app + \delta B)
 \end{align*}
-where $Q_0 = A_0 \div B_0$ and $R_0 = A_0 \mod B_0$.
+where $Q_\app = A_\app \div B_\app$ and $R_\app = A_\app \mod B_\app$.
 We have to show that $\NF(\delta Q) \geq \varphi \nfdiv \NF(B)$ and
 $\NF(\delta R) \geq \varphi \nfmod \NF(B)$.
-Set $\delta X = \delta A - Q_0 \delta B$. 
-Using Theorem~\ref{theo:EDivisionNP}, we obtain $\NF(Q_0) \geq
-\NF(A) \div \NF(B)$ and consequently $\NF(\delta X) \geq \varphi$.
+Set $\delta X = \delta A - Q_\app \delta B$. 
+Using Theorem~\ref{theo:EDivisionNP}, we obtain $\NF(Q_\app) \geq
+\NF(A) \nfdiv \NF(B)$ and consequently $\NF(\delta X) \geq \varphi$.
 On the other hand, an easy computation yields
 $$\delta X = (B + \delta B) \cdot \delta Q + \delta R$$
 so that $\delta Q = \delta X \div (B + \delta B)$ and 
@@ -526,21 +519,21 @@ Don't forget to give the complexity.}
 We now move to lattice precision. We pick $A$ and $B$ two polynomials 
 of respective degree $n$ and $d$ and assume that they are known at 
 precision $O(H_A)$ and $O(H_B)$ respectively:
-$$A = A_0 + O(H_A)
+$$A = A_\app + O(H_A)
 \quad \text{and} \quad
-B = B_0 + O(H_B).$$
+B = B_\app + O(H_B).$$
 where $H_A \in K_{\leq n}[X]$ and $H_B \in K_{\leq d}[X]$ are lattices. 
 According to the results of \cite{padicprec}, in order to determine the 
 precision on $A \div B$ and $A \mod B$, we need to compute the 
 differential of the mappings $(X,Y) \mapsto X \div Y$ and $(X,Y)
-\mapsto X \mod Y$ at the point $(A_0, B_0)$. Writing $Q_0 = A_0 \div
-B_0$ and $R_0 = A_0 \mod B_0$, this can be done by
+\mapsto X \mod Y$ at the point $(A_\app, B_\app)$. Writing $Q_\app = A_\app \div
+B_\app$ and $R_\app = A_\app \mod B_\app$, this can be done by
 expanding the relation:
-$$A_0 + dA = (B_0 + dB) (Q_0 + dQ) + (R_0 + dR)$$
+$$A_\app + dA = (B_\app + dB) (Q_\app + dQ) + (R_\app + dR)$$
 and neglecting the terms of order $\geq 2$. We get this way 
-$dA = B_0 dQ + Q_0 dB + dR$
+$dA = B_\app dQ + Q_\app dB + dR$
 meaning that $dQ$ and $dR$ appears respectively as the quotient and
-the remainder of the Euclidean division of $dX = dA - B_0 dQ$ by $B_0$.
+the remainder of the Euclidean division of $dX = dA - B_\app dQ$ by $B_\app$.
 
 Once this has been done, the strategy is quite similar to that explained 
 for Newton precision: \todo{summerize this in one sentence.}
@@ -549,7 +542,7 @@ for Newton precision: \todo{summerize this in one sentence.}
 
 For this example, we work over $W = \Z_2$ and fix a monic polynomial $M 
 \in \Z[X]$ (known exactly) of degree $5$. Our aim is to compare the 
-numerical stability of the multiplication in the quotient $\Z_2[X]/M(X)$ 
+numerical stability of the multiplication in the quotient $\Z_2[X]/M$ 
 depending on the precision model we are using. In order to do so, we 
 pick $n$ random polynomials $P_1, \ldots, P_n$ in $\Z_2[X]/M(X)$ 
 (according to the Haar measure) whose coefficients are all known at 
@@ -580,8 +573,8 @@ random inputs. We recall that $G$ is defined as follows:
 
 \noindent $\bullet$
 in the case of jagged and Newton precision, the precision on the output 
-may be written into the form $\sum_{i=1}^4 O(2^{N_i}) \: X^i$ and 
-$G = \sum_{i=1}^4 (N_i - N)$;
+may be written into the form $\sum_{i=0}^4 O(2^{N_i}) \: X^i$ and 
+$G = \sum_{i=0}^4 (N_i - N)$;
 
 \noindent $\bullet$
 in the case of lattice precision, the precision on the output is a 
@@ -685,6 +678,7 @@ for computing these factorizations. \todo{Compare with previous
 results...}
 
 \subsection{A Newton iteration}
+\label{ssec:Newtoniter}
 
 In the previous references, the factor $A$ defined above is always 
 obtained \emph{via} a Newton iteration which takes place over a finite 
@@ -703,9 +697,18 @@ A_{i+1} &= A_i + (V_i P \:\mod\: A_i), \smallskip \\
 V_{i+1} &= (2 V_i -V_i^2 B_{i+1} ) \mod A_{i+1} \\
 & \hspace{2cm}\text{where } B_{i+1} = P \div A_{i+1}.
 \end{align*}
-Then the sequence $(A_i)$ convergences to a divisor $A$ of $P$ 
+Then the sequence $(A_i)$ converges to a divisor $A_\infty$ of $P$ 
 of degree $d$ whose leading coefficient is $a_d$ and whose Newton 
 function agrees with $\NF(P)$ on $[0,d]$.
+Moreover, setting:
+$$\kappa = \NF(P)(d{+}1) + \NF(P)(d{-}1) - 2 \cdot \NF(P)(d)$$
+(with $\NF(P)(-1) = \NF(P)(n{+}1) = +\infty$ if necessary),
+we have $\kappa > 0$ and the following rate of convergence:
+\begin{equation}
+\label{eq:rateconv}
+\forall i \geq 0, \quad
+\NF(A_\infty - A_i) \geq \NF(P)_{|[0,d{-}1]} \,+\, 2^i \kappa.
+\end{equation}
 \end{theo}
 
 %\begin{rem}
@@ -739,17 +742,18 @@ We then assume $1 < d < n$. Without loss of generality, we may further
 assume that the coefficient $a_d$ is equal to $1$. We set:
 \begin{align*}
 \lambda_0 & = \NF(P)(d) - \NF(P)(d{-}1) \\
-\lambda_1 & = \NF(P)(d{+}1) - \NF(P)(d).
+\lambda_1 & = \NF(P)(d{+}1) - \NF(P)(d),
 \end{align*}
+so that $\kappa = \lambda_1 - \lambda_0$.
 The existence of an extremal point of $\NP(P)$ located at abscissa
-$d$ ensures that $\lambda_1 > \lambda_0$.
+$d$ ensures that $\lambda_1 > \lambda_0$, \emph{i.e.} $\kappa > 0$.
 For all indices $i$, we define:
 $$\begin{array}{r@{\,\,}lr@{\,\,}l}
 Q_i &= V_i P \div A_i, &
 R_i & = V_i P \mod A_i = A_{i+1} - A_i, 
 \smallskip \\
 S_i &= P \mod A_i, &
-T_i &= 1 - V_i B_i. 
+T_i &= (1 - V_i B_i) \mod A_i
 \end{array}$$
 and when $\square$ is some letter, we put $\Delta \square_i = \square_{i+1} 
 - \square_i$.
@@ -762,9 +766,9 @@ The following relations hold:
 \Delta S_i &= -(R_i B_{i+1}) \mod A_i,  \label{eqdef:Siminus} \\
 S_{i} &= (B_i R_i + T_i S_{i-1} - T_i \: \Delta S_{i-1}) \mod A_{i}, \label{eqdef:Si2}  \\
 \Delta V_i &= (V_i T_i - V_i^2 \: \Delta B_i) \mod A_{i}, \label{eqdef:Viminus}\\
-1-Q_i &= T_i + (R_i-V_i S_i) \div A_i, \label{eqdef:Qiminus}\\
+1-Q_i &= T_i - (V_i S_i) \div A_i, \label{eqdef:Qiminus}\\
 R_{i+1} &= (\Delta V_i \: S_{i+1}+(1{-}Q_i)R_i) \mod A_{i+1}, \label{eq:Riplus}\\
-T_{i+1} &\equiv T_i + V_i \: (\Delta B_i)^2 \pmod{A_{i+1}}. \label{eq:ViBiplus}
+T_{i+1} &= (T_i + V_i \: \Delta B_i)^2 \mod{A_{i+1}}. \label{eq:ViBiplus}
 \end{align}
 \end{lem}
 
@@ -783,7 +787,8 @@ Thus $R_i=V_i S_i \mod A_i$.
 Hence $B_i R_i = (S_i - S_i T_i) \mod A_i$ and $S_i = B_i R_i + S_i T_i 
 \mod A_i$, from what \eqref{eqdef:Si2} follows directly.
 By definition of $V_i$, we get $\Delta V_i = V_i (1-V_i B_{i+1}) \mod A_{i+1}$ and consequently \eqref{eqdef:Viminus}.
-We now write $1-Q_i= T_i + (V_i B_i - Q_i)$. Using \eqref{eq:ViBiQi}, we 
+We now write $1-Q_i= T_i + (V_i B_i - Q_i)$. Using \eqref{eq:ViBiQi} and
+noting that $\deg R_i < \deg A_i = d$, we 
 get \eqref{eqdef:Qiminus}.
 
 We have $V_i P=A_i Q_i+R_i=(A_{i+1}-R_i)Q_i+R_i$ and $V_{i+1} P=A_{i+1} 
@@ -796,10 +801,12 @@ and \eqref{eq:Riplus} is proved. Finally
 \begin{align*}
 T_{i+1} &\equiv 1-2V_i B_{i+1}+V_i^2 B_{i+1}^2 \pmod {A_{i+1}} \\
 &\equiv (1-V_i B_{i+1})^2 \pmod {A_{i+1}} \\
-&\equiv T_i + V_i (\Delta B_i)^2 \pmod {A_{i+1}}
+&\equiv (T_i + V_i \: \Delta B_i)^2 \pmod {A_{i+1}}
 \end{align*}
 which concludes the proof.
 \end{proof}
+
+\subsubsection{Tristan's proof}
 
 \begin{deftn}
 Notation:
@@ -828,8 +835,6 @@ Notation:
 \node[right] at (3.5,0.25) {$\RS$};
 \end{tikzpicture}
 \end{deftn}
-
-\subsubsection{Proof of the Main Theorem}
 
 {\bf Initial Newton polygons}
 
@@ -1004,8 +1009,172 @@ Indeed, thanks to \eqref{eq:Riplus}, we obtain that
 We can proceed similarly for $1-V_{i+1} B_{i+1}$ using \eqref{eq:ViBiplus}.
 
 Finally, we can apply \eqref{eqdef:Si2} for $i+1,$
-\[S_{i+1} = (B_{i+1} R_{i+1} + (1-V_{i+1} B_{i+1}) S_{i}+(1-V_{i+1} B_{i+1})(S_{i+1}-S_{i})) \% A_{i+1},\] to obtain the desired minoration on $\NP (S_{i+1}).$ This concludes the proof.
+\begin{align*}
+S_{i+1} & = (B_{i+1} R_{i+1} + (1-V_{i+1} B_{i+1}) S_{i} \\
+& + (1-V_{i+1} B_{i+1})(S_{i+1}-S_{i})) \% A_{i+1},
+\end{align*}
+to obtain the desired minoration on $\NP (S_{i+1}).$ This concludes the proof.
 \end{proof}
+
+\subsubsection{Xavier's proof}
+
+If $\lambda_0 = -\infty$ or $\lambda_1 = +\infty$, the sequence $(A_i)$
+is constant and the theorem is obvious. We then assume that $\lambda_0$
+and $\lambda_1$ are both finite.
+We notice that, when the polynomial is changed into $cP$ where $c$ is a 
+nonzero constant lying in a finite extension of $K$, the $A_i$'s are all 
+multiplied by $c$ as well whereas the $B_i$'s and the $V_i$'s remained 
+unchanged. Therefore, the theorem holds for $P$ if and only if it holds 
+for $cP$. As a consequence we may assume that $P$ is normalized so that 
+$\NF(P)(d) = d \lambda_0$. We define the function $\varphi : \R^+ \to \R 
+\cup \{+\infty\}$ by:
+\begin{equation}
+\label{eqdef:functionphi}
+\begin{array}{r@{\,\,}ll}
+\varphi(x) & = \NP(P)(x) & \text{for } x \leq d \smallskip \\
+& = \lambda_0 (x-d) + \NP(P)(d) & \text{for } x > d.
+\end{array}
+\end{equation}
+For a polynomial $Q \in K[X]$ of degree $n$, we further define:
+\begin{align}
+b_\varphi(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \varphi(x) 
+\label{eqdef:bphi} \\
+\text{and} \quad
+b_0(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \lambda_0 x.
+\label{eqdef:b0}
+\end{align}
+Set also $b_\varphi(0) = b_0(0) = +\infty$ by convention.
+With the normalization of $P$ we have chosen above, we have $b_0(P)
+= b_\varphi(P) = 0$ and $b_\varphi(Q) \leq b_0(Q)$ for all polynomial
+$Q$. 
+
+\begin{lem}
+\label{lem:bphib0}
+Let $b \in \{b_\varphi, b_0\}$. For $Q_1, Q_2 \in K[X]$:
+
+\smallskip
+
+a) $b(Q_1+Q_2) \geq \min \big(b(Q_1), b(Q_2)\big)$
+
+\smallskip
+
+b) $b(Q_1Q_2) \geq \min b(Q_1) + b(Q_2)$ 
+
+\smallskip
+
+c) $b_\varphi(Q_1 Q_2) \geq b_\varphi(Q_1) + b_0(Q_2) \geq
+b_\varphi(Q_1) + b_\varphi(Q_2)$
+
+\smallskip
+
+\noindent
+For $Q, A \in K[X]$ with $\deg A = d$ and $\NF(A) =
+\NF(P)_{|[0,d]}$:
+
+\smallskip
+
+d) $b(Q \mod A) \geq b(Q)$
+
+\smallskip
+
+e) $b_0(Q \div A) \geq b_\varphi(Q)$.
+\end{lem}
+
+\begin{proof}
+\emph{a)} is clear.
+
+We skip the proof of \emph{b)} which is similar to that of \emph{c)}.
+
+Let $t_1$ (resp. $t_2$) be the translation of vector $(0, b_\varphi
+(Q_1))$ (resp. $(0, b_0(Q_2))$. It follows from the definition of
+$b_\varphi$ that $\NP(Q_1)$ is a subset of $t_1(\Epi(\varphi))$ where
+$\Epi(\varphi)$ denotes the epigraph of $\varphi$. Similarly $\NP(Q_2)
+\subset t_2(C)$ where $C$ is the convex cone generated by the vectors
+$(0,1)$ and $(1, \lambda_0)$. Thus
+$$\NP(Q) \subset t_2 \circ t_1 \big(\Epi(\varphi) + C\big) =
+t_2 \circ t_1\big(\Epi(\varphi)\big)$$
+and \emph{c)} follows.
+
+Finally \emph{d)} and \emph{e)} follows from
+Theorem~\ref{theo:EDivisionNP}.
+\end{proof}
+
+We are now going to prove by induction on $i$ the conjonction of all
+equalities and inequalities below:
+\begin{equation}
+\label{eq:induction}
+\begin{array}{l}
+\NF(A_i) = \varphi_{|[0,d]}, \smallskip \\
+b_0(V_i) \geq 0, \quad
+b_\varphi(R_i) \geq 2^i \kappa \smallskip \\
+b_\varphi(S_i) \geq 0, \quad
+b_0(T_i) \geq 2^i \kappa.
+\end{array}
+\end{equation}
+
+Noting that $A_0$ and $P$ agree up to degree $d$ and that $\NP(P)$ has 
+an extremal point at abscissa $d$, we get $\NF(A_0) = \varphi_{|[0,d]}$.
+Clearly $b_0(V_0) \geq 0$ since $V_0 = 1$. It follows from the 
+definitions that $R_0 = S_0 = P \mod A_0 = (P{-}A_0) \mod A_0$. 
+Noting that $P{-}A_0 = \sum_{i=d+1}^n a_i X^i$, we obtain
+$b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
+\geq \kappa$. Finally observe that:
+$$T_0 = (1 - B_0) \mod A_0 = \big((A_0 - P) \div A_0\big) \mod A_0.$$
+Therefore $b_0(T_0) \geq \kappa$ results from $b_\varphi(A{-}P_0) \geq 
+\kappa$ thanks to Lemma~\ref{lem:bphib0}. 
+We have then established~\eqref{eq:induction} when $i = 0$.
+
+We now assume~\eqref{eq:induction} for the index $i$.
+From $A_{i+1} = A_i + R_i$ and the estimation $b_\varphi(R_i) \geq 2^i 
+\kappa > 0$, we derive $\NF(A_{i+1}) = \varphi_{|[0,d]}$. Therefore,
+Lemma~\ref{lem:bphib0} applies with $A = A_i$ and $A = A_{i+1}$.
+Now using the definition of $B_{i+1}$, we get $b_0(B_{i+1}) \geq 0$.
+As a consequence:
+$$b_\varphi(R_i B_{i+1}) \geq b_\varphi(R_i) + b_0(B_{i+1})
+\geq 2^i \kappa$$
+by Lemma~\ref{lem:bphib0} and the induction hypothesis.
+Using again Lemma~\ref{lem:bphib0}, we then derive from 
+\eqref{eqdef:Biminus} and \eqref{eqdef:Siminus}, $b_0(\Delta B_i) \geq 
+2^i \kappa$ and $b_\varphi(\Delta S_i) \geq 2^i \kappa$.
+Similarly, using \eqref{eqdef:Si2} and the estimations we already know,
+we obtain $b_\varphi(S_i) \geq 2^i \kappa$. Combining this with
+$b_\varphi(\Delta S_i) \geq 2^i \kappa$, we find
+$b_\varphi(S_{i+1}) \geq 2^i \kappa$ as well. Applying again and again
+the same strategy, we deduce successively
+$b_0(\Delta V_i) \geq 2^i \kappa$ using \eqref{eqdef:Viminus},
+$b_0(1{-}Q_i) \geq 2^i \kappa$ using \eqref{eqdef:Qiminus},
+$b_\varphi(R_{i+1}) \geq 2^{i+1} \kappa$ using \eqref{eq:Riplus},
+and finally $b_0(T_{i+1}) \geq 2^{i+1} \kappa$
+using \eqref{eq:ViBiplus}. The equalities and inequalities
+of Eq.~\eqref{eq:induction} have then all been established for
+the index $i+1$ and the induction goes.
+
+From the inequalities $b_\varphi(R_i) \geq 2^i \kappa$, we deduce that 
+the sequence $(A_i)$ is Cauchy and therefore converges. Its limit 
+$A_\infty$ certainly satisfies $\NF(A_\infty) = \varphi_{|[0,d]}$ because 
+all the $A_i$'s do. Moreover we know that $b_\varphi(S_i) \geq 2^i 
+\kappa$ from what we derive that the sequence $(S_i)$ goes to $0$.
+Coming back to the definition of $S_i$, we find $P \mod A_\infty = 0$,
+\emph{i.e.} $A_\infty$ divides $P$. Finally, Eq.~\eqref{eq:rateconv}
+giving the rate of convergence follows from the writing:
+$$A_\infty - A_i = R_i + R_{i+1} + \cdots + R_j + \cdots$$
+together with the facts that $b_\varphi(R_j) \geq 2^i \kappa$ and $\deg 
+R_j \leq d{-}1$ for all $j \geq i$.
+
+\begin{rem}
+\label{rem:slope-factor}
+It follows from the proof above that the conclusion of 
+Theorem~\ref{theo:slope-factor} is still correct as soon as $A_0$ 
+and $V_0$ satisfies:
+$$b_\varphi\big(V_0 P \mod A_0\big) > 0
+\quad \text{and} \quad
+b_0\big((1 - V_0 B_0) \mod A_0\big) > 0$$
+except that the constant $\kappa$ giving the rate of convergence
+should be now defined as:
+$$\kappa = \min \big( 
+b_\varphi\big(V_0 P \mod A_0\big), \,
+b_0\big((1 - V_0 B_0) \mod A_0\big)\big).$$
+\end{rem}
 
 \subsection{A slope factorization algorithm}
 
@@ -1013,7 +1182,7 @@ Let $P \in K_n[X]$ and $d$ be the abscissa of an extremal point of
 $\NP(P)$. Previously (\emph{cf} Theorem~\ref{theo:slope-factor}), we 
 have defined a sequence $(A_i, V_i)$ converging to $(A,V)$ where $A$ is 
 a factor of $P$ whose Newton function is $\NF(P)_{|[0,d]}$ and $V$ is the inverse of $B = P/A$ modulo $A$.
-We now assume that $P$ is known up to some finite precision: $P = P_0 + 
+We now assume that $P$ is known up to some finite precision: $P = P_\app + 
 O(\hspace{0.5mm}\cdots)$ where the object inside the $O$ depends on the 
 chosen precision model. We address the two following questions:
 (1)~what is the precision on the factor $A$, and
@@ -1024,57 +1193,158 @@ $A$ and $B$: if $a_d$ is the coefficient of $P$ of degree $d$, we set
 $A^{(1)} = a_d^{-1} A$ and $B^{(1)} = a_d B$
 so that $A^{(1)}$ is monic and $P = A^{(1)} B^{(1)}$. We shall also 
 always assume that $P$ is monic in the sense that its leading
-coefficient is \emph{exactly} $1$; the precision datum on $P$ then 
-concerns only the coefficients up to degree $n{-}1$. Similarly, noting
+coefficient is \emph{exactly}~$1$; the precision datum on $P$ then 
+only concerns the coefficients up to degree $n{-}1$. Similarly, noting
 that $A^{(1)}$ and $B^{(1)}$ are monic as well, they only carry a
 precision datum up to degree $d{-}1$ and $n{-}d{-}1$ respectively.
 
 \medskip
 
 \noindent
-{\bf About the first question.}
-We first assume that we are working with lattice precision.
-The answer to the first question is then given by the theory of 
-\cite{padicprec} and is controlled by the differential of the
-application sending $P$ to $A^{(1)}$.
+{\bf Newton precision.}
+We assume that the precision on the input $P$ has the shape 
+$O(\varphi_P)$ where $\varphi_P$ is a Newton function of degree 
+$n{-}1$. From now on, we assume that the precision $O(\varphi_P)$ 
+is nondegenerate in the sense of Definition~\ref{def:nondeg}. This
+ensures in particular that the Newton polygon of $P$ is well defined. 
+We import the notations $\varphi$, $b_\varphi$ and $b_0$ from \S 
+\ref{ssec:Newtoniter} and refer to 
+Eqs.~\eqref{eqdef:functionphi}--\eqref{eqdef:b0} for the definitions.
 
 \begin{prop}
-\label{prop:precA1}
-The application $P \mapsto A^{(1)}$ (where $A^{(1)}$ is defined as before) is 
-of class $C^1$ in a neighborhood of $P_0$ and its differential 
-at $P_0$ is the linear mapping:
-$$dP \mapsto dA^{(1)} = (V^{(1)} \: dP) \mod A^{(1)}$$
-where $V^{(1)}$ is the inverse of $B^{(1)}$ modulo $A^{(1)}$.
+We keep all the above notations and assumptions. We set:
+$$\delta = \min_{x \in [0,n{-}1]} \varphi_P(x) - \varphi(x)$$
+and assume that $\delta > 0$. 
+Then the factor $A^{(1)}$ is known with precision at least 
+$O(\varphi_{A^{(1)}})$ with
+$\varphi_{A^{(1)}} = \varphi_{|[0,d{-}1]} - \varphi(d) + \delta$.
 \end{prop}
 
 \begin{proof}
-There certain exists a neighborhood $\mathcal U$ of $P_0$ on which the 
-Newton polygon does not vary. On $\mathcal U$, the function $f : P 
-\mapsto (A^{(1)},B^{(1)})$ is well defined. It is furthermore bijective 
-and its inverse $g$ is given by $(A^{(1)},B^{(1)}) \mapsto A^{(1)}B^{(1)}$.
-Clearly $g$ is of class $C^1$ and its differential is given by
-\begin{equation}
-\label{eq:dPdAdB}
-(dA^{(1)}, dB^{(1)}) \mapsto dP = A^{(1)} \: dB^{(1)} + B^{(1)} \: dA^{(1)}.
-\end{equation}
-Thanks to Bézout Theorem, it is invertible as soon as $A^{(1)}$ and $B^{(1)}$ are
-coprime. This happens on $f(\mathcal U) = g^{-1}(\mathcal U)$ because 
-$\NP(A^{(1)})$ and $\NP(B^{(1)})$ do not shape a common slope. As a consequence
-$f$ is of class $C^1$ on $\mathcal U$. Moreover, its differential is
-obtained by inverting Eq.~\eqref{eq:dPdAdB}. Reducing modulo $A^{(1)}$, we
-get $dP \equiv B^{(1)} \: dA^{(1)} \pmod {A^{(1)}}$.
-The claimed result follows after having noticed that $dA^{(1)}$
-has degree at most $d{-}1$.
+Let $\delta_P \in K[X]$ be such that $\NP(\delta_P) \geq \varphi_P$.
+Let $A_\app^{(1)}$ and $A^{(1)}$ be the monic factors of $P_\app$
+and $P_\app + \delta P$ respectively whose Newton functions are
+$\varphi_{|[0,d]} - \varphi(d)$.
+
+We define the sequences $(A_i)$ and $(V_i)$ by the recurrence: 
+\begin{align*} 
+A_0 & = A_\app, \quad V_{0} = V_\app \medskip \\ A_{i+1} 
+&= A_i + \big(V_i (P_\app + \delta_P) \:\mod\: A_i\big), \smallskip \\ 
+V_{i+1} &= (2 V_i -V_i^2 B_{i+1} ) \mod A_{i+1} \\ 
+&  \hspace{1cm}\text{where } B_{i+1} = (P_\app + \delta_P) \div A_{i+1}. 
+\end{align*} 
+where $A_\app$ and $V_\app$ are those related to $P_\app$. Note that 
+$A_\app = a_d \cdot A^{(1)}_\app$ if $a_d$ denotes the coefficient of 
+$X^d$ in $P_\app$. By Remark~\ref{rem:slope-factor}, we know that the 
+sequence $(A_i)$ converges to $A = a_d \cdot A^{(1)}$ and furthermore:
+$$\NP(A - A_\app) \geq \varphi_{|[0,d{-}1]} + 
+b_\varphi\big((V_\app \cdot \delta P) \mod A_\app\big)$$ 
+since $(V_\app P_\app) \mod A_\app = (1 - V_\app B_\app) \mod A_\app = 
+0$. Using repeatedly Lemma~\ref{lem:bphib0}, we obtain:
+$$b_\varphi\big((V_\app \cdot \delta P) \mod A_\app\big)
+  \geq b_0(V_\app) + b_\varphi(\delta P) \\
+  \geq b_\varphi(\delta P) \geq \delta.$$
+Thus $\NP(A - A_\app) \geq \varphi_{[0,d{-}1]} + \delta$. Dividing
+by $a_d$, we find
+$\NP(A^{(1)} - A^{(1)}_\app) \geq \varphi_{A^{(1)}}$ and we are done.
 \end{proof}
 
-\todo{Derive from Proposition~\ref{prop:precA1} a theoretical
-result on Newton precision.}
+\todo{Answer here the second question.}
 
 \medskip
 
 \noindent
-{\bf About the second question.}
-We now study the problem of the effective computation of $A^{(1)}$.
+{\bf Lattice precision.}
+The precision datum is given here by a lattice $H_P$ in $K_{\leq n{-}1}
+[X]$; we shall then write:
+$$P = P_\app + O(H_P)$$
+where $P_\app$ is a \emph{monic} approximation of the inexact polynomial 
+$P$ we want to factor. We assume from now that $H_P$ is sufficiently 
+small so that the Newton polygon of $P$ is well defined. We then can
+define the function:
+$$F : P_\app + H_P \to K_{=d}[X] \times K_{=n{-}d}[X]$$
+mapping a polynomial $P$ to the couple $(A^{(1)}, B^{(1)})$ obtained
+from it. We set $(A_\app^{(1)}, B_\app^{(1)}) = F(P_\app)$.
 
+\smallskip
+
+\noindent
+We make the following hypothesis \textbf{(H)}:
+
+\smallskip
+
+\noindent
+\hfill
+\begin{minipage}{8cm}
+The lattice $H_P$ is a first order lattice at every point
+of $P_\app + H_P$ in the sense of \cite[Definition~3.3]{padicprec},
+\emph{i.e.} for all $P \in P_\app + H_P$:
+
+\vspace{-5mm}
+
+$$F(P + H_P) = F(P) + F'(P)(H_P).$$
+\end{minipage}
+\hfill \null
+
+\bigskip
+
+\noindent
+Obviously \textbf{(H)} gives an answer to the first question we have 
+raised above: the precision on the couple $A^{(1)}$ is the lattice 
+$H_{A^{(1)}}$ defined as projection on the first component of 
+$F'(P_\app)(H_P)$. It turns out that it can be computed explicitely as 
+shown by the next proposition.
+
+\begin{prop}
+\label{prop:precA1}
+
+The application $P \mapsto A^{(1)}$ is of class $C^1$ on $P_\app + H_P$
+and its differential at at some point $P$ is the linear mapping:
+$$dP \mapsto dA^{(1)} = (V^{(1)} \: dP) \mod A^{(1)}$$
+where $(A^{(1)}, B^{(1)}) = F(P)$ and $V^{(1)}$ is the inverse of 
+$B^{(1)}$ modulo $A^{(1)}$.
+\end{prop}
+
+\begin{proof}
+The function $F$ is injective and a left inverse of it is
+$G : (A^{(1)},B^{(1)}) \mapsto A^{(1)}B^{(1)}$.
+Clearly $G$ is of class $C^1$ and its differential is given by
+\begin{equation}
+\label{eq:dPdAdB}
+(dA^{(1)}, dB^{(1)}) \mapsto dP = A^{(1)} \: dB^{(1)} + B^{(1)} \: dA^{(1)}.
+\end{equation}
+Thanks to Bézout Theorem, it is invertible as soon as $A^{(1)}$ and 
+$B^{(1)}$ are coprime, which is true because $\NP(A^{(1)})$ and 
+$\NP(B^{(1)})$ do not shape a common slope. As a consequence $F$ is of 
+class $C^1$ and its differential is obtained by inverting 
+Eq.~\eqref{eq:dPdAdB}. Reducing modulo $A^{(1)}$, we get $dP \equiv 
+B^{(1)} \: dA^{(1)} \pmod {A^{(1)}}$. The claimed result follows after 
+having noticed that $dA^{(1)}$ has degree at most $d{-}1$.
+\end{proof}
+
+
+\todo{Answer here the second question. (The Proposition below should
+be useful at some point.)}
+
+\begin{prop}
+We assume \textbf{(H)}. 
+
+\vspace{-2mm}
+
+\begin{enumerate}[(i)]
+\item Let $\tilde A^{(1)} \in K_{=d}[X]$ such that
+$\tilde A^{(1)} \tilde B^{(1)} \in P_\app + O(H_P)$ with
+$\tilde B^{(1)} = P_\app \div \tilde A^{(1)}$.
+Then $\tilde A^{(1)} \in A_\app^{(1)} + H_{A^{(1)}}$.
+\item Let in addition $\tilde V^{(1)} \in K_{\leq d{-}1}[X]$ such that:
+$$\big(\tilde B^{(1)} \tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}
+= H_P \mod \tilde A^{(1)}.$$
+Then $H_{A^{(1)}} = \big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}$.
+\end{enumerate}
+\end{prop}
+
+\begin{proof}
+\todo{Write it.}
+\end{proof}
 
 \end{document}
