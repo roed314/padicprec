@@ -731,8 +731,15 @@ we have $\kappa > 0$ and the following rate of convergence:
 %\end{rem}
 
 \begin{rem}
+\label{rem:unicity}
 The divisor $A$ is uniquely determined by the conditions of 
-Theorem~\ref{theo:slope-factor}.
+Theorem~\ref{theo:slope-factor}. Indeed, consider two divisors
+$A$ and $A'$ of $P$ such that $\NF(A) = \NF(A') = \NF(P)_{|[0,d]}$.
+Then $L = \text{llcm}(A,A')$ is a divisor of $P$ as well and the 
+slopes of its Newton polygon are all at most $\lambda_0 = \NF(P)(d) - 
+\NF(P)(d{-}1)$. Therefore $\deg L = d$ and $L$ differs from $A$ and
+$A'$ by a multiplicative nonzero constant. Then, if $A$ and $A'$ 
+share in addition the same leading coefficient, they must coincide.
 \end{rem}
 
 The rest of this subsection is devoted to the proof of the theorem.
@@ -1297,7 +1304,6 @@ shown by the next proposition.
 
 \begin{prop}
 \label{prop:precA1}
-
 The application $P \mapsto A^{(1)}$ is of class $C^1$ on $P_\app + H_P$
 and its differential at at some point $P$ is the linear mapping:
 $$dP \mapsto dA^{(1)} = (V^{(1)} \: dP) \mod A^{(1)}$$
@@ -1344,7 +1350,25 @@ Then $H_{A^{(1)}} = \big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}$.
 \end{prop}
 
 \begin{proof}
-\todo{Write it.}
+\emph{(i)} 
+Set $\tilde P = \tilde A^{(1)} \tilde B^{(1)}$. We know by assumption
+that $\tilde P = P_\app + O(H_P)$. Thus $F(\tilde P)$ is well defined.
+The unicity of the slope factorization (\emph{cf} 
+Remark~\ref{rem:unicity}) further implies that $F(\tilde P) = 
+(\tilde A^{(1)}, \tilde B^{(1)})$. The claim result now follows from
+the hypothesis~\textbf{(H)}.
+
+\smallskip
+
+\emph{(ii)} By applying~\textbf{(H)} with $P = \tilde P$ and replacing 
+$F'(\tilde P)$ by its expression given by Proposition~\ref{prop:precA1}, 
+we find:
+$$H_{A^{(1)}} = \big((\tilde B^{(1)})^{-1} \cdot H_P\big) \mod \tilde A^{(1)}.$$
+Dividing $\big(\tilde B^{(1)} \tilde V^{(1)} H_P\big) \mod \tilde 
+A^{(1)} = H_P \mod \tilde A^{(1)}$ by $\tilde B^{(1)}$ modulo $\tilde
+A^{(1)}$, we get
+$H_{A^{(1)}} = \big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}$
+as expected.
 \end{proof}
 
 \end{document}
