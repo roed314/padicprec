@@ -1,4 +1,5 @@
-mu = NF(P)(d) - NF(P)(d-1)
+mu_0 = NF(P)(d) - NF(P)(d-1)
+mu_1 = NF(P)(d+1) - NF(P)(d)
 
 Remark:
 If P becomes c*P, then
@@ -11,8 +12,9 @@ and extend it to [0,infty] by letting
 
 For a polynomial Q, set:
   b_phi(Q) = min_{x in [0,n]}  (NF(Q)(x) - phi(x))
-  b_0(Q)  = min_{x in [0,n]}  (NF(Q)(x) - mu*x)
-Note b_phi(Q) <= b_0(Q)
+  b_0(Q)  = min_{x in [0,n]}  (NF(Q)(x) - mu_0*x)
+  b_1(Q)  = min_{x in [0,n]}  (NF(Q)(x) - mu_1*x)
+Note b_phi(Q) <= b_0(Q) and b_1(Q) <= b_0(Q)
 
 Define also:
   Epi(phi) = epigraph of phi
@@ -20,7 +22,7 @@ Define also:
 Then b_phi(Q) is the largest value for which NP(Q) is included in the 
 translation of Epi(phi) of vector (0, b_phi(Q)). Same with b_0(Q) and C.
 
-We normalize P such that b_phi(P) = b_0(P) = 0
+We normalize P such that b_phi(P) = b_0(P) = 0. Then b_1(P) = -d*kappa.
 
 Lemma: 
 Q_1, Q_2 are polynomials. Then:
@@ -29,6 +31,7 @@ Q_1, Q_2 are polynomials. Then:
 Q, A polynomials such that NF(A) = phi. Then:
  3) b_phi(Q % A) >= b_phi(Q)
  4) b_0(Q // A) >= b_phi(Q)
+ 5) b_1(Q % A) >= b_1(Q)
 
 Proof:
 1) is clear.
@@ -45,7 +48,7 @@ Proof:
 
 Induction hypothesis:
  . b_phi(A_i) = 0
- . b_0(V_i) >= 0
+ . b_0(V_i) >= b_1(V_i) >= 0
  . b_phi(R_i) >= lambda_i
  . b_0(T_i) >= lambda_i
  . b_phi(S_i) >= 0
@@ -56,6 +59,7 @@ Assume lambda_i > 0
 * NF(A_(i+1)) = NF(A_i)
 * B_(i+1) = P // A_(i+1)
      => b_0(B_(i+1)) >= 0  (because b_phi(P) >= 0)
+     (il faudrait b_1(B_(i+1)) >= 0)
 * b_phi(R_i B_(i+1)) >= lambda_i
      => b_phi(Delta S_i) >= lambda_i
     and b_0(Delta B_i) >= lambda_i
@@ -84,4 +88,8 @@ Assume lambda_i > 0
   b_0(V_i Delta B_i) => lambda_i
      => b_0(T_(i+1)) >= 2*lambda_i
 
+* V_(i+1) = (2*V_i - V_i^2 B_i) % A_(i+1)
+  b_1(V_(i+1)) >= 0
+
 And induction goes.
+

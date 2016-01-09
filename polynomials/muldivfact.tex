@@ -243,7 +243,7 @@ better representations and better algorithms.
 A \emph{Newton function of degree $n$} is a convex function 
 $\varphi : [0,n] \to \R \cup \{+\infty\}$ which is piecewise affine, 
 which takes a finite value at $n$ and whose epigraph $\Epi(\varphi)$ 
-have integral extremal points.
+have extremal points with integral abscissa.
 \end{deftn}
 
 \begin{rem}
@@ -813,6 +813,7 @@ T_{i+1} &\equiv 1-2V_i B_{i+1}+V_i^2 B_{i+1}^2 \pmod {A_{i+1}} \\
 which concludes the proof.
 \end{proof}
 
+\begin{comment}
 \subsubsection{Tristan's proof}
 
 \begin{deftn}
@@ -1024,6 +1025,7 @@ to obtain the desired minoration on $\NP (S_{i+1}).$ This concludes the proof.
 \end{proof}
 
 \subsubsection{Xavier's proof}
+\end{comment}
 
 If $\lambda_0 = -\infty$ or $\lambda_1 = +\infty$, the sequence $(A_i)$
 is constant and the theorem is obvious. We then assume that $\lambda_0$
@@ -1047,17 +1049,18 @@ For a polynomial $Q \in K[X]$ of degree $n$, we further define:
 b_\varphi(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \varphi(x) 
 \label{eqdef:bphi} \\
 \text{and} \quad
-b_0(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \lambda_0 x.
+b_i(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \lambda_i x
+\quad \text{for } i \in \{0,1\}.
 \label{eqdef:b0}
 \end{align}
-Set also $b_\varphi(0) = b_0(0) = +\infty$ by convention.
-With the normalization of $P$ we have chosen above, we have $b_0(P)
+Set also $b_\varphi(0) = b_0(0) = b_1(0) = +\infty$ by convention.
+With the normalization of $P$ we chose above, we have $b_0(P)
 = b_\varphi(P) = 0$ and $b_\varphi(Q) \leq b_0(Q)$ for all polynomial
-$Q$. 
+$Q$. Similarly $b_1(Q) \leq b_0(Q)$ for all $Q$.
 
 \begin{lem}
 \label{lem:bphib0}
-Let $b \in \{b_\varphi, b_0\}$. For $Q_1, Q_2 \in K[X]$:
+Let $b \in \{b_\varphi, b_0, b_1\}$. For $Q_1, Q_2 \in K[X]$:
 
 \smallskip
 
@@ -1069,8 +1072,7 @@ b) $b(Q_1Q_2) \geq \min b(Q_1) + b(Q_2)$
 
 \smallskip
 
-c) $b_\varphi(Q_1 Q_2) \geq b_\varphi(Q_1) + b_0(Q_2) \geq
-b_\varphi(Q_1) + b_\varphi(Q_2)$
+c) $b_\varphi(Q_1 Q_2) \geq b_\varphi(Q_1) + b_0(Q_2)$
 
 \smallskip
 
@@ -1112,7 +1114,7 @@ equalities and inequalities below:
 \label{eq:induction}
 \begin{array}{l}
 \NF(A_i) = \varphi_{|[0,d]}, \smallskip \\
-b_0(V_i) \geq 0, \quad
+b_1(V_i) \geq 0, \quad
 b_\varphi(R_i) \geq 2^i \kappa \smallskip \\
 b_\varphi(S_i) \geq 0, \quad
 b_0(T_i) \geq 2^i \kappa.
@@ -1121,7 +1123,7 @@ b_0(T_i) \geq 2^i \kappa.
 
 Noting that $A_0$ and $P$ agree up to degree $d$ and that $\NP(P)$ has 
 an extremal point at abscissa $d$, we get $\NF(A_0) = \varphi_{|[0,d]}$.
-Clearly $b_0(V_0) \geq 0$ since $V_0 = 1$. It follows from the 
+Clearly $b_1(V_0) \geq 0$ since $V_0 = 1$. It follows from the 
 definitions that $R_0 = S_0 = P \mod A_0 = (P{-}A_0) \mod A_0$. 
 Noting that $P{-}A_0 = \sum_{i=d+1}^n a_i X^i$, we obtain
 $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
@@ -1135,8 +1137,9 @@ We now assume~\eqref{eq:induction} for the index $i$.
 From $A_{i+1} = A_i + R_i$ and the estimation $b_\varphi(R_i) \geq 2^i 
 \kappa > 0$, we derive $\NF(A_{i+1}) = \varphi_{|[0,d]}$. Therefore,
 Lemma~\ref{lem:bphib0} applies with $A = A_i$ and $A = A_{i+1}$.
-Now using the definition of $B_{i+1}$, we get $b_0(B_{i+1}) \geq 0$.
-As a consequence:
+Now coming back to the the definition of $B_{i+1}$ and using
+Theorem~\ref{theo:EDivisionNP}, we get $b_0(B_{i+1}) \geq b_1(B_{i+1}) 
+\geq 0$. As a consequence:
 $$b_\varphi(R_i B_{i+1}) \geq b_\varphi(R_i) + b_0(B_{i+1})
 \geq 2^i \kappa$$
 by Lemma~\ref{lem:bphib0} and the induction hypothesis.
@@ -1148,11 +1151,14 @@ we obtain $b_\varphi(S_i) \geq 2^i \kappa$. Combining this with
 $b_\varphi(\Delta S_i) \geq 2^i \kappa$, we find
 $b_\varphi(S_{i+1}) \geq 2^i \kappa$ as well. Applying again and again
 the same strategy, we deduce successively
-$b_0(\Delta V_i) \geq 2^i \kappa$ using \eqref{eqdef:Viminus},
-$b_0(1{-}Q_i) \geq 2^i \kappa$ using \eqref{eqdef:Qiminus},
-$b_\varphi(R_{i+1}) \geq 2^{i+1} \kappa$ using \eqref{eq:Riplus},
-and finally $b_0(T_{i+1}) \geq 2^{i+1} \kappa$
-using \eqref{eq:ViBiplus}. The equalities and inequalities
+$b_0(\Delta V_i) \geq 2^i \kappa$ using~\eqref{eqdef:Viminus},
+$b_0(1{-}Q_i) \geq 2^i \kappa$ using~\eqref{eqdef:Qiminus},
+$b_\varphi(R_{i+1}) \geq 2^{i+1} \kappa$ using~\eqref{eq:Riplus},
+and then $b_0(T_{i+1}) \geq 2^{i+1} \kappa$
+using~\eqref{eq:ViBiplus}. Finally, coming back to the recurrence
+defining $V_{i+1}$ and remembering that $b_1(V_i)$ and $b_1(B_{i+1})$
+are both nonnegative, we find $b_1(V_{i+1}) \geq 0$.
+The equalities and inequalities
 of Eq.~\eqref{eq:induction} have then all been established for
 the index $i+1$ and the induction goes.
 
@@ -1170,9 +1176,15 @@ R_j \leq d{-}1$ for all $j \geq i$.
 
 \begin{rem}
 \label{rem:slope-factor}
-It follows from the proof above that the conclusion of 
-Theorem~\ref{theo:slope-factor} is still correct as soon as $A_0$ 
-and $V_0$ satisfies:
+It follows from the proof above that the sequence $(V_i)_{i \geq 0}$
+converges as well. Its limit $V_\infty$ is an inverse of $B_\infty
+= P \div A_\infty$ modulo $A_\infty$ and it satisfies in addition
+$b_1(V_\infty) \geq 0$.
+
+Moreover, the conclusion of 
+Theorem~\ref{theo:slope-factor} is still correct if $A_0$ is any 
+polynomial of degree $d$ and leading coefficient $a_d$ and $V_0$
+is any polynomial as soon as they satisfy:
 $$b_\varphi\big(V_0 P \mod A_0\big) > 0
 \quad \text{and} \quad
 b_0\big((1 - V_0 B_0) \mod A_0\big) > 0$$
@@ -1219,6 +1231,7 @@ We import the notations $\varphi$, $b_\varphi$ and $b_0$ from \S
 Eqs.~\eqref{eqdef:functionphi}--\eqref{eqdef:b0} for the definitions.
 
 \begin{prop}
+\label{prop:Newtonprecslope}
 We keep all the above notations and assumptions. We set:
 $$\delta = \min_{x \in [0,n{-}1]} \varphi_P(x) - \varphi(x)$$
 and assume that $\delta > 0$. 
@@ -1255,6 +1268,21 @@ Thus $\NP(A - A_\app) \geq \varphi_{[0,d{-}1]} + \delta$. Dividing
 by $a_d$, we find
 $\NP(A^{(1)} - A^{(1)}_\app) \geq \varphi_{A^{(1)}}$ and we are done.
 \end{proof}
+
+\begin{rem}
+Under the hypothesis~\textbf{(H)} introduced below, a correct precision 
+on $A^{(1)}$ is also $O(\psi_{A^{(1)}})$ where:
+$$\psi_{A^{(1)}} = \big(\varphi_P \nftimes \big(\NF(V_\app)
+- \NF(P)(d)\big)\big) \nfmod \NF(P)_{|[0,d]}.$$
+This follows from Proposition~\ref{prop:precA1} using
+$V^{(1)}_\app = a_d^{-1} V_\app$. It follows in addition from 
+Remark~\ref{rem:slope-factor} that $\NF(V_\app)$ is bounded from below 
+by $x \mapsto \lambda_1 x$. This yields the bound
+$\psi_{A^{(1)}} \geq \big(\varphi_P \nftimes \psi\big) \nfmod 
+\NF(P)_{|[0,d]}$
+where $\psi : [0,d{-}1] \to \R$ is the affine function mapping $x$
+to $\lambda_1 x - \NF(P)(d)$. 
+\end{rem}
 
 \todo{Answer here the second question.}
 
@@ -1327,7 +1355,6 @@ Eq.~\eqref{eq:dPdAdB}. Reducing modulo $A^{(1)}$, we get $dP \equiv
 B^{(1)} \: dA^{(1)} \pmod {A^{(1)}}$. The claimed result follows after 
 having noticed that $dA^{(1)}$ has degree at most $d{-}1$.
 \end{proof}
-
 
 \todo{Answer here the second question. (The Proposition below should
 be useful at some point.)}
