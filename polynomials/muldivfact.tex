@@ -155,6 +155,20 @@
 
 \section{Introduction}
 
+\todo{Write introduction.}
+
+\medskip
+
+\noindent
+{\bf Main Results.}
+
+\medskip
+
+\noindent
+{\bf Organization of the paper.}
+
+\medskip
+
 \noindent
 {\bf Notations.}
 Throughout this paper, we fix a complete discrete valuation field $K$; 
@@ -1297,7 +1311,7 @@ where $P_\app$ is a \emph{monic} approximation of the inexact polynomial
 $P$ we want to factor. We assume from now that $H_P$ is sufficiently 
 small so that the Newton polygon of $P$ is well defined. We then can
 define the function:
-$$F : P_\app + H_P \to K_{=d}[X] \times K_{=n{-}d}[X]$$
+$$F = (F_A, F_B) : P_\app + H_P \to K_{=d}[X] \times K_{=n{-}d}[X]$$
 mapping a polynomial $P$ to the couple $(A^{(1)}, B^{(1)})$ obtained
 from it. We set $(A_\app^{(1)}, B_\app^{(1)}) = F(P_\app)$.
 
@@ -1332,7 +1346,7 @@ shown by the next proposition.
 
 \begin{prop}
 \label{prop:precA1}
-The application $P \mapsto A^{(1)}$ is of class $C^1$ on $P_\app + H_P$
+The application $F_A : P \mapsto A^{(1)}$ is of class $C^1$ on $P_\app + H_P$
 and its differential at at some point $P$ is the linear mapping:
 $$dP \mapsto dA^{(1)} = (V^{(1)} \: dP) \mod A^{(1)}$$
 where $(A^{(1)}, B^{(1)}) = F(P)$ and $V^{(1)}$ is the inverse of 
@@ -1354,6 +1368,36 @@ class $C^1$ and its differential is obtained by inverting
 Eq.~\eqref{eq:dPdAdB}. Reducing modulo $A^{(1)}$, we get $dP \equiv 
 B^{(1)} \: dA^{(1)} \pmod {A^{(1)}}$. The claimed result follows after 
 having noticed that $dA^{(1)}$ has degree at most $d{-}1$.
+\end{proof}
+
+A remarkable Corollary of Proposition~\ref{prop:precA1} asserts the
+optimality of Proposition~\ref{prop:Newtonprecslope} in a particular 
+case.
+
+\begin{cor}
+We assume~\textbf{(H)}.
+When the precision of $P$ is given by $O(\varphi_P)$ with:
+$$\varphi_P = (\NF(P) + \delta)_{|[0,d-1]}
+\quad \text{where $\delta \in \R$}$$
+the precision of $A^{(1)}$ given by 
+Proposition~\ref{prop:Newtonprecslope} is optimal.
+\end{cor}
+
+\begin{proof}
+First remark that the $\delta$ defined in the statement of 
+Proposition~\ref{prop:Newtonprecslope} coincide with the $\delta$
+introduced in the Corollary. Define
+$\varphi_{A^{(1)}} = \varphi_{|[0,d{-}1]} - \varphi(d) + \delta$.
+Let $H_P$ (resp. $H_{A^{(1)}})$ be the lattice consisting of
+polynomials of degree at most $n{-}1$ (resp. at most $d{-}1$)
+whose Newton function is not less that $\varphi_P$ (resp. 
+$\varphi_{A^{(1)}}$). We have to show that $F'_A(P_\app)(H_P) = 
+H_{A^{(1)}}$. But, according to Proposition~\ref{prop:precA1}
+the mapping $G : K_{\leq d{-}1}[X] \to K_{\leq n{-}1}[X]$,
+$$dA^{(1)} \mapsto (B_\app^{(1)} \: dA^{(1)}) \mod A_\app^{(1)}$$
+is a right inverse of $F'_A(P_\app)$. It is then enough to prove
+that $G$ takes $H_{A^{(1)}}$ to $H_P$, which can be done easily
+using Theorem~\ref{theo:EDivisionNP}.
 \end{proof}
 
 \todo{Answer here the second question. (The Proposition below should
@@ -1397,5 +1441,6 @@ A^{(1)}$, we get
 $H_{A^{(1)}} = \big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}$
 as expected.
 \end{proof}
+
 
 \end{document}
