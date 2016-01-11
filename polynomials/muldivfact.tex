@@ -1139,9 +1139,55 @@ Noting that $A_0$ and $P$ agree up to degree $d$ and that $\NP(P)$ has
 an extremal point at abscissa $d$, we get $\NF(A_0) = \varphi_{|[0,d]}$.
 Clearly $b_1(V_0) \geq 0$ since $V_0 = 1$. It follows from the 
 definitions that $R_0 = S_0 = P \mod A_0 = (P{-}A_0) \mod A_0$. 
-Noting that $P{-}A_0 = \sum_{i=d+1}^n a_i X^i$, we obtain
+We remark that $P{-}A_0 = \sum_{i=d+1}^n a_i X^i.$
+Using Theorem \ref{theo:EDivisionNP}, we obtain that
 $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
-\geq \kappa$. Finally observe that:
+\geq \kappa$. 
+%Mettre le dessin ici
+%
+%
+%
+
+\begin{tikzpicture}
+[xscale=0.7, yscale=0.5]
+\fill[blue!30] (4,9.5)--(4,1.6)--(2,1.2)--(0.5,2.8)--(0,6.8)--(0,9.5)--cycle;
+\fill[yellow!50] (6,9.5)--(6,2)--(4,1.6)--(4,9.5)--cycle;
+\fill[green!30] (6,9.5)--(6,2)--(8,4)--(11,9)--(11,9.5)--cycle;
+\draw[->] (-0.5,0)--(11.5,0);
+\draw[->] (0,-0.5)--(0,9.5);
+\draw[very thick] (0,6)--(0.5,2)--(2,.4)--(5,1);
+\draw(5,1)--(8,4)--(11,9);
+\draw[thick] (4,9.5)-- (4,1.6)--(2,1.2)--(0.5,2.8)--(0,6.8);
+\draw[dotted] (6,2)--(4,1.6);
+%useless part?
+\draw[dotted] (7,3)--(2,2)--(0.5,3.6)--(0,7.6);
+\draw[dotted] (8,4)--(2,2.8)--(0.5,4.4)--(0,8.4);
+\draw[dotted] (9,5.667)--(2,4.267)--(0.5,5.867)--(0.046,9.5); %%(0,9.867);
+\draw[dotted] (10,7.333)--(2,5.733)--(0.5,7.333)--(0.229,9.5); %%--(0,11.333);
+\draw[dotted] (11,9)--(2,7.2)--(0.5,8.8)-- (.413,9.5);%%(0,12.8);
+
+
+\draw[<->] (4,.8)--(4,1.6);
+\draw[dotted,thick] (5,0)--(5,9.5);
+\draw[dotted,thick] (4,0)--(4,9.5);
+\draw[dotted,thick] (6,0)--(6,9.5);
+\node[scale=0.8, below left] at (0,0) { $0$ };
+\node[scale=0.8, below] at (5,0) { $d$ };
+\node[scale=0.8, below] at (4,0) { $d{-}1$ };
+\node[scale=0.8, below] at (6,0) { $d{+}1$ };
+\node[scale=0.9, below right] at (2.5,.6) { $\mathbf{A_0}$ };
+\node[scale=0.9, right] at (10.2,7.3) { $P$ };
+%\node[scale=0.9, right] at (10.5,4.4) { $\Delta$ };
+\node[scale=0.9] at (4.2,1.2) { $\kappa$ };
+\node[thick] at (3,9) { $R_0$ };
+\node[thick] at (3,8.5) { $S_0$ };
+%\draw[dashed] (11,5)--(8,4);
+%\draw (8,4)--(2,2)--(0.5,4)--(0,8);
+\end{tikzpicture}
+
+
+
+Finally observe that:
 $$T_0 = (1 - B_0) \mod A_0 = \big((A_0 - P) \div A_0\big) \mod A_0.$$
 Therefore $b_0(T_0) \geq \kappa$ results from $b_\varphi(A{-}P_0) \geq 
 \kappa$ thanks to Lemma~\ref{lem:bphib0}. 
