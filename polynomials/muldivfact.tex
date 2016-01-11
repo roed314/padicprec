@@ -1142,11 +1142,8 @@ definitions that $R_0 = S_0 = P \mod A_0 = (P{-}A_0) \mod A_0$.
 We remark that $P{-}A_0 = \sum_{i=d+1}^n a_i X^i.$
 Using Theorem \ref{theo:EDivisionNP}, we obtain that
 $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
-\geq \kappa$. 
-%Mettre le dessin ici
-%
-%
-%
+\geq \kappa$. We illustrate this fact with the following picture. 
+
 
 \begin{tikzpicture}
 [xscale=0.7, yscale=0.5]
@@ -1165,7 +1162,8 @@ $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
 \draw[dotted] (9,5.667)--(2,4.267)--(0.5,5.867)--(0.046,9.5); %%(0,9.867);
 \draw[dotted] (10,7.333)--(2,5.733)--(0.5,7.333)--(0.229,9.5); %%--(0,11.333);
 \draw[dotted] (11,9)--(2,7.2)--(0.5,8.8)-- (.413,9.5);%%(0,12.8);
-
+\draw[very thick,dotted] (5,1)--(11,2.2);
+\draw[dotted] (0,0)-- (5,1);
 
 \draw[<->] (4,.8)--(4,1.6);
 \draw[dotted,thick] (5,0)--(5,9.5);
@@ -1181,6 +1179,9 @@ $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
 \node[scale=0.9] at (4.2,1.2) { $\kappa$ };
 \node[thick] at (3,9) { $R_0$ };
 \node[thick] at (3,8.5) { $S_0$ };
+\node at (6.8,2.3) { $\lambda_1$ };
+\node at (6.8,.9) { $\lambda_0$ };
+\node[thick] at (10,1.6) { $\varphi$ };
 %\draw[dashed] (11,5)--(8,4);
 %\draw (8,4)--(2,2)--(0.5,4)--(0,8);
 \end{tikzpicture}
