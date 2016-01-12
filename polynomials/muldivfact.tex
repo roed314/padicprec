@@ -1142,15 +1142,15 @@ definitions that $R_0 = S_0 = P \mod A_0 = (P{-}A_0) \mod A_0$.
 We remark that $P{-}A_0 = \sum_{i=d+1}^n a_i X^i.$
 Using Theorem \ref{theo:EDivisionNP}, we obtain that
 $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
-\geq \kappa$. We illustrate this fact with the following picture. 
-
-
-\begin{tikzpicture}
-[xscale=0.7, yscale=0.5]
+\geq \kappa$ (see Figure~\ref{fig:boundR0S0}).
+%
+\begin{figure}
+\hfill
+\begin{tikzpicture}[xscale=0.7, yscale=0.5]
 \fill[blue!30] (4,9.5)--(4,1.6)--(2,1.2)--(0.5,2.8)--(0,6.8)--(0,9.5)--cycle;
 \fill[yellow!50] (6,9.5)--(6,2)--(4,1.6)--(4,9.5)--cycle;
 \fill[green!30] (6,9.5)--(6,2)--(8,4)--(11,9)--(11,9.5)--cycle;
-\draw[->] (-0.5,0)--(11.5,0);
+\draw[->] (-0.5,0)--(11,0);
 \draw[->] (0,-0.5)--(0,9.5);
 \draw[very thick] (0,6)--(0.5,2)--(2,.4)--(5,1);
 \draw(5,1)--(8,4)--(11,9);
@@ -1173,21 +1173,26 @@ $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
 \node[scale=0.8, below] at (5,0) { $d$ };
 \node[scale=0.8, below] at (4,0) { $d{-}1$ };
 \node[scale=0.8, below] at (6,0) { $d{+}1$ };
-\node[scale=0.9, below right] at (2.5,.6) { $\mathbf{A_0}$ };
-\node[scale=0.9, right] at (10.2,7.3) { $P$ };
+\node[scale=0.85, below left] at (1.5,1.3) { $\mathbf{A_0}$ };
+\node[scale=0.85, right] at (10.1,7.3) { $NF(P)$ };
 %\node[scale=0.9, right] at (10.5,4.4) { $\Delta$ };
 \node[scale=0.9] at (4.2,1.2) { $\kappa$ };
-\node[thick] at (3,9) { $R_0$ };
-\node[thick] at (3,8.5) { $S_0$ };
-\node at (6.8,2.3) { $\lambda_1$ };
-\node at (6.8,.9) { $\lambda_0$ };
+\node[scale=0.8] at (3,9) { $NP(R_0)$ };
+\node[scale=0.8] at (3,8.3) { $NP(S_0)$ };
+\node[right,scale=0.9,rotate=35] at (6.2,1.7) { $\text{slope} = \lambda_1$ };
+\node[right,scale=0.9,rotate=8] at (6.8,.9) { $\text{slope} = \lambda_0$ };
 \node[thick] at (10,1.6) { $\varphi$ };
 %\draw[dashed] (11,5)--(8,4);
 %\draw (8,4)--(2,2)--(0.5,4)--(0,8);
 \end{tikzpicture}
+\hfill\null
 
+\vspace{-5mm}
 
-
+\caption{Bound on $\NF(R_0)$ and $\NF(S_0)$}
+\label{fig:boundR0S0}
+\end{figure}
+%
 Finally observe that:
 $$T_0 = (1 - B_0) \mod A_0 = \big((A_0 - P) \div A_0\big) \mod A_0.$$
 Therefore $b_0(T_0) \geq \kappa$ results from $b_\varphi(A{-}P_0) \geq 
