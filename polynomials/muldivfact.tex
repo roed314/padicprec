@@ -360,7 +360,7 @@ $$\begin{array}{r@{\,\,}rcl}
 \multicolumn{3}{@{}l}{= \varphi_{|[0,d{-}1]} \nfplus \big( 
 \psi_{|[0,d{-}1]} + \delta\big)} \medskip \\
 \varphi \nfdiv \psi & : \, [0, n-d] & \to & \R \cup \{+\infty\} \smallskip \\
-& x & \mapsto & \inf_{h \geq 0} \psi(x+d+h) - \lambda h.
+& x & \mapsto & \inf_{h \geq 0} \varphi(x+d+h) - \lambda h.
 \end{array}$$
 \end{deftn}
 
@@ -412,7 +412,7 @@ Given $A, B \in K[X]$ with $B \neq 0$, we have:
 
 \begin{proof}
 Write $A = A_{<d} + A_{\geq d}$ where $A_{<d}$ (resp. $A_{\geq d}$)
-consists of monomials of $A$ of degree at least $d$ (resp. less than
+consists of monomials of $A$ of degree less than $d$ (resp. at least
 $d$). Noting that:
 $$A \mod B = A_{<d} + (A_{\geq d} \mod B)
 \quad \text{and} \quad
@@ -533,7 +533,7 @@ $$A_\app + dA = (B_\app + dB) (Q_\app + dQ) + (R_\app + dR)$$
 and neglecting the terms of order $\geq 2$. We get this way 
 $dA = B_\app dQ + Q_\app dB + dR$
 meaning that $dQ$ and $dR$ appears respectively as the quotient and
-the remainder of the Euclidean division of $dX = dA - B_\app dQ$ by $B_\app$.
+the remainder of the Euclidean division of $dX = dA - Q_\app dB$ by $B_\app$.
 
 Once this has been done, the strategy is quite similar to that explained 
 for Newton precision: \todo{summerize this in one sentence.}
@@ -653,7 +653,7 @@ the number of not diffused digits in the lattice model makes sense:
 indeed the latter appears as a theoretical upper bound of the former
 and the difference between them quantifies the quality of the way we
 track precision in the jagged (or the Newton) precision model. We 
-observe that this difference is usually not neglictible (\emph{cf} 
+observe that this difference is usually not negligible (\emph{cf} 
 notably the case of $M(X) = (X+1)^5 + 2$) meaning that this quality 
 is not very good in general.
 As for diffused digits, they correspond to digits that cannot be 
