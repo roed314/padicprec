@@ -32,6 +32,7 @@
 \DeclareMathOperator{\Lat}{Lat}
 \DeclareMathOperator{\round}{round}
 \DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\lcm}{lcm}
 
 \newcommand{\slp}{\text{\rm slp}}
 \newcommand{\RS}{\text{\rm RS}}
@@ -788,7 +789,7 @@ we have $\kappa > 0$ and the following rate of convergence:
 The divisor $A$ is uniquely determined by the conditions of 
 Theorem~\ref{theo:slope-factor}. Indeed, consider two divisors
 $A$ and $A'$ of $P$ such that $\NF(A) = \NF(A') = \NF(P)_{|[0,d]}$.
-Then $L = \text{llcm}(A,A')$ is a divisor of $P$ as well and the 
+Then $L = \lcm(A,A')$ is a divisor of $P$ as well and the 
 slopes of its Newton polygon are all at most $\lambda_0 = \NF(P)(d) - 
 \NF(P)(d{-}1)$. Therefore $\deg L = d$ and $L$ differs from $A$ and
 $A'$ by a multiplicative nonzero constant. Then, if $A$ and $A'$ 
@@ -797,7 +798,7 @@ share in addition the same leading coefficient, they must coincide.
 
 The rest of this subsection is devoted to the proof of the theorem.
 If $d = n$ (resp. $d = 1$), the sequence $A_i$ is constant equal to
-$P$ (resp. to the constant coefficient of $P$) and theorem is clear.
+$P$ (resp. to the constant coefficient of $P$) and theorem is clear. \todo{Should this be $d=0$?}
 We then assume $1 < d < n$. Without loss of generality, we may further 
 assume that the coefficient $a_d$ is equal to $1$. We set:
 \begin{align*}
@@ -845,7 +846,7 @@ derive
 \end{equation} 
 Thus $R_i=V_i S_i \mod A_i$.
 Hence $B_i R_i = (S_i - S_i T_i) \mod A_i$ and $S_i = B_i R_i + S_i T_i 
-\mod A_i$, from what \eqref{eqdef:Si2} follows directly.
+\mod A_i$, from which \eqref{eqdef:Si2} follows directly \todo{(there is a sign error here)}.
 By definition of $V_i$, we get $\Delta V_i = V_i (1-V_i B_{i+1}) \mod A_{i+1}$ and consequently \eqref{eqdef:Viminus}.
 We now write $1-Q_i= T_i + (V_i B_i - Q_i)$. Using \eqref{eq:ViBiQi} and
 noting that $\deg R_i < \deg A_i = d$, we 
@@ -1090,14 +1091,15 @@ unchanged. Therefore, the theorem holds for $P$ if and only if it holds
 for $cP$. As a consequence we may assume that $P$ is normalized so that 
 $\NF(P)(d) = d \lambda_0$. We define the function $\varphi : \R^+ \to \R 
 \cup \{+\infty\}$ by:
-\begin{equation}
-\label{eqdef:functionphi}
-\begin{array}{r@{\,\,}ll}
-\varphi(x) & = \NP(P)(x) & \text{for } x \leq d \smallskip \\
-& = \lambda_0 (x-d) + \NP(P)(d) & \text{for } x > d.
-\end{array}
+\begin{equation} \label{eqdef:functionphi}
+\varphi(x) = \begin{cases} \NF(P)(x) &\mbox{ if $x \leq d$} \\
+\lambda_0 (x-d) + \NF(P)(d) &\mbox{ if $x > d$} \end{cases}
+%\begin{array}{r@{\,\,}ll}
+%\varphi(x) & = \NP(P)(x) & \text{for } x \leq d \smallskip \\
+%& = \lambda_0 (x-d) + \NP(P)(d) & \text{for } x > d.
+%\end{array}
 \end{equation}
-For a polynomial $Q \in K[X]$ of degree $n$, we further define:
+\todo{For $x>d$, why not say $\varphi(x) = \lambda_0 x$?} For a polynomial $Q \in K[X]$ of degree $n$, we further define:
 \begin{align}
 b_\varphi(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \varphi(x) 
 \label{eqdef:bphi} \\
