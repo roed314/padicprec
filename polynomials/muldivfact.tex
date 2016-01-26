@@ -126,7 +126,7 @@
   \affaddr{University of Pittsburgh}\\
   \affaddr{\textsf{roed.math@gmail.com}}
 \alignauthor Tristan Vaccon\\
-  \affaddr{Rikkyo University}\\
+  \affaddr{JSPS--Rikkyo University}\\
   \affaddr{\textsf{vaccon@rikkyo.ac.jp}}
 }
 
@@ -225,7 +225,7 @@ the notation $O(\pi^N)$ means that the coefficients $a_i$ for $i
 \geq N$ are discarded. If $N > v$ and $a_v \neq 0$, the integer $v$ 
 is the valuation of $x$ and the difference $N-v$ is called the
 \emph{relative precision}.
-Alternatively, one may thing that the writing~\eqref{eq:CDVFseriesO}
+Alternatively, one may think that the writing~\eqref{eq:CDVFseriesO}
 represents a subset of $K$ which consists of all elements in $K$ for
 which the $a_i$'s in the range $[v,N-1]$ are those specified. From the
 metric point of view, this is a ball (centered at any point inside it).
@@ -235,15 +235,15 @@ rather easy. For example, if $x$ and $y$ are known with absolute (resp.
 relative) precision $N_x$ and $N_y$ respectively, one can compute the 
 sum $x+y$ (resp. the product $xy$) at absolute (resp. relative) 
 precision $\min(N_x,N_y)$. Computations with $p$-adic and Laurent
-series are often handle this way on symbolic computation softwares.
+series are often handled this way on symbolic computation softwares.
 
 \subsection{Precision for polynomials}
 
 The situation is much more subtle when we are working with a collection 
 of elements of $K$ (\emph{e.g.} a polynomial) and not just a single one.
 Indeed, several precision data may be considered and, as we shall see
-later, each of them has is own interest. Below we detail three of them
-for the special case of polynomials.
+later, each of them has its own interest. Below we detail three models 
+of precision for the special case of polynomials.
 
 \medskip
 
@@ -270,7 +270,7 @@ have extremal points with integral abscissa.
 
 \begin{rem}
 The datum of $\varphi$ is equivalent to that of $\Epi(\varphi)$ and they 
-can easily represented and manipulated on a computer.
+can easily be represented and manipulated on a computer.
 \end{rem}
 
 We recall that one can attach a Newton function to each polynomial.
@@ -329,9 +329,9 @@ have $\NP(P_\app + \delta P) = \NP(P_\app)$.
 {\bf Lattice precision.}
 The notion of \emph{lattice precision} was developed in 
 \cite{caruso-roe-vaccon:14a}. It encompasses the two previous models and has
-the decisive advantage of optimality. As a counterpart, it might be
-very space-consuming and time-consuming for polynomials of large
-degree.
+the decisive advantage of precision optimality.
+ As a counterpart, it might be very space-consuming and time-consuming 
+ for polynomials of large degree.
 
 \begin{deftn}
 Let $V$ be a finite dimensional vector space over $K$. A lattice
@@ -735,7 +735,7 @@ results...}
 In the previous references, the factor $A$ defined above is always 
 obtained \emph{via} a Newton iteration which takes place over a finite 
 extension of $K$. We introduce here a variant of this Newton iteration 
-whose main advantage to be defined over $K$ itself.
+whose main advantage is to be defined over $K$ itself.
 
 \begin{theo} \label{theo:slope-factor}
 Let $P(X) = \sum_{i=0}^n a_i X^i$ be a polynomial of degree $n$ with
@@ -1310,7 +1310,7 @@ We now assume that $P$ is known up to some finite precision: $P = P_\app +
 O(\hspace{0.5mm}\cdots)$ where the object inside the $O$ depends on the 
 chosen precision model. We address the two following questions:
 (1)~what is the precision on the factor $A$, and
-(2)~how one can compute in practive $A$ at this precision?
+(2)~how can one compute in practice $A$ at this precision?
 
 In the sequel, it will be convenient to use a different normalization on 
 $A$ and $B$: if $a_d$ is the coefficient of $P$ of degree $d$, we set
@@ -1517,7 +1517,7 @@ Set $\tilde P = \tilde A^{(1)} \tilde B^{(1)}$. We know by assumption
 that $\tilde P = P_\app + O(H_P)$. Thus $F(\tilde P)$ is well defined.
 The unicity of the slope factorization (\emph{cf} 
 Remark~\ref{rem:unicity}) further implies that $F(\tilde P) = 
-(\tilde A^{(1)}, \tilde B^{(1)})$. The claim result now follows from
+(\tilde A^{(1)}, \tilde B^{(1)})$. The claimed result now follows from
 the hypothesis~\textbf{(H)}.
 
 \smallskip
