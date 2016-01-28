@@ -163,17 +163,78 @@ of the algorithm using several precision models.
 
 \section{Introduction}
 
-\todo{Write introduction.}
+Polynomial factorization is a fundamental problem in computational algebra.
+The algorithms used to solve it depend on the ring of coefficients, with finite fields,
+local fields, number fields and rings of integers of particular interest to number theorists.
+In this article, we focus on a task that forms a building block for factorization
+algorithms over complete discrete valuation fields: the decomposition into factors based on the
+slopes of the Newton polygon.
+
+The Newton polygon of a polynomial $f(X) = \sum a_i X^i$ over such a field is given by
+the convex hull of the points $(i, \val(a_i))$ and the point $(0, +\infty)$.  The lower
+boundary of this polygon consists of line segments $(x_j,y_j)$ -- $(x_{j+1},y_{j+1})$
+of slope $s_j$.  The slope factorization of $f(X)$ expresses $f(X)$ as a product
+of polynomials $g_j(X)$ with degree $x_{j+1} - x_j$ whose roots all have valuation $-s_j$.
+Our main result is a new algorithm for computing these $g_j(X)$.
+
+Any computation with $p$-adic fields must work with approximations modulo finite
+powers of $p$, and one of the key requirements in designing an algorithm is
+an analysis of how the precision of the variables evolve over the computation.
+We work with precision models developed by the same authors
+\cite{caruso-roe-vaccon:14a}*{\S 4.2}, focusing on the lattice and Newton models.
+As part of the analysis of the slope factorization algorithm, we describe
+how the precision of the quotient and remainder depend on the input polynomials
+in Euclidean division..  
 
 \medskip
 
 \noindent
 {\bf Main Results.}
 
+Suppose that the Newton polygon of $P(X) = \sum_{i=0}^n a_i X^i$
+has a break at $i=d$.  Set $A_0 = \sum_{i=0}^d a_i X^i$, $V_0 = 1$ and
+\begin{align*}
+A_{i+1} &= A_i + (V_i P \% A_i) \\
+B_{i+1} &= P // A_{i+1} \\
+V_{i+1} &= (2V_i - V_i^2B_{i+1}) \% A_{i+1}.
+\end{align*}
+Our main result is Theorem \ref{theo:slope-factor},
+which states that the sequence $(A_i)$ converges
+to a divisor of $P$.
+
 \medskip
 
 \noindent
 {\bf Organization of the paper.}
+
+After setting notation, in
+Section \ref{sec:prec_data} we recall various models for tracking
+precision in polynomial arithmetic.  We give some background
+on Newton polygons and explain how using lattices to store
+precision can allow for extra \emph{diffuse} $p$-adic digits that
+are not localized on any single coefficient.
+
+In Section \ref{sec:quo_rem}, we consider Euclidean division.
+We describe in Theorem \ref{theo:EDivisionNP}
+how the Newton polygons of the quotient and remainder
+depend on numerator and denominator.  We use this
+result to describe in Proposition \ref{prop:NewtonprecEuclide}
+the precision evolution in Euclidean division using
+the Newton precision model.  We then compare the
+precision performance of Euclidean division in the
+jagged, Newton and lattice models experimentally,
+finding different behavior depending on the modulus.
+
+Finally, in Section \ref{sec:slope_fac} we describe
+our slope factorization algorithm, which is based on
+a Newton iteration.  Unlike other algorithms for
+slope factorization, ours does not require working
+in an extension field \todo{citation?}.  In Theorem
+\ref{theo:slope-factor} we define a sequence
+of polynomials that will converge to the factors
+determined by an extremal point in the Newton
+polygon.  We then discuss the precision behavior
+of the algorithm.
 
 \medskip
 
@@ -209,7 +270,7 @@ polynomials with coefficients in $K$. The subspace of polynomials of
 degree at most $n$ (resp. exactly $n$) is denoted by $K_{\leq n}[X]$ 
 (resp. $K_{=n}[X]$).
 
-\section{Precision data}
+\section{Precision data} \label{sec:prec_data}
 
 Elements in $K$ (and \emph{a fortiori} in $K[X]$) carry an infinite 
 amount of information. They thus cannot be stored entirely in the
@@ -362,7 +423,7 @@ notion of \emph{diffused digits of precision} introduced in
 sequel in order to compare the behaviour of the three aforementioned 
 precision data in concrete situations.
 
-\section{Euclidean division}
+\section{Euclidean division} \label{sec:quo_rem}
 
 Euclidean division provides a building block for many algorithms associated
 to polynomials in one variable.  In order to analyze the precision behavior
@@ -716,7 +777,7 @@ increases almost on pace with $X^5 + 2$.  In contrast,
 non-lattice methods for $(X+1)^5 + 2$ are on par
 with the other non-Eisenstein examples.
 
-\section{Slope factorization}
+\section{Slope factorization} \label{sec:slope_fac}
 
 A well-known theorem \cite{dwork-geratto-sullivan:Gfunctions}*{Thm. 6.1} asserts that each 
 extremal point $M$ in the Newton polygon $\NP(P)$ of a polynomial $P \in 
