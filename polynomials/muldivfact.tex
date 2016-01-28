@@ -199,7 +199,7 @@ B_{i+1} &= P // A_{i+1} \\
 V_{i+1} &= (2V_i - V_i^2B_{i+1}) \% A_{i+1}.
 \end{align*}
 Our main result is Theorem \ref{theo:slope-factor},
-which states that the sequence $(A_i)$ converges
+which states that the sequence $(A_i)$ converges quadritically
 to a divisor of $P$.
 
 \medskip
@@ -856,9 +856,9 @@ share in addition the same leading coefficient, they must coincide.
 \end{rem}
 
 The rest of this subsection is devoted to the proof of the theorem.
-If $d = n$ (resp. $d = 1$), the sequence $A_i$ is constant equal to
-$P$ (resp. to the constant coefficient of $P$) and theorem is clear. \todo{Should this be $d=0$?}
-We then assume $1 < d < n$. Without loss of generality, we may further 
+If $d = n$ (resp. $d = 0$), the sequence $A_i$ is constant equal to
+$P$ (resp. to the constant coefficient of $P$) and theorem is clear. \todo{Should this be $d=0$? (Tristan:) I agree, I have tried to change accordingly the previous and following statement.}
+We then assume $1 \leq d < n$. Without loss of generality, we may further 
 assume that the coefficient $a_d$ is equal to $1$. We set:
 \begin{align*}
 \lambda_0 & = \NF(P)(d) - \NF(P)(d{-}1) \\
@@ -884,7 +884,7 @@ The following relations hold:
 \begin{align}
 \Delta B_i &= -(R_i B_{i+1}) \div A_i, \label{eqdef:Biminus} \\
 \Delta S_i &= -(R_i B_{i+1}) \mod A_i,  \label{eqdef:Siminus} \\
-S_{i} &= (B_i R_i + T_i S_{i-1} - T_i \: \Delta S_{i-1}) \mod A_{i}, \label{eqdef:Si2}  \\
+S_{i} &= (B_i R_i + T_i S_{i-1} + T_i \: \Delta S_{i-1}) \mod A_{i}, \label{eqdef:Si2}  \\
 \Delta V_i &= (V_i T_i - V_i^2 \: \Delta B_i) \mod A_{i}, \label{eqdef:Viminus}\\
 1-Q_i &= T_i - (V_i S_i) \div A_i, \label{eqdef:Qiminus}\\
 R_{i+1} &= (\Delta V_i \: S_{i+1}+(1{-}Q_i)R_i) \mod A_{i+1}, \label{eq:Riplus}\\
@@ -905,7 +905,8 @@ derive
 \end{equation} 
 Thus $R_i=V_i S_i \mod A_i$.
 Hence $B_i R_i = (S_i - S_i T_i) \mod A_i$ and $S_i = B_i R_i + S_i T_i 
-\mod A_i$, from which \eqref{eqdef:Si2} follows directly \todo{(there is a sign error here)}.
+\mod A_i$, from which \eqref{eqdef:Si2} follows directly 
+%\todo{(there is a sign error here)}. (Tristan:fixed)
 By definition of $V_i$, we get $\Delta V_i = V_i (1-V_i B_{i+1}) \mod A_{i+1}$ and consequently \eqref{eqdef:Viminus}.
 We now write $1-Q_i= T_i + (V_i B_i - Q_i)$. Using \eqref{eq:ViBiQi} and
 noting that $\deg R_i < \deg A_i = d$, we 
