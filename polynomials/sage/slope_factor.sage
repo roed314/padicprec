@@ -91,7 +91,8 @@ def test_factor(NP1,NP2,S,niter,truncprec):
     precB = NewtonPolygon([(0,truncprec),(degB-1,truncprec)])
     precP = precNewton_mul(A,precA,B,precB)
     #precres = precNewton_mul(P,precP,V,precision_polygon(V))
-    #precres = precNewton_mul(P,precP,V,precision_polygon(V))   
+    #precres = precNewton_mul(P,precP,V,precision_polygon(V))
+    #  Using Psi   
     precres = precP*V.newton_polygon()
     quo, precres = Newton_quorem(precres,A0.newton_polygon())
     nwton = sum([ceil(precres(i)) for i in range(d)]) - d*truncprec
@@ -151,3 +152,19 @@ P=A*B
 #nana=(A-A2).newton_polygon().plot()
 Q,R=my_quo_rem(P,A)
 Q2,R2=my_quo_rem(P,A2)
+
+######
+
+NPtest1 =NewtonPolygon([(0,5),(2,1),(6,0)])
+NPtest2 =NewtonPolygon([(0,0),(3,0),(5,10)])
+
+A,B,A2,V=test_factor(NPtest1,NPtest2,S,50, 100)
+
+
+#####
+NPtest1 =NewtonPolygon([(0,5),(2,1),(3,0)])
+NPtest2 =NewtonPolygon([(0,0),(5,-2),(7,10)])
+
+A,B,A2,V=test_factor(NPtest1,NPtest2,S,50, 100)
+
+
