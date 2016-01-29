@@ -309,10 +309,27 @@ of precision for the special case of polynomials.
 \medskip
 
 \noindent
+{\bf Flat precision.}
+The simplest method for tracking the precision of a polynomial is
+to record each coefficient modulo a fixed power of $p$.  While
+easy to analyze and implement, this method suffers when
+applied to polynomials whose Newton polygons are far from flat.
+
+\medskip
+
+\noindent
 {\bf Jagged precision.}
-The most naive precision we may consider is the so-called \emph{jagged 
-precision}. It consists in attaching an individual precision (of the
-shape $O(\pi^{N_i})$) to each coefficient separatedly.
+The next obvious approach is to record the precision of each
+coefficient individually, a method that we will refer to as \emph{jagged}
+precision.  Jagged precision is commonly implemented
+in computer algebra systems, since standard polynomial algorithms
+can be written for generic coefficient rings.  However, these
+generic implementations often have suboptimal precision behavior,
+since combining intermediate expressions into a final answer
+may lose precision.  Moreover, when compared to the Newton
+precision model, extra precision in the middle coefficients, above
+the Newton polygon of the remaining terms, will have no effect
+on any of the values of that polynomial.
 
 \medskip
 
@@ -542,32 +559,9 @@ using the estimation on $\NF(A\mod B)$ we have just proved
 \medskip
 
 \noindent
-{\bf Flat and Jagged precision.}
-
-The simplest method for tracking the precision of a polynomial is
-to record each coefficient modulo a fixed power of $p$, yet this
-method suffers when applied to polynomials with small roots.
-The next obvious approach is to record the precision of each
-coefficient individually, a method that we will refer to as \emph{jagged}
-precision.  Jagged precision is the easiest to implement in
-a computer algebra system, since standard polynomial algorithms,
-such as Karatsuba multiplication, can be written for generic coefficient rings.
-
-However, this ease of implementation has a cost:
-methods designed for exact rings will often have suboptimal
-precision behavior, since combining intermediate expressions
-into a final answer may lose precision.  Moreover, extra precision
-in the middle coefficients of a polynomial, above the Newton polygon
-of the remaining terms, will have no effect on any of the values
-of that polynomial.  As a consequence of these deficiencies, we
-do not present a detailed analysis of this precision model here.
-
-\medskip
-
-\noindent
 {\bf Newton precision.}
-We consider here the case where the precision is given by Newton
-functions. Concretely, we pick $A, B \in K[X]$ two polynomials which 
+We first analyze the precision behavior of Euclidean division
+in the Newton model.  Concretely, we pick $A, B \in K[X]$ two polynomials which 
 are known at precision $O(\varphi_A)$ and $O(\varphi_B)$ respectively:
 $$A = A_\app + O(\varphi_A)
 \quad \text{and} \quad
@@ -748,12 +742,12 @@ relevant.
 On the other hand, the lattice precision may end up with better results. 
 Nevertheless this strongly depends on the modulus $M$. For instance, 
 when $M$ is irreducible modulo $p=2$ or Eiseistein, there is apparently 
-no benefit of using the lattice precision model. We emphasize that 
+no benefit to using the lattice precision model. We emphasize that 
 these two particular cases correspond to modulus that are usually used 
 to define (unramified and totally ramified respectively) extensions of 
 $\Q_2$.
 
-For other modulus, the situation is quite different and the benefit of 
+For other moduli, the situation is quite different and the benefit of 
 using the lattice precision model becomes more apparent. 
 The comparison between the gain of precision in the jagged model and 
 the number of not diffused digits in the lattice model makes sense:
