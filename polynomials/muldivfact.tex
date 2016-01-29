@@ -763,13 +763,11 @@ intrinsic limitations of this model. We observe that it can be very
 important as well in several cases.
 
 The modulus $(X+1)^5 + 2$ shows the advantage of working
-with lattice precision in intermediate computations.  While
-a small amount of the precision gain is diffuse, the number of
-diffuse $p$-adic digits remains constant as $n$ increases,
-and the increase in precision on the actual coefficients
-increases almost on pace with $X^5 + 2$.  In contrast,
-non-lattice methods for $(X+1)^5 + 2$ are on par
-with the other non-Eisenstein examples.
+with lattice precision in intermediate computations.  Indeed,
+the precision behavior using the lattice model closely parallels
+that of $X^5+2$, since the lattices are related by a change of
+variables.  But this structure is not detected in the Newton
+or jagged models.
 
 \section{Slope factorization} \label{sec:slope_fac}
 
@@ -851,8 +849,8 @@ share in addition the same leading coefficient, they must coincide.
 
 The rest of this subsection is devoted to the proof of the theorem.
 If $d = n$ (resp. $d = 0$), the sequence $A_i$ is constant equal to
-$P$ (resp. to the constant coefficient of $P$) and theorem is clear. \todo{Should this be $d=0$? (Tristan:) I agree, I have tried to change accordingly the previous and following statement.}
-We then assume $1 \leq d < n$. Without loss of generality, we may further 
+$P$ (resp. to the constant coefficient of $P$) and theorem is clear.
+We then assume $0 < d < n$. Without loss of generality, we may further 
 assume that the coefficient $a_d$ is equal to $1$. We set:
 \begin{align*}
 \lambda_0 & = \NF(P)(d) - \NF(P)(d{-}1) \\
