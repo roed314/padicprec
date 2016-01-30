@@ -1,6 +1,6 @@
 load("mulmod.sage")
-p = 11
-R = Zp(11,prec=100)
+p = 2
+R = Zp(p,prec=100)
 prec = 100
 SZ.<X> = PolynomialRing(ZZ)
 S.<x> = PolynomialRing(R)
@@ -43,22 +43,38 @@ def slope_factor(P,d,niter,S):
 # Design of test of slope factorization
 ########################################
 
-def random_poly_above_NP(NP,R, truncprec):
+#truncprec is not None means we are forcing flat precision on A and B
+
+def random_poly_above_NP(NP,R,S, truncprec = None):
     """
 	create a polynomial with random coefficients 
         above the Newton polygon     NP.
         highest coefficient is of the form p^l
     """
+    x = S.gen()
     p=R.uniformizer()
     vert = NP.vertices()
     d = vert[len(vert)-1][0]
-    P = p^(ceil(NP(0)))
+    prectab = []
+    P = S(0)
     for i in range(1,d):
-        P += ((R.random_element()*p^(ceil(NP(i)))).add_bigoh(truncprec))*x^i
-    P+=(R(p^(ceil(NP(d)))).add_bigoh(truncprec))*x^d
-    return P
+        if truncprec is None:
+            c =  ((R.random_element()*p^(ceil(NP(i)))))
+            prectab.append(c.precision_absolute())
+            P +=c*x^i
+        else:
+            c =  ((R.random_element()*p^(ceil(NP(i))))).add_bigoh(truncprec)
+            prectab.append(truncprec)
+            P +=c*x^i              
+    if truncprec is not(None):
+        P+=(R(p^(ceil(NP(d)))).add_bigoh(truncprec))*x^d+ R(p^(ceil(NP(0)))).add_bigoh(truncprec)
+        prectab.append(truncprec)
+    else:
+        P+=(R(p^(ceil(NP(d)))))*x^d+p^(ceil(NP(0)))
+        prectab.append(P.list()[0].precision_absolute())
+    return P,sum(prectab)
 	
-def test_factor(NP1,NP2,S,niter,truncprec):
+def test_factor(NP1,NP2,S,niter,truncprec = None):
     """
         create two random polynomials A and B with Newton polygons above NP1 and NP2
         Compute the product AB and factor it by slope factorisation to obtain A
@@ -66,8 +82,8 @@ def test_factor(NP1,NP2,S,niter,truncprec):
     """
     R=S.base_ring()
     x=S.gen()
-    A = random_poly_above_NP(NP1,R,truncprec)
-    B = random_poly_above_NP(NP2,R,truncprec)
+    A,absA = random_poly_above_NP(NP1,R,S,truncprec)
+    B, absB = random_poly_above_NP(NP2,R,S,truncprec)
     P = A*B
 
     vert = NP1.vertices()
@@ -75,35 +91,51 @@ def test_factor(NP1,NP2,S,niter,truncprec):
     degB = NP2.vertices()[len(NP2.vertices())-1][0]
     A2,V = slope_factor(P,d,niter,S)
 
+
     A0 = sum([P.list()[i]*x^i for i in range(d+1)])
+
+
 
     ##################
     # Jagged precision
     ##################
-    abs = prec_absolute(A2) - (d+1)*truncprec
-    print("jagged precision")
-    print abs
+    abs = prec_absolute(A2)-A2.list()[d].precision_absolute() - absA
+
+
 
     ##################
     # Newton precision
     ##################
-    precA = NewtonPolygon([(0,truncprec),(d-1,truncprec)])
-    precB = NewtonPolygon([(0,truncprec),(degB-1,truncprec)])
-    precP = precNewton_mul(A,precA,B,precB)
-    #precres = precNewton_mul(P,precP,V,precision_polygon(V))
-    #precres = precNewton_mul(P,precP,V,precision_polygon(V))
-    #  Using Psi   
-    precres = precP*V.newton_polygon()
-    quo, precres = Newton_quorem(precres,A0.newton_polygon())
-    nwton = sum([ceil(precres(i)) for i in range(d)]) - d*truncprec
-    print("Newton precision")
-    print nwton
+    if truncprec is not(None):
+        precA = NewtonPolygon([(0,truncprec),(d-1,truncprec)])
+        precB = NewtonPolygon([(0,truncprec),(degB-1,truncprec)])
+        precP = precNewton_mul(A,precA,B,precB)
+        #precres = precNewton_mul(P,precP,V,precision_polygon(V))
+        #precres = precNewton_mul(P,precP,V,precision_polygon(V))
+        #  Using Psi   
+        precres = precP*V.newton_polygon()
+        quo, precres = Newton_quorem(precres,A0.newton_polygon())
+        nwton = sum([ceil(precres(i)) for i in range(d)]) - absA
+    else:
+        precA = NewtonPolygon([(i,A.list()[i].precision_absolute()) for i in range(d)])
+        precB = NewtonPolygon([(i,B.list()[i].precision_absolute()) for i in range(degB)])
+        precP = precNewton_mul(A,precA,B,precB)
+
+        #  Using Psi   
+        precres = precP*V.newton_polygon()
+        quo, precres = Newton_quorem(precres,A0.newton_polygon())
+        nwton = sum([ceil(precres(i)) for i in range(d)]) - absA
+
+
+
+    # Using Phi ?
+
 
     ####################    
     # Lattice estimation
     ####################    
-    dA = [x^i for i in range(d+1)]
-    dB = [x^i for i in range(NP1.vertices()[len(NP1.vertices())-1][0]+1)]
+    dA = [x^i for i in range(d)]
+    dB = [x^i for i in range(degB+1)]
     dP = [ B*da for da in dA] + [ db*A for db in dB ]
     dA2 = [ my_rem(V*dp,A) for dp in dP]
 
@@ -127,19 +159,45 @@ def test_factor(NP1,NP2,S,niter,truncprec):
         theory2 += min([elt[i].valuation() for elt in Lattice])
         for ind in range(len(Lat)):
             scalar = Lat[ind][i] // gen[i]
-            scalar = scalar.lift_to_precision(truncprec)
+            #scalar = scalar.lift_to_precision(truncprec)
+            scalar = scalar.lift()
             Lat[ind] -= scalar * gen
+
+
+
+    return abs, nwton, theory, theory2, theory-theory2
+
+def stat_test_factor(NP1,NP2,S,niter,truncprec,nbtest):
+    abs=nwton=theory= theory2= theorydiff=0
+    for i in range(nbtest):
+        abs0, nwton0, theory0, theory20, theorydiff0 = test_factor(NP1,NP2,S,niter,truncprec)
+        abs+=abs0
+        nwton += nwton0
+        theory += theory0
+        theory2 += theory20
+        theorydiff += theorydiff0
+    print("jagged precision")
+    print (abs/nbtest).numerical_approx()
+    print("Newton precision")
+    print (nwton/nbtest).numerical_approx()
     print("lattice precision")
-    print theory, theory2, theory-theory2
-
-
-    return A,B,A2,V
-
+    print (theory/nbtest).numerical_approx(), (theory2/nbtest).numerical_approx(), (theorydiff/nbtest).numerical_approx()
+    return (abs/nbtest).numerical_approx(), (nwton/nbtest).numerical_approx(), (theory/nbtest).numerical_approx(), (theory2/nbtest).numerical_approx(), (theorydiff/nbtest).numerical_approx()
+        
 
 ########################################
 # Actual testing
 ########################################
 
+#####################
+#p=2
+#####################
+
+p=2
+R = Zp(p,prec=100)
+prec = 100
+SZ.<X> = PolynomialRing(ZZ)
+S.<x> = PolynomialRing(R)
 
 #NPtest1 =NewtonPolygon([(0,2),(4,0)])
 #NPtest2 =NewtonPolygon([(0,0),(4,3)])
@@ -147,24 +205,57 @@ def test_factor(NP1,NP2,S,niter,truncprec):
 NPtest1 =NewtonPolygon([(0,5),(2,-2),(6,0)])
 NPtest2 =NewtonPolygon([(0,0),(4,3),(7,10)])
 
-A,B,A2,V=test_factor(NPtest1,NPtest2,S,50, 100)
-P=A*B
-#nana=(A-A2).newton_polygon().plot()
-Q,R=my_quo_rem(P,A)
-Q2,R2=my_quo_rem(P,A2)
+#stat_test_factor(NPtest1,NPtest2,S,50, 100,1000)
+#stat_test_factor(NPtest1,NPtest2,S,50, None,1000)
 
 ######
 
 NPtest1 =NewtonPolygon([(0,5),(2,1),(6,0)])
 NPtest2 =NewtonPolygon([(0,0),(3,0),(5,10)])
 
-A,B,A2,V=test_factor(NPtest1,NPtest2,S,50, 100)
+#stat_test_factor(NPtest1,NPtest2,S,50, 100,1000)
 
 
 #####
 NPtest1 =NewtonPolygon([(0,5),(2,1),(3,0)])
 NPtest2 =NewtonPolygon([(0,0),(5,-2),(7,10)])
 
-A,B,A2,V=test_factor(NPtest1,NPtest2,S,50, 100)
+stat_test_factor(NPtest1,NPtest2,S,50, 100,1000)
+#stat_test_factor(NPtest1,NPtest2,S,50, None,1000)
+
+########################
+#p=11
+########################
+
+p=11
+R = Zp(p,prec=100)
+prec = 100
+SZ.<X> = PolynomialRing(ZZ)
+S.<x> = PolynomialRing(R)
+
+#NPtest1 =NewtonPolygon([(0,2),(4,0)])
+#NPtest2 =NewtonPolygon([(0,0),(4,3)])
+
+NPtest1 =NewtonPolygon([(0,5),(2,-2),(6,0)])
+NPtest2 =NewtonPolygon([(0,0),(4,3),(7,10)])
+
+#stat_test_factor(NPtest1,NPtest2,S,50, 100,1000)
+#stat_test_factor(NPtest1,NPtest2,S,50, None,1000)
+
+######
+
+NPtest1 =NewtonPolygon([(0,5),(2,1),(6,0)])
+NPtest2 =NewtonPolygon([(0,0),(3,0),(5,10)])
+
+#stat_test_factor(NPtest1,NPtest2,S,50, 100,1000)
+
+
+#####
+NPtest1 =NewtonPolygon([(0,5),(2,1),(3,0)])
+NPtest2 =NewtonPolygon([(0,0),(5,-2),(7,10)])
+
+##stat_test_factor(NPtest1,NPtest2,S,50, 100,100)
+#stat_test_factor(NPtest1,NPtest2,S,50, None,1000)
+
 
 

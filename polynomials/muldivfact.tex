@@ -50,6 +50,8 @@
 \newcommand{\trans}{{}^{\text t}}
 \newcommand{\T}{\mathcal{T}}
 
+\newcommand{\softO}{O\tilde{~}}
+
 \renewcommand{\prec}{\text{\rm prec}}
 \newcommand{\NF}{\text{\rm NF}}
 
@@ -137,7 +139,7 @@ We study two important operations on polynomials defined over complete
 discrete valuation fields: Euclidean division and factorization. In particular,
 we design a simple and efficient algorithm for computing slope factorizations,
 based on Newton iteration.  One of its main features is that we avoid working
-over an extension of the base field.
+with fractional exponents.
 We pay particular attention to stability, and analyze the behavior
 of the algorithm using several precision models.
 \end{abstract}
@@ -184,18 +186,18 @@ We work with precision models developed by the same authors
 \cite{caruso-roe-vaccon:14a}*{\S 4.2}, focusing on the lattice and Newton models.
 As part of the analysis of the slope factorization algorithm, we describe
 how the precision of the quotient and remainder depend on the input polynomials
-in Euclidean division..  
+in Euclidean division.
 
 \medskip
 
 \noindent
 {\bf Main Results.}
-
+%
 Suppose that the Newton polygon of $P(X) = \sum_{i=0}^n a_i X^i$
 has a break at $i=d$.  Set $A_0 = \sum_{i=0}^d a_i X^i$, $V_0 = 1$ and
 \begin{align*}
 A_{i+1} &= A_i + (V_i P \% A_i) \\
-B_{i+1} &= P // A_{i+1} \\
+B_{i+1} &= P \div A_{i+1} \\
 V_{i+1} &= (2V_i - V_i^2B_{i+1}) \% A_{i+1}.
 \end{align*}
 Our main result is Theorem \ref{theo:slope-factor},
@@ -206,7 +208,7 @@ to a divisor of $P$.
 
 \noindent
 {\bf Organization of the paper.}
-
+%
 After setting notation, in
 Section \ref{sec:prec_data} we recall various models for tracking
 precision in polynomial arithmetic.  We give some background
@@ -229,7 +231,7 @@ Finally, in Section \ref{sec:slope_fac} we describe
 our slope factorization algorithm, which is based on
 a Newton iteration.  Unlike other algorithms for
 slope factorization, ours does not require working
-in an extension field\todo{ citation?}.  In Theorem
+with fractional exponents\todo{ citation?}.  In Theorem
 \ref{theo:slope-factor} we define a sequence
 of polynomials that will converge to the factors
 determined by an extremal point in the Newton
@@ -1136,22 +1138,24 @@ to obtain the desired minoration on $\NP (S_{i+1}).$ This concludes the proof.
 If $\lambda_0 = -\infty$ or $\lambda_1 = +\infty$, the sequence $(A_i)$
 is constant and the theorem is obvious. We then assume that $\lambda_0$
 and $\lambda_1$ are both finite.
-We notice that, when the polynomial is changed into $cP$ where $c$ is a 
-nonzero constant lying in a finite extension of $K$, the $A_i$'s are all 
-multiplied by $c$ as well whereas the $B_i$'s and the $V_i$'s remained 
-unchanged. Therefore, the theorem holds for $P$ if and only if it holds 
-for $cP$. As a consequence we may assume that $P$ is normalized so that 
-$\NF(P)(d) = d \lambda_0$. We define the function $\varphi : \R^+ \to \R 
+
+We define the function $\varphi : \R^+ \to \R 
 \cup \{+\infty\}$ by:
 \begin{equation} \label{eqdef:functionphi}
 \varphi(x) = \begin{cases} \NF(P)(x) &\mbox{ if $x \leq d$} \\
-\lambda_0 (x-d) + \NF(P)(d) &\mbox{ if $x > d$} \end{cases}
+\lambda_0 (x - d) + \NF(P)(d) &\mbox{ if $x > d$} \end{cases}
 %\begin{array}{r@{\,\,}ll}
 %\varphi(x) & = \NP(P)(x) & \text{for } x \leq d \smallskip \\
 %& = \lambda_0 (x-d) + \NP(P)(d) & \text{for } x > d.
 %\end{array}
 \end{equation}
-\todo{For $x>d$, why not say $\varphi(x) = \lambda_0 x$?} For a polynomial $Q \in K[X]$ of degree $n$, we further define:
+We notice that, when the polynomial is changed into $cP$ where $c$ is a 
+nonzero constant lying in a finite extension of $K$, the $A_i$'s are all 
+multiplied by $c$ as well whereas the $B_i$'s and the $V_i$'s remained 
+unchanged. Therefore, the theorem holds for $P$ if and only if it holds 
+for $cP$. As a consequence we may assume that $P$ is normalized so that 
+$\NF(P)(d) = d \lambda_0$, so that $\varphi(x) = \lambda_0 x$ for $x > d$.
+For a polynomial $Q \in K[X]$ of degree $n$, we further define:
 \begin{align}
 b_\varphi(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \varphi(x) 
 \label{eqdef:bphi} \\
@@ -1342,7 +1346,7 @@ $b_1(V_\infty) \geq 0$.
 
 Moreover, the conclusion of 
 Theorem~\ref{theo:slope-factor} is still correct if $A_0$ is any 
-polynomial of degree $d$ and leading coefficient $a_d$ and $V_0$
+polynomial of degree $d$ with leading coefficient $a_d$ and $V_0$
 is any polynomial as soon as they satisfy:
 $$b_\varphi\big(V_0 P \mod A_0\big) > 0
 \quad \text{and} \quad
@@ -1443,7 +1447,91 @@ where $\psi : [0,d{-}1] \to \R$ is the affine function mapping $x$
 to $\lambda_1 x - \NF(P)(d)$. 
 \end{rem}
 
-\todo{Answer here the second question.}
+We can now move to the second question we have raised before, 
+\emph{i.e.} the design of an algorithm for computing $A^{(1)}$ with the 
+precision given by Proposition~\ref{prop:Newtonprecslope}. Our strategy 
+consists in computing first the precision and applying then the Newton 
+iteration until the expected precision is reached. Below is the
+precise description of our algorithm.
+
+\noindent\hrulefill
+
+\noindent {\bf Algorithm} {\tt slope\_factorisation\_Newton}
+
+\noindent{\bf Input:} a monic polynomial $P + O(\varphi_P) \in K_n[X]$,
+
+\noindent\phantom{{\bf Input:} }a break point $d$ of $\NP(P)$
+
+\noindent{\bf Output:} the factor $A$ described above
+
+\smallskip\noindent 1.\ %
+Compute the functions $\NF(P)$ and $\varphi$
+
+\smallskip\noindent 2.\ %
+Compute $\varphi_A = \varphi_{|[0,d-1]} - \varphi(d) + \min_{x \in [0,n]}
+\varphi_P(x) - \varphi(x)$
+
+\smallskip\noindent 3.\ %
+Compute $\kappa = \NP(P)(d{+}1) + \NF(P)(d{-}1) - 2 \cdot \NF(P)(d)$
+
+\smallskip\noindent 4.\ %
+Set $i = 0$, $A_0 = \sum_{i=0}^d a_i X^i$
+($a_i = \text{coeffs of } P$), $V_0 = 1$
+
+\smallskip\noindent 5.\ %
+{\bf repeat until} $\varphi_{|[0,d{-}1]} + 2^i \kappa \geq \varphi_A$
+
+\smallskip\noindent 6.\ \hspace{5mm}%
+lift $A_i$, $V_i$ and $P$ at enough precision
+
+\smallskip\noindent 7.\ \hspace{5mm}%
+compute 
+
+\smallskip
+
+\hspace{1cm}$\bullet$
+$A_{i+1} = A_i + (P V_i \mod A_i)$
+
+\hspace{1cm}\phantom{$\bullet$ }%
+at precision $O(\varphi_{|[0,d{-}1]} + 2^{i+1} \kappa)$
+
+\smallskip
+
+\hspace{1cm}$\bullet$
+$V_{i+1} = (2 V_i - V_i^2 \cdot (P \div A_{i+1})) \mod A_{i+1}$
+
+\hspace{1cm}\phantom{$\bullet$ }%
+at precision $O(x \mapsto \lambda_1 x + 2^{i+1}\kappa)$
+
+\smallskip\noindent 8.\ \hspace{5mm}%
+set $i = i+1$
+
+\smallskip\noindent 9.\ 
+{\bf return} $A_i$
+
+\vspace{-1ex}\noindent\hrulefill
+
+\begin{rem}
+The precision needed at line 6 is of course governed by the computation
+performed at line 7. Note that it can be either computed \emph{a
+priori} by using Proposition~\ref{prop:NewtonprecEuclide} or dynamically 
+by using relaxed algorithms from 
+\cite{hoeven:02a,hoeven:07a,berthomieu-hoeven-lecerf:11a}. In both 
+cases, it is in $O(\pi^{N_i})$ with $N_i = O(2^i \kappa + \min 
+\NF(P))$.
+\end{rem}
+
+\noindent
+It follows from Theorem~\ref{theo:slope-factor}, 
+Remark~\ref{rem:slope-factor} and Proposition~\ref{prop:Newtonprecslope} 
+that Algorithm {\tt slope\_factorisation\_Newton} is correct and 
+stable. Using the standard soft-$O$ notation $\softO(\cdot)$ for
+hiding logarithmic factor, our algorithm performs at most $\softO(n)$ 
+combinatorial operations and $\softO(n)$ operations in $K$ at precision 
+$O(\pi^N)$ with $N = O(\max \varphi_P - \min \NF(P))$ if one uses 
+quasi-optimal algorithms for multiplication and Euclidean division of 
+polynomials.
+
 
 \medskip
 
@@ -1545,8 +1633,9 @@ that $G$ takes $H_{A^{(1)}}$ to $H_P$, which can be done easily
 using Theorem~\ref{theo:EDivisionNP}.
 \end{proof}
 
-\todo{Answer here the second question. (The Proposition below should
-be useful at some point.)}
+As for the second question, the discussion is similar to the case of 
+Newton precision expect that we need a new stop criterium. It is given 
+by the following proposition.
 
 \begin{prop}
 We assume \textbf{(H)}. 
@@ -1587,8 +1676,69 @@ $H_{A^{(1)}} = \big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}$
 as expected.
 \end{proof}
 
+\noindent
+{\bf Numerical experimentations.} 
+%
+We have implemented the following scheme to illustrate the behaviour of 
+precision for slope factorization over $\mathbb{Q}_2 [X].$
+We start with random polynomials $A$ and $B$ with given minoration on 
+their Newton polygons, assuring they have no common slope.
+We compute $P=AB$ and then $A^{(1)}$, and compare the obtained 
+precision on $A^{(1)}$ (jagged) with the estimation given using 
+$\psi_{A^{(1)}}$ and Proposition \ref{prop:precA1} 
+assuming~\textbf{(H)}. The mean amount of lost digits for $1000$ 
+experiments is given in the following array. Two settings are possible 
+for the initial $A$ and $B$ : relative or absolute precision equal to 
+$100$ for their coefficients.
+
+\medskip
+
+{\small%
+\noindent \hfill%
+\renewcommand{\arraystretch}{1.3}%
+\begin{tabular}{|c|c|c|c|c|}%
+\hline
+\multirow{2}{*}{Polynomials} & 
+\multirow{2}{*}{\hspace{1mm}Precision\hspace{1mm}} & 
+\multicolumn{3}{c|}{Gain of precision} \\
+\cline{3-5}
+& &Jagged & Newton & Lattice \\
+\hline
+\multirow{2}{*}{%
+\begin{tikzpicture}[xscale=0.11, yscale=0.05]
+\draw[transparent] (-2,11) rectangle (15,11);
+\draw[->] (0,-.5) -- (0,10.5);
+\draw[->] (-0.05,0) -- (13.5,0);
+\draw (6,-.75) -- (6,.75);
+\node[scale=0.7,below] at (6,0) {$d$};
+\draw (0,5) -- (2,-2) -- (6,0) -- (10,3) -- (13,10);
+\draw[dotted] (6,0) -- (6,10);
+\node at (3.5,5) {$A$};
+\node at (8.5,5) {$B$};
+\end{tikzpicture}}
+& absolute & $-14.5$ & $-14.7$ & $0.0$ \\
+& relative & $\phantom{0}{-}1.5$ & $\phantom{0}{-}3.6$ & $0.0$ \\
+\hline
+\multirow{2}{*}{\begin{tikzpicture}[xscale=0.11, yscale=0.05]
+\draw[transparent] (-2,11) rectangle (15,11);
+\draw[->] (0,-.5) -- (0,10.5);
+\draw[->] (-0.05,0) -- (13.5,0);
+\draw (6,-.75) -- (6,.75);
+\node[scale=0.7,below] at (6,0) {$d$};
+\draw (0,5) -- (6,0) -- (11,-2) -- (13,10);
+\draw[dotted] (6,0) -- (6,10);
+\node at (3.5,5) {$A$};
+\node at (8.5,5) {$B$};
+\end{tikzpicture}}
+& absolute & $\phantom{-0}0.0$ & $\phantom{-0}0.0$ & $0.0$ \\
+& relative & $\phantom{0}{-}0.3$ & $\phantom{0}{-}1.2$ & $0.0$ \\
+\hline
+\end{tabular}
+\hfill \null}
+
+
 \bibliographystyle{plain}
-\bibliography{../roebib/Biblio}
+\bibliography{muldivfact}
 
 
 \end{document}
