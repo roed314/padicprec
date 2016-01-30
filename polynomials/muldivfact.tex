@@ -1587,6 +1587,62 @@ $H_{A^{(1)}} = \big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}$
 as expected.
 \end{proof}
 
+{\bf Numerical experimentations.} We have implemented the following scheme to illustrate the behaviour of precision
+for slope factorization over $\mathbb{Q}_2 [X].$
+We start with random polynomials $A$ and $B$ with given minoration on their Newton polygons, assuring
+they have no common slope.
+We compute $P=AB$ and then $A^{(1)}$, and compare the obtained precision on $A^{(1)}$
+(jagged) with the estimation given using $\Psi_{A^{(1)}}$ and Proposition \ref{prop:precA1}
+assuming~\textbf{(H)}. The mean amount of lost digits for $1000$ experiments is given in the following array.
+Two settings are possible for the initial $A$ and $B$ : relative or absolute precision equal to $100$ for their coefficients.  
+
+\medskip
+
+{\small%
+\noindent \hfill%
+\renewcommand{\arraystretch}{1.2}%
+\begin{tabular}{|c|c|c|c|c|}%
+\hline
+\multirow{2}{*}{Polynomials} & 
+\multirow{2}{*}{\hspace{2mm}Precision\hspace{2mm}} & 
+\multicolumn{3}{c|}{Gain of precision} \\
+\cline{3-5}
+& &Jagged & Newton
+      & \raisebox{-0.5mm}{Lattice} \\
+\hline
+\multirow{2}{*}{
+\begin{tikzpicture}[xscale=0.1, yscale=0.05]
+\draw[->] (0,-.5) -- (0,10.5);
+\draw[->] (-0.05,0) -- (13.5,0);
+\draw (6,-.75) -- (6,.75);
+\node[below, right] at (6,-2) {$d$};
+\draw (0,5) -- (2,-2) -- (6,0) -- (10,3) -- (13,10);
+\draw[dotted] (6,0) -- (6,10);
+\node at (3,5) {$A$};
+\node at (9,5) {$B$};
+\end{tikzpicture}}
+& abs & $-14.5$ & $-14.7$ & $0$ \\
+& rel & $-1.5$ & $-3.6$ & $0$ \\
+\hline
+\multirow{2}{*}{\begin{tikzpicture}[xscale=0.11, yscale=0.05]
+\draw[->] (0,-.5) -- (0,10.5);
+\draw[->] (-0.05,0) -- (13.5,0);
+\draw (3,-.75) -- (3,.75);
+\node[below, left] at (3,-2.5) {$d$};
+\draw (0,5) -- (2,1) -- (3,0) -- (8,-2) -- (10,10);
+\draw[dotted] (3,0) -- (3,10);
+\node at (1.5,5) {$A$};
+\node at (6.5,5) {$B$};
+\end{tikzpicture}}
+& abs & $0$ & $0$ & $0$ \\
+& rel & $-0.3$ & $-1.2$ & $0$ \\
+\hline
+\end{tabular}
+\hfill \null}
+
+\medskip
+
+
 \bibliographystyle{plain}
 \bibliography{../roebib/Biblio}
 
