@@ -179,6 +179,12 @@ of slope $s_j$.  The slope factorization of $f(X)$ expresses $f(X)$ as a product
 of polynomials $g_j(X)$ with degree $x_{j+1} - x_j$ whose roots all have valuation $-s_j$.
 Our main result is a new algorithm for computing these $g_j(X)$.
 
+Polynomial factorization over local fields has seen a great deal of progress recently
+\citelist{\cite{pauli:10a} \cite{guardia-nart-pauli:12a} \cite{guardia-montes-nart:08a} \cite{montes:99a}}
+following an algorithm of Montes.  Slope factorization provides a subroutine
+in such algorithms \cite{pauli:10a}*{\S 2}.  For the most difficult inputs, it is not the dominant
+contributor to the runtime of the algorithm, but in some circumstances it will be.
+
 Any computation with $p$-adic fields must work with approximations modulo finite
 powers of $p$, and one of the key requirements in designing an algorithm is
 an analysis of how the precision of the variables evolve over the computation.
@@ -201,8 +207,13 @@ B_{i+1} &= P \div A_{i+1} \\
 V_{i+1} &= (2V_i - V_i^2B_{i+1}) \% A_{i+1}.
 \end{align*}
 Our main result is Theorem \ref{theo:slope-factor},
-which states that the sequence $(A_i)$ converges quadritically
+which states that the sequence $(A_i)$ converges quadratically
 to a divisor of $P$.
+
+In order to prove Theorem \ref{theo:slope-factor}, we also determine
+the precision of the quotient and remainder in Euclidean division,
+which may be of independent interest.  These results are found in
+Section \ref{sec:prec_track}.
 
 \medskip
 
@@ -556,7 +567,7 @@ using the estimation on $\NF(A\mod B)$ we have just proved
 (see Figure~\ref{fig:NewtonEuclide}).
 \end{proof}
 
-\subsection{Tracking precision}
+\subsection{Tracking precision} \label{sec:prec_track}
 
 \medskip
 
