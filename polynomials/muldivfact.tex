@@ -1,9 +1,11 @@
-\documentclass{sig-alternate-2013}
+\documentclass{sig-alternate-05-2015}
 
 \setlength{\paperheight}{11in}
 \setlength{\paperwidth}{8.5in}
 
 \usepackage[utf8]{inputenc}
+
+\hyphenation{regarding}
 
 \usepackage{amsmath,amssymb}
 \usepackage{amsthmnoproof}
@@ -180,16 +182,21 @@ of polynomials $g_j(X)$ with degree $x_{j+1} - x_j$ whose roots all have valuati
 Our main result is a new algorithm for computing these $g_j(X)$.
 
 Polynomial factorization over local fields has seen a great deal of progress recently
-\citelist{\cite{pauli:10a} \cite{guardia-nart-pauli:12a} \cite{guardia-montes-nart:08a} \cite{montes:99a}}
+\citelist{\cite{pauli:10a}, \cite{guardia-nart-pauli:12a}, \cite{guardia-montes-nart:08a}, \cite{montes:99a}}
 following an algorithm of Montes.  Slope factorization provides a subroutine
-in such algorithms \cite{pauli:10a}*{\S 2}.  For the most difficult inputs, it is not the dominant
+in such algorithms \cite[Section~2]{pauli:10a}.  For the most difficult inputs, it is not the dominant
 contributor to the runtime of the algorithm, but in some circumstances it will be.
+We underline moreover that the methods introduced in this paper extend 
+partially to the noncommutative setting and appear this way as an
+essential building block in several decomposition algorithms of 
+$p$-adic Galois representations and $p$-adic differential 
+equations~\cite{caruso:16}.
 
 Any computation with $p$-adic fields must work with approximations modulo finite
 powers of $p$, and one of the key requirements in designing an algorithm is
 an analysis of how the precision of the variables evolve over the computation.
 We work with precision models developed by the same authors
-\cite{caruso-roe-vaccon:14a}*{\S 4.2}, focusing on the lattice and Newton models.
+\cite[Section~4.2]{caruso-roe-vaccon:14a}, focusing on the lattice and Newton models.
 As part of the analysis of the slope factorization algorithm, we describe
 how the precision of the quotient and remainder depend on the input polynomials
 in Euclidean division.
@@ -202,15 +209,19 @@ in Euclidean division.
 Suppose that the Newton polygon of $P(X) = \sum_{i=0}^n a_i X^i$
 has a break at $i=d$.  Set $A_0 = \sum_{i=0}^d a_i X^i$, $V_0 = 1$ and
 \begin{align*}
-A_{i+1} &= A_i + (V_i P \% A_i) \\
+A_{i+1} &= A_i + (V_i P \mod A_i) \\
 B_{i+1} &= P \div A_{i+1} \\
-V_{i+1} &= (2V_i - V_i^2B_{i+1}) \% A_{i+1}.
+V_{i+1} &= (2V_i - V_i^2B_{i+1}) \mod A_{i+1}.
 \end{align*}
 Our main result is Theorem \ref{theo:slope-factor},
 which states that the sequence $(A_i)$ converges quadratically
-to a divisor of $P$.
+to a divisor of $P$. This provides a quasi-optimal simple-to-implement 
+algorithm for computing slope factorizations.
+We moreover carry out a careful study of the precision and, applying
+a strategy coming from~\cite{caruso-roe-vaccon:14a}, we end up with
+an algorithm that outputs optimal results regarding to accuracy.
 
-In order to prove Theorem \ref{theo:slope-factor}, we also determine
+In order to prove Theorem~\ref{theo:slope-factor}, we also determine
 the precision of the quotient and remainder in Euclidean division,
 which may be of independent interest.  These results are found in
 Section \ref{sec:prec_track}.
@@ -242,8 +253,8 @@ Finally, in Section \ref{sec:slope_fac} we describe
 our slope factorization algorithm, which is based on
 a Newton iteration.  Unlike other algorithms for
 slope factorization, ours does not require working
-with fractional exponents\todo{ citation?}.  In Theorem
-\ref{theo:slope-factor} we define a sequence
+with fractional exponents. % \todo{ citation?}. 
+In Theorem \ref{theo:slope-factor} we define a sequence
 of polynomials that will converge to the factors
 determined by an extremal point in the Newton
 polygon.  We then discuss the precision behavior
@@ -369,7 +380,7 @@ If $P(X) = \sum_{i=0}^n a_n X^n \in K_n[X]$, we define its Newton
 polygon $\NP(P)$ as the convex hull of the points $(i,\val(a_i))$ 
 ($1 \leq i \leq n$) together with the point at infinity $(0,+\infty)$
 and then its Newton function $\NF(P) : [0,n] \to \R$ as the unique
-function whose epigraph is $\NP(P)$. It is well known \cite{dwork-geratto-sullivan:Gfunctions}*{\S 1.6} that:
+function whose epigraph is $\NP(P)$. It is well known \cite[Section~1.6]{dwork-geratto-sullivan:Gfunctions} that:
 $$\begin{array}{r@{\,\,}c@{\,\,}l}
 \NP(P+Q) & \subset & \text{Conv}\big(\NP(P) \cup \NP(Q)\big) \smallskip \\
 \NP(PQ) & = & \NP(P) + \NP(Q)
@@ -437,7 +448,7 @@ We shall sometimes denote it $O(H)$ in order to emphasize that it should
 be considered as a precision datum. The notation $P_\app(X) + O(H)$ then 
 refers to any polynomial in the $W$-affine space $P_\app(X) + H$. 
 Tracking lattice precision can be done using differentials as shown in
-\cite{caruso-roe-vaccon:14a}*{Lemma~3.4 and Proposition~3.12}: if $f : K_{\leq n}[X] 
+\cite[Lemma~3.4 and Proposition~3.12]{caruso-roe-vaccon:14a}: if $f : K_{\leq n}[X] 
 \to K_{\leq m}[X]$ denotes any strictly differentiable function with
 surjective differential, under mild assumption on $H$, we have:
 $$f(P_\app(X)+H) = f(P_\app(X)) + f'(P_\app(X))(H)$$
@@ -449,7 +460,7 @@ the lattice precision. Indeed, a precision of the shape $\sum_{i=0}^n
 O(\pi^{N_i}) X^i$ corresponds to the lattice generated by the elements 
 $\pi^{N_i} X^i$ ($0 \leq i \leq n$). This remark is the origin of the 
 notion of \emph{diffused digits of precision} introduced in 
-\cite{caruso-roe-vaccon:15a}*{Definition 2.3}. We shall use it repeatedly in the 
+\cite[Definition~2.3]{caruso-roe-vaccon:15a}. We shall use it repeatedly in the 
 sequel in order to compare the behaviour of the three aforementioned 
 precision data in concrete situations.
 
@@ -460,11 +471,8 @@ to polynomials in one variable.  In order to analyze the precision behavior
 of such algorithms, we need to first understand the precision attached to
 the quotient and remainder when dividing two polynomials.
 In the sequel, we use the notation $A \div B$ and $A \mod B$
-for the polynomials satisfying
-\begin{align*}
-A &= (A \div B) \cdot B + (A \mod B) \\
-\deg(A \mod B) &< \deg(B).
-\end{align*}
+for the polynomials satisfying $A = (A \div B) \cdot B + (A \mod B)$
+and $\deg(A \mod B) < \deg(B)$.
 
 \subsection{Euclidean division of Newton functions}
 
@@ -623,7 +631,8 @@ With this result in hand, we may split the computation of
 Euclidean division into two pieces, first computing approximations
 $Q_\app$ and $R_\app$ and separately computing $\delta Q$ and $\delta R$.
 Both the approximations and the precision can be computing in time that is
-quasi-linear in the degree. \todo{Is this sufficiently precision complexity analysis?}
+quasi-linear in the degree. 
+%\todo{Is this sufficiently precision complexity analysis?}
 
 \medskip
 
@@ -680,10 +689,11 @@ product of the $P_i$'s using the following quite naive algorithm.
 
 \medskip
 
-The table below reports the average gain of \emph{absolute} 
-precision $G$ which is observed while executing the algorithm above 
-for various modulus and $n$. The average is taken on a sample of $1000$ 
-random inputs. We recall that $G$ is defined as follows:
+The table of Figure~\ref{fig:modularmult} reports the average gain of 
+\emph{absolute} precision $G$ which is observed while executing the 
+algorithm above for various modulus and $n$. The average is taken on a 
+sample of $1000$ random inputs. We recall that $G$ is defined as 
+follows:
 
 \noindent $\bullet$
 in the case of jagged and Newton precision, the precision on the output 
@@ -698,10 +708,9 @@ $G$ as a sum $G_{\text{nd}} + G_{\text{d}}$ where $G_{\text{d}}$ is the
 index of $H$ in the largest lattice $H_0$ contained in $H$ which can be 
 generated by elements of the shape $2^{N_i} X^i$ ($0 \leq i \leq 4$). 
 (The term $G_d$ corresponds to diffused digits according to 
-\cite{caruso-roe-vaccon:15a}*{Definition 2.3}.)
+\cite[Definition~2.3]{caruso-roe-vaccon:15a}.)
 
-\medskip
-
+\begin{figure}
 {\small%
 \noindent \hfill%
 \renewcommand{\arraystretch}{1.2}%
@@ -743,7 +752,9 @@ generated by elements of the shape $2^{N_i} X^i$ ($0 \leq i \leq 4$).
 \end{tabular}
 \hfill \null}
 
-\medskip
+\caption{Precision for modular multiplication}
+\label{fig:modularmult}
+\end{figure}
 
 We observe several interesting properties. First of all, the gains for 
 Newton precision and jagged precision always agree though one may have 
@@ -784,7 +795,7 @@ or jagged models.
 
 \section{Slope factorization} \label{sec:slope_fac}
 
-A well-known theorem \cite{dwork-geratto-sullivan:Gfunctions}*{Thm. 6.1} asserts that each 
+A well-known theorem \cite[Theorem~6.1]{dwork-geratto-sullivan:Gfunctions} asserts that each 
 extremal point $M$ in the Newton polygon $\NP(P)$ of a polynomial $P \in 
 K[X]$ corresponds to a factorization $P = AB$ where the Newton polygon 
 of $A$ (resp. $B$) is given by the part of $\NP(P)$ located at the left 
@@ -792,8 +803,14 @@ of $A$ (resp. $B$) is given by the part of $\NP(P)$ located at the left
 \emph{slope factorization}.
 
 The aim of this section is to design efficient and stable algorithms 
-for computing these factorizations. \todo{Compare with previous
-results...}
+for computing these factorizations: indeed the algorithm we obtain has 
+a quasi-optimal complexity (compared to the size of the input 
+polynomial) and outputs a result whose precision is (close to be) 
+optimal. One important feature of our algorithm is its simplicity 
+and its flexibility: in particular, unlike standard previous slope 
+factorization algorithms, it does not require working with
+fractional exponents.
+
 
 \subsection{A Newton iteration}
 \label{ssec:Newtoniter}
@@ -1343,8 +1360,8 @@ all the $A_i$'s do. Moreover we know that $b_\varphi(S_i) \geq 2^i
 \kappa$ from what we derive that the sequence $(S_i)$ goes to $0$.
 Coming back to the definition of $S_i$, we find $P \mod A_\infty = 0$,
 \emph{i.e.} $A_\infty$ divides $P$. Finally, Eq.~\eqref{eq:rateconv}
-giving the rate of convergence follows from the writing:
-$$A_\infty - A_i = R_i + R_{i+1} + \cdots + R_j + \cdots$$
+giving the rate of convergence follows from the writing
+$A_\infty{-}A_i = \sum_{j=i}^\infty R_j$
 together with the facts that $b_\varphi(R_j) \geq 2^i \kappa$ and $\deg 
 R_j \leq d{-}1$ for all $j \geq i$.
 
@@ -1363,10 +1380,10 @@ $$b_\varphi\big(V_0 P \mod A_0\big) > 0
 \quad \text{and} \quad
 b_0\big((1 - V_0 B_0) \mod A_0\big) > 0$$
 except that the constant $\kappa$ giving the rate of convergence
-should be now defined as:
-$$\kappa = \min \big( 
+should be now
+$\kappa = \min \big( 
 b_\varphi\big(V_0 P \mod A_0\big), \,
-b_0\big((1 - V_0 B_0) \mod A_0\big)\big).$$
+b_0\big((1 - V_0 B_0) \mod A_0\big)\big)$.
 \end{rem}
 
 \subsection{A slope factorization algorithm}
@@ -1549,8 +1566,8 @@ polynomials.
 \noindent
 {\bf Lattice precision.}
 The precision datum is given here by a lattice $H_P$ in $K_{\leq n{-}1}
-[X]$; we shall then write:
-$$P = P_\app + O(H_P)$$
+[X]$; we shall then write
+$P = P_\app + O(H_P)$
 where $P_\app$ is a \emph{monic} approximation of the inexact polynomial 
 $P$ we want to factor. We assume from now that $H_P$ is sufficiently 
 small so that the Newton polygon of $P$ is well defined. We then can
@@ -1559,18 +1576,15 @@ $$F = (F_A, F_B) : P_\app + H_P \to K_{=d}[X] \times K_{=n{-}d}[X]$$
 mapping a polynomial $P$ to the couple $(A^{(1)}, B^{(1)})$ obtained
 from it. We set $(A_\app^{(1)}, B_\app^{(1)}) = F(P_\app)$.
 
-\smallskip
-
-\noindent
 We make the following hypothesis \textbf{(H)}:
 
-\smallskip
+\medskip
 
 \noindent
 \hfill
 \begin{minipage}{8cm}
 The lattice $H_P$ is a first order lattice at every point
-of $P_\app + H_P$ in the sense of \cite{caruso-roe-vaccon:14a}*{Definition~3.3},
+of $P_\app + H_P$ in the sense of \cite[Definition~3.3]{caruso-roe-vaccon:14a},
 \emph{i.e.} for all $P \in P_\app + H_P$:
 
 \vspace{-5mm}
@@ -1591,7 +1605,7 @@ shown by the next proposition.
 \begin{prop}
 \label{prop:precA1}
 The application $F_A : P \mapsto A^{(1)}$ is of class $C^1$ on $P_\app + H_P$
-and its differential at some point $P$ is the linear mapping:
+and its differential at some point $P$ is the linear mapping
 $$dP \mapsto dA^{(1)} = (V^{(1)} \: dP) \mod A^{(1)}$$
 where $(A^{(1)}, B^{(1)}) = F(P)$ and $V^{(1)}$ is the inverse of 
 $B^{(1)}$ modulo $A^{(1)}$.
@@ -1619,10 +1633,8 @@ optimality of Proposition~\ref{prop:Newtonprecslope} in a particular
 case.
 
 \begin{cor}
-We assume~\textbf{(H)}.
-When the precision of $P$ is given by $O(\varphi_P)$ with:
-$$\varphi_P = (\NF(P) + \delta)_{|[0,d-1]}
-\quad \text{where $\delta \in \R$}$$
+We assume~\textbf{(H)}. Let $\delta \in \R$.
+When the precision of $P$ is given by $O(\NF(P)_{|[0,d-1]} + \delta)$,
 the precision of $A^{(1)}$ given by 
 Proposition~\ref{prop:Newtonprecslope} is optimal.
 \end{cor}
@@ -1634,11 +1646,11 @@ introduced in the Corollary. Define
 $\varphi_{A^{(1)}} = \varphi_{|[0,d{-}1]} - \varphi(d) + \delta$.
 Let $H_P$ (resp. $H_{A^{(1)}})$ be the lattice consisting of
 polynomials of degree at most $n{-}1$ (resp. at most $d{-}1$)
-whose Newton function is not less that $\varphi_P$ (resp. 
+whose Newton function is not less that $\varphi_P = \NF(P)_{|[0,d-1]} + \delta$ (resp. 
 $\varphi_{A^{(1)}}$). We have to show that $F'_A(P_\app)(H_P) = 
-H_{A^{(1)}}$. But, according to Proposition~\ref{prop:precA1}
+H_{A^{(1)}}$. According to Proposition~\ref{prop:precA1}
 the mapping $G : K_{\leq d{-}1}[X] \to K_{\leq n{-}1}[X]$,
-$$dA^{(1)} \mapsto (B_\app^{(1)} \: dA^{(1)}) \mod A_\app^{(1)}$$
+$dA^{(1)} \mapsto (B_\app^{(1)} \: dA^{(1)}) \mod A_\app^{(1)}$
 is a right inverse of $F'_A(P_\app)$. It is then enough to prove
 that $G$ takes $H_{A^{(1)}}$ to $H_P$, which can be done easily
 using Theorem~\ref{theo:EDivisionNP}.
@@ -1649,15 +1661,17 @@ Newton precision expect that we need a new stopping criterion. It is given
 by the following proposition.
 
 \begin{prop}
+\label{prop:stop}
 We assume \textbf{(H)}. 
 
-\vspace{-2mm}
+\vspace{-1mm}
 
 \begin{enumerate}[(i)]
 \item Let $\tilde A^{(1)} \in K_{=d}[X]$ such that
 $\tilde A^{(1)} \tilde B^{(1)} \in P_\app + O(H_P)$ with
 $\tilde B^{(1)} = P_\app \div \tilde A^{(1)}$.
 Then $\tilde A^{(1)} \in A_\app^{(1)} + H_{A^{(1)}}$.
+\vspace{-1mm}
 \item Let in addition $\tilde V^{(1)} \in K_{\leq d{-}1}[X]$ such that:
 $$\big(\tilde B^{(1)} \tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}
 = H_P \mod \tilde A^{(1)}.$$
@@ -1674,8 +1688,6 @@ Remark~\ref{rem:unicity}) further implies that $F(\tilde P) =
 (\tilde A^{(1)}, \tilde B^{(1)})$. The claimed result now follows from
 the hypothesis~\textbf{(H)}.
 
-\smallskip
-
 \emph{(ii)} By applying~\textbf{(H)} with $P = \tilde P$ and replacing 
 $F'(\tilde P)$ by its expression given by Proposition~\ref{prop:precA1}, 
 we find:
@@ -1687,6 +1699,18 @@ $H_{A^{(1)}} = \big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}$
 as expected.
 \end{proof}
 
+As a conclusion, the algorithm we propose consists in computing the 
+Newton sequences $(A_i)$ and $(V_i)$ (following the strategy of the
+algorithm \texttt{slope\_factorisation\_Newton} regarding to precision)
+until we find a couple $(\tilde A^{(1)}, \tilde V^{(1)})$ satisfying 
+the requirements (i) and (ii) of Proposition~\ref{prop:stop}. Once this 
+couple has been found, one may safely output $\tilde A^{(1)} + 
+O\big(\big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}\big)$ under
+\textbf{(H)}.
+The resulting algorithm has quasi-optimal running 
+time and optimal stability.
+
+\begin{comment}
 \noindent
 {\bf Numerical experimentations.} 
 %
@@ -1746,10 +1770,9 @@ $100$ for their coefficients.
 \hline
 \end{tabular}
 \hfill \null}
-
+\end{comment}
 
 \bibliographystyle{plain}
 \bibliography{muldivfact}
-
 
 \end{document}
