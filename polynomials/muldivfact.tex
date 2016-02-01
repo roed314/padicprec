@@ -878,8 +878,7 @@ share in addition the same leading coefficient, they must coincide.
 The rest of this subsection is devoted to the proof of the theorem.
 If $d = n$ (resp. $d = 0$), the sequence $A_i$ is constant equal to
 $P$ (resp. to the constant coefficient of $P$) and theorem is clear.
-We then assume $0 < d < n$. Without loss of generality, we may further 
-assume that the coefficient $a_d$ is equal to $1$. We set:
+We then assume $0 < d < n$. We set:
 \begin{align*}
 \lambda_0 & = \NF(P)(d) - \NF(P)(d{-}1) \\
 \lambda_1 & = \NF(P)(d{+}1) - \NF(P)(d),
@@ -1175,12 +1174,12 @@ We define the function $\varphi : \R^+ \to \R
 %& = \lambda_0 (x-d) + \NP(P)(d) & \text{for } x > d.
 %\end{array}
 \end{equation}
-We notice that, when the polynomial is changed into $cP$ where $c$ is a 
+We notice that, when the polynomial $P$ is changed into $cP$ where $c$ is a 
 nonzero constant lying in a finite extension of $K$, the $A_i$'s are all 
 multiplied by $c$ as well whereas the $B_i$'s and the $V_i$'s remained 
 unchanged. Therefore, the theorem holds for $P$ if and only if it holds 
 for $cP$. As a consequence we may assume that $P$ is normalized so that 
-$\NF(P)(d) = d \lambda_0$, so that $\varphi(x) = \lambda_0 x$ for $x > d$.
+$\NF(P)(d) = d \lambda_0$, \emph{i.e.} $\varphi(x) = \lambda_0 x$ for $x > d$.
 For a polynomial $Q \in K[X]$ of degree $n$, we further define:
 \begin{align}
 b_\varphi(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \varphi(x) 
@@ -1318,7 +1317,7 @@ $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
 %
 Finally observe that:
 $$T_0 = (1 - B_0) \mod A_0 = \big((A_0 - P) \div A_0\big) \mod A_0.$$
-Therefore $b_0(T_0) \geq \kappa$ results from $b_\varphi(A{-}P_0) \geq 
+Therefore $b_0(T_0) \geq \kappa$ results from $b_\varphi(A_0{-}P) \geq 
 \kappa$ thanks to Lemma~\ref{lem:bphib0}. 
 We have then established~\eqref{eq:induction} when $i = 0$.
 
@@ -1333,7 +1332,7 @@ $$b_\varphi(R_i B_{i+1}) \geq b_\varphi(R_i) + b_0(B_{i+1})
 \geq 2^i \kappa$$
 by Lemma~\ref{lem:bphib0} and the induction hypothesis.
 Using again Lemma~\ref{lem:bphib0}, we then derive from 
-\eqref{eqdef:Biminus} and \eqref{eqdef:Siminus}, $b_0(\Delta B_i) \geq 
+\eqref{eqdef:Biminus} and \eqref{eqdef:Siminus} that $b_0(\Delta B_i) \geq 
 2^i \kappa$ and $b_\varphi(\Delta S_i) \geq 2^i \kappa$.
 Similarly, using \eqref{eqdef:Si2} and the estimations we already know,
 we obtain $b_\varphi(S_i) \geq 2^i \kappa$. Combining this with
