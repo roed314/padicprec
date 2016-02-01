@@ -148,7 +148,7 @@ of the algorithm using several precision models.
 
 \category{I.1.2}{Computing Methodologies}{Symbolic and Algebraic Manipulation -- \emph{Algebraic Algorithms}}
 \terms{Algorithms, Theory}
-\keywords{}
+\keywords{Algorithms, $p$-adic precision, Newton polygon, factorization}
 
 %\vspace{1mm}
 % \noindent
@@ -182,7 +182,7 @@ of polynomials $g_j(X)$ with degree $x_{j+1} - x_j$ whose roots all have valuati
 Our main result is a new algorithm for computing these $g_j(X)$.
 
 Polynomial factorization over local fields has seen a great deal of progress recently
-\citelist{\cite{pauli:10a}, \cite{guardia-nart-pauli:12a}, \cite{guardia-montes-nart:08a}, \cite{montes:99a}}
+\citelist{\cite{pauli:10a} \cite{guardia-nart-pauli:12a} \cite{guardia-montes-nart:08a} \cite{montes:99a}}
 following an algorithm of Montes.  Slope factorization provides a subroutine
 in such algorithms \cite[Section~2]{pauli:10a}.  For the most difficult inputs, it is not the dominant
 contributor to the runtime of the algorithm, but in some circumstances it will be.
@@ -803,22 +803,20 @@ of $A$ (resp. $B$) is given by the part of $\NP(P)$ located at the left
 \emph{slope factorization}.
 
 The aim of this section is to design efficient and stable algorithms 
-for computing these factorizations: indeed the algorithm we obtain has 
-a quasi-optimal complexity (compared to the size of the input 
+for computing these factorizations. Precisely the algorithm we obtain 
+has a quasi-optimal complexity (compared to the size of the input 
 polynomial) and outputs a result whose precision is (close to be) 
-optimal. One important feature of our algorithm is its simplicity 
-and its flexibility: in particular, unlike standard previous slope 
-factorization algorithms, it does not require working with
-fractional exponents.
-
+optimal. Two of its important additional features are simplicity and 
+flexibility.
 
 \subsection{A Newton iteration}
 \label{ssec:Newtoniter}
 
-In the previous references, the factor $A$ defined above is always 
-obtained \emph{via} a Newton iteration which takes place over a finite 
-extension of $K$. We introduce here a variant of this Newton iteration 
-whose main advantage is to be defined over $K$ itself.
+The factor $A$ defined above is usually obtained \emph{via} a Newton 
+iteration after having prepared our polynomial by flattening the first 
+slope using a change of variables involving possibly rational 
+exponents. We introduce here a variant of this iteration which does not 
+require the flattening step and is entirely defined over $K[X]$.
 
 \begin{theo} \label{theo:slope-factor}
 Let $P(X) = \sum_{i=0}^n a_i X^i$ be a polynomial of degree $n$ with
