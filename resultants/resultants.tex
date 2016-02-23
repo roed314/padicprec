@@ -118,11 +118,11 @@ As wonderfully illustrated by the success of Kedlaya-type counting
 points algorithms \cite{kedlaya}, $p$-adic technics are gaining nowadays 
 more and more popularity in computer science, and more specifically in 
 symbolic computation. A crucial issue when dealing with $p$-adics is 
-those of stability. Indeed, just like real numbers, $p$-adic numbers are 
+that of stability. Indeed, just like real numbers, $p$-adic numbers are 
 by nature infinite and thus need to be truncated in order to fit in the 
 memory of a computer. The level of truncation is called the 
 \emph{precision}. Usual softwares implementing $p$-adics (\emph{e.g.} 
-\textsc{magma} \cite{magma}, \textsc{pari} \cite{pari}, \textsc{sage} 
+\textsc{magma} \cite{magma}, \textsc{pari} \cite{pari}, \textsc{sagemath} 
 \cite{sage}) generally tracks the precision as follows: an individual 
 precision is attached to any $p$-adic variable and this precision is 
 updated after each basic arithmetic operation. This way of tracking 
@@ -279,7 +279,7 @@ $B$ ``computed in degree $(d_A,d_B)$'' \\
 \label{subsec:setting}
 
 The aim of this section is to introduce the setting we shall work in 
-throughout this paper (which is a bit more general than those considered 
+throughout this paper (which is a bit more general than that considered 
 in the introduction).
 
 \subsection{Complete discrete valuation rings}
@@ -315,9 +315,7 @@ element $x \in \A$ can be written uniquely as a convergent series:
 x = x_0 + x_1 \pi + x_2 \pi^2 + \cdots + x_n \pi^n + \cdots
 \end{equation}
 where the $x_i$'s lie in a fixed set $S$ of representatives of classes
-modulo $\pi$. Therefore, as an additive group, $\A$ is isomorphic to 
-the set of sequences $\N \to k$. On the contrary, the multiplicative
-structure may vary.
+modulo $\pi$ with $0 \in S$.
 
 Let $K$ denote the fraction field of $\A$. The valuation $v$ extends 
 uniquely to $K$ by letting $\val(\frac x y) = \val(x) - \val(y)$. 
@@ -330,7 +328,7 @@ x = \sum_{i=i_0}^\infty x_i \pi^i
 \end{equation}
 where $i_0$ is some relative integer and the $x_i$'s are as above. The 
 valuation of $x$ can be easily read off this writing: it is the smallest 
-integer $i$ such that $x_i \not\equiv 0 \pmod \pi$.
+integer $i$ such that $x_i \neq 0$.
 
 \subsubsection{Examples}
 
@@ -419,7 +417,7 @@ not specified.
 From a theoretical point of view, the expression~\eqref{eq:approx}
 does not represent a single element $x$ of $\A$ but an open ball in
 $\A$, namely the ball of radius $e^{-N}$ centered at $\sum_{i=0}^{N-1} 
-x_i \pi^i$ (or actually any element congruent to it modulo $\pi^N$).
+x_i \pi^i$ (or actually at any element congruent to it modulo $\pi^N$).
 In other words, on a computer, we cannot work with actual $p$-adic
 numbers and we replace them by balls which are more tractable (at
 least, they can be encoded by a finite amount of information).
@@ -437,7 +435,7 @@ Of course, it may happen that all the $x_i$'s ($0 \leq i < N$) vanish,
 in which case the valuation of $x$ is undetermined. In this particular
 case, the relative precision of $x$ is undefined.
 
-There exist simple formulae to following precision after each single
+There exist simple formulae for following precision after each single
 elementary computation. For instance, basic arithmetic operations can
 be handled using:
 \begin{align}
@@ -465,7 +463,7 @@ with the convention that $\val(a) = N_a$ (resp. $\val(b) = N_b$) if all
 known digits of $a$ (resp. $b$) are zero.
 Combining these formulae, one can track the precision while executing 
 any given algorithm. This is the analogue of the standard \emph{interval 
-arithmetic} over the reals. Many usual softwares (as \textsc{sage}, 
+arithmetic} over the reals. Many usual softwares (as \textsc{sagemath}, 
 \textsc{magma}) implement $p$-adic numbers and formal series this way. 
 We shall see later that this often results in overestimating the losses 
 of precision.
@@ -576,7 +574,7 @@ Using Cramer formulae, we can build polynomials $U^{d_A, d_B}(A,B) \in
 \ring_{< d_B}[X]$ and $V^{d_A, d_B}(A,B) \in \ring_{< d_A}[X]$ 
 satisfying the two following conditions:
 \begin{enumerate}[i)]
-\item their coefficients are, up to a sing, maximal minors of the 
+\item their coefficients are, up to a sign, maximal minors of the 
 Sylvester matrix, and
 \item $A \cdot U^{d_A, d_B}(A,B) + B \cdot V^{d_A, d_B}(A,B) = 
 \Res^{d_A, d_B}(A,B)$.
@@ -601,7 +599,7 @@ as before, we can construct polynomials $U_j^{d_A, d_B}(A,B) \in
 \ring_{< d_B-j}[X]$ and $V_j^{d_A, d_B}(A,B) \in \ring_{< d_A-j}[X]$
 such that:
 \begin{enumerate}[i)]
-\item their coefficients are, up to a sing, maximal minors of the 
+\item their coefficients are, up to a sign, maximal minors of the 
 Sylvester matrix\footnote{Indeed, observe that the matrix of $\psi_j$ is a
 submatrix of the Sylvester matrix.}, and
 \item $A \cdot U_j^{d_A, d_B}(A,B) + B \cdot V_j^{d_A, d_B}(A,B) 
@@ -735,7 +733,7 @@ denotes the leading coefficient of $B$.
 \begin{algorithm}
   \SetKwInOut{Input}{Input}
   \SetKwInOut{Output}{Output}
-  \Input{Two polynomials $A, B \in K_d[X]$ (given at finie precision)}
+  \Input{Two polynomials $A, B \in K_d[X]$ (given at finite precision)}
   \Output{The complete sequence of subresultants of $A$ and $B$.}
 
   \BlankLine
@@ -814,7 +812,7 @@ they thus have a strong probabilistic flavour.
 \begin{rem}
 The locution \emph{Euclide-like algorithms} (which appears in the 
 title of the Section) refers to the family of
-algorithms computed \textsc{gcd}s or subresultants by means of successive
+algorithms computing \textsc{gcd}s or subresultants by means of successive
 Euclidean divisions. We believe that the stability of all algorithms in
 this family is comparable since we are precisely loosing precision
 while performing Euclidean divisions.
@@ -849,13 +847,13 @@ computing a polynomial, the software truncates the precision on each
 coefficient to the smallest one.
 One can argue that this assumption is too strong (compared to usual
 implementations of $p$-adic numbers). Nevertheless, it defines a 
-simplified framework where computations can be performed and experiments 
+simplified framework in which computations can be carried out and experiments 
 show that it rather well reflects the behaviour of the loss of precision 
 in Euclide-like algorithms.
 
 Let $V_j$ be the valuation of the principal $j$-th subresultant of $A,B$ 
 and $W_j$ be the minimum of the valuations of the coefficients of $R_j$. 
-We of course have $V_j \geq W_j$ and we set $\delta_j = V_j - W_j$.
+Of course we have $V_j \geq W_j$ and we set $\delta_j = V_j - W_j$.
 
 \begin{prop}
 \label{prop:precEuclide}
@@ -874,11 +872,11 @@ $$\begin{array}{rrcl}
 \end{array}$$
 where $s$ is the coefficient of degree $j$ of $S$. Let us first estimate 
 the precision of $S$. Using \eqref{eq:precmul}--\eqref{eq:precdiv}, we 
-find that the computed relation precision on $r_{j+1} \cdot r_j^{-1} 
+find that the computed relative precision on $r_{j+1} \cdot r_j^{-1} 
 \cdot R_j$ is $\min(N_{j+1} - V_{j+1}, N_j - V_j)$. The absolute
 precision of this value is then
-$M = \min(N_{j+1} - \delta_j, N_j - \delta_j + V_{j+1} - V_j)$. This
-quantity is also the precision of $S$ since the other summand
+$M = \min(N_{j+1} - \delta_j, N_j - \delta_j + V_{j+1} - V_j)$. The
+latter is also the precision of $S$ since the first summand
 $R_{j+1}$ is known with higher precision. Repeating the argument, we
 find that the precision of $(R_{j+1} \,\%\, R_j)$ is equal to 
 $\min(M - \delta_j, N_j - \delta_j + \val(s) - V_j)$ and therefore is 
@@ -944,7 +942,7 @@ $(X, \, X' + \min(X', [X/2]))$
 where $X$ and $X'$ are two independant discrete random variables with 
 geometric law of parameter $(1 - q^{-1})$ and the notation $[\cdot]$ 
 stands for the integer part function. In particular, we observe that 
-$(V_{d-2}, V_{d-1}) \neq (2,1)$ almost surely although the events 
+$(V_{d-1}, V_{d-2}) \neq (2,1)$ almost surely although the events 
 $\{V_{d-1} = 2\}$ and $\{V_{d-2} = 1\}$ both occur with positive 
 probability.
 
@@ -1002,11 +1000,11 @@ in particular $\frac{\sqrt q}{q-1} \leq \sigma[V_j] <
 By Theorem \ref{th:lawVj}, we have $\E[V_j] =
 \sum_{i=0}^d \E[Z_i]$ with $Z_i = \min(X_{j-i}, \ldots, X_{j+i})$ ($j$ 
 is fixed during all the proof). Our conventions imply that $Z_i$ 
-vanishes if $i \geq d-j$. On the contrary, if $i < d-j$, let us define 
+vanishes if $i \geq d-j$. Let us define 
 $\tau(1), \ldots, \tau(d-j)$ as the numbers $\sigma(1), \ldots, 
-\sigma(d-j)$ sorted in increasing order. The random variable $Z_i$ 
-is then the minimum of $\tau(i)$ independant random variables with 
-geometric distribution of parameter $(1 - q^{-1})$ and thus its 
+\sigma(d-j)$ sorted in increasing order. For $i < d-j$, the random variable $Z_i$ 
+is the minimum of $\tau(i)$ independant random variables with 
+geometric distribution of parameter $(1 - q^{-1})$. Thus its 
 distribution is geometric of parameter $(1 - q^{-\tau(i)})$.
 Its expected value is then $\frac 1 {q^{\tau(i) - 1}}$ and the first
 formula follows. The inequality $\frac 1 {q-1} \leq \E[V_j]$ is clear
@@ -1035,24 +1033,29 @@ where $e(i,i') = \min(\tau(i), \tau(i')) = \tau(\min(i,i'))$. Summing
 up these contributions, we get the equality in~(3). The inequalities
 are derived from this similarly to what we have done in~(1).
 
-We now prove~(4). Let $(Z_i)_{i \geq 0}$ be a countable family 
-of independant random variable having all geometric distribution of 
-parameter $(1 - q^{-1})$. We set $Z = \sum_{i=1}^\infty \min(Z_1, \ldots, 
-Z_i)$. Cleary $V_j \leq Z$ and it is then enough to prove:
-$$\P[Z \geq m] \leq q^{-m + O(\sqrt m)}.$$
+We now prove~(4). Let $(G_i)_{i \geq 0}$ be a countable family 
+of independant random variables having all geometric distribution of 
+parameter $(1 - q^{-1})$. We set $G = \sum_{i=1}^\infty \min(G_1, 
+\ldots, G_i)$. Thanks to Theorem~\ref{th:lawVj}, it is enough to prove
+that $\P[G \geq m] \leq q^{-m + O(\sqrt m)}$.
 We introduce the event $E_m$ formulated as follows:
-\emph{there exists a partition $(m_1, \ldots, m_\ell)$ of $m$ such that $X_i 
-\geq m_i$ for all $i \leq \ell$}.
-Up to a measure-zero subset, $E_m$ contains the event $\{ Z \geq m\}$.
-We obtain this way:
-$$\P[Z \geq m] \leq \P[E_m] \leq
-\sum \, \prod_{i=1}^\ell \P[X_1 \geq m_i]$$
-where the latter sum runs over all partitions $(m_1, \ldots, m_\ell)$ 
-of $m$. Replacing $\P[X_1 \geq m_i]$ by $q^{-m_i}$, we get
+\emph{there exists a partition $\underline m = 
+(m_1, \ldots, m_\ell)$ of $m$ such that 
+$G_i \geq m_i$ for all $i \leq \ell$}.
+We claim that $E_m$ contains the event $\{ G \geq m\}$. Indeed assume
+$G \geq m$ and set $m'_i = \min(G_1, \ldots, G_i)$. Clearly, the 
+sequence $(m'_i)_{i \geq 1}$ is nondecreasing and $\sum_{i=1}^\infty 
+m'_i \geq m$ by assumption. Therefore there exists a partition 
+$(m_1, \ldots, m_\ell)$ of $m$ with $m_i \leq m'_i$ for all $i$.
+These $m_i$'s also satisfy $G_i \geq m_i$ and our clair is then proved. 
+We derive $\P[G \geq m] \leq \P[E_m]$ and therefore:
+$$\P[G \geq m] \leq \sum_{\underline m} \, \prod_{i=1}^\ell \P[G_i \geq m_i]$$
+where the latter sum runs over all partitions $\underline m = (m_1, \ldots, m_\ell)$ 
+of $m$. Replacing $\P[G_i \geq m_i]$ by $q^{-m_i}$, we get
 $\P[E_m] \leq p(m) \cdot q^{-m}$
 where $p(m)$ denotes the number of partitions of $m$. By a famous 
 formula \cite{andrews}, we know that $\log p(m)$ is equivalent to $\pi 
-\sqrt{2m/3}$. In particular it is in $q^{O(\sqrt m)}$ and~(4) is proved.
+\sqrt{2m/3}$. In particular $p(m) \in q^{O(\sqrt m)}$ and~(4) is proved.
 
 We now derive~(5) by a standard argument. It follows from~(4) that
 $$\P[\max(V_0, \ldots, V_{d-1})] \leq d \cdot q^{-m + c\sqrt m}$$
@@ -1061,7 +1064,7 @@ $$\E[\max(V_0, \ldots, V_{d-1})] \leq \sum_{m=1}^\infty \min(1,
 d \cdot q^{-m + c\sqrt m}).$$
 Let $m_0$ denote the smallest index such that $d \cdot q^{-m_0 + c\sqrt 
 m_0}$, \emph{i.e.} $m_0 - c \sqrt{m_0} \geq \log_q d$. Solving the latest
-equation, we get $m_0 = \log_q + O(\sqrt{\log_q d})$. Moreover
+equation, we get $m_0 = \log_q d + O(\sqrt{\log_q d})$. Moreover
 $\sum_{m=m_0}^\infty d\: q^{-m + c\sqrt m}$ is bounded independantly of
 $d$. The result follows.
 \end{proof}
@@ -1150,10 +1153,10 @@ We are going to define the inverse of $\psi_j$. We fix a quadruple
 $(\mathcal U_j, \mathcal U_{j-1}, \mathcal R_j, \mathcal R_{j-1})$ in 
 $\mathcal E_j^\times$ and set $a = \mathcal R_j[j]$.
 Let $\mathcal W_j$ and $\mathcal W_{j-1}$ denote 
-the $j$-th cofactors of $(\mathcal U_{j-1}, \mathcal U_j)$ in degree 
+the cofactors of $(\mathcal U_{j-1}, \mathcal U_j)$ in degree 
 $(d{-}j, d{-}j{-}1)$. Define $\mathcal V_j = \alpha \mathcal W_j$ and 
 $\mathcal V_{j-1} = -\alpha \mathcal W_{j-1}$ where $\alpha =
-a^{4j-4d+6}$. The relation:
+a^{2j-2d+4}$. The relation:
 \begin{equation}
 \label{eq:missingcof}
 \mathcal U_{j-1} \mathcal V_j - 
@@ -1164,23 +1167,24 @@ then holds. We now define $A$ and $B$ using the formulae:
 \label{eq:systemAB}
 \left\{\begin{array}{l}
 A = (-1)^j \cdot a^{-2} \cdot (\mathcal V_j \mathcal R_{j-1} - \mathcal V_{j-1} \mathcal R_j) \smallskip \\
-B = (-1)^{j-1} \cdot a^{-2} \cdot (\mathcal U_j \mathcal R_{j-1} - \mathcal U_{j-1} \mathcal R_j) \\
+B = (-1)^{j-1} \cdot a^{-2} \cdot (\mathcal U_j \mathcal R_{j-1} - \mathcal U_{j-1} \mathcal R_j). \\
 \end{array}\right.
 \end{equation}
-and let $\varphi_j$ be the function mapping $(\mathcal U_j, \mathcal 
+They are both monic of degree $d$, so that we can define $\varphi_j$
+as the function taking $(\mathcal U_j, \mathcal 
 U_{j-1}, \mathcal R_j, \mathcal R_{j-1})$ to $(A,B)$. The composite 
 $\varphi_j \circ \psi_j$ is easily checked to be the identity: indeed, 
 if $\psi_j(A,B) = (\mathcal U_j, \mathcal U_{j-1}, \mathcal R_j, 
 \mathcal R_{j-1})$, the relation~\eqref{eq:missingcof} implies that 
-$\mathcal V_{j-1}$ and $\mathcal V_j$ are the missing cofactors and, 
-consequently, $A$ and $B$ have to be given by the 
+$\mathcal V_{j-1}$ and $\mathcal V_j$ are the missing cofactors (up 
+to a sign) and, consequently, $A$ and $B$ have to be given by the 
 system~\eqref{eq:systemAB}.
 
 To conclude the proof, it remains to prove that the composite in 
 the other direction $\psi_j \circ \varphi_j$ is the identity as well. 
 Since both $\varphi_j$ and $\psi_j$ are componant-wise given by 
 polynomials, we can use functoriality and assume that $\ring$ is 
-the field $\Q(c_0, c_1, \ldots, c_n)$ (with $n = 2d$) and that 
+the field $\Q(c_0, c_1, \ldots, c_n)$ (with $n = 2d$) where
 each variable $c_i$ corresponds to one coefficient of $\mathcal U_j$, 
 $\mathcal U_{j-1}$, $\mathcal R_j$ and $\mathcal R_{j-1}$ with the
 convention that $c_0$ (resp. $(-1)^{j-1} c_0$) is used for the leading
@@ -1201,11 +1205,16 @@ has to be bijective. Therefore there must exist $\lambda \in \ring$
 such that $\mathcal R_j = \lambda \cdot R_j$ and $\mathcal U_j = \lambda 
 \cdot U_j$. Similarly $(\mathcal R_{j-1}, \mathcal U_{j-1}) = \mu \cdot
 (R_{j-1}, U_{j-1})$ for some $\mu \in \ring$. Identifying the leadings 
-coefficients, we get $\lambda = \mu$. Writing
-$\Res^{d-j,d-j-1}(\mathcal U_{j-1}, \mathcal U_j) = 
-\Res^{d-j,d-j-1}(U_{j-1}, U_j)$,
-we get $\lambda^{2(d-j)-1} = 1$. Since the exponent is odd, this implies 
-$\lambda = 1$ and we are done.
+coefficients, we get $\lambda = \mu$. Now observe that:
+$$\Res^{d-j,d-j-1}(\mathcal U_{j-1}, \mathcal U_j) = 
+\Res^{d-j,d-j-1}(\lambda U_{j-1}, \lambda U_j) = 
+\lambda^{2d-2j-1} \cdot \Res^{d-j,d-j-1}(U_{j-1}, U_j).$$
+Noting that $(\mathcal U_j, \mathcal U_{j-1}, \mathcal R_j, \mathcal 
+R_{j-1})$ and $(U_j, U_{j-1}, R_j, R_{j-1})$ both belong to $\mathcal
+E_j$, we derive:
+$$\mathcal R_j[j]^{2(d-j-1)} = \lambda^{2d-2j-1} \cdot R_j[j]^{2(d-j-1)}$$
+from what we finally get $\lambda = 1$ since $\mathcal R_j = \lambda
+\cdot R_j$.
 \end{proof}
 
 \begin{cor}
@@ -1244,12 +1253,12 @@ $q^{2d-\Card J} (q-1)^{\Card J}$. To do this, we introduce several
 additional notations. First, we write $J = \{n_1, \ldots, 
 n_\ell\}$ with $n_1 > n_2 > \cdots > n_\ell$ and set $n_{\ell+1} = 
 0$ by convention. Given $n$ and $m$ two integers with $m < n$, we let 
-$V_{(m,n)}$ denote the set of polynomials of the form
+$V_{[m,n)}$ denote the set of polynomials of the form
 $a_m X^m + a_{m+1} X^{m+1} \cdots + a_n X^n$
-with $a_i \in \ring$ and $a_n \neq 0$. Clearly, $V_{(m,n)}$ has
+with $a_i \in \ring$ and $a_n \neq 0$. Clearly, $V_{[m,n)}$ has
 cardinality $(q-1) q^{n-m}$. If $P$ is any polynomial of 
 degree $n$ and $m < n$ is an integer, we further define $P[m{:}] \in 
-V_{(m,n)}$ as the polynomial obtained from $P$ by removing its monomials 
+V_{[m,n)}$ as the polynomial obtained from $P$ by removing its monomials 
 of degree $< m$. Finally, given $(A,B)$ in $\Omega_\ring$, we 
 denote by $(S_i(A,B))$ its subresultant pseudo-remainder sequence as 
 defined in \S \ref{subsec:subres}. We note that, if $(A,B) \in 
@@ -1258,7 +1267,7 @@ have $\deg S_i = n_i$ for all $i$. We now claim that the mapping
 $$\begin{array}{rcl} 
 \Lambda_J : \,\, 
 \Omega_\ring(J) & \to & 
-V_{(n_1,n_2)} \times \cdots \times V_{(n_\ell,n_{\ell+1})} \smallskip \\
+V_{[n_1,n_2)} \times \cdots \times V_{[n_\ell,n_{\ell+1})} \smallskip \\
 (A,B) & \mapsto & 
 \big(S_i(A,B)[n_{i+1}{:}]\big)_{1 \leq i \leq \ell}
 \end{array}$$ 
@@ -1292,7 +1301,7 @@ $$\P[\delta_j \geq m] \geq (1 - q^{-1}) \cdot
 \frac{q(q^j - 1)}{q^{j+1}-1} =
 \frac{(q-1)(q^j - 1)}{q^{j+1}-1}.$$
 The case $j = d-1$ is actually simpler. Indeed, the same argument works 
-expect that we know for sure that $r_{j+1} = r_d$ is invertible since it 
+except that we know for sure that $r_{j+1} = r_d$ is invertible since it 
 is equal to $1$ by convention. In that case, the probability is then 
 equal to $\frac{q(q^j - 1)}{q^{j+1}-1}$.
 
@@ -1344,7 +1353,7 @@ distribution than $\sum_{i=1}^{V_j^{(0)} - 1} \min(X_{j-i}^{(1)},
 $Y_j^{(1)} = \sum_{i=1}^d \min(X_{j-i}^{(0)}, X_{j-i}^{(1)}, \ldots, 
 X_{j+i}^{(0)}, X_{j+i}^{(1)})$. More precisely,
 the equidistribution of $(A^{(1)}, B^{(1)})$ shows that the 
-joint distribution $(V_j^{(0)}, V_j^{(1)})$ is the same as those
+joint distribution $(V_j^{(0)}, V_j^{(1)})$ is the same as that
 of $(Y_j^{(0)}, Y_j^{(1)})$. Repeating the argument, we see that
 $(V_j^{(m)})_{m \geq 0}$ is distributed as $(Y_j^{(m)})_{m \geq 0}$
 where:
@@ -1399,7 +1408,7 @@ A $\A$-lattice in a finite dimensional vector space $E$ over $K$ is
 a $\A$-submodule of $E$ generated by a $K$-basis of $E$.
 \end{deftn}
 
-Although the defintion of a lattice is similar to that of $\Z$-lattice 
+Although the definition of a lattice is similar to that of $\Z$-lattice 
 in $\R^d$, the geometrical representation of it is quite different. 
 Indeed, the elements of $\A$ themselves are not distributed as $\Z$ is 
 in $\R$ but rather from a ball inside $K$ (they are exactly elements of 
@@ -1470,14 +1479,14 @@ The case of locally analytic functions is treated in \cite{padicprec}
 in full generality. Nevertheless, for the application we have in mind, 
 it will be enough to restrict ourselves to the simpler case of 
 \emph{integral polynomial} functions. In order to proceed, we assume 
-that $E$ is endowed with distingushed ``orthonormal'' 
+that $E$ is endowed with distinguished ``orthonormal'' 
 basis\footnote{One can prove that such a basis always exists.}, that is 
 a basis $(e_1, \ldots, e_n)$ with the property that $\Vert \sum_{i=1}^n 
 x_i e_i \Vert_E = \max_{1\leq i \leq n} |x_i|$ for all 
-families of $\lambda_i$'s lying in $K$. In other words, the choice of
-this distingushed ``orthonormal'' basis defines a norm-preserving 
+families of $x_i$'s lying in $K$. In other words, the choice of
+this distinguished ``orthonormal'' basis defines a norm-preserving 
 isomorphism between $E$ and $K^n$ endowed with the sup norm. We assume
-similarly that we are given a distingushed ``orthonormal'' basis
+similarly that we are given a distinguished ``orthonormal'' basis
 $(f_1, \ldots, f_m)$ of $F$. Then any function $f : E \to F$ can
 be written in our distinguished system of coordinates as follows:
 $$f(x) = \sum_{j=1}^m F_j(x_1, \ldots, x_n) f_j
@@ -1491,7 +1500,7 @@ polynomials functions with coefficients in $\A$.
 \begin{ex}
 \label{ex:Gaussnorm}
 Let us examine more closely the case of polynomial spaces since it will 
-be considered repeadtly in the sequel. We take $E = K_{<n}[X]$ and $F = 
+be considered repeatedly in the sequel. We take $E = K_{<n}[X]$ and $F = 
 K_{<m}[X]$ and endow both with the Gauss norm, which is defined by:
 \begin{align*}
 \Vert a_0 + a_1 X + \cdots + a_{n-1} X^{n-1} \Vert_E & 
@@ -1503,7 +1512,7 @@ It is clear from these definitions that the canonical basis $(1, X,
 \ldots, X^{n-1})$ and $(1, X, \ldots, X^{m-1})$ of $E$ and $F$ 
 respectively are ``orthonormal''. Moreover the coordinates in these
 basis are the $a_i$'s and the $b_i$'s respectively. Hence, an integral
-polynomial function $f : E \to F$ is nothing but a function mapping a
+polynomial function $f : E \to F$ is nothing but a function mapping
 a polynomial $P$ to a polynomial $Q$ whose coefficients are given by
 polynomial expressions which involve only the coefficients of $P$ and 
 some constants in $\A$.
@@ -1567,7 +1576,7 @@ $g(C)$ into two parts as follows:
 Part~\eqref{item:gpx} is not easy to handle in full generality: in order 
 to be efficient, a special close analysis taking advantage of the 
 particular problem under consideration is often necessary. For now, let 
-us simply assume that we have given two lattices $H_\min$ and $H_\max$ 
+us simply assume that we are given two lattices $H_\min$ and $H_\max$ 
 with the property that:
 \begin{equation}
 \label{eq:Hminmax}
@@ -1698,7 +1707,7 @@ whose skeleton is depicted in Algorithm~\ref{algo:stabilizedF}.
   \SetKwInOut{Input}{Input}
   \SetKwInOut{Output}{Output}
   \Input{$x$ given at precision $O(H)$}
-  \Output{$g(x)$ given at precision $O(H_{\max,n})$}
+  \Output{$f(x)$ given at precision $O(H_{\max,n})$}
   
   \BlankLine
 
@@ -1715,7 +1724,7 @@ whose skeleton is depicted in Algorithm~\ref{algo:stabilizedF}.
 \end{algorithm}
 
 The correctness of Algorithm~\ref{algo:stabilizedF} (under the 
-assumptions listed above) is clear after Lemma~\ref{eq:padicprec}.
+assumptions listed above) is clear after Lemma~\ref{lem:padicprec}.
 
 \subsection{Application to subresultants}
 \label{subsec:stabilization}
@@ -1822,7 +1831,7 @@ stable version of Algorithm~\ref{algo:subres}.
   \For{$j = (d-1), (d-2), \ldots, 1$}
     {$r_j \leftarrow$ coefficient in $X^j$ of $R_j$
 
-     \lIf{$v_j \geq \frac N 2$}{\textbf{raise} NotImplementedError}
+     \lIf{$\val(r_j) \geq \frac N 2$}{\textbf{raise} NotImplementedError}
 
      \textbf{lift} $(R_{j+1}, R_j)$ at precision $O(\pi^{N+2\val(r_j) + 2\val(r_{j+1}))})$
 
@@ -1880,9 +1889,9 @@ complexity is also $\tilde O(d^2 N \cdot \log |k|)$ bit operations.
 
 To conclude with, let us comment on briefly the hypothesis {\bf (H)}. We 
 first remark that it is satisfied with high probability if $N$ is large 
-compared to $2 \cdot \log_d p$. Thus, replacing eventually $N$ by $3 
-\cdot \log_d p$ (which does not affect the complexity), the 
-assumption~(b) is harmless on average --- but maybe not on particularly 
+compared to $2 \cdot \log_d p$. Thus, replacing if necessary $N$ by $3 
+\cdot \log_d p$ (which does not affect the complexity), it is harmless
+on average --- but might be not on particularly 
 bad instances. We moreover underline that, if we are just interested in 
 computing the $j$-th subresultant for a particular $j$, then we just 
 need to assume the non-vanishing of the principal subresultants in the 
@@ -1921,7 +1930,7 @@ precision naively otherwise: it is possible to get this way a stable
 algorithm whose average running time is acceptable but which seems to be 
 bad in the worst case. Can we do better?
 
-Another quite interesting question is those of designing an algorithm 
+Another quite interesting question is that of designing an algorithm 
 which combines the precision technology developed in this paper with the 
 ``half-\textsc{gcd}'' methods. It is actually closely related to the 
 previous question because ``half-\textsc{gcd}'' methods make an 
@@ -1937,9 +1946,9 @@ apply rounding heuristics when final digits are unsettled.
 In comparison with arithmetic interval, floating point arithmetic has
 two main advantages. First, it allows simple and fast implementations.
 Second, experiments show that the obtained results have generally
-more much correct digits that those predicted by arithmetic interval.
-The counterpart is that, expect on small examples, obtaining proved
-results is generally intractable.
+more much correct digits than the number predicted by arithmetic interval.
+The counterpart is that, except on small examples, obtaining proved
+results is often quite difficult and even sometimes intractable.
 
 In the $p$-adic setting, the analogue of floating point arithmetic has 
 not been developed yet. One reason for this is probably the well-known 
@@ -1985,7 +1994,7 @@ ultrametric floating point arithmetic are the simplicity and the
 efficiency while the counterpart is the difficulty to get proved results. 
 Moreover, the aforementioned examples are evidences that ultrametric 
 floating point arithmetic may often compute much more correct digits 
-than those predicted by an analysis based on interval arithmetic. In 
+than the number predicted by a naive analysis based on interval arithmetic. In 
 order to illustrate this last assertion, let us go back to the case of 
 resultants discussed earlier in this paper. Let $A$ and $B$ be two monic 
 polynomials of degree $d$ (picked at random) whose coefficients are all 
