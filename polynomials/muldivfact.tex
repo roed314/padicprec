@@ -207,7 +207,8 @@ in Euclidean division.
 {\bf Main Results.}
 %
 Suppose that the Newton polygon of $P(X) = \sum_{i=0}^n a_i X^i$
-has a break at $i=d$.  Set $A_0 = \sum_{i=0}^d a_i X^i$, $V_0 = 1$ and
+has a break at $i=d$.  Denote by $A \div B$ and $A \mod B$ the quotient and remainder
+in the Euclidean division of $A$ by $B$. Set $A_0 = \sum_{i=0}^d a_i X^i$, $V_0 = 1$ and
 \begin{align*}
 A_{i+1} &= A_i + (V_i P \mod A_i) \\
 B_{i+1} &= P \div A_{i+1} \\
@@ -590,7 +591,7 @@ B = B_\app + O(\varphi_B)$$
 Here $A_\app$ and $B_\app$ are some approximations of $A$ and $B$ respectively 
 and $\varphi_A$ and $\varphi_B$ denotes two Newton functions of degree 
 $\deg A$ and $\deg B$ respectively.
-We are interested in determining the precision on $A \mod B$ and $A
+We are interested in determining the precision of $A \mod B$ and $A
 \div B$. The following proposition gives a theoretical answer under
 mild assumptions.
 
@@ -646,7 +647,7 @@ $$A = A_\app + O(H_A)
 B = B_\app + O(H_B).$$
 where $H_A \in K_{\leq n}[X]$ and $H_B \in K_{\leq d}[X]$ are lattices. 
 According to the results of \cite{caruso-roe-vaccon:14a}, in order to determine the 
-precision on $A \div B$ and $A \mod B$, we need to compute the 
+precision of $A \div B$ and $A \mod B$, we need to compute the 
 differential of the mappings $(X,Y) \mapsto X \div Y$ and $(X,Y)
 \mapsto X \mod Y$ at the point $(A_\app, B_\app)$. Writing $Q_\app = A_\app \div
 B_\app$ and $R_\app = A_\app \mod B_\app$, this can be done by
@@ -696,12 +697,12 @@ sample of $1000$ random inputs. We recall that $G$ is defined as
 follows:
 
 \noindent $\bullet$
-in the case of jagged and Newton precision, the precision on the output 
+in the case of jagged and Newton precision, the precision of the output 
 may be written into the form $\sum_{i=0}^4 O(2^{N_i}) \: X^i$ and 
 $G = \sum_{i=0}^4 (N_i - N)$;
 
 \noindent $\bullet$
-in the case of lattice precision, the precision on the output is a 
+in the case of lattice precision, the precision of the output is a 
 lattice $H$ and $G$ is the index of $H$ in $2^N \mathcal L$ where 
 $\mathcal L = \Z_2[X]/M$ is the standard lattice; in that case, we write 
 $G$ as a sum $G_{\text{nd}} + G_{\text{d}}$ where $G_{\text{d}}$ is the 
@@ -1392,7 +1393,7 @@ a factor of $P$ whose Newton function is $\NF(P)_{|[0,d]}$ and $V$ is the invers
 We now assume that $P$ is known up to some finite precision: $P = P_\app + 
 O(\hspace{0.5mm}\cdots)$ where the object inside the $O$ depends on the 
 chosen precision model. We address the two following questions:
-(1)~what is the precision on the factor $A$, and
+(1)~what is the precision of the factor $A$, and
 (2)~how can one compute in practice $A$ at this precision?
 
 In the sequel, it will be convenient to use a different normalization on 
@@ -1409,7 +1410,7 @@ precision datum up to degree $d{-}1$ and $n{-}d{-}1$ respectively.
 
 \noindent
 {\bf Newton precision.}
-We assume that the precision on the input $P$ has the shape 
+We assume that the precision of the input $P$ has the shape 
 $O(\varphi_P)$ where $\varphi_P$ is a Newton function of degree 
 $n{-}1$. From now on, we assume that the precision $O(\varphi_P)$ 
 is nondegenerate in the sense of Definition~\ref{def:nondeg}. This
@@ -1570,7 +1571,7 @@ $P$ we want to factor. We assume from now that $H_P$ is sufficiently
 small so that the Newton polygon of $P$ is well defined. We then can
 define the function:
 $$F = (F_A, F_B) : P_\app + H_P \to K_{=d}[X] \times K_{=n{-}d}[X]$$
-mapping a polynomial $P$ to the couple $(A^{(1)}, B^{(1)})$ obtained
+mapping a polynomial $P$ to the pair $(A^{(1)}, B^{(1)})$ obtained
 from it. We set $(A_\app^{(1)}, B_\app^{(1)}) = F(P_\app)$.
 
 We make the following hypothesis \textbf{(H)}:
@@ -1594,7 +1595,7 @@ $$F(P + H_P) = F(P) + F'(P)(H_P).$$
 
 \noindent
 Obviously \textbf{(H)} gives an answer to the first question we have 
-raised above: the precision on the couple $A^{(1)}$ is the lattice 
+raised above: the precision of the pair $A^{(1)}$ is the lattice 
 $H_{A^{(1)}}$ defined as projection on the first component of 
 $F'(P_\app)(H_P)$. It turns out that it can be computed explicitely as 
 shown by the next proposition.
@@ -1699,9 +1700,9 @@ as expected.
 As a conclusion, the algorithm we propose consists in computing the 
 Newton sequences $(A_i)$ and $(V_i)$ (following the strategy of the
 algorithm \texttt{slope\_factorisation\_Newton} regarding to precision)
-until we find a couple $(\tilde A^{(1)}, \tilde V^{(1)})$ satisfying 
+until we find a pair $(\tilde A^{(1)}, \tilde V^{(1)})$ satisfying 
 the requirements (i) and (ii) of Proposition~\ref{prop:stop}. Once this 
-couple has been found, one may safely output $\tilde A^{(1)} + 
+pair has been found, one may safely output $\tilde A^{(1)} + 
 O\big(\big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}\big)$ under
 \textbf{(H)}.
 The resulting algorithm has quasi-optimal running 
@@ -1716,7 +1717,7 @@ precision for slope factorization over $\mathbb{Q}_2 [X].$
 We start with random polynomials $A$ and $B$ with given minoration on 
 their Newton polygons, assuring they have no common slope.
 We compute $P=AB$ and then $A^{(1)}$, and compare the obtained 
-precision on $A^{(1)}$ (jagged) with the estimation given using 
+precision of $A^{(1)}$ (jagged) with the estimation given using 
 $\psi_{A^{(1)}}$ and Proposition \ref{prop:precA1} 
 assuming~\textbf{(H)}. The mean amount of lost digits for $1000$ 
 experiments is given in the following array. Two settings are possible 
