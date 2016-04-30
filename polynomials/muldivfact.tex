@@ -184,10 +184,12 @@ Our main result is a new algorithm for computing these $g_j(X)$.
 Polynomial factorization over local fields has seen a great deal of progress recently
 \citelist{\cite{pauli:10a} \cite{guardia-nart-pauli:12a} \cite{guardia-montes-nart:08a} \cite{montes:99a}}
 following an algorithm of Montes.  Slope factorization provides a subroutine
-in such algorithms \cite[Section~2]{pauli:10a}.  For the most difficult inputs, it is not the dominant
-contributor to the runtime of the algorithm, but in some circumstances it will be.
-We underline moreover that the methods introduced in this paper extend 
-partially to the noncommutative setting and appear this way as an
+in such algorithms \cite{pauli:10a}*{Section~2}.  Note that our algorithm lifts
+a \emph{slope factor} corresponding to a segment of the Newton polygon,
+rather than the irreducible factor found by single factor lifting \cite{guardia-nart-pauli:12a}.
+The slope factors are easier to find; as a consequence our iteration is less involved.
+We also remark that the methods introduced in this paper extend 
+partially to the non-commutative setting and appear this way as an
 essential building block in several decomposition algorithms of 
 $p$-adic Galois representations and $p$-adic differential 
 equations~\cite{caruso:16}.
@@ -253,8 +255,8 @@ finding different behavior depending on the modulus.
 Finally, in Section \ref{sec:slope_fac} we describe
 our slope factorization algorithm, which is based on
 a Newton iteration.  Unlike other algorithms for
-slope factorization, ours does not require working
-with fractional exponents. % \todo{ citation?}. 
+slope factorization \cite{chistov:90a}*{Eq. (3)}, ours does not require working
+with fractional exponents.
 In Theorem \ref{theo:slope-factor} we define a sequence
 of polynomials that will converge to the factors
 determined by an extremal point in the Newton
@@ -336,7 +338,7 @@ of precision for the special case of polynomials.
 \noindent
 {\bf Flat precision.}
 The simplest method for tracking the precision of a polynomial is
-to record each coefficient modulo a fixed power of $p$.  While
+to record each coefficient modulo a fixed power of $\pi$.  While
 easy to analyze and implement, this method suffers when
 applied to polynomials whose Newton polygons are far from flat.
 
@@ -377,7 +379,7 @@ can easily be represented and manipulated on a computer.
 \end{rem}
 
 We recall that one can attach a Newton function to each polynomial.
-If $P(X) = \sum_{i=0}^n a_n X^n \in K_n[X]$, we define its Newton
+If $P(X) = \sum_{i=0}^n a_n X^n \in K[X]$, we define its Newton
 polygon $\NP(P)$ as the convex hull of the points $(i,\val(a_i))$ 
 ($1 \leq i \leq n$) together with the point at infinity $(0,+\infty)$
 and then its Newton function $\NF(P) : [0,n] \to \R$ as the unique
@@ -816,7 +818,7 @@ flexibility.
 The factor $A$ defined above is usually obtained \emph{via} a Newton 
 iteration after having prepared our polynomial by flattening the first 
 slope using a change of variables involving possibly rational 
-exponents. We introduce here a variant of this iteration which does not 
+exponents \cite{chistov:90a}*{Eq. (3)}. We introduce here a variant of this iteration which does not 
 require the flattening step and is entirely defined over $K[X]$.
 
 \begin{theo} \label{theo:slope-factor}
@@ -1162,8 +1164,8 @@ to obtain the desired minoration on $\NP (S_{i+1}).$ This concludes the proof.
 \end{comment}
 
 If $\lambda_0 = -\infty$ or $\lambda_1 = +\infty$, the sequence $(A_i)$
-is constant and the theorem is obvious. We then assume that $\lambda_0$
-and $\lambda_1$ are both finite.
+is constant and the theorem follows, so assume that $\lambda_0$
+and $\lambda_1$ are finite.
 
 We define the function $\varphi : \R^+ \to \R 
 \cup \{+\infty\}$ by:
@@ -1175,12 +1177,11 @@ We define the function $\varphi : \R^+ \to \R
 %& = \lambda_0 (x-d) + \NP(P)(d) & \text{for } x > d.
 %\end{array}
 \end{equation}
-We notice that, when the polynomial $P$ is changed into $cP$ where $c$ is a 
-nonzero constant lying in a finite extension of $K$, the $A_i$'s are all 
-multiplied by $c$ as well whereas the $B_i$'s and the $V_i$'s remained 
-unchanged. Therefore, the theorem holds for $P$ if and only if it holds 
-for $cP$. As a consequence we may assume that $P$ is normalized so that 
-$\NF(P)(d) = d \lambda_0$, \emph{i.e.} $\varphi(x) = \lambda_0 x$ for $x > d$.
+For nonzero $c$ in a finite extension of $K$, note that the theorem holds
+for $P$ if and only if it holds for $cP$, since the $A_i$'s change to $cA_i$'s
+while the $B_i$'s and the $V_i$'s remained unchanged. We may thus assume
+that $P$ is normalized so that  $\NF(P)(d) = d \lambda_0$,
+\emph{i.e.} $\varphi(x) = \lambda_0 x$ for $x > d$.
 For a polynomial $Q \in K[X]$ of degree $n$, we further define:
 \begin{align}
 b_\varphi(Q) & = \min_{x \in [0,n]} \NF(Q)(x) - \varphi(x) 
@@ -1365,7 +1366,7 @@ R_j \leq d{-}1$ for all $j \geq i$.
 
 \begin{rem}
 \label{rem:slope-factor}
-It follows from the proof above that the sequence $(V_i)_{i \geq 0}$
+From the proof above, the sequence $(V_i)_{i \geq 0}$
 converges as well. Its limit $V_\infty$ is an inverse of $B_\infty
 = P \div A_\infty$ modulo $A_\infty$ and it satisfies in addition
 $b_1(V_\infty) \geq 0$.
@@ -1386,7 +1387,7 @@ b_0\big((1 - V_0 B_0) \mod A_0\big)\big)$.
 
 \subsection{A slope factorization algorithm}
 
-Let $P \in K_n[X]$ and $d$ be the abscissa of an extremal point of 
+Let $P \in K[X]$ have degree $n$ and $d$ be the abscissa of an extremal point of 
 $\NP(P)$. Previously (\emph{cf} Theorem~\ref{theo:slope-factor}), we 
 have defined a sequence $(A_i, V_i)$ converging to $(A,V)$ where $A$ is 
 a factor of $P$ whose Newton function is $\NF(P)_{|[0,d]}$ and $V$ is the inverse of $B = P/A$ modulo $A$.
@@ -1399,12 +1400,11 @@ chosen precision model. We address the two following questions:
 In the sequel, it will be convenient to use a different normalization on 
 $A$ and $B$: if $a_d$ is the coefficient of $P$ of degree $d$, we set
 $A^{(1)} = a_d^{-1} A$ and $B^{(1)} = a_d B$
-so that $A^{(1)}$ is monic and $P = A^{(1)} B^{(1)}$. We shall also 
-always assume that $P$ is monic in the sense that its leading
-coefficient is \emph{exactly}~$1$; the precision datum on $P$ then 
-only concerns the coefficients up to degree $n{-}1$. Similarly, noting
-that $A^{(1)}$ and $B^{(1)}$ are monic as well, they only carry a
-precision datum up to degree $d{-}1$ and $n{-}d{-}1$ respectively.
+so that $A^{(1)}$ is monic and $P = A^{(1)} B^{(1)}$. We also assume
+the leading coefficient of $P$ is \emph{exactly}~$1$; the precision datum on $P$ then 
+only concerns the coefficients up to degree $n{-}1$. Similarly,
+$A^{(1)}$ and $B^{(1)}$ only carry
+precision up to degree $d{-}1$ and $n{-}d{-}1$ (resp).
 
 \medskip
 
@@ -1476,15 +1476,14 @@ to $\lambda_1 x - \NF(P)(d)$.
 We can now move to the second question we have raised before, 
 \emph{i.e.} the design of an algorithm for computing $A^{(1)}$ with the 
 precision given by Proposition~\ref{prop:Newtonprecslope}. Our strategy 
-consists in computing first the precision and applying then the Newton 
-iteration until the expected precision is reached. Below is the
-precise description of our algorithm.
+consists in computing first the precision and then applying the Newton 
+iteration until the expected precision is reached.
 
 \noindent\hrulefill
 
 \noindent {\bf Algorithm} {\tt slope\_factorisation\_Newton}
 
-\noindent{\bf Input:} a monic polynomial $P + O(\varphi_P) \in K_n[X]$,
+\noindent{\bf Input:} a monic polynomial $P + O(\varphi_P) \in K[X]$ of degree $n$,
 
 \noindent\phantom{{\bf Input:} }a break point $d$ of $\NP(P)$
 
@@ -1542,7 +1541,7 @@ The precision needed at line 6 is of course governed by the computation
 performed at line 7. Note that it can be either computed \emph{a
 priori} by using Proposition~\ref{prop:NewtonprecEuclide} or dynamically 
 by using relaxed algorithms from 
-\cite{hoeven:02a,hoeven:07a,berthomieu-hoeven-lecerf:11a}. In both 
+\cites{hoeven:02a,hoeven:07a,berthomieu-hoeven-lecerf:11a}. In both 
 cases, it is in $O(\pi^{N_i})$ with $N_i = O(2^i \kappa + \min 
 \NF(P))$.
 \end{rem}
@@ -1550,9 +1549,9 @@ cases, it is in $O(\pi^{N_i})$ with $N_i = O(2^i \kappa + \min
 \noindent
 It follows from Theorem~\ref{theo:slope-factor}, 
 Remark~\ref{rem:slope-factor} and Proposition~\ref{prop:Newtonprecslope} 
-that Algorithm {\tt slope\_factorisation\_Newton} is correct and 
-stable. Using the standard soft-$O$ notation $\softO(\cdot)$ for
-hiding logarithmic factor, our algorithm performs at most $\softO(n)$ 
+that the above algorithm is correct and 
+stable. Using the standard notation $\softO(\cdot)$ for
+hiding logarithmic factors, our algorithm performs at most $\softO(n)$ 
 combinatorial operations and $\softO(n)$ operations in $K$ at precision 
 $O(\pi^N)$ with $N = O(\max \varphi_P - \min \NF(P))$ if one uses 
 quasi-optimal algorithms for multiplication and Euclidean division of 
@@ -1602,7 +1601,7 @@ shown by the next proposition.
 
 \begin{prop}
 \label{prop:precA1}
-The application $F_A : P \mapsto A^{(1)}$ is of class $C^1$ on $P_\app + H_P$
+The map $F_A : P \mapsto A^{(1)}$ is of class $C^1$ on $P_\app + H_P$
 and its differential at some point $P$ is the linear mapping
 $$dP \mapsto dA^{(1)} = (V^{(1)} \: dP) \mod A^{(1)}$$
 where $(A^{(1)}, B^{(1)}) = F(P)$ and $V^{(1)}$ is the inverse of 
@@ -1654,9 +1653,7 @@ that $G$ takes $H_{A^{(1)}}$ to $H_P$, which can be done easily
 using Theorem~\ref{theo:EDivisionNP}.
 \end{proof}
 
-As for the second question, the discussion is similar to the case of 
-Newton precision expect that we need a new stopping criterion. It is given 
-by the following proposition.
+To compute $A^{(1)}$ in practice, we give a stopping criterion.
 
 \begin{prop}
 \label{prop:stop}
@@ -1698,8 +1695,8 @@ as expected.
 \end{proof}
 
 As a conclusion, the algorithm we propose consists in computing the 
-Newton sequences $(A_i)$ and $(V_i)$ (following the strategy of the
-algorithm \texttt{slope\_factorisation\_Newton} regarding to precision)
+Newton sequences $(A_i)$ and $(V_i)$ (following the strategy of
+Algorithm \texttt{slope\_factorisation\_Newton} regarding to precision)
 until we find a pair $(\tilde A^{(1)}, \tilde V^{(1)})$ satisfying 
 the requirements (i) and (ii) of Proposition~\ref{prop:stop}. Once this 
 pair has been found, one may safely output $\tilde A^{(1)} + 
