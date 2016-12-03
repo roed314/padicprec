@@ -106,9 +106,23 @@
 \isbn{978-1-4503-4380-0/16/07}\acmPrice{\$15.00}
 \doi{http://dx.doi.org/10.1145/2930889.2930898}
 
-\permission{Publication rights licensed to ACM. ACM acknowledges that this contribution was authored or co-authored by an employee, contractor or affiliate of a national government. As such, the Government retains a nonexclusive, royalty-free right to publish or reproduce this article, or to allow others to do so, for Government purposes only.}
+\clubpenalty=10000 
+\widowpenalty = 10000
 
-\begin{document}
+\title{Division and Slope Factorization of p-Adic Polynomials}
+
+\numberofauthors{3}
+\author{
+\alignauthor Xavier Caruso\\
+  \affaddr{Universit\'e Rennes 1}\\
+  \affaddr{xavier.caruso@normalesup.org}
+\alignauthor David Roe \\
+  \affaddr{University of Pittsburgh}\\
+  \affaddr{roed.math@gmail.com}
+\alignauthor Tristan Vaccon\\
+  \affaddr{JSPS--Rikkyo University}\\
+  \affaddr{vaccon@rikkyo.ac.jp}
+}
 
 \newtheorem{theo}{Theorem}[section]
 \newtheorem{lem}[theo]{Lemma}
@@ -121,20 +135,9 @@
 \newtheorem{ex}[theo]{Example}
 \newtheorem{deftn}[theo]{Definition}
 
-\title{Division and Slope Factorization of p-Adic Polynomials}
 
-\numberofauthors{3}
-\author{
-\alignauthor Xavier Caruso\\
-  \affaddr{Universit\'e Rennes 1}\\
-  \affaddr{\textsf{xavier.caruso@normalesup.org}}
-\alignauthor David Roe \\
-  \affaddr{University of Pittsburgh}\\
-  \affaddr{\textsf{roed.math@gmail.com}}
-\alignauthor Tristan Vaccon\\
-  \affaddr{JSPS--Rikkyo University}\\
-  \affaddr{\textsf{vaccon@rikkyo.ac.jp}}
-}
+
+\begin{document}
 
 \maketitle
 
@@ -157,10 +160,6 @@ of the algorithm using several precision models.
 </concept>
 </ccs2012>
 \end{CCSXML}
-
-\vspace{-1mm}
-\ccsdesc[500]{Computing methodologies~Algebraic algorithms}
-\printccsdesc
 
 \vspace{-1.5mm}
 \keywords{Algorithms, $p$-adic precision, Newton polygon, factorization}
@@ -209,9 +208,8 @@ essential building block in several decomposition algorithms of
 $p$-adic Galois representations and $p$-adic differential 
 equations~\cite{caruso:16}.
 
-Any computation with $p$-adic fields must work with approximations modulo finite
-powers of $p$, and one of the key requirements in designing an algorithm is
-an analysis of how the precision of the variables evolve over the computation.
+Any $p$-adic computation must work with approximations modulo finite
+powers of $p$ and include an analysis of how the precision of the variables evolve over the computation.
 We work with precision models developed by the same authors
 \cite[Section~4.2]{caruso-roe-vaccon:14a}, focusing on the lattice and Newton models.
 As part of the analysis of the slope factorization algorithm, we describe
@@ -1483,12 +1481,17 @@ O\big(\big(\tilde V^{(1)} \cdot H_P\big) \mod \tilde A^{(1)}\big)$ under
 The resulting algorithm has quasi-optimal running 
 time and optimal stability.
 
-\bibliographystyle{plain}
+%\bibliographystyle{plain}
+
+\begingroup
+\raggedright
 
 % \bib, bibdiv, biblist are defined by the amsrefs package.
 \begin{bibdiv}
 \begin{biblist}
-\tiny
+%\tiny
+\vspace*{0.5mm}
+\scriptsize
 
 \bib{berthomieu-hoeven-lecerf:11a}{article}{
       author={Berthomieu, J{\'e}r{\'e}my},
@@ -1634,5 +1637,6 @@ time and optimal stability.
 
 \end{biblist}
 \end{bibdiv}
+\endgroup
 
 \end{document}
