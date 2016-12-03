@@ -1,0 +1,88 @@
+chi(M) = 0   (chi inconnu)
+
+d = deg P = nb_cols(V) 
+
+P(M)*V = 0 (mod p)
+
+P(M)*V + dP(M)*V + P(M)*dV = 0
+
+dV -> dV + V*dT
+
+(V+dV)*(1+dT) = V + dV + V*dT
+
+dV -> n*d - d^2 = d*(n-d)
+dP -> d
+
+V = noyau de P(M)
+P(M)*dV  dans l'image de P(M)
+
+À résoudre
+dP(M)*V = W (mod image de P(M))
+
+Je sais que ker P(M) et im P(M) sont en somme directe
+
+
+% --------------------------------------------------------------------
+
+S, T, X petits
+A nilpotent, B inversible
+
+( I  0 ) ( A  T ) ( I  0 )
+( -X I ) ( S  B ) ( X  I )
+
+( A     T    )
+( S-XA  B-XT )
+
+(    A+XT         T   )
+( S-AX+BX+XTX   B-XT  )
+
+S - XA + BX = 0
+
+XA - BX = S
+
+si A^2 = 0 
+----------
+
+XA^2 - BXA = SA
+XA = -B^(-1)SA
+BX = XA - S 
+   = -B^(-1) S A - S
+X = -B^(-2) S A - B^(-1) S
+
+
+si A^3 = 0
+----------
+
+BXA^2 = -SA^2
+XA^2 = -B^(-1) S A^2
+XA = -B^(-2) S A^2 - B^(-1) S A
+X = -B^(-3) S A^2 - B^(-2) S A - B^(-1) S
+
+
+Cas général
+-----------
+
+X = -sum(B^(-i-1)*S*A^i, i=0..infty)
+
+X_0 = -B^(-1)*S
+X_1 = X_0 + B^(-1)*X_0*A
+X_2 = X_1 + B^(-2)*X_1*A^2
+X_3 = X_2 + B^(-4)*X_2*A^4
+X_4 = X_3 + B^(-8)*X_3*A^8
+...
+converge vers X solution de XA-BX = S
+
+
+% ------------------------------------------------------------------
+
+diviseurs élémentaires de M = v_1, ..., v_n
+
+M |-> chi(M) = det(X-M)
+
+différentielle:
+dM |-> Tr(Com(X-M)*dM)
+
+réseau = réseau engendré par les coefficients de Com(X-M)
+
+coeff en X^k:
+ . réseau engendré par les mineurs de taille (n-1-k) ???

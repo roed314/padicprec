@@ -1,0 +1,174 @@
+\documentclass{sig-alternate-05-2015}
+
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+
+\usepackage[utf8]{inputenc}
+
+\hyphenation{regarding}
+
+\usepackage{amsmath,amssymb}
+\usepackage{amsthmnoproof}
+\usepackage{amsrefs}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{stmaryrd}
+\usepackage{enumerate}
+\usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
+\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
+\usepackage{comment}
+\usepackage{multirow}
+\usepackage{tikz}
+
+\newcommand{\noopsort}[1]{}
+\DeclareMathOperator{\NP}{NP}
+\DeclareMathOperator{\HP}{HP}
+\DeclareMathOperator{\PP}{PP}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\tr}{Tr}
+\DeclareMathOperator{\com}{Com}
+\DeclareMathOperator{\Grass}{Grass}
+\DeclareMathOperator{\Lat}{Lat}
+\DeclareMathOperator{\round}{round}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\lcm}{lcm}
+
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Zp}{\Z_p}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Qp}{\Q_p}
+\newcommand{\Fp}{\mathbb{F}_p}
+\newcommand{\R}{\mathbb R}
+
+\newcommand{\softO}{O\tilde{~}}
+
+\def\todo#1{\ \!\!{\color{red} #1}}
+\definecolor{purple}{rgb}{0.6,0,0.6}
+\def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
+
+\def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
+
+\CopyrightYear{2016}
+\setcopyright{acmcopyright}
+\conferenceinfo{ISSAC '16,}{July 19-22, 2016, Waterloo, ON, Canada}
+\isbn{978-1-4503-4380-0/16/07}\acmPrice{\$15.00}
+\doi{http://dx.doi.org/10.1145/2930889.2930898}
+
+\permission{Publication rights licensed to ACM. ACM acknowledges that this contribution was authored or co-authored by an employee, contractor or affiliate of a national government. As such, the Government retains a nonexclusive, royalty-free right to publish or reproduce this article, or to allow others to do so, for Government purposes only.}
+
+\begin{document}
+
+\newtheorem{theo}{Theorem}[section]
+\newtheorem{lem}[theo]{Lemma}
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{cor}[theo]{Corollary}
+\newtheorem{quest}[theo]{Question}
+\newtheorem{conj}[theo]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rem}[theo]{Remark}
+\newtheorem{ex}[theo]{Example}
+\newtheorem{deftn}[theo]{Definition}
+
+\title{Characteristic polynomial of p-adic matrices}
+
+\numberofauthors{3}
+\author{
+\alignauthor Xavier Caruso\\
+  \affaddr{Universit\'e Rennes 1}\\
+  \affaddr{\textsf{xavier.caruso@normalesup.org}}
+\alignauthor David Roe\\
+  \affaddr{Pittsburg University}\\
+  \affaddr{\textsf{roed@pitt.edu}}
+\alignauthor Tristan Vaccon\\
+  \affaddr{Universit\'e de Limoges}\\
+  \affaddr{\textsf{tristan.vaccon@unilim.fr}}
+}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10010147.10010148.10010149.10010150</concept_id>
+<concept_desc>Computing methodologies~Algebraic algorithms</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\vspace{-1mm}
+\ccsdesc[500]{Computing methodologies~Algebraic algorithms}
+\printccsdesc
+
+\vspace{-1.5mm}
+\keywords{Algorithms, $p$-adic precision, Newton polygon, factorization}
+
+%\vspace{1mm}
+% \noindent
+% {\bf Categories and Subject Descripto\RS:} \\
+%\noindent I.1.2 [{\bf Computing Methodologies}]:{~} Symbolic and Algebraic
+%  Manipulation -- \emph{Algebraic Algorithms}
+%
+% \vspace{1mm}
+% \noindent
+% {\bf General Terms:} Algorithms, Theory
+%
+% \vspace{1mm}
+% \noindent
+% {\bf Keywords:} $p$-adic precision, linear algebra, ultrametric analysis
+%\medskip
+
+\section{Introduction}
+
+\todo{Example of $M$ and $M + 1$}
+
+\section{Theoretical study}
+
+\subsection{The theory of p-adic precision}
+
+\todo{Recall the Lemma (with integral version)}
+
+\subsection{Computation of the differential}
+
+\todo{Formula with comatrix.}
+
+\subsection{Properties of the image of $d \chi$}
+
+\todo{Surjectivity. Stability under multiplication by $X$ mod $\chi$.}
+
+\todo{Image modulo $p$ and elementary divisors. 
+Consequences: (1)~computation in $\softO(n^\omega)$ and (2)~gain criterium.}
+
+\section{Computation of $\chi$ and $d\chi$}
+
+\subsection{Hessenberg form}
+
+\todo{Describe algorithm (with matrices and endormophisms?). 
+Remark about precision.}
+
+\subsection{Computation of the inverse}
+
+\todo{Describe algorithm with SNF. Remark about precision.
+Application to the computation of $d\chi$}
+
+\subsection{Jagged precision}
+
+\todo{Computation of optimal jagged precision.}
+
+\section{The case of diagonalizable matrices}
+
+\subsection{Legendre precision}
+
+\todo{Describe Legendre precision and show that it is optimal for
+a diagonalizable matrix over $\Zp$.}
+
+\subsection{Algorithm}
+
+\end{document}
