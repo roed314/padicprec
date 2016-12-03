@@ -101,10 +101,10 @@
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
 \CopyrightYear{2016}
-\setcopyright{licensedothergov}
-\conferenceinfo{ISSAC'16,}{July 19--22, 2016, Waterloo, ON, Canada} \isbn{978-1-4503-4380-0/16/07}
-\acmPrice{\$15.00}
-\doi{http://dx.doi.org/10.1145/2930889.2930897}
+\setcopyright{acmcopyright}
+\conferenceinfo{ISSAC '16,}{July 19-22, 2016, Waterloo, ON, Canada}
+\isbn{978-1-4503-4380-0/16/07}\acmPrice{\$15.00}
+\doi{http://dx.doi.org/10.1145/2930889.2930898}
 
 \permission{Publication rights licensed to ACM. ACM acknowledges that this contribution was authored or co-authored by an employee, contractor or affiliate of a national government. As such, the Government retains a nonexclusive, royalty-free right to publish or reproduce this article, or to allow others to do so, for Government purposes only.}
 
@@ -654,7 +654,6 @@ Euclidean division into two pieces, first computing approximations
 $Q_\app$ and $R_\app$ and separately computing $\delta Q$ and $\delta R$.
 Both the approximations and the precision can be computing in time that is
 quasi-linear in the degree. 
-%\todo{Is this sufficiently precision complexity analysis?}
 
 \medskip
 
@@ -695,10 +694,6 @@ precision $O(2^N)$ for some large integer $N$. We then compute the
 product of the $P_i$'s using the following quite naive algorithm.
 
 \noindent\hrulefill
-
-%\noindent {\bf Algorithm 1:} {\tt example\_product}
-%
-%\smallskip
 
 \noindent 1.\ {\bf set} $P = 1$
 
@@ -873,25 +868,6 @@ as we know, the result of Theorem~\ref{theo:slope-factor} is
 new.
 \end{rem}
 
-%\begin{rem}
-%Using $P \mapsto P^*=X^{deg(P)}P \left( \frac{1}{X} \right), $ the assumptions in Theorem \ref{theo:slope-factor} do not induce any loss in generality.
-%\end{rem}
-
-%\begin{rem}
-%Non necessity to have $A_0$ as the first slope. It is possible to use minorations.
-%
-%\begin{tikzpicture}
-%\draw[->] (0,-1) -- (0,2);
-%\draw[->] (-0.05,0) -- (4,0);
-%\node[left] at (0,0) {$0$};
-%\draw (1.5,-.1) -- (1.5,.1);
-%\node[above] at (1.5,0) {$d$};
-%\draw (0,1)-- (1.5,0) -- (3,-.375)-- (3.5,.625);
-%\draw[green] (0,1.5)-- (1,0.33)-- (1.5,0) --(2,-.125)-- (3,0)-- (3.5,1);
-%\node[below] at (.75,-0.2) {$\lambda_0$};
-%\end{tikzpicture}
-%\end{rem}
-
 \begin{rem}
 \label{rem:unicity}
 The divisor $A$ is uniquely determined by the conditions of 
@@ -925,7 +901,6 @@ T_i &= (1 - V_i B_i) \mod A_i
 \end{array}$$
 and when $\square$ is some letter, we put $\Delta \square_i = \square_{i+1} 
 - \square_i$.
-%We use the next Lemma to record some useful formulae.
 
 \begin{lem} \label{lem:formulae}
 The following relations hold:
@@ -954,7 +929,6 @@ derive
 Thus $R_i=V_i S_i \mod A_i$.
 Hence $B_i R_i = (S_i - S_i T_i) \mod A_i$ and $S_i = B_i R_i + S_i T_i 
 \mod A_i$, from which \eqref{eqdef:Si2} follows directly 
-%\todo{(there is a sign error here)}. (Tristan:fixed)
 By definition of $V_i$, we get $\Delta V_i = V_i (1-V_i B_{i+1}) \mod A_{i+1}$ and consequently \eqref{eqdef:Viminus}.
 We now write $1-Q_i= T_i + (V_i B_i - Q_i)$. Using \eqref{eq:ViBiQi} and
 noting that $\deg R_i < \deg A_i = d$, we 
@@ -984,10 +958,6 @@ We define the function $\varphi : \R^+ \to \R
 \begin{equation} \label{eqdef:functionphi}
 \varphi(x) = \begin{cases} \NF(P)(x) &\mbox{ if $x \leq d$} \\
 \lambda_0 (x - d) + \NF(P)(d) &\mbox{ if $x > d$} \end{cases}
-%\begin{array}{r@{\,\,}ll}
-%\varphi(x) & = \NP(P)(x) & \text{for } x \leq d \smallskip \\
-%& = \lambda_0 (x-d) + \NP(P)(d) & \text{for } x > d.
-%\end{array}
 \end{equation}
 For nonzero $c$ in a finite extension of $K$, note that the theorem holds
 for $P$ if and only if it holds for $cP$, since the $A_i$'s change to $cA_i$'s
@@ -1092,12 +1062,11 @@ $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
 \draw(5,1)--(8,4)--(11,9);
 \draw[thick] (4,9.5)-- (4,1.6)--(2,1.2)--(0.5,2.8)--(0,6.8);
 \draw[dotted] (6,2)--(4,1.6);
-%useless part?
 \draw[dotted] (7,3)--(2,2)--(0.5,3.6)--(0,7.6);
 \draw[dotted] (8,4)--(2,2.8)--(0.5,4.4)--(0,8.4);
-\draw[dotted] (9,5.667)--(2,4.267)--(0.5,5.867)--(0.046,9.5); %%(0,9.867);
-\draw[dotted] (10,7.333)--(2,5.733)--(0.5,7.333)--(0.229,9.5); %%--(0,11.333);
-\draw[dotted] (11,9)--(2,7.2)--(0.5,8.8)-- (.413,9.5);%%(0,12.8);
+\draw[dotted] (9,5.667)--(2,4.267)--(0.5,5.867)--(0.046,9.5); 
+\draw[dotted] (10,7.333)--(2,5.733)--(0.5,7.333)--(0.229,9.5); 
+\draw[dotted] (11,9)--(2,7.2)--(0.5,8.8)-- (.413,9.5);
 \draw[very thick,dotted] (5,1)--(11,2.2);
 \draw[dotted] (0,0)-- (5,1);
 
@@ -1111,15 +1080,12 @@ $b_\varphi(P{-}A_0) \geq \kappa$ and then $b_\varphi(R_0) = b_\varphi(S_0)
 \node[scale=0.8, below] at (6,0) { $d{+}1$ };
 \node[scale=0.85, below left] at (1.5,1.3) { $\mathbf{A_0}$ };
 \node[scale=0.85, right] at (10.1,7.3) { $NF(P)$ };
-%\node[scale=0.9, right] at (10.5,4.4) { $\Delta$ };
 \node[scale=0.9] at (4.2,1.2) { $\kappa$ };
 \node[scale=0.8] at (3,9) { $NP(R_0)$ };
 \node[scale=0.8] at (3,8.3) { $NP(S_0)$ };
 \node[right,scale=0.9,rotate=35] at (6.2,1.7) { $\text{slope} = \lambda_1$ };
 \node[right,scale=0.9,rotate=8] at (6.8,.9) { $\text{slope} = \lambda_0$ };
 \node[thick] at (10,1.6) { $\varphi$ };
-%\draw[dashed] (11,5)--(8,4);
-%\draw (8,4)--(2,2)--(0.5,4)--(0,8);
 \end{tikzpicture}
 \hfill\null
 

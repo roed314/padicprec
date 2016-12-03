@@ -1,22 +1,20 @@
-%\documentclass{sig-alternate}
-%\documentclass{lms}
-\documentclass{article}
+\documentclass{jT}
+%\documentclass{article}
 \usepackage[utf8]{inputenc}
 
-\usepackage{vmargin}
-
 \usepackage{amsmath,amssymb,amsthm}
-%\usepackage{amsrefs}
 \usepackage[usenames,dvipsnames]{color}
 \usepackage{stmaryrd}
 \usepackage{enumerate}
-\usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
+\usepackage[norelsize,algoruled,vlined,english,linesnumbered]{algorithm2e}
 \usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{comment}
 \usepackage{tikz}
 \usepackage{bbm}
 \usepackage{multirow}
 \renewcommand*{\theHsection}{\thesection}
+
+\numberwithin{equation}{section}
 
 \definecolor{beige}{rgb}{0.9,0.9,0.7}
 
@@ -30,8 +28,6 @@
 \DeclareMathOperator{\Grass}{Grass}
 \DeclareMathOperator{\Lat}{Lat}
 \DeclareMathOperator{\round}{round}
-
-\begin{document}
 
 \newtheorem{theo}{Theorem}[section]
 \newtheorem{lem}[theo]{Lemma}
@@ -84,24 +80,40 @@
 
 \newcommand{\A}{W}
 
-\def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
-\title{Numerical stability of Euclide algorithm\\over ultrametric fields}
+\begin{document}
 
-%\numberofauthors{1}
-%\author{
-%\alignauthor Xavier Caruso\\
-%  \affaddr{Universit\'e Rennes 1}\\
-%  \email{\normalsize \textsf{xavier.caruso@normalesup.org}}
-%}
+\title[Numerical stability of Euclide algorithm over ultrametric fields]
+{Numerical stability of Euclide algorithm\\over ultrametric fields}
+
 \author{Xavier Caruso}
+\address{Xavier Caruso\\
+Université Rennes 1, IRMAR, 35042 Rennes Cedex\\
+France}
+\email{xavier.caruso@normalesup.org}
+\urladdr{http://perso.univ-rennes1.fr/xavier.caruso}
+
+\subjclass{11S99, 11Y99, 68W30}
+
+\keywords{Euclide algorithm, ultrametric precision, subresultants}
 
 \maketitle
 
-\begin{abstract}
+\begin{resume}
+Nous étudions le problème de la stabilité du calcul des résultants et
+sous-résultants des polynômes définis sur des anneaux de valuation
+discrète complets (\emph{e.g.} $\Zp$ ou $k[[t]]$ où $k$ est un corps).
+Nous démontrons que les algorithmes de type Euclide sont très instables
+en moyenne et, dans de nombreux cas, nous expliquons comment les rendre
+stables sans dégrader la complexité. Chemin faisant, nous déterminons
+la loi de la valuation des sous-résultants de deux polynômes $p$-adiques
+aléatoires unitaires de même degré.
+\end{resume}
+
+\begin{abstr}
 We address the problem of the stability of the computations of resultants 
 and subresultants of polynomials defined over complete discrete valuation 
 rings (\emph{e.g.} $\Zp$ or $k[[t]]$ where $k$ is a field). We prove that 
@@ -110,7 +122,7 @@ many cases, how one can stabilize them without sacrifying the complexity.
 On the way, we completely determine the distribution of the valuation of
 the subresultants of two random monic $p$-adic polynomials having the
 same degree.
-\end{abstract}
+\end{abstr}
 
 \section{Introduction}
 
@@ -249,23 +261,23 @@ this paper. The definitions of many of them will be recalled in
 \begin{figure}
 \begin{center}
 \begin{tabular}{rcl}
-$\ring$ &--- & a commutative ring (without any further assumption) \\
+$\ring$ &--- & a commutative ring \\
 $\A$ &---& a complete discrete valuation ring \\
 $\pi$ &---& a uniformizer of $\A$ \\
 $K$ &---& the fraction field of $\A$ \\
 $k$ &---& the residue field of $\A$ \smallskip \\
 
 $\ring_{<n}[X]$ &---& the free $\ring$-module consisting of
-polynomials over $\ring$ of degree $<n$ \\
+polynomials\\ & & over $\ring$ of degree $<n$ \\
 $\ring_{\leq n}[X]$ &---& the free $\ring$-module consisting of
-polynomials over $\ring$ of degree $\leq n$ \\
+polynomials\\ & & over $\ring$ of degree $\leq n$ \\
 $\ring_n[X]$ &---& the affine space consisting of \emph{monic}
-polynomials over $\ring$ of degree $n$. \smallskip \\
+polynomials\\ & & over $\ring$ of degree $n$. \smallskip \\
 
 $\Res^{d_A,d_B}(A,B)$ &---& The resultant of $A$ and
-$B$ ``computed in degree $(d_A,d_B)$'' \\
+$B$\\ & & ``computed in degree $(d_A,d_B)$'' \\
 $\Res_j^{d_A,d_B}(A,B)$ &---& The $j$-th subresultant of $A$ and
-$B$ ``computed in degree $(d_A,d_B)$'' \\
+$B$\\ & & ``computed in degree $(d_A,d_B)$'' \\
 \end{tabular}
 \end{center}
 
@@ -476,13 +488,15 @@ with the input:
 \begin{align*}
 A & = X^5 + 
       \big(27 + O(2^5)\big) X^4 +
-      \big(11 + O(2^5)\big) X^3 +
+      \big(11 + O(2^5)\big) X^3 \\
+& \hspace{1cm} + 
       \big(5 + O(2^5)\big) X^2 +
       \big(18 + O(2^5)\big) X +
       \big(25 + O(2^5)\big) \\
 B & = X^5 + 
       \big(24 + O(2^5)\big) X^4 +
-      \big(25 + O(2^5)\big) X^3 +
+      \big(25 + O(2^5)\big) X^3 \\
+& \hspace{1cm} + 
       \big(12 + O(2^5)\big) X^2 +
       \big(3 + O(2^5)\big) X +
       \big(10 + O(2^5)\big).
@@ -491,12 +505,15 @@ The remainder in the Euclidean division of $A$ by $B$ is $S_3 = A-B$.
 According to Eq.~\eqref{eq:precsub},
 we do not loose precision while performing this substraction and the
 result we get is:
-$$S_3 = 
+\begin{align*}
+S_3 & = 
       \big(3 + O(2^5)\big) X^4 +
-      \big(18 + O(2^5)\big) X^3 +
+      \big(18 + O(2^5)\big) X^3 \\
+& \hspace{1cm} +
       \big(25 + O(2^5)\big) X^2 +
       \big(15 + O(2^5)\big) X +
-      \big(15 + O(2^5)\big).$$ 
+      \big(15 + O(2^5)\big).
+\end{align*}
 In order to compute $S_4$, we have now to perform the Euclidean division 
 of $S_2 = B$ by $S_3$. Noting that the leading coefficient of $S_2$ has 
 valuation $0$ and using Eq~\eqref{eq:precadd}--\eqref{eq:precdiv}, we 
@@ -646,7 +663,7 @@ efficient algorithm for computing them. Since it will play an important
 role in this paper, we take a few lines to recall it.
 
 This reinterpretation is based on the so-called \emph{subresultant 
-pseudo-remainder sequence} which is defined as follows. We pick $A$ and 
+pseudo-re\-mainder sequence} which is defined as follows. We pick $A$ and 
 $B$ as above. Denoting by $(P \,\%\, Q)$ 
 the remainder in the Euclidean division of $P$ by $Q$, we define two 
 recursive sequences $(S_i)$ and $(c_i)$ as follows:
@@ -769,7 +786,8 @@ Example~\ref{ex:Euclide}, we obtain:
 R_4 & = 
   \big(29 + O(2^5)\big) X^4 + 
   \big(14 + O(2^5)\big) X^3 + 
-  \big(5 + O(2^5)\big) X^2 + 
+  \big(5 + O(2^5)\big) X^2 \\
+& \hspace{1cm} + 
   \big(17 + O(2^5)\big) X + 
   \big(17 + O(2^5)\big) \\
 R_3 & = 
@@ -998,7 +1016,9 @@ in particular $\frac{\sqrt q}{q-1} \leq \sigma[V_j] <
 
 \begin{proof}
 By Theorem \ref{th:lawVj}, we have $\E[V_j] =
-\sum_{i=0}^d \E[Z_i]$ with $Z_i = \min(X_{j-i}, \ldots, X_{j+i})$ ($j$ 
+\sum_{i=0}^d \E[Z_i]$ with 
+$$Z_i = \min(X_{j-i}, \ldots, X_{j+i})$$ 
+($j$ 
 is fixed during all the proof). Our conventions imply that $Z_i$ 
 vanishes if $i \geq d-j$. Let us define 
 $\tau(1), \ldots, \tau(d-j)$ as the numbers $\sigma(1), \ldots, 
@@ -1103,7 +1123,8 @@ degree of $A$ and $B$.
 
 \begin{proof}
 
-By functoriality of subresultants, we may assume that $\ring = \Z[a_0, 
+By functoriality of subresultants, we may assume that $\ring$ is the
+ring $\Z[a_0, 
 \ldots, a_{d-1}, b_0, \ldots, b_{d-1}]$ and that $A$ and $B$ are the two 
 generic monic polynomials $A = X^d + \sum_{i=0} a_i X^i$ and $B = X^d + 
 \sum_{i=0} b_i X^i$. Under this additional assumption, all principal
@@ -1206,9 +1227,11 @@ such that $\mathcal R_j = \lambda \cdot R_j$ and $\mathcal U_j = \lambda
 \cdot U_j$. Similarly $(\mathcal R_{j-1}, \mathcal U_{j-1}) = \mu \cdot
 (R_{j-1}, U_{j-1})$ for some $\mu \in \ring$. Identifying the leadings 
 coefficients, we get $\lambda = \mu$. Now observe that:
-$$\Res^{d-j,d-j-1}(\mathcal U_{j-1}, \mathcal U_j) = 
-\Res^{d-j,d-j-1}(\lambda U_{j-1}, \lambda U_j) = 
-\lambda^{2d-2j-1} \cdot \Res^{d-j,d-j-1}(U_{j-1}, U_j).$$
+\begin{align*}
+\Res^{d-j,d-j-1}(\mathcal U_{j-1}, \mathcal U_j) & = 
+\Res^{d-j,d-j-1}(\lambda U_{j-1}, \lambda U_j) \\
+& = \lambda^{2d-2j-1} \cdot \Res^{d-j,d-j-1}(U_{j-1}, U_j).
+\end{align*}
 Noting that $(\mathcal U_j, \mathcal U_{j-1}, \mathcal R_j, \mathcal 
 R_{j-1})$ and $(U_j, U_{j-1}, R_j, R_{j-1})$ both belong to $\mathcal
 E_j$, we derive:
@@ -1540,8 +1563,11 @@ It is a direct corollary of \cite[Proposition 3.12]{padicprec}.
 Let us now briefly explain how Lemma~\ref{lem:padicprec} can be utilized 
 for tracking precision.
 
-\paragraph{Tracking precision \emph{locally}}
+\bigskip
 
+\noindent
+\textit{Tracking precision locally.}
+%
 Assume first that we want to perform a given rather simple operation --- 
 corresponding, say, to an elementary step (\emph{e.g.} an iteration of 
 the main loop) of the algorithm we are executing --- modeled by a 
@@ -1650,8 +1676,11 @@ generally not difficult.
 \label{fig:adaptative}
 \end{figure}
 
-\paragraph{Tracking precision \emph{globally}}
+\bigskip
 
+\noindent
+\textit{Tracking precision globally.}
+%
 As already said, we shall use the above method for tracking precision 
 while executing a single step in a complete algorithm. Let us now 
 address the problem of ``glueing''. We consider an algorithm \texttt{F} 
@@ -1881,9 +1910,9 @@ at which we are computing is upper bounded by $N + 2 \max(V_0, \ldots,
 V_{d-1})$. This justifies the announced complexity.
 \end{proof}
 
-According to Corollary \ref{cor:Vj}, the expected value of the variable 
+According to Corollary \ref{cor:Vj}, the expected value of 
 $\max(V_0, \ldots, V_{d-1})$ is in $O(\log_p d)$. Thus, the average 
-complexity of Algorithm 1 is $O(d^2 \cdot \M(N + \log d))$ bit 
+complexity of Algorithm 1 is $$O(d^2 \cdot \M(N + \log d))$$ bit 
 operations. In all usual cases (\emph{cf} Remark \ref{rem:M}), this
 complexity is also $\tilde O(d^2 N \cdot \log |k|)$ bit operations.
 
@@ -2011,6 +2040,8 @@ point of view, floating point arithmetics seems to behave better in
 the ultrametric setting: we may hope to get proved results relatively
 cheaply.
 
+\def\refname{\centerline{Bibliographie}}
+
 \begin{thebibliography}{99}
 %\footnotesize
 \bibitem{andrews}
@@ -2039,7 +2070,7 @@ cheaply.
 \bibitem{LU}
   X.~Caruso,
   \emph{Random matrices over a DVR and LU factorization},
-  to appear at J. Symb. Comp.
+  J. Symb. Comp. {\bf 71}, 98--123
 \bibitem{cohen}
   H.~Cohen,
   \emph{A course in Computational Algebraic Number Theory},
@@ -2050,8 +2081,8 @@ cheaply.
   J. Ramanujan Math. Soc. {\bf 16} (2001), 323--338
 \bibitem{padicdiff}
   P.~Lairez, T.~Vaccon,
-  \emph{Computation of power series solutions with $p$-adic coefficients of certain differential equations},
-  preprint (2014)
+  \emph{On $p$-adic differential equations with separation of variables},
+  preprint (2016)
 \bibitem{sage}
   W.~Stein et al.
   \emph{Sage Mathematics Software}, 
