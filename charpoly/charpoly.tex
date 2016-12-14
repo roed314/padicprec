@@ -152,6 +152,8 @@ In this section, we combine the computation of an Hessenberg form
 of a matrix and the computation of the inverse through the SNF
 over a complete discrete valuation field
 to compute $\com (X-A)$ and $d \chi.$
+%The computation of an Hessenberg form provides an $O(n^3)$
+%algorithm to compute the characteristic polynomial.
 
 \subsection{Hessenberg form}
 
@@ -226,6 +228,17 @@ the coefficient of the transvection matrix is the lift (in $\mathbb{Z}, $  $k[X]
 Exactness follows directly. Over other fields, we can not lift, but the computations are still valid.
 The rest is clear.
 \end{proof}
+
+\begin{rem} \label{rem:char_pol_from_hessenberg}
+From an Hessenberg form of $M,$ it is well known
+that one can compute the characteristic polynomial of 
+$M$ in $O(n^3)$ operations in $K.$ See \todo{cite Cohen} page
+55 and 56.
+However, this computation involves some divisions, and its
+behaviour regarding to precision is not easy to
+quantify.
+\end{rem}
+
 
 \subsection{Computation of the inverse}
 
@@ -535,7 +548,16 @@ What then is to do is to find the smallest
 $val((A_i)_{j,k} dM_{k,j}).$
 \end{rem}
 
-
+\begin{rem}
+As a consequence of the previous remark, once the optimal jagged
+precision is known, it is possible to possible lift arbitrarily
+the precision on $M$ and then to perform
+a computation of the characteristic polynomial
+from an Hessenberg form as in \ref{rem:char_pol_from_hessenberg},
+in $O(n^3).$
+By truncating afterward at the optimal jagged precision,
+we can achieve by this way this optimal precision.
+\end{rem}
 
 \section{The case of diagonalizable matrices}
 
