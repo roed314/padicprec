@@ -222,7 +222,7 @@ $P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k((X))$, and the comp
 \end{prop}
 \begin{proof}
 Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k((X)).$
-Inside the nested \textbf{for} loop, if we want to eliminate $p^{u_y} \varepsilon_y+O(p^{n_y}$ with pivot $p^{u_x} \varepsilon_x+O(p^{n_x},$
+Inside the nested \textbf{for} loop, if we want to eliminate $p^{u_y} \varepsilon_y+O(p^{n_y})$ with pivot $p^{u_x} \varepsilon_x+O(p^{n_x}),$
 with the $\varepsilon$'s being units,
 the coefficient of the transvection matrix is the lift (in $\mathbb{Z}, $  $k[X]$ or adequate extension) of $p^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{\min (n_x,n_y)}.$
 Exactness follows directly. Over other fields, we can not lift, but the computations are still valid.
@@ -263,7 +263,7 @@ at least when $N$ is large.
 \end{prop}
 \begin{proof}
 The smallest valuation of a coefficient of $M^{-1}$ is $-cond(M).$
-It is $-2cond(M)$ for $M^{-2}$ 2 and it is then clear that $-2cond(M)$
+It is $-2cond(M)$ for $M^{-2}$ and it is then clear that $-2cond(M)$
 can be obtained as the valuation of a coefficient of $du(M) \cdot dM$
 and the smallest that can be achieved this way for $dM$ in a precision lattice
 of flat precision. Hence the optimality of the bound given, at least when 
@@ -271,8 +271,8 @@ $N$ is large, thanks to \todo{Reference for precision lemma}.
 
 Now, the computation of an SNF form over a CDVF was described in \todo{reference these Vaccon}.
 From $M$ known at flat precision $O(\pi^N),$ we can obtain an exact $\Delta$ and $P,Q$ 
-known at precision at least $O(\pi^{N-cond(M)})$ with coefficients in \todo{integral ring}
-and determinant in \todo{integer ring invertible} realizing an SNF form of $M.$
+known at precision at least $O(\pi^{N-cond(M)})$ with coefficients in $O_K$
+and determinant in $O_K^*$ realizing an SNF form of $M.$
 There is no loss in precision when computing $P^{-1}$ and $Q^{-1}.$
 Now, computing $\Delta^{-1}$ exactly, its smallest coefficient being  of valuation $-cond(M),$
 we obtain $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ known at precision at least $O(\pi^{N-2cond(M)}),$
@@ -292,7 +292,7 @@ are not, \textit{a priori}, set to live in a CDVF.
 We show that we can reduce this task to the computation
 of an SNF over a CDVF, with no division in $K.$
 
-Firstly, we need a lemma to relate comatrices for
+Firstly, we need a lemma to relate comatrices of
 similar matrices:
 
 \begin{lem} \label{lem:comatrix_of_similar}
@@ -301,8 +301,8 @@ $M_1=PM_2P^{-1},$ then:
 \[ \com (X-M_1)=P \com (X-M_2) P^{-1}. \] 
 \end{lem}
 
-The first ingredients are reciprocal polynomials.
-We extend their definition to matrices of polynomials.
+The second ingredient we need is the reciprocal polynomial.
+We extend its definition to matrices of polynomials.
 \begin{deftn}
 Let $A \in M_n(K[X]).$ We denote by $A^{rec}$ the matrix
 whose coefficients are the reciprocal polynomials of the
@@ -368,7 +368,7 @@ $\softO (n^3)$ operations in $O_K$ at the precision given by $H.$
 \begin{proof}
 Firstly, the operations of the lines 2 and 3 are in $\softO (n^3)$ operations
 in $O_K$ at the precision given by $H.$
-Indeed, since $H$ is an approximate matrix, when we use $U_{i,i}$ as pivot,
+Indeed, since $H$ is an approximate matrix, when we use $U_{i,i}$ as pivot:
 on its columns, only $U_{i+1,i}$ can be a non zero-approximate coefficient.
 As a consequence, when performing this column-pivoting, only two rows ($i$ and
 $i+1$) lead to operations in $O_K [[K]]$ other than checking precision.
@@ -399,7 +399,7 @@ we can compute the optimal jagged precision on $\chi (M)$
 in $\softO (n^3)$ operations in $O_K$ at the initial flat precision.
 \end{prop}
 \begin{proof}
-Computing $M=PHP^{-1}$ an approximate Hessenberg form can be done in
+Computing $M=PHP^{-1},$ an approximate Hessenberg form, can be done in
 $O(n^3)$ with no division.
 Computing $\com (X-H)$ can be done in $\softO (n^3)$ with no division.
 Then, by Lemma \ref{lem:comatrix_of_similar}, $tr(\com (X-M) \cdot dM)=tr(P\com (X-H)P^{-1} \cdot dM).$
@@ -408,7 +408,7 @@ $dM$ being flat, so is $P^{-1}  dM P$ with same precision,
 and the jagged precision on $\chi (M)$ can then directly be read on $\com (X-H).$
 \end{proof}
 
-\subsection{$\com (X -M)$ and jagged precision}
+%\subsection{$\com (X -M)$ and jagged precision}
 
 
 \subsection{Factorization}
@@ -416,7 +416,7 @@ and the jagged precision on $\chi (M)$ can then directly be read on $\com (X-H).
 When this time $dM$ is jagged, the trick of the proof of Proposition
 \ref{prop:optimal_flat} can not work anymore.
 Indeed, the computation of $P^{-1}  dM P$ and then of $\com (X-H) P^{-1}  dM P$
-are not easy as $P^{-1}  dM P$ is not jagged anymore.
+are not easy, as $P^{-1}  dM P$ is not jagged anymore.
 Fortunately, a factorization result of $\com (X-M)$ will be enough
 to conclude that optimal precision can still be read in $\softO (n^3)$
 operations in $O_K.$ 
@@ -446,7 +446,7 @@ By the Chinese Remainder Theorem, our first result is then proved.
 
 Now, let us take $U=col(A,1)$ the first column of $A$ and
 $V=A_{1,1}^{-1} row(A,1) \mod \chi (M)$ (as $A_{1,1}$ is
-invertible $\mod \chi (M).$
+invertible $\mod \chi (M)).$
 Then thanks to \eqref{eqn:2-minors-com}, $U$ and $V$ satisfy the desired equality. 
 \end{proof}
 
@@ -518,9 +518,9 @@ in $O_K[X]$ of degree at most $n.$
 Thus, it is in $\softO (n^3).$
 Step 5 and 6 are also in $\softO (n^3).$
 All that is to prove is that the set of $P$ and $S$ to avoid
-is of positive dimension.
-As any the proof of \ref{prop:factor_com}, we can work modulo $X-\lambda$
-for $\lambda$ a root of $\chi (M)$ (in an algebraic closuer)
+is of dimension at most $n-1.$
+As in the proof of \ref{prop:factor_com}, we can work modulo $X-\lambda$
+for $\lambda$ a root of $\chi (M)$ (in an algebraic closure)
 and then apply Chinese Remainder Theorem.
 The goal of the Step $2$ is to ensure the first row of $B$ contains an
 invertible modulo $\chi (M).$
@@ -532,7 +532,7 @@ Similarily, the goal of Step 3 is to put an invertible coefficient (modulo
 $\chi(M)$) on $C_{1,1},$ and again, only a finite union of affine
 hyperplane is to avoid.
 Hence, the set that the $\mu_i$'s have to avoid is a finite union
-of hyperplane, and hence, is of positive dimension.
+of hyperplane, and hence, is of dimension at most $n-1.$
 Thus, almost any $\mu_i$ lead to a matrix $C$ passing the test
 on Step 4, which concludes the proof.
 \end{proof}
@@ -550,7 +550,7 @@ $val((A_i)_{j,k} dM_{k,j}).$
 
 \begin{rem}
 As a consequence of the previous remark, once the optimal jagged
-precision is known, it is possible to possible lift arbitrarily
+precision is known, it is possible to lift arbitrarily
 the precision on $M$ and then to perform
 a computation of the characteristic polynomial
 from an Hessenberg form as in \ref{rem:char_pol_from_hessenberg},
