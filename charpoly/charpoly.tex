@@ -252,7 +252,7 @@ $P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k((X))$, and the comp
 Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k((X)).$
 Inside the nested \textbf{for} loop, if we want to eliminate $p^{u_y} \varepsilon_y+O(p^{n_y})$ with pivot $p^{u_x} \varepsilon_x+O(p^{n_x}),$
 with the $\varepsilon$'s being units,
-the coefficient of the transvection matrix is the lift (in $\mathbb{Z}, $  $k[X]$ or adequate extension) of $p^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{\min (n_x,n_y)}.$
+the corresponding coefficient of the corresponding shear matrix is the lift (in $\mathbb{Z}, $  $k[X]$ or adequate extension) of $p^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{\min (n_x,n_y)}.$
 Exactness follows directly. Over other fields, we can not lift, but the computations are still valid.
 The rest is clear.
 \end{proof}
@@ -332,6 +332,8 @@ $M_1=PM_2P^{-1},$ then:
 The second ingredient we need is the reciprocal polynomial.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
+Let $P \in K[X]$ be of degree $d \in \mathbb{N}_{>0}.$ 
+We define its reciprocal polynomial as $P^{rec}=X^d P \left( 1/X \right).$
 Let $A \in M_n(K[X]).$ We denote by $A^{rec}$ the matrix
 whose coefficients are the reciprocal polynomials of the
 coefficients of $A.$ 
@@ -402,7 +404,8 @@ As a consequence, when performing this column-pivoting, only two rows ($i$ and
 $i+1$) lead to operations in $O_K [[K]]$ other than checking precision.
 Hence, line 3 costs $\softO (n^2)$ for the computation of $U.$
 Following line 1, the computation of $Q^{-1}$ is done by operations on rows, starting from the identity matrix.
-Coefficient for the transvection is the opposite of the one defined by pivoting
+Corresponding coefficient for the corresponding shear matrix
+ is the opposite of the one defined by pivoting
 and the indices for the receiving and giving rows are swapped compared to the operations on columns.
 Thus, we can show that it requires no additional operation in $O_K[[X]].$ $Q^{-1}$ is just filled as
 an upper-triangular matrix.
@@ -413,7 +416,8 @@ for the computation of $P^{-1}$ and $U.$
 
 Line 6 is in $\softO (n^2)$ and 7 in $\softO (n^3).$
 
-Thanks to the fact that the $P$ only corresponds to the product of $n-1$ transvections, the
+Thanks to the fact that the $P$ only corresponds to the product of $n-1$ 
+shear matrices, the
 product on line 8 is in $\softO (n^3).$
 We emphasize that no division has been done throughout the algorithm.
 Line 9 is costless, and the result is then proved.
