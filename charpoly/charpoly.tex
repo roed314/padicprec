@@ -43,7 +43,6 @@
 \newcommand{\Qp}{\Q_p}
 \newcommand{\Fp}{\mathbb{F}_p}
 \newcommand{\R}{\mathbb R}
-\newcommand{\OK}{\mathcal{O}_K}
 
 \newcommand{\softO}{O\tilde{~}}
 
@@ -136,10 +135,6 @@ satisfied, and give examples when the precision is larger than $O(p^k)$.
 \section{Introduction}
 
 \todo{Example of $M$ and $M + 1$}
-
-\subsection{Notation} Throughout the paper, $K$ will refer to a complete,
-discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
-$\OK$ its ring of integers and $\pi$ a uniformizer.
 
 \section{Theoretical study}
 
@@ -274,7 +269,7 @@ using a matrix $T.$
 
 \begin{prop} 
 Algorithm 1 computes $H$ and $P$ realizing an approximate Hessenberg form of $M.$
-$P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k((X))$, and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coeffient in $M.$
+$P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k((X))$, and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coefficent in $M.$
 \end{prop}
 \begin{proof}
 Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k((X)).$
@@ -288,7 +283,7 @@ The rest is clear.
 \begin{rem} \label{rem:char_pol_from_hessenberg}
 From an Hessenberg form of $M,$ it is well known
 that one can compute the characteristic polynomial of 
-$M$ in $O(n^3)$ operations in $K.$ See \todo{cite Cohen} page
+$M$ in $O(n^3)$ operations in $K.$ See \cite{Cohen:2013} page
 55 and 56.
 However, this computation involves some divisions, and its
 behaviour regarding to precision is not easy to
@@ -323,9 +318,9 @@ It is $-2cond(M)$ for $M^{-2}$ and it is then clear that $-2cond(M)$
 can be obtained as the valuation of a coefficient of $du(M) \cdot dM$
 and the smallest that can be achieved this way for $dM$ in a precision lattice
 of flat precision. Hence the optimality of the bound given, at least when 
-$N$ is large, thanks to \todo{Reference for precision lemma}.
+$N$ is large, thanks to Lemma 3.14 of \cite{CRV:2014}
 
-Now, the computation of an SNF form over a CDVF was described in \todo{reference these Vaccon}.
+Now, the computation of an SNF form over a CDVF was described in \cite{Vaccon-these}.
 From $M$ known at flat precision $O(\pi^N),$ we can obtain an exact $\Delta$ and $P,Q$ 
 known at precision at least $O(\pi^{N-cond(M)})$ with coefficients in $O_K$
 and determinant in $O_K^*$ realizing an SNF form of $M.$
@@ -628,8 +623,7 @@ a diagonalizable matrix over $\Zp$.}
 
 \subsection{Algorithm}
 
-
 \bibliographystyle{plain}
-\bibliography{../roebib/Biblio}
+\bibliography{charpoly}
 
 \end{document}
