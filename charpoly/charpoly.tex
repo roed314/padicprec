@@ -74,7 +74,7 @@
 \newtheorem{ex}[theo]{Example}
 \newtheorem{deftn}[theo]{Definition}
 
-\title{Characteristic polynomial of p-adic matrices}
+\title{Characteristic polynomials of p-adic matrices}
 
 \numberofauthors{3}
 \author{
@@ -92,6 +92,13 @@
 \maketitle
 
 \begin{abstract}
+We analyze the precision of the characteristic polynomial $\chi(A)$ of
+an $n \times n$ $p$-adic matrix $A$ using differential precision methods
+developed previously.  When $A$ is integral with precision $O(p^k)$,
+we give a criterion (checkable in time $\softO(n^\omega)$) for
+$\chi(A)$ to have precision exactly $O(p^k)$.  We also give a $\softO(n^3)$
+algorithm for determining the optimal precision when the criterion is not
+satisfied, and give examples when the precision is larger than $O(p^k)$.
 \end{abstract}
 
 \begin{CCSXML}
@@ -138,7 +145,7 @@ $\OK$ its ring of integers and $\pi$ a uniformizer.
 
 \subsection{The theory of p-adic precision}
 
-We recall some of the definitions and results of \cite{CRV:2014}
+We recall some of the definitions and results of \cite{caruso-roe-vaccon:14a}
 as a foundation for our discussion of the precision for the characteristic polynomial
 of a matrix.  We will be concerned with two $K$-manifolds in what follows:
 the space $M_n(K)$ of $n \times n$ matrices with entries in $K$ and the space
@@ -153,12 +160,38 @@ monic polynomials can be specified by giving a lattice in the tangent space
 at $f(X) \in K_n[X]$, or restricted to jagged or flat precision in the interest
 of simplicity.
 
-The main benefit of working with lattices is the following result
-\citelist{\cite{CRV:2014}*{Lem. 3.4} \cite{CRV:2015}*{Prop. 2.2}}.
 
-\todo{Recall the Lemma (with integral version)}
+The main benefit of working with lattices is the following result
+\citelist{\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} \cite{caruso-roe-vaccon:15a}*{Prop. 2.2}}.
+
+Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map.  For a matrix $M \in M_n(K)$
+we identify the tangent space $V$ at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi(M)$ with
+the space $K_{<n}[X]$ of polynomials of degree less than $n$.  Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed)
+ball of radius $r$ in $V$.  
+Our analysis of the $\chi$ begins with the following result
+\citelist{\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} \cite{caruso-roe-vaccon:15a}*{Prop. 2.2}}.
+
+\begin{prop} \label{prop:mainlem}
+Suppose that $M \in M_n(K)$ and that $d\chi(M): V \to W$ is surjective.
+Let $C$ be a positive real number such that
+$B_W(1) \subset d\chi(M)(B_V(C))$.  Then, for all $\rho \in (0, 1]$ and all
+$r \in (0, C \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
+satisfies:
+\begin{equation}
+\chi(M + H) = \chi(M) + d\chi(H).
+\end{equation}
+\end{prop}
 
 \subsection{Computation of the differential}
+
+In light of Proposition \ref{prop:mainlem}, we recall the computation of $d\chi$
+\citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}.
+Let $\com(M)$ denote the comatrix of $M$; when $M \in \GL_n(K)$ then $\com(M) = \det(M) M^{-1}$.  Then $d\chi(M)$ is given
+by
+\[
+d\chi(M): dM \mapsto \tr(\com(X-M) \cdot dM).
+\]
+Moreover, $d\chi(M)$ will be surjective exactly when the Jordan blocks of $M$ all have distinct generalized eigenvalues.   
 
 \todo{Formula with comatrix.}
 
@@ -169,12 +202,16 @@ The main benefit of working with lattices is the following result
 \todo{Image modulo $p$ and elementary divisors. 
 Consequences: (1)~computation in $\softO(n^\omega)$ and (2)~gain criterium.}
 
-\section{Computation of $\chi$ and $d \chi$}
+Equality of lattices holds iff it does mod p, so need surjectivity modulo p.  Surjectivity of differential
+can be seen: write matrix in Jordan normal form.  Comatrix(X - M) surjective iff when you write it
+in Frobenius normal form it has only one block.
+
+\section{Computation of the characteristic polynomial and its derivative}
 
 In this section, we combine the computation of an Hessenberg form
 of a matrix and the computation of the inverse through the SNF
 over a complete discrete valuation field
-to compute $\com (X-A)$ and $d \chi.$
+to compute $\com (X-M)$ and $d \chi.$
 %The computation of an Hessenberg form provides an $O(n^3)$
 %algorithm to compute the characteristic polynomial.
 
@@ -290,7 +327,7 @@ It is $-2cond(M)$ for $M^{-2}$ and it is then clear that $-2cond(M)$
 can be obtained as the valuation of a coefficient of $du(M) \cdot dM$
 and the smallest that can be achieved this way for $dM$ in a precision lattice
 of flat precision. Hence the optimality of the bound given, at least when 
-$N$ is large, thanks to Lemma 3.14 of \cite{CRV:2014}
+$N$ is large, thanks to Lemma 3.14 of \cite{caruso-roe-vaccon:14a}
 
 Now, the computation of an SNF form over a CDVF was described in \cite{Vaccon-these}.
 From $M$ known at flat precision $O(\pi^N),$ we can obtain an exact $\Delta$ and $P,Q$ 
