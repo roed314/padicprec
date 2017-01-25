@@ -43,6 +43,7 @@
 \newcommand{\Qp}{\Q_p}
 \newcommand{\Fp}{\mathbb{F}_p}
 \newcommand{\R}{\mathbb R}
+\newcommand{\OK}{\mathcal{O}_K}
 
 \newcommand{\softO}{O\tilde{~}}
 
@@ -129,9 +130,31 @@
 
 \todo{Example of $M$ and $M + 1$}
 
+\subsection{Notation} Throughout the paper, $K$ will refer to a complete,
+discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
+$\OK$ its ring of integers and $\pi$ a uniformizer.
+
 \section{Theoretical study}
 
 \subsection{The theory of p-adic precision}
+
+We recall some of the definitions and results of \cite{CRV:2014}
+as a foundation for our discussion of the precision for the characteristic polynomial
+of a matrix.  We will be concerned with two $K$-manifolds in what follows:
+the space $M_n(K)$ of $n \times n$ matrices with entries in $K$ and the space
+$K_n[X]$ of monic degree $n$ polynomials over $K$.  Given a matrix $M \in M_n(K)$,
+the most general kind of precision structure we may attach to $M$ is a
+\emph{lattice} $H$ in the tangent space at $M$.  However, representing an
+arbitrary lattice requires $n^2$ basis vectors, each with $n^2$ entries.  We therefore
+frequently work with certain classes of lattices, either \emph{jagged} lattices
+where we specify a precision for each matrix entry or \emph{flat} lattices where
+every entry is known to a fixed precision $O(p^m)$.  Similarly, precision for
+monic polynomials can be specified by giving a lattice in the tangent space
+at $f(X) \in K_n[X]$, or restricted to jagged or flat precision in the interest
+of simplicity.
+
+The main benefit of working with lattices is the following result
+\citelist{\cite{CRV:2014}*{Lem. 3.4} \cite{CRV:2015}*{Prop. 2.2}}.
 
 \todo{Recall the Lemma (with integral version)}
 
