@@ -43,6 +43,7 @@
 \newcommand{\Qp}{\Q_p}
 \newcommand{\Fp}{\mathbb{F}_p}
 \newcommand{\R}{\mathbb R}
+\newcommand{\OK}{\mathcal{O}_K}
 
 \newcommand{\softO}{O\tilde{~}}
 
@@ -136,6 +137,10 @@ satisfied, and give examples when the precision is larger than $O(p^k)$.
 
 \todo{Example of $M$ and $M + 1$}
 
+\subsection{Notation} Throughout the paper, $K$ will refer to a complete,
+discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
+$\OK$ its ring of integers and $\pi$ a uniformizer.
+
 \section{Theoretical study}
 
 \subsection{The theory of p-adic precision}
@@ -154,6 +159,10 @@ every entry is known to a fixed precision $O(p^m)$.  Similarly, precision for
 monic polynomials can be specified by giving a lattice in the tangent space
 at $f(X) \in K_n[X]$, or restricted to jagged or flat precision in the interest
 of simplicity.
+
+
+The main benefit of working with lattices is the following result
+\citelist{\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} \cite{caruso-roe-vaccon:15a}*{Prop. 2.2}}.
 
 Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map.  For a matrix $M \in M_n(K)$
 we identify the tangent space $V$ at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi(M)$ with
@@ -318,7 +327,7 @@ It is $-2cond(M)$ for $M^{-2}$ and it is then clear that $-2cond(M)$
 can be obtained as the valuation of a coefficient of $du(M) \cdot dM$
 and the smallest that can be achieved this way for $dM$ in a precision lattice
 of flat precision. Hence the optimality of the bound given, at least when 
-$N$ is large, thanks to Lemma 3.14 of \cite{CRV:2014}
+$N$ is large, thanks to Lemma 3.14 of \cite{caruso-roe-vaccon:14a}
 
 Now, the computation of an SNF form over a CDVF was described in \cite{Vaccon-these}.
 From $M$ known at flat precision $O(\pi^N),$ we can obtain an exact $\Delta$ and $P,Q$ 
