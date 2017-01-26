@@ -1,4 +1,33 @@
-def optimal_jagged(M):
+def number_diffused(M):
+    H = copy(M)
+    d = H.ncols()
+    n = H.nrows()
+    if n < d:
+        return Infinity
+    number = 0
+    for j in range(d):
+        val = Infinity; piv = -1
+        for i in range(j,n):
+            if H[i,j] == 0: continue
+            v = H[i,j].valuation()
+            if v < val:
+                val = v; piv = i
+        if val is Infinity: return Infinity
+        H.swap_rows(piv,j)
+        H.rescale_row(j, ~(H[j,j].unit_part()))
+        for i in range(j+1,n):
+            H.add_multiple_of_row(i,j, -H[i,j] >> val)
+
+        nb = 0
+        for i in range(j):
+            v = val - H[i,j].valuation()
+            if v > nb: nb = v
+        number += nb
+
+    return number
+
+
+def optimal_jagged(M, diffused=False):
     d = M.nrows()
     if d != M.ncols():
         raise ValueError
@@ -9,6 +38,7 @@ def optimal_jagged(M):
 
     opt = d * [ Infinity ]
 
+    rows = [ ]
     for i in range(d):
         for j in range(d):
             v = M[j,i].precision_absolute()
@@ -16,8 +46,14 @@ def optimal_jagged(M):
                 if C[i,j][k] == 0: continue
                 w = v + C[i,j][k].valuation()
                 if w < opt[k]: opt[k] = w
+            if diffused:
+                rows.append([ C[i,j][k] << v for k in range(d) ])
 
-    return opt
+    number = 0
+    if diffused:
+        number = number_diffused(matrix(rows))
+
+    return opt, number
 
 
 def zealous_jagged(M):
@@ -25,7 +61,7 @@ def zealous_jagged(M):
     return [ c.precision_absolute() for c in P.list() ]
 
 
-def test(d,p=2,prec=200,repeat=1,filename=None):
+def stat(d,p=2,prec=200,repeat=10,diffused=False,filename=None):
     if filename is None:
         filename = "results-%s.txt" % d
     Rz = Qp(p,prec=prec)
@@ -36,6 +72,7 @@ def test(d,p=2,prec=200,repeat=1,filename=None):
     dev_opt = [ 0 ] * d
     dev_zea = [ 0 ] * d
     dev_flo = [ 0 ] * d
+    moy_diff = 0; dev_diff = 0
     count = 0
     import io
     fh = io.open(filename,'a')
@@ -43,8 +80,8 @@ def test(d,p=2,prec=200,repeat=1,filename=None):
     for _ in range(repeat):
         Mz = random_matrix(Rz,d,d)
 
-        optimal = optimal_jagged(Mz)
-        if Infinity in optimal:
+        optimal, number = optimal_jagged(Mz, diffused=diffused)
+        if Infinity in optimal or number is Infinity:
             continue
 
         Pz = Mz.charpoly(algorithm="df")
@@ -61,17 +98,25 @@ def test(d,p=2,prec=200,repeat=1,filename=None):
 
         for i in range(d):
             v = Pz2[i].valuation()
-            fh.write(u"X^%s	%s	%s	%s\n" % (i,optimal[i]-v, zealous[i]-v, floating[i]-v))
-            moy_opt[i] += optimal[i] - v
-            moy_zea[i] += zealous[i] - v
-            moy_flo[i] += floating[i] - v
-            dev_opt[i] += (optimal[i] - v)**2
-            dev_zea[i] += (zealous[i] - v)**2
-            dev_flo[i] += (floating[i] - v)**2
+            opt = prec - (optimal[i] - v)
+            zea = prec - (zealous[i] - v)
+            flo = prec - (floating[i] - v)
+            fh.write(u"X^%s	%s	%s	%s\n" % (i, opt, zea, flo))
+            moy_opt[i] += opt
+            moy_zea[i] += zea
+            moy_flo[i] += flo
+            dev_opt[i] += opt**2
+            dev_zea[i] += zea**2
+            dev_flo[i] += flo**2
+        if diffused:
+            moy_diff += number
+            dev_diff += number**2
+            fh.write(u"Diff.	%s\n" % number)
         fh.write(u"\n")
         fh.flush()
 
         count += 1
+        if count % 10 == 0: print count
 
     fh.write(u"Average\n")
     for i in range(d):
@@ -79,17 +124,21 @@ def test(d,p=2,prec=200,repeat=1,filename=None):
        moy_zea[i] = RR(moy_zea[i]/count)
        moy_flo[i] = RR(moy_flo[i]/count)
        fh.write(u"X^%s	%s	%s	%s\n" % (i,moy_opt[i], moy_zea[i], moy_flo[i]))
+    if diffused:
+       moy_diff = RR(moy_diff/count)
+       fh.write(u"Diff:	%s\n" % moy_diff)
 
-    fh.write(u"Deviation\n")
+    fh.write(u"\nDeviation\n")
     for i in range(d):
        dev_opt[i] = sqrt(RR(dev_opt[i]/count) - moy_opt[i]**2)
        dev_zea[i] = sqrt(RR(dev_zea[i]/count) - moy_zea[i]**2)
        dev_flo[i] = sqrt(RR(dev_flo[i]/count) - moy_flo[i]**2)
        fh.write(u"X^%s	%s	%s	%s\n" % (i,dev_opt[i], dev_zea[i], dev_flo[i]))
+    if diffused:
+       dev_diff = sqrt(RR(dev_diff/count) - moy_diff**2)
+       fh.write(u"Diff:	%s\n" % dev_diff)
 
-    fh.write(u"Ratio of success: %s\n" % RR(count/repeat))
+    fh.write(u"\nRatio of success: %s\n" % RR(count/repeat))
 
     fh.write(u"\n----\n\n")
     fh.close()
-
-    return moy_opt, dev_opt, moy_zea, dev_zea, moy_flo, dev_flo, RR(count/repeat)
