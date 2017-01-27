@@ -206,7 +206,48 @@ Equality of lattices holds iff it does mod p, so need surjectivity modulo p.  Su
 can be seen: write matrix in Jordan normal form.  Comatrix(X - M) surjective iff when you write it
 in Frobenius normal form it has only one block.
 
-\section{Computation of the characteristic polynomial and its derivative}
+\begin{prop} \label{prop:factor_com}
+Let $M \in M_n (O_K)$ be such that $discr(\chi (M)) \neq 0.$
+We assume that $A=\com (X-M)$ is such that $gcd(A_{1,1}, \chi (M))=1$
+(in $K[X]$).
+Then for $U=col(A,1)$ and $V=A_{1,1}^{-1} row(A,1) \mod \chi (M),$
+both in $O_K[X]^n,$ we have: 
+\[ \com (X-M)= U \cdot {}^t V \mod \chi (M).\]
+\end{prop}
+\begin{proof}
+We first prove that for all $i,j \in \llbracket 1, n \rrbracket,$ we have
+\begin{equation}A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod \chi (M). \label{eqn:2-minors-com} \end{equation}
+Let $\lambda$ be a root of $\chi (M)$ in an algebraic closure of $K.$
+Then $A(\lambda)$ is of rank one.
+Indeed, $A(\lambda) \times (\lambda-M) =0.$
+Since $\chi (M)$ is square-free, then $\lambda-M$ is of rank $n-1$
+and then $A(\lambda)$ is of rank at most one.
+Nevertheless, we can remark that
+ $gcd(A_{1,1}, \chi (M))=1,$ $A_{1,1} \neq 0 \mod (X-\lambda)$
+and thus, $A(\lambda)$ is of rank exactly one.
+As a consequence, all $2 \times 2$-minors of $A(\lambda)$ are zero.
+It means that \[A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod (X-\lambda). \]
+By the Chinese Remainder Theorem, our first result is then proved.
+
+Now, let us take $U=col(A,1)$ the first column of $A$ and
+$V=A_{1,1}^{-1} row(A,1) \mod \chi (M)$ (as $A_{1,1}$ is
+invertible $\mod \chi (M)).$
+Then thanks to \eqref{eqn:2-minors-com}, $U$ and $V$ satisfy the desired equality. 
+\end{proof}
+
+\begin{rem}
+If $M \in M_n (O_K)$ is such that for some $U,V \in O_{K}[X]^n$
+we have $\com (X-M)= U \cdot {}^t V \mod \chi (M)$ and if 
+$P\in GL_n (O_K)$ then
+\[\com (X-PMP^{-1})=(PU) \cdot ( {}^tV P^{-1}) \mod \chi(M).\]
+In other words, factorizability of $\com(X-M)$ is stable
+by change of basis.
+\end{rem}
+
+
+
+\section{Optimal precision\\via Hessenberg form}
+%\section{Computation of the characteristic polynomial and its derivative}
 
 In this section, we combine the computation of an Hessenberg form
 of a matrix and the computation of the inverse through the SNF
@@ -472,68 +513,20 @@ $dM$ being flat, so is $P^{-1}  dM P$ with same precision,
 and the jagged precision on $\chi (M)$ can then directly be read on $\com (X-H).$
 \end{proof}
 
-%\subsection{$\com (X -M)$ and jagged precision}
-
-
-\subsection{Factorization}
+\subsection{Computation and optimal jagged precision}
 
 When this time $dM$ is jagged, the trick of the proof of Proposition
 \ref{prop:optimal_flat} can not work anymore.
 Indeed, the computation of $P^{-1}  dM P$ and then of $\com (X-H) P^{-1}  dM P$
 are not easy, as $P^{-1}  dM P$ is not jagged anymore.
-Fortunately, a factorization result of $\com (X-M)$ will be enough
-to conclude that optimal precision can still be read in $\softO (n^3)$
-operations in $O_K.$ 
-
-\begin{prop} \label{prop:factor_com}
-Let $M \in M_n (O_K)$ be such that $discr(\chi (M)) \neq 0.$
-We assume that $A=\com (X-M)$ is such that $gcd(A_{1,1}, \chi (M))=1$
-(in $K[X]$).
-Then for $U=col(A,1)$ and $V=A_{1,1}^{-1} row(A,1) \mod \chi (M),$
-both in $O_K[X]^n,$ we have: 
-\[ \com (X-M)= U \cdot {}^t V \mod \chi (M).\]
-\end{prop}
-\begin{proof}
-We first prove that for all $i,j \in \llbracket 1, n \rrbracket,$ we have
-\begin{equation}A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod \chi (M). \label{eqn:2-minors-com} \end{equation}
-Let $\lambda$ be a root of $\chi (M)$ in an algebraic closure of $K.$
-Then $A(\lambda)$ is of rank one.
-Indeed, $A(\lambda) \times (\lambda-M) =0.$
-Since $\chi (M)$ is square-free, then $\lambda-M$ is of rank $n-1$
-and then $A(\lambda)$ is of rank at most one.
-Nevertheless, we can remark that
- $gcd(A_{1,1}, \chi (M))=1,$ $A_{1,1} \neq 0 \mod (X-\lambda)$
-and thus, $A(\lambda)$ is of rank exactly one.
-As a consequence, all $2 \times 2$-minors of $A(\lambda)$ are zero.
-It means that \[A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod (X-\lambda). \]
-By the Chinese Remainder Theorem, our first result is then proved.
-
-Now, let us take $U=col(A,1)$ the first column of $A$ and
-$V=A_{1,1}^{-1} row(A,1) \mod \chi (M)$ (as $A_{1,1}$ is
-invertible $\mod \chi (M)).$
-Then thanks to \eqref{eqn:2-minors-com}, $U$ and $V$ satisfy the desired equality. 
-\end{proof}
-
-\begin{rem}
-If $M \in M_n (O_K)$ is such that for some $U,V \in O_{K}[X]^n$
-we have $\com (X-M)= U \cdot {}^t V \mod \chi (M)$ and if 
-$P\in GL_n (O_K)$ then
-\[\com (X-PMP^{-1})=(PU) \cdot ( {}^tV P^{-1}) \mod \chi(M).\]
-In other words, factorizability of $\com(X-M)$ is stable
-by change of basis.
-\end{rem}
+Fortunately, Proposition~\ref{prop:factom_com} will be enough to 
+conclude that optimal precision can still be read in $\softO (n^3)$ 
+operations in $O_K.$
 
 
-
-
-
-
-
-\subsection{Computation and optimal jagged precision}
-
-Thanks to the previous results, we can now compute 
-$\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3),$
-using the following algorithm.
+%Thanks to the previous results, we can now compute 
+%$\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3),$
+%using the following algorithm.
 
 \noindent\hrulefill
 
@@ -623,14 +616,20 @@ By truncating afterward at the optimal jagged precision,
 we can achieve by this way this optimal precision.
 \end{rem}
 
-\section{The case of diagonalizable matrices}
+\section{Optimal precision\\via Frobenius form}
+
+\section{Eigenvalues}
+
+\subsection{Optimal precision on a simple eigenvalue}
+
+\todo{Optimal precision on $P(\lambda_i)$ and on $\lambda_i$}
 
 \subsection{Legendre precision}
 
 \todo{Describe Legendre precision and show that it is optimal for
 a diagonalizable matrix over $\Zp$.}
 
-\subsection{Algorithm}
+%\subsection{Algorithm}
 
 \bibliographystyle{plain}
 \bibliography{charpoly}
