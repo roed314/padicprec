@@ -47,6 +47,8 @@
 
 \newcommand{\softO}{O\tilde{~}}
 
+\newcommand{\inv}{\text{\rm inv}}
+
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
 \def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
@@ -674,13 +676,16 @@ surjective.
 \subsection{Compact form of $d \chi_M$}
 
 Let $C$ be the companion matrix associated to $\chi_M$:
-$$N = \left( \begin{matrix}
+\begin{equation}
+\label{eq:companion}
+N = \left( \begin{matrix}
 0 & 1 & 0 & \cdots & 0 \\
 \vdots & \ddots & 1 & \ddots & \vdots \\
 \vdots & & \ddots & \ddots & 0 \\
 0 & \cdots & \cdots & 0 & 1 \\
 -a_0 & -a_1 & \cdots & \cdots & -a_{n-1}
-\end{matrix} \right)$$
+\end{matrix} \right)
+\end{equation}
 with $\chi_M = a_0 + a_1 X + \cdots + a_{n-1} X^{n-1} + X^n$.
 By Proposition~\ref{prop:surjectivity}, there exists a matrix 
 $P \in \GL_n(K)$ such that $M = P N P^{-1}$. Applying the same
@@ -691,8 +696,11 @@ invertible matrix $Q \in \GL_n(K)$ such that $M^t = Q N Q^{-1}$.
 \label{prop:shortcom}
 We keep the previous notations and assumptions.
 Let $V$ be the row vector $(1, X, \ldots, X^{n-1})$. Then
-$$\com(X{-}M) = \alpha \cdot P V^t \cdot V Q^t
-\mod \chi_M$$
+\begin{equation}
+\label{eq:shortcom}
+\com(X{-}M) = \alpha \cdot P V^t \cdot V Q^t
+\mod \chi_M
+\end{equation}
 for some $\alpha \in K[X]$.
 \end{prop}
 
@@ -720,6 +728,53 @@ informations can be read off on this short form $(\alpha, P, Q,
 \chi_M)$.
 
 \subsection{Fast computation}
+
+We now move to algorithms and show that the quadruple $(\alpha, P, Q, 
+\chi_M)$ can be computed for a cost of $\softO(n^\omega)$ operations
+in the ground field $K$ with high probability.
+
+The matrix $P$ can be computed as follows. Pick $c \in K^n$. Define 
+$c_i = M^i c$ for all $i \geq 1$. The $c_i$'s can be computed in 
+$\softO(n^\omega)$ operations in $K$ using \cite{}. Let $P_\inv$ be the 
+$n \times n$ matrix whose rows are the $c_i$'s for $1 \leq i \leq n$. 
+Remark that $P_\inv$ is invertible if and only if $(c_0, c_1, \ldots, 
+c_{n-1})$ is a basis of $K^n$ if and only if $c$ is a cyclic vector. 
+Moreover after base change to the basis $(c_0, \ldots, c_{n-1})$, the matrix 
+$M$ takes the shape \eqref{eq:companion}. In other words, if $P_\inv$
+is invertible, then $P = P_\inv^{-1}$ is a solution of $M = P N P^{-1}$.
+Observe moreover that the condition ``$P_\inv$ is invertible'' is open
+for the Zariski topology. It then happens with high probability as soon
+as it is not empty, that is as soon as $M$ admits a cyclic vector, which
+holds by assumption.
+
+The characteristic polynomial $\chi_M$ can be recovered thanks to the
+relation $(a_0, a_1, \ldots, a_{n-1}) = -c_n \cdot P$.
+
+Now, instead of computing directly $Q$, we first compute a matrix $R$ 
+with the property that $N^t = R N R^{-1}$. For that, we apply the same
+strategy as above except that we start with the vector $e = (1, 0, 
+\ldots, 0)$ (and not with a random vector). A simple computation shows
+that, for $1 \leq i \leq n{-}1$, the vector $N^i e$ has the shape:
+$$N^i e = (0, \ldots, 0, -a_0, \star, \ldots, \star)$$
+with $n{-}i$ starting zeros. Therefore the $N^i e$'s form a basis of
+$K^n$, \emph{i.e.} $e$ is always a cyclic vector of $N$. Once $R$ has
+been compute, we recover $Q$ using the relation $Q = P_\inv^t R$.
+
+It remains to compute the scaling factor $\alpha$. For this, we write
+the relation:
+\begin{equation}
+\label{eq:shortcomN}
+\com(X{-}N) = \alpha \cdot V^t \cdot V R^t \mod \chi_M
+\end{equation}
+which comes from Eq.~\eqref{eq:shortcom} after multiplication on the 
+left by $P^{-1}$ and multiplication on the right by $P$. We observe
+moreover that the first row of $R$ is $(1, 0, \ldots, 0)$. Evaluating
+the top left entry of Eq.~\eqref{eq:shortcomN}, we end up with the 
+relation:
+$$\alpha = a_1 + a_2 X + \cdots + a_{n-1} X^{n-2} + X^{n-1}.$$
+No further computation are then needed to derive the value of $\alpha$.
+
+
 
 \subsection{Optimal jagged precision}
 
