@@ -155,17 +155,24 @@ monic polynomials can be specified by giving a lattice in the tangent space
 at $f(X) \in K_n[X]$, or restricted to jagged or flat precision in the interest
 of simplicity.
 
-Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map.  For a matrix $M \in M_n(K)$
-we identify the tangent space $V$ at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi(M)$ with
-the space $K_{<n}[X]$ of polynomials of degree less than $n$.  Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed)
-ball of radius $r$ in $V$.  
-Our analysis of the $\chi$ begins with the following result
-\citelist{\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} \cite{caruso-roe-vaccon:15a}*{Prop. 2.2}}.
+Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map.
+Our analysis of the precision behavior of $\chi$ rests upon
+the computation of its derivative $d\chi$, using \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
+For a matrix $M \in M_n(K)$ we identify the tangent space $V$
+at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi(M)$ with
+the space $K_{<n}[X]$ of polynomials of degree less than $n$.
+Let $\com(M)$ denote the comatrix of $M$ (when $M \in \GL_n(K)$,
+we have $\com(M) = \det(M) M^{-1}$).  Recall
+\citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}
+that $d\chi(M)$ is given by
+\begin{equation} \label{eq:dchi}
+d\chi(M): dM \mapsto \tr(\com(X-M) \cdot dM).
+\end{equation}
+Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$.
 
 \begin{prop} \label{prop:mainlem}
-Suppose that $M \in M_n(K)$ and that $d\chi(M): V \to W$ is surjective.
-Let $C$ be a positive real number such that
-$B_W(1) \subset d\chi(M)(B_V(C))$.  Then, for all $\rho \in (0, 1]$ and all
+Suppose that $M \in M_n(K)$, all the Jordan blocks of $M$ have distinct generalized eigenvalues, and
+let $C = \max(\lvert \det(M)^{-1} \rvert, 1)$.  \todo{What if $\det(M) = 0$?}. Then, for all $\rho \in (0, 1]$ and all
 $r \in (0, C \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
 satisfies:
 \begin{equation}
@@ -173,22 +180,51 @@ satisfies:
 \end{equation}
 \end{prop}
 
-\subsection{Computation of the differential}
+\begin{proof}
+We first show that the distinct generalized eigenvalues condition
+guarantees that $d\chi(M): V \to W$ is surjective.  For any $A \in \GL_n(K)$,
+the image of $d\chi(M)$ will be the same as the image of $d\chi(AMA^{-1})$ ,
+so we may assume that $M$ is in Jordan form.  Letting $dM$ range over
+matrices with a single $1$ entry and all other entries $0$, it suffices to show
+that the entries of $\com(X-M)$ span $W$.  Suppose that the blocks of $M$
+have dimensions $d_1, \dots, d_m$ with corresponding generalized eigenvalues
+$\lambda_1, \dots, \lambda_m$.  The only nonzero entries of $\com(X-M)$
+are those on or below the diagonal within the Jordan blocks, and within the $i$th
+block, each entry along the $j$th subdiagonal is
+$\pm(X-\lambda_i)^{d_i - j - 1} \prod_{k \ne i} (X-\lambda_k)^{d_k}$.
+As long as the $\lambda_i$ are distinct, these form a basis for $W$.
 
-In light of Proposition \ref{prop:mainlem}, we recall the computation of $d\chi$
-\citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}.
-Let $\com(M)$ denote the comatrix of $M$; when $M \in \GL_n(K)$ then $\com(M) = \det(M) M^{-1}$.  Then $d\chi(M)$ is given
-by
-\[
-d\chi(M): dM \mapsto \tr(\com(X-M) \cdot dM).
-\]
-Moreover, $d\chi(M)$ will be surjective exactly when the Jordan blocks of $M$ all have distinct generalized eigenvalues.   
+Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
+of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X-M)$.
+Since the precision polygon lies below the Newton polygon \cite{caruso-roe-vaccon:15a}*{Prop. 3.4},
+and since the smallest entry of the Newton polygon occurs either with the leading
+coefficient or the constant term, $B_W(1) \subset d\chi(M)(B_V(C))$.
 
-\todo{Formula with comatrix.}
+Since the coefficients of $\chi(M)$ are given by polynomials in the entries of $M$
+with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
+the conclusion.
+\end{proof}
 
 \subsection{Properties of the image of $d \chi$}
 
-\todo{Surjectivity. Stability under multiplication by $X$ mod $\chi$.}
+Consider the isomorphism $W \to K[X] / \chi(X)$ induced by inclusion.
+\begin{proposition}
+Let $M \in M_n(K)$, $r>0$ and $H \subset K[X] / \chi(X)$ be the image
+of $B_V(r)$ under $d\chi(M)$.  Then $X \cdot H = H$.
+\end{proposition}
+\begin{proof}
+\todo{Finish proof}
+\end{proof}
+
+We can also give a criterion on $M$ that implies 
+\begin{proposition}
+Suppose that $M \in M_n(\OK)$, and that the reduction $\bar{M}$ of $M$ modulo $\pi$ has
+a cyclic vector.  Then for any $r > 0$, we have $d\chi(M)(B_V(r)) = B_W(r)$.
+\end{proposition}
+\begin{proof}
+First note that it suffices to prove the claim for $r=1$ since $d\chi(M)$ is linear.
+Next, it suffices to check that $d\chi(M)$ is surjective modulo $\pi$.
+\end{proof}
 
 \todo{Image modulo $p$ and elementary divisors. 
 Consequences: (1)~computation in $\softO(n^\omega)$ and (2)~gain criterium.}
