@@ -509,7 +509,7 @@ which concludes the proof.
 
 
 
-\subsection{$\com (X -H)$ and flat precision}
+\subsection{The comatrix of $X{-}H$}
 
 In this subsection, we want to compute $\com (X Id -H)$
 by using the SNF computation of the previous subsection.
@@ -624,32 +624,9 @@ Line 9 is costless, and the result is then proved.
 \end{proof}
 
 
+\subsection{The comatrix of $X{-}M$}
 
-\begin{prop} \label{prop:optimal_flat}
-If $M \in M_n(O_K)$ is known at flat precision $dM$ (high enough), then 
-we can compute the optimal jagged precision on $\chi (M)$
-in $\softO (n^3)$ operations in $O_K$ at the initial flat precision.
-\end{prop}
-\begin{proof}
-Computing $M=PHP^{-1},$ an approximate Hessenberg form, can be done in
-$O(n^3)$ with no division.
-Computing $\com (X-H)$ can be done in $\softO (n^3)$ with no division.
-Then, by Lemma \ref{lem:comatrix_of_similar}, $tr(\com (X-M) \cdot dM)=tr(P\com (X-H)P^{-1} \cdot dM).$
-thus, \[tr(\com (X-M) \cdot dM)=tr(\com (X-H) P^{-1}  dM P). \]
-$dM$ being flat, so is $P^{-1}  dM P$ with same precision, 
-and the jagged precision on $\chi (M)$ can then directly be read on $\com (X-H).$
-\end{proof}
-
-\subsection{Computation and optimal jagged precision}
-
-When this time $dM$ is jagged, the trick of the proof of Proposition
-\ref{prop:optimal_flat} can not work anymore.
-Indeed, the computation of $P^{-1}  dM P$ and then of $\com (X-H) P^{-1}  dM P$
-are not easy, as $P^{-1}  dM P$ is not jagged anymore.
-Fortunately, Proposition~\ref{prop:factom_com} will be enough to 
-conclude that optimal precision can still be read in $\softO (n^3)$ 
-operations in $O_K.$
-
+\todo{Add a small intro}
 
 %Thanks to the previous results, we can now compute 
 %$\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3),$
@@ -657,7 +634,7 @@ operations in $O_K.$
 
 \noindent\hrulefill
 
-\noindent {\bf Algorithm 3:} {\tt Approximate $\com (X -M)$ }
+\noindent {\bf Algorithm 3:} {\tt Approximate $\com (X{-}M)$ }
 
 \noindent{\bf Input:} an approx. $M \in M_n(O_K),$ with $discr(\chi_M) \neq 0.$ 
 
@@ -720,28 +697,6 @@ of hyperplane, and hence, is of dimension at most $n-1.$
 Thus, almost any $\mu_i$ lead to a matrix $C$ passing the test
 on Step 4, which concludes the proof.
 \end{proof}
-
-\begin{rem}
-If $dM$ is jagged, we can read the optimal
-jagged precision from $\com (X-M).$
-Indeed, we can write $\com (X-M)=\sum_{i=1}^{n-1} A_i X^i$
-for some matrices $A_i \in M_n(O_K).$
-Then the best jagged precision on the coefficient of 
-$X^i$ can be read from $tr (A_i dM).$
-What then is to do is to find the smallest 
-$val((A_i)_{j,k} dM_{k,j}).$
-\end{rem}
-
-\begin{rem}
-As a consequence of the previous remark, once the optimal jagged
-precision is known, it is possible to lift arbitrarily
-the precision on $M$ and then to perform
-a computation of the characteristic polynomial
-from an Hessenberg form as in \ref{rem:char_pol_from_hessenberg},
-in $O(n^3).$
-By truncating afterward at the optimal jagged precision,
-we can achieve by this way this optimal precision.
-\end{rem}
 
 \section{Differential\\via Frobenius form}
 
@@ -810,12 +765,122 @@ No further computation are then needed to derive the value of $\alpha$.
 
 
 
-\subsection{Optimal jagged precision}
+\section{Optimal jagged precision}
 
-\section{Eigenvalues}
-\label{sec:eigenvalues}
+\subsection{On the characteristic polynomial}
 
-\subsection{Optimal precision on a simple eigenvalue}
+\todo{Reorganize...}
+
+\begin{prop} \label{prop:optimal_flat}
+If $M \in M_n(O_K)$ is known at flat precision $dM$ (high enough), then 
+we can compute the optimal jagged precision on $\chi (M)$
+in $\softO (n^3)$ operations in $O_K$ at the initial flat precision.
+\end{prop}
+\begin{proof}
+Computing $M=PHP^{-1},$ an approximate Hessenberg form, can be done in
+$O(n^3)$ with no division.
+Computing $\com (X-H)$ can be done in $\softO (n^3)$ with no division.
+Then, by Lemma \ref{lem:comatrix_of_similar}, $tr(\com (X-M) \cdot dM)=tr(P\com (X-H)P^{-1} \cdot dM).$
+thus, \[tr(\com (X-M) \cdot dM)=tr(\com (X-H) P^{-1}  dM P). \]
+$dM$ being flat, so is $P^{-1}  dM P$ with same precision, 
+and the jagged precision on $\chi (M)$ can then directly be read on $\com (X-H).$
+\end{proof}
+
+When this time $dM$ is jagged, the trick of the proof of Proposition
+\ref{prop:optimal_flat} can not work anymore.
+Indeed, the computation of $P^{-1}  dM P$ and then of $\com (X-H) P^{-1}  dM P$
+are not easy, as $P^{-1}  dM P$ is not jagged anymore.
+Fortunately, Proposition~\ref{prop:factom_com} will be enough to 
+conclude that optimal precision can still be read in $\softO (n^3)$ 
+operations in $O_K.$
+
+\begin{rem}
+If $dM$ is jagged, we can read the optimal
+jagged precision from $\com (X-M).$
+Indeed, we can write $\com (X-M)=\sum_{i=1}^{n-1} A_i X^i$
+for some matrices $A_i \in M_n(O_K).$
+Then the best jagged precision on the coefficient of 
+$X^i$ can be read from $tr (A_i dM).$
+What then is to do is to find the smallest 
+$val((A_i)_{j,k} dM_{k,j}).$
+\end{rem}
+
+\begin{rem}
+As a consequence of the previous remark, once the optimal jagged
+precision is known, it is possible to lift arbitrarily
+the precision on $M$ and then to perform
+a computation of the characteristic polynomial
+from an Hessenberg form as in \ref{rem:char_pol_from_hessenberg},
+in $O(n^3).$
+By truncating afterward at the optimal jagged precision,
+we can achieve by this way this optimal precision.
+\end{rem}
+
+
+{\bf Numerical experiments}
+
+\begin{figure}
+\hfill
+{\renewcommand*{\arraystretch}{1.3}
+\begin{tabular}{|c|r|r|r|}
+\cline{2-4} 
+\multicolumn{1}{l|}{} 
+  & \multicolumn{3}{c|}{Average loss of accuracy} \\
+\cline{2-4}
+\multicolumn{1}{l|}{\null\hspace{6mm}\null} 
+  & \makebox[1.5cm]{\hfill Optimal\hfill\null}
+  & \makebox[1.5cm]{\hfill CR\hfill\null}
+  & \makebox[1.5cm]{\hfill FP\hfill\null} \\
+\hline
+\rule{0pt}{2.7ex}%
+$X^0$ & $3.17$ & $196\phantom{.00}$ & $189\phantom{.00}$ \vspace{-1.5ex} \\
+{\scriptsize (det.)} 
+& {\scriptsize dev: $1.76$} & {\scriptsize dev: $240$} & {\scriptsize dev: $226$} \\
+\rule{0pt}{2.7ex}%
+$X^1$ & $2.98$ & $161\phantom{.00}$ & $156\phantom{.00}$ \vspace{-1.5ex} \\
+& {\scriptsize dev: $1.69$} & {\scriptsize dev: $204$} & {\scriptsize dev: $195$} \\
+\rule{0pt}{2.7ex}%
+$X^2$ & $2.75$ & $129\phantom{.00}$ & $126\phantom{.00}$ \vspace{-1.5ex} \\
+& {\scriptsize dev: $1.57$} & {\scriptsize dev: $164$} & {\scriptsize dev: $164$} \\
+\rule{0pt}{2.7ex}%
+$X^3$ & $2.74$ & $108\phantom{.00}$ & $105\phantom{.00}$ \vspace{-1.5ex} \\
+& {\scriptsize dev: $1.73$} & {\scriptsize dev: $144$} & {\scriptsize dev: $143$} \\
+\rule{0pt}{2.7ex}%
+$X^4$ & $2.57$ &  $63.2\phantom{0}$ &  $60.6\phantom{0}$ \vspace{-1.5ex} \\
+& {\scriptsize dev: $1.70$} & {\scriptsize dev: $85.9$} & {\scriptsize dev: $85.8$} \\
+\rule{0pt}{2.7ex}%
+$X^5$ & $2.29$ &  $51.6\phantom{0}$ &  $49.7\phantom{0}$ \vspace{-1.5ex} \\
+& {\scriptsize dev: $1.66$} & {\scriptsize dev: $75.3$} & {\scriptsize dev: $74.9$} \\
+\rule{0pt}{2.7ex}%
+$X^6$ & $2.07$ &   $9.04$           &   $8.59$ \vspace{-1.5ex} \\
+& {\scriptsize dev: $1.70$} & {\scriptsize dev: $26.9$} & {\scriptsize dev: $26.4$} \\
+\rule{0pt}{2.7ex}%
+$X^7$ & $1.64$ &   $5.70$           &   $5.38$ \vspace{-1.5ex} \\
+& {\scriptsize dev: $1.65$} & {\scriptsize dev: $15.3$} & {\scriptsize dev: $14.7$} \\
+\rule{0pt}{2.7ex}%
+$X^8$ & $0.99$ &   $0.99$           &   $0.99$ \vspace{-1.5ex} \\
+{\scriptsize (trace)} 
+& {\scriptsize dev: $1.37$} & {\scriptsize dev: $1.37$} & {\scriptsize dev: $1.37$} \\
+\hline
+\end{tabular}}
+\hfill\null
+
+\medskip
+
+\hfill
+{\footnotesize Results for a sample of $1000$ instances}
+\hfill\null
+
+\caption{Average loss of accuracy on the coefficients
+of the characteristic polynomial of a random $9 \times 9$
+matrix over $\Q_2$}
+
+\end{figure}
+
+
+
+\subsection{On eigenvalues}
+\label{ssec:eigenvalues}
 
 \todo{Optimal precision on $P(\lambda_i)$ and on $\lambda_i$}
 

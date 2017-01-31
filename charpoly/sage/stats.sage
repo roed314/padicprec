@@ -61,9 +61,9 @@ def zealous_jagged(M):
     return [ c.precision_absolute() for c in P.list() ]
 
 
-def stat(d,p=2,prec=200,repeat=10,diffused=False,filename=None):
+def stat(d,p=2,prec=200,repeat=10,diffused=False,filename=None,algorithm="df"):
     if filename is None:
-        filename = "results-%s.txt" % d
+        filename = "results-%s-%s.txt" % (d,algorithm)
     Rz = Qp(p,prec=prec)
     Rf = QpFP(p,prec=prec)
     moy_opt = [ 0 ] * d
@@ -84,16 +84,16 @@ def stat(d,p=2,prec=200,repeat=10,diffused=False,filename=None):
         if Infinity in optimal or number is Infinity:
             continue
 
-        Pz = Mz.charpoly(algorithm="df")
+        Pz = Mz.charpoly(algorithm=algorithm)
         zealous = [ Pz[i].precision_absolute() for i in range(d) ]
 
         diffprec = max([ optimal[i] - zealous[i] for i in range(d) ])
         Rz2 = Qp(p, prec=prec+diffprec)
         Mz2 = matrix(d,d,[ Rz2(c).lift_to_precision() for c in Mz.list() ])
-        Pz2 = Mz2.charpoly()
+        Pz2 = Mz2.charpoly(algorithm=algorithm)
 
         Mf = Mz.change_ring(Rf)
-        Pf = Mf.charpoly(algorithm="df")
+        Pf = Mf.charpoly(algorithm=algorithm)
         floating = [ min(optimal[i], (Pz2[i]-Rz2(Pf[i])).valuation()) for i in range(d) ]
 
         for i in range(d):
