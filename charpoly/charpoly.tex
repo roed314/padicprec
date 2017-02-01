@@ -175,6 +175,38 @@ that $d\chi(M)$ is given by
 \begin{equation} \label{eq:dchi}
 d\chi(M): dM \mapsto \tr(\com(X-M) \cdot dM).
 \end{equation}
+
+\begin{prop}
+\label{prop:surjectivity}
+For $M \in M_n(K)$, the following conditions are equivalent:
+\begin{enumerate}[(i)]
+\renewcommand{\itemsep}{0pt}
+\item \label{pt:surj} the differential $d\chi(M)$ is surjective
+\item \label{pt:cyc} the matrix $M$ has a cyclic vector (\emph{i.e.} $M$ is similar
+to a companion matrix)
+\item \label{pt:1d} the eigenspaces of $M$ over the algebraic
+closure $\bar{K}$ of $K$ all have dimension $1$
+%\item the Jordan blocks of $M$ all have distinct generalized eigenvalues
+\end{enumerate}
+\end{prop}
+
+\begin{proof}
+The equivalence of \eqref{pt:cyc} and \eqref{pt:1d} is standard; see
+\cite{hoffman-kunze:LinearAlgebra}*{\S 7.1} for example.  We now show
+that \eqref{pt:surj} and \eqref{pt:cyc} are equivalent.
+
+For any $A \in \GL_n(K)$, the image of $d\chi(M)$ will be the same
+as the image of $d\chi(AMA^{-1})$, so we may assume that
+$M$ is a companion matrix.  For a companion matrix, the bottom row of
+$\com(X-M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi(M)$ is surjective.
+
+To show the inverse, suppose that $M$ has a repeated eigenvalue $\lambda$ over $\bar{K}$.
+After conjugating into Jordan normal form over $\bar{K}$, the entries of $\com(X-M)$
+will also be block diagonal, and divisible within each block by the product of $(X-\mu)$
+for each other eigenvalue $\mu$.  Since $\lambda$ occurs twice as an eigenvalue,
+$X - \lambda$ will divide every entry of $\com(X-M)$ and $d\chi(M)$ will not be surjective.
+\end{proof}
+
 Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$.
 
 \begin{prop} \label{prop:mainlem}
@@ -188,18 +220,6 @@ satisfies:
 \end{prop}
 
 \begin{proof}
-We first show that the distinct generalized eigenvalues condition
-guarantees that $d\chi(M): V \to W$ is surjective.  For any $A \in \GL_n(K)$,
-the image of $d\chi(M)$ will be the same as the image of $d\chi(AMA^{-1})$ ,
-so we may assume that $M$ is in Jordan form.  Letting $dM$ range over
-matrices with a single $1$ entry and all other entries $0$, it suffices to show
-that the entries of $\com(X-M)$ span $W$.  Suppose that the blocks of $M$
-have dimensions $d_1, \dots, d_m$ with corresponding generalized eigenvalues
-$\lambda_1, \dots, \lambda_m$.  The only nonzero entries of $\com(X-M)$
-are those on or below the diagonal within the Jordan blocks, and within the $i$th
-block, each entry along the $j$th subdiagonal is
-$\pm(X-\lambda_i)^{d_i - j - 1} \prod_{k \ne i} (X-\lambda_k)^{d_k}$.
-As long as the $\lambda_i$ are distinct, these form a basis for $W$.
 
 Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
 of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X-M)$.
@@ -212,20 +232,6 @@ with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
 the conclusion.
 \end{proof}
 
-\begin{prop}
-\label{prop:surjectivity}
-For $M \in M_n(K)$, the following conditions are equivalent:
-\begin{enumerate}[(i)]
-\renewcommand{\itemsep}{0pt}
-\item the differential $d\chi(M)$ is surjective
-\item the matrix $M$ has a cyclic vector (\emph{i.e.} $M$ is similar
-to a companion matrix)
-\item the eigenspaces of $M$ associated to eigenvalues in an algebraic
-closure of $\bar K$ have all dimension $1$
-%\item the Jordan blocks of $M$ all have distinct generalized eigenvalues
-\end{enumerate}
-\end{prop}
-
 By definition, the codomain of $d \chi_M$ is $K_{< n}[X]$. 
 However, when $M$ is given, $K_{< n}[X]$ is canonically isomorphic
 to $K[X]/\chi_M(X)$ as a $K$-vector space. For our purpose, it will 
@@ -235,7 +241,7 @@ $M_n(K) \to K[X]/\chi_M(X)$.
 \begin{prop}
 Let $A$ be the subring of $K[X]$ consisting of polynomials $P$ for
 which $P(M) \in M_n(\OK)$. Then $d \chi_M \big(M_n(\OK)\big)$ 
-(considered as a submodule of $K[X]/\chi_M(X)$) is stable by 
+(considered as a submodule of $K[X]/\chi_M(X)$) is stable under 
 multiplication by the elements of $A$.
 \end{prop}
 \begin{proof}
@@ -246,17 +252,8 @@ are linear combinations with integer coefficients of the entries of $C$.  $C*(X-
 
 \begin{cor}
 If the coefficients of $M$ lie in $\OK$, then $d \chi_M \big(M_n(\OK)\big)$ 
-is stable by multiplication by $X$ and hence is a module over $\OK[X]$.
+is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
 \end{cor}
-
-\begin{prop}
-Let $M \in M_n(K)$, $r>0$ and $H \subset K[X] / \chi(X)$ be the image
-of $B_V(r)$ under $d\chi(M)$.  Then $X \cdot H = H$.
-\end{prop}
-\begin{proof}
-\todo{Finish proof}
-\end{proof}
-
 
 We can also give a criterion on $M$ that allows an easy description of the image of flat
 precision lattices under $d\chi(M)$.
