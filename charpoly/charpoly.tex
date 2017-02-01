@@ -379,14 +379,17 @@ informations can be read off on this short form $(\alpha, P, Q,
 In this section, we combine the computation of an Hessenberg form
 of a matrix and the computation of the inverse through the SNF
 over a complete discrete valuation field
-to compute $\com (X-M)$ and $d \chi.$
+to compute $\com (X-M)$ and $d \chi$
+in a way such that if $M \in M_n(O_K),$
+only division by invertible elements of $O_K$
+occur.
 %The computation of an Hessenberg form provides an $O(n^3)$
 %algorithm to compute the characteristic polynomial.
 
 \subsection{Hessenberg form}
 
-\todo{Describe algorithm (with matrices and endormophisms?). 
-Remark about precision.}
+We begin with the study of the computation of
+an approximate Hessenberg form.
 
 \begin{deftn}
 $M \in M_n (k)$ is said to be an Hessenberg matrix if
@@ -532,8 +535,8 @@ $M_1=PM_2P^{-1},$ then:
 The second ingredient we need is the reciprocal polynomial.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
-Let $P \in K[X]$ be of degree $d \in \mathbb{N}_{>0}.$ 
-We define its reciprocal polynomial as $P^{rec}=X^d P \left( 1/X \right).$
+$n$ being fixed, let $P \in K[X]$ be of degree $d \leq n.$ 
+We define its reciprocal polynomial as $P^{rec}=X^n P \left( 1/X \right).$
 Let $A \in M_n(K[X]).$ We denote by $A^{rec}$ the matrix
 whose coefficients are the reciprocal polynomials of the
 coefficients of $A.$ 
@@ -551,7 +554,8 @@ This lemma allows us to compute $com(1-XM)$ instead of $com(X-M).$
 This has a remarkable advantage: the pivots during the computation of
 the SNF of $com(1-XM)$ are units of $O_K[[X]],$ and are known
 in advance to be on the diagonal. This leads to a very smooth
-precision and complexity behaviour. 
+precision and complexity behaviour when the entry matrix lives in 
+$M_n(O_K).$ 
 
 \noindent\hrulefill
 
@@ -626,11 +630,7 @@ Line 9 is costless, and the result is then proved.
 
 \subsection{The comatrix of $X{-}M$}
 
-\todo{Add a small intro}
 
-%Thanks to the previous results, we can now compute 
-%$\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3),$
-%using the following algorithm.
 
 \noindent\hrulefill
 
@@ -657,7 +657,7 @@ to the first column of $B.$
 \noindent 4.\  \textbf{If} $gcd(C_{1,1}, \chi(M)) \neq 1,$ \textbf{then} go to 2.
 
 \noindent 5. \ Compute $U,V \in O_K[X]^n$ such that $C=U {}^t V \mod \chi (M),$
-using Proposition \ref{prop:factor_com}.
+by inverting $C_{1,1} \mod \chi(M).$
 
 \noindent 6. \ Return $com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi (M).$
 
