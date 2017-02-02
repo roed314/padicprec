@@ -560,23 +560,35 @@ $M_1=PM_2P^{-1},$ then:
 \[ \com (X-M_1)=P \com (X-M_2) P^{-1}. \] 
 \end{lem}
 
-The second ingredient we need is the reciprocal polynomial.
+The second ingredient we need is reciprocal polynomials.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
-Let $P \in K[X]$ be of degree $d \leq n.$ 
-We define its reciprocal polynomial as $P^{rec}=X^d P \left( 1/X \right).$
-Let $A \in M_n(K[X]).$ We denote by $A^{rec}$ the matrix
-whose coefficients are the reciprocal polynomials of the
-coefficients of $A.$ 
+Let $d \in \mathbb{N}$ and $P \in K[X]$ of degree at most $d.$ 
+We define the reciprocal polynomial of order $f$ of $P$ as $P^{rec,d}=X^d P \left( 1/X \right).$
+Let $A \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
+We denote by $A^{rec,d}$ the matrix
+whose coefficients are the reciprocal polynomials of order $d$ 
+of the coefficients of $A.$ 
 \end{deftn}
 We then have the following result :
 \begin{lem}
 Let $M \in M_n(K).$ Then:
 \begin{eqnarray*}
-com(1-XM)^{rec}=&com(X-M), \\
-(\chi_M \times 1)^{rec}=&(1-XM) com(1-XM).\\
+com(1-XM)^{rec,n-1}=&com(X-M), \\
+(\chi_M \times 1)^{rec,n}=&(1-XM) com(1-XM).\\
 \end{eqnarray*}
 \end{lem}
+\begin{proof}
+It all comes down to the following result:
+let $A \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
+then $det (A^{rec,1})=det(A)^{rec,d}.$
+Indeed, one can use multilinearity of the determinant on $X^d det(A(1/X))$
+to prove this result.
+It directly implies the second part of the lemma.
+As for the first part, since coefficients of the comatrix we are interested in
+are determinants of a matrix of polynomials of degree at most 1, the result
+is also clear.
+\end{proof}
 
 This lemma allows us to compute $com(1-XM)$ instead of $com(X-M).$
 This has a remarkable advantage: the pivots during the computation of
@@ -616,7 +628,7 @@ using the invertible pivot $U_{i,i}.$
 
 \noindent 8. \ $V:=\psi \times P^{-1} \times Q^{-1}   \mod X^{n+1}.$
 
-\noindent 9. \ \textbf{Return} $V^{rec}, \psi^{rec}.$
+\noindent 9. \ \textbf{Return} $V^{rec,n-1}, \psi^{rec,n}.$
 
 \vspace{-1ex}\noindent\hrulefill
 
