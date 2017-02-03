@@ -137,11 +137,36 @@ satisfied, and give examples when the precision is larger than $O(p^k)$.
 
 \section{Introduction}
 
+\todo{Explain here why computing characteric polynomial is so important}
+
+\todo{Explain also why taking care of precision is important}
+
 \todo{Example of $M$ and $M + 1$}
 
-\subsection{Notation} Throughout the paper, $K$ will refer to a complete,
-discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
-$\OK$ its ring of integers and $\pi$ a uniformizer.
+\medskip
+
+\noindent
+{\bf Previous contributions.}
+\todo{Many \emph{ad-hoc} for Kedlaya-like counting point algorithms.
+Our previous paper. What else?}
+
+\medskip
+
+\noindent
+{\bf The contribution of this paper.}
+
+\medskip
+
+\noindent
+{\bf Organization of the article.}
+
+\medskip
+
+\noindent
+{\bf Notations.}
+Throughout the paper, $K$ will refer to a complete, discrete valuation 
+field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its 
+valuation, $\OK$ its ring of integers and $\pi$ a uniformizer.
 
 \section{Theoretical study}
 
@@ -906,6 +931,12 @@ characteristic polynomial of $M$ computed \emph{via} the call:
 \cite{caruso-coursepadic}*{\S 2.3}), the number of correct digits of the 
 $k$-th coefficient of the characteristic polynomial of $M$.
 \end{enumerate}
+
+\begin{rem}
+The keyword \texttt{algorithm="df"} forces \texttt{SageMath} to use the 
+division free algorithm of \cite{}. It is likely that, proceeding so, we 
+limit the loss of precision.
+\end{rem}
 
 \noindent
 The table of Figure~\ref{fig:exp} summarizes the obtaines results. 
