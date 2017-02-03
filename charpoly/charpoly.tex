@@ -84,7 +84,7 @@
   \affaddr{Universit\'e Rennes 1}\\
   \affaddr{\textsf{xavier.caruso@normalesup.org}}
 \alignauthor David Roe\\
-  \affaddr{Pittsburg University}\\
+  \affaddr{University of Pittsburg}\\
   \affaddr{\textsf{roed@pitt.edu}}
 \alignauthor Tristan Vaccon\\
   \affaddr{Universit\'e de Limoges}\\
@@ -169,37 +169,73 @@ For a matrix $M \in M_n(K)$ we identify the tangent space $V$
 at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi(M)$ with
 the space $K_{<n}[X]$ of polynomials of degree less than $n$.
 Let $\com(M)$ denote the comatrix of $M$ (when $M \in \GL_n(K)$,
-we have $\com(M) = \det(M) M^{-1}$).  Recall
+we have $\com(M) = \det(M) M^{-1}$) and $d\chi_M$ the differential at $M$.  Recall
 \citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}
-that $d\chi(M)$ is given by
+that $d\chi_M$ is given by
 \begin{equation} \label{eq:dchi}
-d\chi(M): dM \mapsto \tr(\com(X-M) \cdot dM).
+d\chi_M: dM \mapsto \tr(\com(X-M) \cdot dM).
 \end{equation}
+
+\begin{prop}
+\label{prop:surjectivity}
+For $M \in M_n(K)$, the following conditions are equivalent:
+\begin{enumerate}[(i)]
+\renewcommand{\itemsep}{0pt}
+\item \label{pt:surj} the differential $d\chi_M$ is surjective
+\item \label{pt:cyc} the matrix $M$ has a cyclic vector (\emph{i.e.} $M$ is similar
+to a companion matrix)
+\item \label{pt:1d} the eigenspaces of $M$ over the algebraic
+closure $\bar{K}$ of $K$ all have dimension $1$
+%\item the Jordan blocks of $M$ all have distinct generalized eigenvalues
+\end{enumerate}
+\end{prop}
+
+\begin{proof}
+The equivalence of \eqref{pt:cyc} and \eqref{pt:1d} is standard; see
+\cite{hoffman-kunze:LinearAlgebra}*{\S 7.1} for example.  We now show
+that \eqref{pt:surj} and \eqref{pt:cyc} are equivalent.
+
+For any $A \in \GL_n(K)$, the image of $d\chi$ at $M$ will be the same
+as the image of $d\chi$ at $AMA^{-1}$, so we may assume that
+$M$ is a companion matrix.  For a companion matrix, the bottom row of
+$\com(X-M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi_M$ is surjective.
+
+To show the inverse, suppose that $M$ has a repeated eigenvalue $\lambda$ over $\bar{K}$.
+After conjugating into Jordan normal form over $\bar{K}$, the entries of $\com(X-M)$
+will also be block diagonal, and divisible within each block by the product of $(X-\mu)$
+for each other eigenvalue $\mu$.  Since $\lambda$ occurs twice as an eigenvalue,
+$X - \lambda$ will divide every entry of $\com(X-M)$ and $d\chi_M$ will not be surjective.
+\end{proof}
+
+We also have an analogue of Proposition \ref{prop:surjectivity} for integral matrices.
+
+\begin{prop}
+\label{prop:intsurj}
+For $M \in M_n(\OK)$, the following conditions are equivalent:
+\begin{enumerate}[(i)]
+\renewcommand{\itemsep}{0pt}
+\item \label{pt:surjp} the image of $M_n(\OK)$ under $d\chi_M$ is $\OK[X] \cap K_{<n}[X]$.
+\item \label{pt:cycp} the reduction of $M$ modulo $\pi$ has a cyclic vector
+\end{enumerate}
+\end{prop}
+\begin{proof}
+The condition \eqref{pt:surjp} is equivalent to the surjectivity of $d\chi_M$ modulo $\pi$.  The equivalence with
+\eqref{pt:cycp} follows the same argument as Proposition \ref{prop:surjectivity}, but over $\OK / \pi\OK$.
+\end{proof}
+
 Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$.
 
 \begin{prop} \label{prop:mainlem}
-Suppose that $M \in M_n(K)$, all the Jordan blocks of $M$ have distinct generalized eigenvalues, and
+Suppose that $M \in M_n(K)$ satisfies one of the conditions of Proposition \ref{prop:surjectivity}, and
 let $C = \max(\lvert \det(M)^{-1} \rvert, 1)$.  \todo{What if $\det(M) = 0$?}. Then, for all $\rho \in (0, 1]$ and all
 $r \in (0, C \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
 satisfies:
 \begin{equation}
-\chi(M + H) = \chi(M) + d\chi(H).
+\chi(M + H) = \chi(M) + d\chi_M(H).
 \end{equation}
 \end{prop}
 
 \begin{proof}
-We first show that the distinct generalized eigenvalues condition
-guarantees that $d\chi(M): V \to W$ is surjective.  For any $A \in \GL_n(K)$,
-the image of $d\chi(M)$ will be the same as the image of $d\chi(AMA^{-1})$ ,
-so we may assume that $M$ is in Jordan form.  Letting $dM$ range over
-matrices with a single $1$ entry and all other entries $0$, it suffices to show
-that the entries of $\com(X-M)$ span $W$.  Suppose that the blocks of $M$
-have dimensions $d_1, \dots, d_m$ with corresponding generalized eigenvalues
-$\lambda_1, \dots, \lambda_m$.  The only nonzero entries of $\com(X-M)$
-are those on or below the diagonal within the Jordan blocks, and within the $i$th
-block, each entry along the $j$th subdiagonal is
-$\pm(X-\lambda_i)^{d_i - j - 1} \prod_{k \ne i} (X-\lambda_k)^{d_k}$.
-As long as the $\lambda_i$ are distinct, these form a basis for $W$.
 
 Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
 of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X-M)$.
@@ -212,19 +248,20 @@ with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
 the conclusion.
 \end{proof}
 
-\begin{prop}
-\label{prop:surjectivity}
-For $M \in M_n(K)$, the following conditions are equivalent:
-\begin{enumerate}[(i)]
-\renewcommand{\itemsep}{0pt}
-\item the differential $d\chi(M)$ is surjective
-\item the matrix $M$ has a cyclic vector (\emph{i.e.} $M$ is similar
-to a companion matrix)
-\item the eigenspaces of $M$ associated to eigenvalues in an algebraic
-closure of $\bar K$ have all dimension $1$
-%\item the Jordan blocks of $M$ all have distinct generalized eigenvalues
-\end{enumerate}
-\end{prop}
+The relationship between precision and the images of lattices under $d\chi_M$ allows us to
+apply Proposition \ref{prop:intsurj} to determine when the precision of the characteristic polynomial
+is the minimum possible.
+
+\begin{cor}
+Suppose that $M \in \GL_n(\OK)$ is known with precision $O(p^N)$.
+Then the characteristic polynomial of $M$ has precision larger than $O(p^N)$
+if and only if the reduction of $M$ modulo $\pi$ does not have a cyclic vector.
+\end{cor}
+
+\todo{Image modulo $p$ and elementary divisors. 
+Consequences: (1)~computation in $\softO(n^\omega)$ and (2)~gain criterium.}  
+
+\subsection{Stability under multiplication by $X$}
 
 By definition, the codomain of $d \chi_M$ is $K_{< n}[X]$. 
 However, when $M$ is given, $K_{< n}[X]$ is canonically isomorphic
@@ -234,46 +271,37 @@ $M_n(K) \to K[X]/\chi_M(X)$.
 
 \begin{prop}
 Let $A$ be the subring of $K[X]$ consisting of polynomials $P$ for
-which $P(M) \in M_n(\OK)$. Then $d \chi_M \big(M_n(\OK)\big)$ 
-(considered as a submodule of $K[X]/\chi_M(X)$) is stable by 
-multiplication by the elements of $A$.
+which $P(M) \in M_n(\OK)$, and $V = d \chi_M \big(M_n(\OK)\big)$
+as a submodule of $K[X]/\chi_M(X)$.  Then $V$ is stable under 
+multiplication by $A$.
 \end{prop}
 \begin{proof}
-\todo{The image is generated by the entries of $C = \com(X-M)$
-and we have $P(M) \cdot C \equiv  P(X) \cdot C \pmod{\chi_M(X)}$ since the entries of $P(X) \cdot C$
-are linear combinations with integer coefficients of the entries of $C$.  $C*(X-M) = \chi(M)$ (since matrix * comatrix is determinant).}
+Let $C = \com(X-M)$ and $P \in A$.  By \eqref{eq:dchi}, $V$ is given by
+the $\OK$-span of the entries of $C$.   Using the fact that the product of matrix
+with its comatrix is the determinant, $(X - M) \cdot C = \chi(M)$ and thus
+$P(X) \cdot C \equiv P(M) \cdot C \pmod{\chi_M(X)}$.  The span of the entries
+of the left hand side is precisely $P(X) \cdot V$, while the span of the entries
+of the right hand side is contained within $V$ since $P(M) \in M_n(\OK)$.
 \end{proof}
 
 \begin{cor}
-If the coefficients of $M$ lie in $\OK$, then $d \chi_M \big(M_n(\OK)\big)$ 
-is stable by multiplication by $X$ and hence is a module over $\OK[X]$.
+If $M \in M_n(\OK)$, then $d \chi_M \big(M_n(\OK)\big)$ 
+is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
 \end{cor}
-
-\begin{prop}
-Let $M \in M_n(K)$, $r>0$ and $H \subset K[X] / \chi(X)$ be the image
-of $B_V(r)$ under $d\chi(M)$.  Then $X \cdot H = H$.
-\end{prop}
-\begin{proof}
-\todo{Finish proof}
-\end{proof}
-
 
 We can also give a criterion on $M$ that allows an easy description of the image of flat
 precision lattices under $d\chi(M)$.
 \begin{prop}
 Suppose that $M \in M_n(\OK)$, and that the reduction $\bar{M}$ of $M$ modulo $\pi$ has
-a cyclic vector.  Then for any $r > 0$, we have $d\chi(M)(B_V(r)) = B_W(r)$.
+a cyclic vector.  Then $d\chi_M\big(M_n(\OK)\big) = \OK[X] / \chi(M)$.
 \end{prop}
 \begin{proof}
-First note that it suffices to prove the claim for $r=1$ since $d\chi(M)$ is linear.
-Next, it suffices to check that $d\chi(M)$ is surjective modulo $\pi$.
+It suffices to check that $d\chi_M$ is surjective modulo $\pi$.
 Surjectivity of differential
 can be seen: write matrix in Jordan normal form.  Comatrix(X - M) surjective iff when you write it
 in Frobenius normal form it has only one block.
 \end{proof}
 
-\todo{Image modulo $p$ and elementary divisors. 
-Consequences: (1)~computation in $\softO(n^\omega)$ and (2)~gain criterium.}  
 
 \begin{comment}
 \begin{prop} \label{prop:factor_com}
@@ -379,14 +407,17 @@ informations can be read off on this short form $(\alpha, P, Q,
 In this section, we combine the computation of an Hessenberg form
 of a matrix and the computation of the inverse through the SNF
 over a complete discrete valuation field
-to compute $\com (X-M)$ and $d \chi.$
+to compute $\com (X-M)$ and $d \chi$
+in a way such that if $M \in M_n(O_K),$
+only division by invertible elements of $O_K$
+occur.
 %The computation of an Hessenberg form provides an $O(n^3)$
 %algorithm to compute the characteristic polynomial.
 
 \subsection{Hessenberg form}
 
-\todo{Describe algorithm (with matrices and endormophisms?). 
-Remark about precision.}
+We begin with the study of the computation of
+an approximate Hessenberg form.
 
 \begin{deftn}
 $M \in M_n (k)$ is said to be an Hessenberg matrix if
@@ -529,29 +560,42 @@ $M_1=PM_2P^{-1},$ then:
 \[ \com (X-M_1)=P \com (X-M_2) P^{-1}. \] 
 \end{lem}
 
-The second ingredient we need is the reciprocal polynomial.
+The second ingredient we need is reciprocal polynomials.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
-Let $P \in K[X]$ be of degree $d \in \mathbb{N}_{>0}.$ 
-We define its reciprocal polynomial as $P^{rec}=X^d P \left( 1/X \right).$
-Let $A \in M_n(K[X]).$ We denote by $A^{rec}$ the matrix
-whose coefficients are the reciprocal polynomials of the
-coefficients of $A.$ 
+Let $d \in \mathbb{N}$ and $P \in K[X]$ of degree at most $d.$ 
+We define the reciprocal polynomial of order $f$ of $P$ as $P^{rec,d}=X^d P \left( 1/X \right).$
+Let $A \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
+We denote by $A^{rec,d}$ the matrix
+whose coefficients are the reciprocal polynomials of order $d$ 
+of the coefficients of $A.$ 
 \end{deftn}
 We then have the following result :
 \begin{lem}
 Let $M \in M_n(K).$ Then:
 \begin{eqnarray*}
-com(1-XM)^{rec}=&com(X-M), \\
-(\chi_M \times 1)^{rec}=&(1-XM) com(1-XM).\\
+com(1-XM)^{rec,n-1}=&com(X-M), \\
+(\chi_M \times 1)^{rec,n}=&(1-XM) com(1-XM).\\
 \end{eqnarray*}
 \end{lem}
+\begin{proof}
+It all comes down to the following result:
+let $A \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
+then $det (A^{rec,1})=det(A)^{rec,d}.$
+Indeed, one can use multilinearity of the determinant on $X^d det(A(1/X))$
+to prove this result.
+It directly implies the second part of the lemma.
+As for the first part, since coefficients of the comatrix we are interested in
+are determinants of a matrix of polynomials of degree at most 1, the result
+is also clear.
+\end{proof}
 
 This lemma allows us to compute $com(1-XM)$ instead of $com(X-M).$
 This has a remarkable advantage: the pivots during the computation of
 the SNF of $com(1-XM)$ are units of $O_K[[X]],$ and are known
 in advance to be on the diagonal. This leads to a very smooth
-precision and complexity behaviour. 
+precision and complexity behaviour when the entry matrix lives in 
+$M_n(O_K).$ 
 
 \noindent\hrulefill
 
@@ -584,7 +628,7 @@ using the invertible pivot $U_{i,i}.$
 
 \noindent 8. \ $V:=\psi \times P^{-1} \times Q^{-1}   \mod X^{n+1}.$
 
-\noindent 9. \ \textbf{Return} $V^{rec}, \psi^{rec}.$
+\noindent 9. \ \textbf{Return} $V^{rec,n-1}, \psi^{rec,n}.$
 
 \vspace{-1ex}\noindent\hrulefill
 
@@ -626,11 +670,7 @@ Line 9 is costless, and the result is then proved.
 
 \subsection{The comatrix of $X{-}M$}
 
-\todo{Add a small intro}
 
-%Thanks to the previous results, we can now compute 
-%$\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3),$
-%using the following algorithm.
 
 \noindent\hrulefill
 
@@ -657,7 +697,7 @@ to the first column of $B.$
 \noindent 4.\  \textbf{If} $gcd(C_{1,1}, \chi(M)) \neq 1,$ \textbf{then} go to 2.
 
 \noindent 5. \ Compute $U,V \in O_K[X]^n$ such that $C=U {}^t V \mod \chi (M),$
-using Proposition \ref{prop:factor_com}.
+by inverting $C_{1,1} \mod \chi(M).$
 
 \noindent 6. \ Return $com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi (M).$
 
