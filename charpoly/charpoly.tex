@@ -45,9 +45,12 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\OK}{\mathcal{O}_K}
 
+\newcommand{\calU}{\mathcal{U}}
+
 \newcommand{\softO}{O\tilde{~}}
 
 \newcommand{\inv}{\text{\rm inv}}
+\newcommand{\app}{\text{\rm app}}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
@@ -846,10 +849,10 @@ jagged precision: the $(i,j)$ entry of $M$ is given at precision
 $O(\pi^{N_{i,j}})$ for some given integer $N_{i,j}$. 
 Lemma 3.4 of \cite{caruso-roe-vaccon:14a} then teaches us that
 the optimal precision on the $k$-th coefficient of $\chi_M$ is 
-$O(\pi^{M_k})$ where $M_k$ is given by the formula:
+$O(\pi^{N'_k})$ where $N'_k$ is given by the formula:
 \begin{equation}
 \label{eq:optjagged}
-M_k = \min_{1 \leq i, j\leq n} N_{j,i} + \val(\pi_k(C_{i,j}))
+N'_k = \min_{1 \leq i, j\leq n} N_{j,i} + \val(\pi_k(C_{i,j}))
 \end{equation}
 where $C_{i,j}$ is the $(i,j)$ entry of the comatrix $\com(X{-}M)$.
 
@@ -874,10 +877,10 @@ If $M \in M_n(O_K)$ is given at (high enough) \emph{flat} precision,
 then we can avoid the final base change step in the Hessenberg method.
 Indeed, observe that, thanks to Lemma \ref{lem:comatrix_of_similar}, 
 we can write:
-$$tr(\com (X{-}M) \cdot dM)=tr(\com (X{-}H)\cdot P^{-1} dM P)$$
+$$\tr(\com (X{-}M) \cdot dM)=\tr(\com (X{-}H)\cdot P^{-1} dM P)$$
 where $P$ lies in $\GL_n(\OK)$. Moreover, the latter condition implies
 that $P^{-1} dM P$ runs over $M_n(\OK)$ when $P$ runs over $M_n(\OK)$.
-As a consequence, the integer $M_k$ given the optimal precision on the 
+As a consequence, the integer $N'_k$ given the optimal precision on the 
 $k$-th coefficient of $M$ is also equal to
 $N + \min_{1 \leq i, j\leq n} \val(\pi_k(C^H_{i,j}))$
 where $C^H_{i,j}$ is the $(i,j)$ entry of the comatrix of $X{-}H$
@@ -1013,9 +1016,9 @@ and $v$ is the valuation of the $k$-th coefficient of $\chi_M$, then:
 \begin{enumerate}[$\bullet$]
 \renewcommand{\itemsep}{0pt}
 \item the column ``Optimal'' is the average of the quantities 
-$(M_k{-}v) - N$ (where $M_k$ is defined by Eq.~\eqref{eq:optjagged}): 
-$M_k{-}v$ is the optimal \emph{relative} precision, so that the
-difference $(M_k{-}v) - N$ is the loss of relative precision;
+$(N'_k{-}v) - N$ (where $N'_k$ is defined by Eq.~\eqref{eq:optjagged}): 
+$N'_k{-}v$ is the optimal \emph{relative} precision, so that the
+difference $(N'_k{-}v) - N$ is the loss of relative precision;
 \item the column ``CR'' is the average of the quatities 
 $(\text{CR}_k{-}v) - N$ where $\text{CR}_k$ is the computed (absolute) 
 precision on the $k$-th coefficient of $\chi_M$;
@@ -1033,14 +1036,118 @@ methods developed in this paper.
 \subsection{On eigenvalues}
 \label{ssec:eigenvalues}
 
-\todo{Optimal precision on $P(\lambda_i)$ and on $\lambda_i$}
+Let $M \in M_n(K)$ and $\lambda \in K$ be a \emph{simple} eigenvalue 
+of $M$. We are interesting in quantifying the optimal precision on 
+$\lambda$ when $M$ is given with some uncertainty.
 
-\subsection{Legendre precision}
+For doing so, we fix an approximation $M_\app \in M_n(K)$ of $M$ and 
+suppose that the uncertainty of $M$ is ``jagged'' in the sense that
+each entry of $M$ is given at some precision $O(\pi^{N_{i,j}})$.
+Let $\lambda_\app$ be the relevant eigenvalue of $M_\app$. We remark 
+that it is possible to follow the eigenvalue $\lambda_\app$ on a small 
+neighborhood $\calU$ of $M$. Precisely, there exists a unique continuous 
+function $f : \calU \to K$ such that:
+\begin{enumerate}[$\bullet$]
+\renewcommand{\itemsep}{0pt}
+\item $f(M_\app) = \lambda_\app$, and
+\item $f(M)$ is an eigenvalue of $M$ for all $M \in \calU$.
+\end{enumerate}
 
-\todo{Describe Legendre precision and show that it is optimal for
-a diagonalizable matrix over $\Zp$.}
+\begin{lem}
+The function $f$ is strictly differentiable on a neighborhood of 
+$M_\app$.
+The differential of $f$ at $M$ is the linear mapping:
+$$dM \mapsto d \lambda = - \frac{\tr(\com(\lambda-M) \cdot dM)}
+{\chi'_M(\lambda)}$$
+where $\chi'_M$ is the usual derivative of $\chi_M$.
+\end{lem}
 
-%\subsection{Algorithm}
+\begin{proof}
+The first assertion follows from the implicit function Theorem.
+Differentiating the relation $\chi_M(\lambda) = 0$, we get
+$\chi'_M(\lambda) \cdot d \lambda + \tr(\com(X-M) \cdot dM)(\lambda) = 0$,
+from what the Lemma follows.
+\end{proof}
+
+\noindent
+Lemma 3.4 of \cite{caruso-roe-vaccon:14a} now implies that, if the
+$N_{i,j}$'s are large enough and rather well balanced, the optimal
+precision on the eigenvalue $\lambda$ is $O(p^{N'})$ with:
+$$N' = \min_{1 \leq i, j\leq n} \big(N_{j,i} + \val(C_{i,j}(\lambda)) - 
+\val(\chi'_M(\lambda))\big)$$
+where $C_{i,j}$ denotes as above the $(i,j)$ entry of $\com(X{-}M)$.
+Writing
+$\com(X{-}M) = \alpha \cdot P V^t \cdot V Q^t \text{ mod } \chi_M$
+as in Proposition~\ref{prop:shortcom}, we find:
+\begin{align*}
+N' & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+& \hspace{2mm} + \min_{1 \leq i, j\leq n} \big(N_{j,i} + 
+\val(P_i V(\lambda)^t) + \val(V(\lambda) Q_j^t)\big)
+\end{align*}
+where $P_i$ denotes the $i$-th row of $P$ and, similarly, $Q_j$
+denotes the $j$-th row of $Q$. Note moreover that $V(\lambda)$ is
+the row vector $(1, \lambda, \ldots, \lambda^{n-1})$.
+By the discussion of \S \ref{}, the exact value of $M$ can be 
+determined for a cost of $\softO(n^\omega)$ operations in $K$ and
+$O(n^2)$ operations on integers. 
+
+When $M$ is given at flat precision, \emph{i.e.} the $N_{i,j}$'s are all 
+equal to some $N$, the formula for $N'$ rewrites:
+\begin{align*}
+N' & = N + \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+& \hspace{2mm} + \min_{1 \leq i \leq n} \val(P_i V(\lambda)^t)
++ \min_{1 \leq j \leq n} \val(V(\lambda) Q_j^t)\big)
+\end{align*}
+and can therefore now be evaluated for a cost of $\softO(n^\omega)$
+operations in $K$ and only $O(n)$ operations on integers.
+
+\medskip
+
+To conclude with, let us discuss briefly the situation where we want
+to figure out the optimal jagged precision on a tuple $(\lambda_1,
+\ldots, \lambda_s)$ of eigenvalues. Applying what we have done
+previously, we find that the optimal precision on $\lambda_k$ is 
+\begin{align*}
+N'_k & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+& \hspace{2mm} + \min_{1 \leq i, j\leq n} \big(N_{j,i} + 
+\val(P_i V(\lambda)^t) + \val(V(\lambda) Q_j^t)\big).
+\end{align*}
+
+\begin{prop}
+\label{prop:opteigenvalues}
+The $N'_k$'s can be all computed in $\softO(n^\omega)$ operations
+in $K$ and $O(n^2 s)$ operations on integers.
+
+If the $N_{i,j}$'s are all equal, the above complexity can be 
+lowered to $\softO(n^\omega)$ operations in $K$ and $O(n s)$ operations 
+on integers.
+\end{prop}
+
+\begin{proof}
+The $\alpha(\lambda_k)$'s and the $\chi'_M(\lambda_k)$'s can be computed 
+for a cost of $\softO(ns)$ operations in $K$ using fast multipoint 
+evaluation methods~\cite{}.
+On the other hand, we observe that $P_i V(\lambda_k)^t$ is nothing but
+the $(i,k)$ entry of the matrix:
+$$P \cdot \left( \begin{matrix}
+\lambda_1 & \cdots & \lambda_s \\
+\lambda_1^2 & \cdots & \lambda_s^2 \\
+\vdots & & \vdots \\
+\lambda_1^{n-1} & \cdots & \lambda_s^{n-1}
+\end{matrix} \right).$$
+The latter product can be computed in $\softO(n^\omega)$ operations in 
+$K$\footnote{It turns out that $\softO(n^2)$ is also possible because
+the right factor is a structured matrix (a truncated Vandermonde):
+computing the above product reduces to evaluate a polynomial at the
+points $\lambda_1, \ldots, \lambda_s$.}. Therefore all the $P_i 
+V(\lambda_k)^t$'s (for $i$ and $k$ varying) 
+can be determined with the same complexity. 
+Similarly all the $V(\lambda) Q_j^t$ are computed for the same cost.
+The first assertion of Proposition~\ref{prop:opteigenvalues} follows.
+The second assertion is now proved similarly to the case of a unique
+eigenvalue.
+\end{proof}
+
 
 \bibliographystyle{plain}
 \bibliography{charpoly}
