@@ -61,11 +61,11 @@
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
-\CopyrightYear{2016}
+\CopyrightYear{2017}
 \setcopyright{acmcopyright}
-\conferenceinfo{ISSAC '16,}{July 19-22, 2016, Waterloo, ON, Canada}
-\isbn{978-1-4503-4380-0/16/07}\acmPrice{\$15.00}
-\doi{http://dx.doi.org/10.1145/2930889.2930898}
+\conferenceinfo{ISSAC '17,}{July 25-28, 2017, Kaiserslautern, Germany}
+\isbn{***-*-****-****-0/17/07}\acmPrice{\$15.00}
+\doi{http://dx.doi.org/10.1145/*******.*******}
 
 \permission{Publication rights licensed to ACM. ACM acknowledges that this contribution was authored or co-authored by an employee, contractor or affiliate of a national government. As such, the Government retains a nonexclusive, royalty-free right to publish or reproduce this article, or to allow others to do so, for Government purposes only.}
 
@@ -448,7 +448,7 @@ by the datum of the quadruple $(\alpha, P, Q, \chi_M)$ whose total size
 stays within $O(n^2)$ : the polynomials $\alpha$ and $\chi_M$ are 
 determined by $2n$ coefficients while we need $2n^2$ coefficients to 
 write down the matrices $P$ and $Q$. 
-We shall see moreover in \S \ref{sec:eigenvalues} that interesting
+We shall see moreover in Subsection \ref{ssec:eigenvalues} that interesting
 informations can be read off on this short form $(\alpha, P, Q, 
 \chi_M)$.
 
@@ -666,7 +666,7 @@ such that $U=PU_0Q.$
 
 \noindent 3.\  \:  \textbf{Eliminate}, modulo $X^{n+1}$ the coefficients $U_{i,j},$ for $j\geq i+1$ 
 using the invertible pivot
-$U_{i,i}=1+XL_{i,i} \mod X^{n+1}$ (with $L_{i,i} \in \Zp [X]$). 
+$U_{i,i}=1+XL_{i,i} \mod X^{n+1}$ (with $L_{i,i} \in O_K[X]$). 
 
 \noindent 4.\    {\bf for} $i=1,\dots,n-1$ {\bf do} 
 
@@ -687,7 +687,8 @@ using the invertible pivot $U_{i,i}.$
 
 \begin{theo}
 Let $H \in M_n(O_K)$ be an approximate Hessenberg matrix.
-Then, using Algorithm 2, one can compute $\com (X -H)$ in 
+Then, using Algorithm 2, one can compute $\com (X -H)$
+and $\chi_M$ in 
 $\softO (n^3)$ operations in $O_K$ at the precision given by $H.$
 \end{theo}
 \begin{proof}
@@ -717,11 +718,33 @@ product on line 8 is in $\softO (n^3).$
 We emphasize that no division has been done throughout the algorithm.
 Line 9 is costless, and the result is then proved.
 \end{proof}
+\begin{rem}
+If $M \in M_n(K)$ does not have coefficients in $O_K,$
+then, by an appropriate scaling, we can still use
+Algorithms 1 and 2 to get $\chi_M$
+in $\softO (n^3)$ operations in $O_K$ at some shift
+of the initial precision.
+\end{rem}
 
+We will see in Section \ref{sec:optjagged} that for an
+entry matrix with coefficients known at flat precision,
+Algorithms 1 and 2 are enough to
+know the optimal jagged precision on $\chi_M.$
 
 \subsection{The comatrix of $X{-}M$}
 
-
+In this Subsection, we are interested in a special
+case of the computation of the comatrix of $X-M,$
+when $\chi_M$ is square-free (which is the 
+generic case).
+We observe that it is possible to combine
+the result of Proposition \ref{prop:shortcom}
+with Algorithm 2 to actually compute
+the comatrix of $X-M.$
+It leads to a $\softO (n^3)$ algorithm
+where the only divisions are for
+gcd and modular inverse computations.
+ 
 
 \noindent\hrulefill
 
@@ -758,9 +781,11 @@ by inverting $C_{1,1} \mod \chi(M).$
 
 
 \begin{theo}
+For $M \in M_n(O_K)$ such that $discr( \chi_M) \neq 0,$
 Algorithm 3 compute 
 $\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3)$
-operations in $O_K$ at initial precision.
+operations in $K$ at initial precision.
+The only divisions are in steps 4 and 5.
 \end{theo}
 \begin{proof}
 As we have already seen, completing Step 1 and 2 is in $\softO (n^3).$
@@ -771,7 +796,7 @@ Thus, it is in $\softO (n^3).$
 Step 5 and 6 are also in $\softO (n^3).$
 All that is to prove is that the set of $P$ and $S$ to avoid
 is of dimension at most $n-1.$
-As in the proof of \ref{prop:factor_com}, we can work modulo $X-\lambda$
+The idea is to work modulo $X-\lambda$
 for $\lambda$ a root of $\chi (M)$ (in an algebraic closure)
 and then apply Chinese Remainder Theorem.
 The goal of the Step $2$ is to ensure the first row of $B$ contains an
@@ -786,8 +811,25 @@ hyperplane is to avoid.
 Hence, the set that the $\mu_i$'s have to avoid is a finite union
 of hyperplane, and hence, is of dimension at most $n-1.$
 Thus, almost any $\mu_i$ lead to a matrix $C$ passing the test
-on Step 4, which concludes the proof.
+on Step 4.
+Now, it is clear that the only divisions happening are on steps 4 and 5.
+This concludes the proof.
 \end{proof}
+
+
+\begin{rem}
+As in the previous section, it is possible
+to scale $M \in M_n(K)$ so as to
+get coefficients in $O_K$ and apply the previous algorithm.
+\end{rem}
+\begin{rem}
+We refer to \cite{caruso:15a} for the handling
+of the precision on gcd and modular inverse computations.
+In this article, ways to tame the loss of precision
+coming from divisions are explored, following
+the methods of \cite{caruso-roe-vaccon:14a}.
+\end{rem}
+
 
 \section{Differential\\via Frobenius form}
 \label{sec:diffFrob}
@@ -827,6 +869,7 @@ for the Zariski topology. It then happens with high probability as soon
 as it is not empty, that is as soon as $M$ admits a cyclic vector, which
 holds by assumption.
 
+
 The characteristic polynomial $\chi_M$ can be recovered thanks to the
 relation $(a_0, a_1, \ldots, a_{n-1}) = -c_n \cdot P$.
 
@@ -857,7 +900,16 @@ No further computation are then needed to derive the value of $\alpha$.
 \section{Optimal jagged precision}
 \label{sec:optjagged}
 
-\todo{Write a small introduction}
+In the previous Sections, \ref{sec:diffHess} and \ref{sec:diffHess},
+we have proposed algorithms to obtain the comatrix of 
+$X-M.$ Our motivation for these computations is to then
+be able to understand what is the optimal precision on $\chi_M.$
+In this section, we provide some answers to this question of
+the optimal precision on $\chi_M,$ along with
+numerical evidence.
+We also show that it is then possible to derive 
+optimal precision on eigenvalues of $M.$ 
+
 
 \subsection{On the characteristic polynomial}
 
