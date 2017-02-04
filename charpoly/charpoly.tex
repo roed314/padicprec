@@ -137,11 +137,48 @@ satisfied, and give examples when the precision is larger than $O(p^k)$.
 
 \section{Introduction}
 
-\todo{Example of $M$ and $M + 1$}
+\todo{Explain here why computing characteristic polynomial is so important.}
 
-\subsection{Notation} Throughout the paper, $K$ will refer to a complete,
+The characteristic polynomial is a fundamental invariant of a matrix: its roots
+give the eigenvalues, and the trace and determinant can be extracted from its coefficients.
+In fact, the best known division-free algorithm for computing determinants
+over arbitrary rings \cite{kartofen:92a} does so using the characteristic polynomial.
+Over $p$-adic fields, computing the characteristic polynomial is a key ingredient in
+algorithms for counting points of varieties over finite fields. \todo{list some point counting references.}
+\todo{Application to characteristic polynomials of elements of p-adic field extensions?}
+
+\todo{Explain also why taking care of precision is important.}
+
+When computing with $p$-adic matrices, the lack of infinite memory implies
+that the entries may only be approximated at some finite precision $O(p^m)$.  As a
+consequence, in designing algorithms for such matrices one must analyze
+not only the running time of the algorithm but also the accuracy of the result.
+
+Let $M \in M_n(\Qp)$ be known at precision $O(p^m)$.
+The simplest approach for computing the characteristic polynomial of $M$
+is to compute $\det(X-M)$ either using recursive row expansion or various division free
+algorithms \cites{\cite{seifullin:02a} \cite{kartofen:92a}}.  There are two issues
+with these methods.  First, they are slower than alternatives that allow division,
+requiring $O(n!)$, $O(n^4)$ and $\softO(n^{2 + \omega/2})$ operations.  Second,
+while the lack of division implies that the result is accurate modulo $p^m$ as
+long as $M \in M_n(\Zp)$, they still do not yield the optimal precision.
+
+A faster approach over a field is to compute the Frobenius normal form of $M$,
+which is achievable in running time $\softO(n^\omega)$ \cite{storjohann:01a}.
+However, the fact that it uses division frequently leads to catastrophic losses of division.
+In many examples, no precision remains at the end of the calculation.
+
+\todo{Example of $M$ and $M + 1$.}
+
+\subsection*{Previous contributions.} Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?
+
+\subsection*{The contribution of this paper.}
+
+\subsection*{Organization of the article.}
+
+\subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
 discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
-$\OK$ its ring of integers and $\pi$ a uniformizer.
+$\OK$ its ring of integers and $\pi$ a uniformizer. \todo{Soft-Oh}
 
 \section{Theoretical study}
 
@@ -165,7 +202,7 @@ of simplicity.
 Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map.
 Our analysis of the precision behavior of $\chi$ rests upon
 the computation of its derivative $d\chi$, using \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
-For a matrix $M \in M_n(K)$ we identify the tangent space $V$
+For a matrix $M \in M_n(K)$, we identify the tangent space $V$
 at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi(M)$ with
 the space $K_{<n}[X]$ of polynomials of degree less than $n$.
 Let $\com(M)$ denote the comatrix of $M$ (when $M \in \GL_n(K)$,
@@ -226,9 +263,9 @@ The condition \eqref{pt:surjp} is equivalent to the surjectivity of $d\chi_M$ mo
 Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$.
 
 \begin{prop} \label{prop:mainlem}
-Suppose that $M \in M_n(K)$ satisfies one of the conditions of Proposition \ref{prop:surjectivity}, and
-let $C = \max(\lvert \det(M)^{-1} \rvert, 1)$.  \todo{What if $\det(M) = 0$?}. Then, for all $\rho \in (0, 1]$ and all
-$r \in (0, C \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
+Suppose that $M \in M_n(K)$ satisfies one of the conditions in Proposition \ref{prop:surjectivity}, and
+let $\alpha = \max(\lvert \det(M)^{-1} \rvert, 1)$.  \todo{What if $\det(M) = 0$?}. Then, for all $\rho \in (0, 1]$ and all
+$r \in (0, \alpha \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
 satisfies:
 \begin{equation}
 \chi(M + H) = \chi(M) + d\chi_M(H).
@@ -239,9 +276,9 @@ satisfies:
 
 Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
 of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X-M)$.
-Since the precision polygon lies below the Newton polygon \cite{caruso-roe-vaccon:15a}*{Prop. 3.4},
+Since the precision polygon lies below the Newton polygon of $M$ \cite{caruso-roe-vaccon:15a}*{Prop. 3.4},
 and since the smallest entry of the Newton polygon occurs either with the leading
-coefficient or the constant term, $B_W(1) \subset d\chi(M)(B_V(C))$.
+coefficient or the constant term, $B_W(1) \subset d\chi(M)(B_V(\alpha))$.
 
 Since the coefficients of $\chi(M)$ are given by polynomials in the entries of $M$
 with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
@@ -253,10 +290,13 @@ apply Proposition \ref{prop:intsurj} to determine when the precision of the char
 is the minimum possible.
 
 \begin{cor}
-Suppose that $M \in \GL_n(\OK)$ is known with precision $O(p^N)$.
-Then the characteristic polynomial of $M$ has precision larger than $O(p^N)$
+Suppose that $M \in \GL_n(\OK)$ is known with precision $O(p^m)$.
+Then the characteristic polynomial of $M$ has precision larger than $O(p^m)$
 if and only if the reduction of $M$ modulo $\pi$ does not have a cyclic vector.
 \end{cor}
+
+Note that this criterion is checkable using $\softO(n^\omega)$ operations in the residue field,
+the running time of matrix multiplication.
 
 \todo{Image modulo $p$ and elementary divisors. 
 Consequences: (1)~computation in $\softO(n^\omega)$ and (2)~gain criterium.}  
