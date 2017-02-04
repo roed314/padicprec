@@ -204,7 +204,7 @@ relationship between $\chi_M$ and $\chi_{1+M}$.
 
 \subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
 discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
-$\OK$ its ring of integers and $\pi$ a uniformizer. \todo{$\softO$, $\omega$, scalar matrices and $I_n$}
+$\OK$ its ring of integers and $\pi$ a uniformizer. \todo{$\softO$, $\omega$, scalar matrices and $I_n$, $\sigma_1(M), \dots, \sigma_n(M)$}
 
 \section{Theoretical study}
 
@@ -550,56 +550,53 @@ precision behavior is not easy to quantify.
 \subsection{Computation of the inverse}
 
 In this section, we prove that to compute the inverse of
-a matrix over a CDVF $K$, SNF is precision-wise optimal in the flat-precision case.
-We first recall what is the differential of the computation of the inverse of a matrix.
+a matrix over a CDVF $K$, the Smith normal form is precision-wise optimal in the flat-precision case.
+We first recall the differential of matrix inversion.
 
 \begin{lem}
 Let $u \: : \: GL_n (K) \rightarrow GL_n(K),$ $M \mapsto M^{-1}.$
-Then for $M \in GL_n (K),$ $du(M) \cdot dM=M^{-1} dM M^{-1}.$
+Then for $M \in GL_n (K),$ $du_M(dM)=M^{-1} dM M^{-1}.$
 It is always surjective.
 \end{lem}
 
 We then have the following result about the loss in precision when computing the inverse.
 
 \begin{prop}
-Let $\cond(M)$ be the valuation of the last invariant factor of $M.$
-If $dM$ is a flat precision of $O(\pi^N)$ on $M$ then $M^{-1}$
-can be computed at precision $O(\pi^{N-2\cond(M)})$ by a \textbf{SNF} computation
-and this lower-bound is optimal
-at least when $N$ is large.
+Let $\cond(M) = \val(\sigma_n(M))$.
+If $dM$ is a flat precision of $O(\pi^m)$ on $M$ then $M^{-1}$
+can be computed at precision $O(\pi^{m-2\cond(M)})$ by a \textbf{SNF} computation
+and this lower-bound is optimal,
+at least when $m$ is large.
 \end{prop}
 \begin{proof}
 The smallest valuation of a coefficient of $M^{-1}$ is $-\cond(M).$
-It is $-2\cond(M)$ for $M^{-2}$ and it is then clear that $-2\cond(M)$
-can be obtained as the valuation of a coefficient of $du(M) \cdot dM$
+It is $-2\cond(M)$ for $M^{-2}$ and it is then clear that $m-2\cond(M)$
+can be obtained as the valuation of a coefficient of $du_M(dM)$
 and the smallest that can be achieved this way for $dM$ in a precision lattice
 of flat precision. Hence the optimality of the bound given, at least when 
-$N$ is large, thanks to Lemma 3.14 of \cite{caruso-roe-vaccon:14a}
+$m$ is large \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
 
-Now, the computation of an SNF form over a CDVF was described in \cite{Vaccon-these}.
-From $M$ known at flat precision $O(\pi^N),$ we can obtain an exact $\Delta$ and $P,Q$ 
-known at precision at least $O(\pi^{N-\cond(M)})$ with coefficients in $O_K$
-and determinant in $O_K^*$ realizing an SNF form of $M.$
+Now, the computation of the Smith normal form was described in \cite{Vaccon-these}.
+From $M$ known at flat precision $O(\pi^m),$ we can obtain an exact $\Delta$, and $P$ and $Q$ 
+known at precision at least $O(\pi^{m-\cond(M)})$, with coefficients in $O_K$
+and determinant in $O_K^\times$ realizing an Smith normal form of $M.$
 There is no loss in precision when computing $P^{-1}$ and $Q^{-1}.$
-Now, computing $\Delta^{-1}$ exactly, its smallest coefficient being  of valuation $-\cond(M),$
-we obtain $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ known at precision at least $O(\pi^{N-2\cond(M)}),$
+Since the smallest valuation occurring in $\Delta^{-1}$ is $-\cond(M),$
+we see that $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ is known at precision at least $O(\pi^{m-2\cond(M)}),$
 which concludes the proof.
 \end{proof}
 
-
-
 \subsection{The comatrix of $X{-}H$}
 
-In this subsection, we want to compute $\com (X Id -H)$
-by using the SNF computation of the previous subsection.
-As it is, in a way, optimal for the computation of the
-inverse in a CDVF, we hope to get reasonable behavior
-for the computation of $\com (X-M)$ even though the coefficients
-are not, \textit{a priori}, set to live in a CDVF.
-We show that we can reduce this task to the computation
-of an SNF over a CDVF, with no division in $K.$
+In this section, we compute $\com(X-H)$ for a Hessenberg matrix $H$
+using the Smith normal form computation of the previous section.
+The entries of $\com(X-H)$ lie in $K[X]$, which is not a CDVF,
+so we may not directly apply the methods of the previous section.
+However, we may relate $\com(X-H)$ to $\com(1-XH)$, whose
+entries lie in the CDVF $K((X))$.  In this way, we compute $\com(X-H)$
+using an SNF method, with no division in $K$.
 
-Firstly, we need a lemma to relate comatrices of
+First, we need a lemma relating comatrices of
 similar matrices:
 
 \begin{lem} \label{lem:comatrix_of_similar}
