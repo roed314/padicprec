@@ -148,7 +148,9 @@ give the eigenvalues, and the trace and determinant can be extracted from its co
 In fact, the best known division-free algorithm for computing determinants
 over arbitrary rings \cite{kaltofen:92a} does so using the characteristic polynomial.
 Over $p$-adic fields, computing the characteristic polynomial is a key ingredient in
-algorithms for counting points of varieties over finite fields. \todo{list some point counting references.}
+algorithms for counting points of varieties over finite fields (see
+\cite{kedlaya:01a, harvey:07a, harvey:14a}.
+
 \todo{Application to characteristic polynomials of elements of p-adic field extensions?}
 
 When computing with $p$-adic matrices, the lack of infinite memory implies
@@ -196,7 +198,30 @@ We formalize this phenomenon using lattices; see Section \ref{sec:padicprec} for
 further explanation, and \cite{caruso:17a}*{\S 3.2.2} for a specific example of the
 relationship between $\chi_M$ and $\chi_{1+M}$.
 
-\subsection*{Previous contributions.} Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?
+\subsection*{Previous contributions.} 
+%\todo{Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?}
+
+Since the description of Kedlaya's algorithm in
+\cite{kedlaya:01a}, the computation of characteristic polynomials
+over $p$-adic numbers
+has become a crucial point in many counting-points algorithms.
+We can cite for example \cite{harvey:07a, harvey:14a} for
+algorithms to count points on hyperelliptic curves.
+
+In most of these papers, the precision analysis usually
+deals with great details on how to obtain the matrices (\textit{e.g.} of action of Frobenius)  that are involved in the point-counting schemes.
+However, the computation of their characteristic polynomials is often
+a little bit less thoroughly studied: some
+refer to fast algorithms (using divisions), while others
+refer to division-free algorithms.
+
+In \cite{caruso-roe-vaccon:15a}, the authors have begun the application
+of the theory of differential precision of \cite{caruso-roe-vaccon:14a}
+to stable computation of characteristic polynomials.
+They have obtained a way to express the optimal precision
+on the characteristic polynomials, but have not studied 
+how to attain this optimal precision algorithmicaly.
+
 
 \subsection*{The contribution of this paper.} % Or \textbf
 
@@ -321,8 +346,8 @@ apply Proposition \ref{prop:intsurj} to determine when the precision of the char
 is the minimum possible.
 
 \begin{cor} \label{cor:prec_gain}
-Suppose that $M \in \GL_n(\OK)$ is known with precision $O(p^m)$.
-Then the characteristic polynomial of $M$ has precision lattice strictly contained in $O(p^m)$
+Suppose that $M \in \GL_n(\OK)$ is known with precision $O(\pi^m)$.
+Then the characteristic polynomial of $M$ has precision lattice strictly contained in $O(\pi^m)$
 if and only if the reduction of $M$ modulo $\pi$ does not have a cyclic vector.
 \end{cor}
 
@@ -531,9 +556,9 @@ $P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k((X))$, and the comp
 \end{prop}
 \begin{proof}
 Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k((X)).$
-Inside the nested \textbf{for} loop, if we want to eliminate $p^{u_y} \varepsilon_y+O(p^{n_y})$ with pivot $p^{u_x} \varepsilon_x+O(p^{n_x}),$
+Inside the nested \textbf{for} loop, if we want to eliminate $\pi^{u_y} \varepsilon_y+O(\pi^{n_y})$ with pivot $\pi^{u_x} \varepsilon_x+O(\pi^{n_x}),$
 with the $\varepsilon$'s being units,
-the corresponding coefficient of the corresponding shear matrix is the lift(in $\mathbb{Z}, $  $\mathbb{F}_q[X],$ $\mathbb{Q}[X]$ or adequate extension) of $p^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{\min (n_x,n_y)}.$
+the corresponding coefficient of the corresponding shear matrix is the lift(in $\mathbb{Z}, $  $\mathbb{F}_q[X],$ $\mathbb{Q}[X]$ or adequate extension) of $\pi^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{u_y-u_x\min (n_x-u_x,n_y-u_y)}.$
 Exactness follows directly. Over other fields, we can not lift, but the computations are still valid.
 The rest is clear.
 \end{proof}
@@ -609,7 +634,7 @@ The second ingredient we need is reciprocal polynomials.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
 Let $d \in \mathbb{N}$ and $P \in K[X]$ of degree at most $d.$ 
-We define the reciprocal polynomial of order $f$ of $P$ as $P^{\rec,d}=X^d P \left( 1/X \right).$
+We define the reciprocal polynomial of order $d$ of $P$ as $P^{\rec,d}=X^d P \left( 1/X \right).$
 Let $A \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
 We denote by $A^{\rec,d}$ the matrix
 whose coefficients are the reciprocal polynomials of order $d$ 
@@ -839,18 +864,25 @@ coefficients. The aim of this short section is to design a fast
 algorithm (with complexity $\softO(n^\omega)$) for computing this short 
 form. The price to pay is that divisions in $K$ appear, which can be an 
 issue regarding to precision in particular cases.
+In this section, we only estimate the number of operations in $K$
+and not their behaviour on precision.
 
 From now on, we fix a matrix $M \in M_n(K)$ for which $d \chi_M$ is 
-surjective. Let $(\alpha, P, Q, \chi_M)$ be the quadruaple encoding
+surjective. Let $(\alpha, P, Q, \chi_M)$ be the quadruple encoding
 the short form of $d \chi_M$; we recall that they are related by the
 relations:
 \begin{align*}
 d \chi_M(dM) & =\tr(\com(X{-}M) \cdot dM) \\
 \com(X{-}M) & = \alpha \cdot P V^t \cdot V Q^t \mod \chi_M.
 \end{align*}
+
+$\chi_M$ can be computed in $\softO(n^\omega)$ operations in $K$
+(\textit{e.g.} as a by-product of \cite{storjohann:01a}).
+
 The matrix $P$ can be computed as follows. Pick $c \in K^n$. Define 
 $c_i = M^i c$ for all $i \geq 1$. The $c_i$'s can be computed in 
-$\softO(n^\omega)$ operations in $K$ using the first algorithm
+$\softO(n^\omega)$ operations in $K,$ \textit{e.g.}
+using the first algorithm
 of \cite{keller-gehrig:85a}. Let $P_\inv$ be the 
 $n \times n$ matrix whose rows are the $c_i$'s for $1 \leq i \leq n$. 
 Remark that $P_\inv$ is invertible if and only if $(c_0, c_1, \ldots, 
@@ -889,12 +921,23 @@ moreover that the first row of $R$ is $(1, 0, \ldots, 0)$. Evaluating
 the top left entry of Eq.~\eqref{eq:shortcomN}, we end up with the 
 relation:
 $$\alpha = a_1 + a_2 X + \cdots + a_{n-1} X^{n-2} + X^{n-1}.$$
-No further computation are then needed to derive the value of $\alpha$.
+No further computation are then needed to derive the value of $\alpha$
+and we can conclude with the following theorem.
+
+\begin{theo}
+Given $M \in M_n(K)$ such that $d \chi_M$ is surjective,
+then one can compute $(\alpha, P, Q, \chi_M)$
+in $K[X]$ such that
+$\com(X{-}N) = \alpha \cdot V^t \cdot V R^t \mod \chi_M$
+in $\softO(n^\omega)$ operations in $K.$
+\end{theo}
+
+
 
 \section{Optimal jagged precision}
 \label{sec:optjagged}
 
-In the previous Sections, \ref{sec:diffHess} and \ref{sec:diffHess},
+In the previous Sections, \ref{sec:diffHess} and \ref{sec:diffFrob},
 we have proposed algorithms to obtain the comatrix of 
 $X-M.$ Our motivation for these computations is to then
 be able to understand what is the optimal precision on $\chi_M.$
@@ -1146,7 +1189,7 @@ from which the Lemma follows.
 \noindent
 Lemma 3.4 of \cite{caruso-roe-vaccon:14a} now implies that, if the
 $N_{i,j}$'s are large enough and sufficiently well balanced, the optimal
-precision on the eigenvalue $\lambda$ is $O(p^{N'})$ with:
+precision on the eigenvalue $\lambda$ is $O(\pi^{N'})$ with:
 $$N' = \min_{1 \leq i, j\leq n} \big(N_{j,i} + \val(C_{i,j}(\lambda)) - 
 \val(\chi'_M(\lambda))\big)$$
 where $C_{i,j}$ denotes as above the $(i,j)$ entry of $\com(X{-}M)$.
