@@ -61,11 +61,11 @@
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
-\CopyrightYear{2016}
+\CopyrightYear{2017}
 \setcopyright{acmcopyright}
-\conferenceinfo{ISSAC '16,}{July 19-22, 2016, Waterloo, ON, Canada}
-\isbn{978-1-4503-4380-0/16/07}\acmPrice{\$15.00}
-\doi{http://dx.doi.org/10.1145/2930889.2930898}
+\conferenceinfo{ISSAC '17,}{July 25-28, 2017, Kaiserslautern, Germany}
+\isbn{***-*-****-****-0/17/07}\acmPrice{\$15.00}
+\doi{http://dx.doi.org/10.1145/*******.*******}
 
 \permission{Publication rights licensed to ACM. ACM acknowledges that this contribution was authored or co-authored by an employee, contractor or affiliate of a national government. As such, the Government retains a nonexclusive, royalty-free right to publish or reproduce this article, or to allow others to do so, for Government purposes only.}
 
@@ -204,7 +204,7 @@ relationship between $\chi_M$ and $\chi_{1+M}$.
 
 \subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
 discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
-$\OK$ its ring of integers and $\pi$ a uniformizer. \todo{$\softO$, $\omega$}
+$\OK$ its ring of integers and $\pi$ a uniformizer. \todo{$\softO$, $\omega$, scalar matrices and $I_n$}
 
 \section{Theoretical study}
 
@@ -284,15 +284,19 @@ For $M \in M_n(\OK)$, the following conditions are equivalent:
 \end{prop}
 \begin{proof}
 The condition \eqref{pt:surjp} is equivalent to the surjectivity of $d\chi_M$ modulo $\pi$.  The equivalence with
-\eqref{pt:cycp} follows the same argument as Proposition \ref{prop:surjectivity}, but over $\OK / \pi\OK$.
+\eqref{pt:cycp} follows the same argument as Proposition \ref{prop:surjectivity}, but over the residue field of $K$.
 \end{proof}
 
-Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$.
+Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$, and let
+$\sigma_1(M), \dots, \sigma_n(M)$ denote the elementary divisors of $M$.
 
 \begin{prop} \label{prop:mainlem}
-Suppose that $M \in M_n(K)$ satisfies one of the conditions in Proposition \ref{prop:surjectivity}, and
-let $\alpha = \max(\lvert \det(M)^{-1} \rvert, 1)$.  \todo{What if $\det(M) = 0$?}. Then, for all $\rho \in (0, 1]$ and all
-$r \in (0, \alpha \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
+Suppose that $M \in M_n(K)$ satisfies one of the conditions in Proposition \ref{prop:surjectivity}, and let 
+\[
+\alpha = \min\left(\prod_{i=1}^{n-1} \left\vert \sigma_i(M) \right\vert, 1\right).
+\]
+Then, for all $\rho \in (0, 1]$ and all
+$r \in (0, \alpha^{-1} \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
 satisfies:
 \begin{equation}
 \chi(M + H) = \chi(M) + d\chi_M(H).
@@ -303,9 +307,9 @@ satisfies:
 
 Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
 of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X-M)$.
-Since the precision polygon lies below the Newton polygon of $M$ \cite{caruso-roe-vaccon:15a}*{Prop. 3.4},
-and since the smallest entry of the Newton polygon occurs either with the leading
-coefficient or the constant term, $B_W(1) \subset d\chi(M)(B_V(\alpha))$.
+By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
+occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
+$B_W(1) \subset d\chi(M)(B_V(\alpha^{-1}))$.
 
 Since the coefficients of $\chi(M)$ are given by polynomials in the entries of $M$
 with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
@@ -430,10 +434,10 @@ for some $\alpha \in K[X]$.
 
 \begin{proof}
 Write $C = \com(X{-}M)$. From $(X{-}M) \cdot C \equiv 0 
-\pmod{\chi_M}$, we deduce $(X{-}N) \cdot P^{-1} C \equiv 0 \pmod{\chi_M}$. 
-Therefore each column of $P^{-1} C$ lies in the right kernel of $X{-}N$
+\pmod{\chi_M}$, we deduce $(X{-}\mathscr{C}) \cdot P^{-1} C \equiv 0 \pmod{\chi_M}$. 
+Therefore each column of $P^{-1} C$ lies in the right kernel of $X{-}\mathscr{C}$
 modulo $\chi_M$. On the other hand, a direct computation shows that
-every column vector $W$ lying in the right kernel of $X{-}N$ modulo 
+every column vector $W$ lying in the right kernel of $X{-}\mathscr{C}$ modulo 
 $\chi_M$ can be written as $W = w \cdot V^t$ for some $w \in 
 K[X]/\chi_M$. We deduce that $C \equiv P \cdot V^t B \pmod{\chi_M}$
 for some row vector $B$.
@@ -445,49 +449,45 @@ we are done.
 Proposition~\ref{prop:shortcom} shows that $\com(X{-}M)$ can be encoded 
 by the datum of the quadruple $(\alpha, P, Q, \chi_M)$ whose total size 
 stays within $O(n^2)$ : the polynomials $\alpha$ and $\chi_M$ are 
-determined by $2n$ coefficients while we need $2n^2$ coefficients to 
+determined by $2n$ coefficients while we need $2n^2$ entries to 
 write down the matrices $P$ and $Q$. 
-We shall see moreover in \S \ref{sec:diffFrob} that interesting
-informations can be read off on this short form $(\alpha, P, Q, 
+We shall see moreover in Section \ref{sec:diffFrob} that interesting
+information can be read off of this short form $(\alpha, P, Q, 
 \chi_M)$.
 
 \section{Differential\\via Hessenberg form}
 \label{sec:diffHess}
 
-In this section, we combine the computation of an Hessenberg form
-of a matrix and the computation of the inverse through the SNF
-over a complete discrete valuation field
-to compute $\com (X-M)$ and $d \chi$
-in a way such that if $M \in M_n(O_K),$
-only division by invertible elements of $O_K$
-occur.
-%The computation of an Hessenberg form provides an $O(n^3)$
+In this section, we combine the computation of a Hessenberg form
+of a matrix and the computation of the inverse through the Smith normal form (SNF)
+over a complete discrete valuation field (CDVF)
+to compute $\com(X-M)$ and $d \chi$.
+If $M \in M_n(O_K)$, then only division by invertible
+elements of $O_K$ will occur.
+%The computation of a Hessenberg form provides an $O(n^3)$
 %algorithm to compute the characteristic polynomial.
 
 \subsection{Hessenberg form}
 
-We begin with the study of the computation of
+We begin with the computation of
 an approximate Hessenberg form.
 
 \begin{deftn}
-$M \in M_n (k)$ is said to be an Hessenberg matrix if
-\[\forall i \in \llbracket 3, n \rrbracket, 
-\forall j \in \llbracket 1, i-2 \rrbracket, M_{i,j}=0. \]
-If $M \in M_n (k)$ and $H \in M_n (k)$ is an Hessenberg 
-matrix such that there exists $P \in GL_n(k)$
-with $H=PMP^{-1},$ we say that H is an Hessenberg form
-of $M.$
-\end{deftn}
-
-\begin{deftn}
-In the previous definition of an Hessenberg matrix $M,$
- if we only have $M_{i,j}= O(\pi^{n_{i,j}}),$ then we say
- that $M$ is an approximate Hessenberg matrix.
- This generalize directly to approximate Hessenberg form. 
+A \emph{Hessenberg matrix} is a matrix $M \in M_n(K)$ with
+\[
+M_{i,j}=0 \mbox{ for $j \le i-2$.}
+\]
+Given integers $n_{i,j}$, an \emph{approximate Hessenberg matrix}
+is a matrix $M \in M_n(K)$ with
+\[
+M_{i,j} = O(\pi^{n_{i,j}}) \mbox{ for $j \le i-2$.}
+\]
+If $M \in M_n (K)$ and $H \in M_n (K)$ is an (approximate) Hessenberg matrix
+similar to $M$, we say that H is an \emph{(approximate) Hessenberg form} of $M.$
 \end{deftn}
 
 It is not hard to prove that every matrix over a field admits
-an Hessenberg form.
+a Hessenberg form.
 We prove here that over $K,$ if a matrix is 
 known at finite (jagged) precision,
 we can compute an approximate Hessenberg form of it.
@@ -508,7 +508,7 @@ It relies on the following algorithm.
 
 \noindent 1.\ {\bf for} $j=1,\dots,n-1$ {\bf do} 
 
-\noindent 2.\  \:  {\bf swap} the row $j+1$ with a row $i_{min}$ ($i_{min} \geq 2$) s.t. $val(H_{i_{min},j})$ is minimal. 
+\noindent 2.\  \:  {\bf swap} the row $j+1$ with a row $i_{min}$ ($i_{min} \geq 2$) s.t. $\val(H_{i_{min},j})$ is minimal. 
 
 \noindent 3.\  \:  {\bf for} $i=j+2,\dots,n$ {\bf do} 
 
@@ -549,7 +549,7 @@ precision behavior is not easy to quantify.
 
 \subsection{Computation of the inverse}
 
-In this Subsection, we prove that to compute the inverse of
+In this section, we prove that to compute the inverse of
 a matrix over a CDVF $K$, SNF is precision-wise optimal in the flat-precision case.
 We first recall what is the differential of the computation of the inverse of a matrix.
 
@@ -593,7 +593,7 @@ which concludes the proof.
 In this subsection, we want to compute $\com (X Id -H)$
 by using the SNF computation of the previous subsection.
 As it is, in a way, optimal for the computation of the
-inverse in a CDVF, we hope to get reasonnable behaviour
+inverse in a CDVF, we hope to get reasonable behavior
 for the computation of $\com (X-M)$ even though the coefficients
 are not, \textit{a priori}, set to live in a CDVF.
 We show that we can reduce this task to the computation
@@ -663,7 +663,7 @@ such that $U=PU_0Q.$
 
 \noindent 3.\  \:  \textbf{Eliminate}, modulo $X^{n+1}$ the coefficients $U_{i,j},$ for $j\geq i+1$ 
 using the invertible pivot
-$U_{i,i}=1+XL_{i,i} \mod X^{n+1}$ (with $L_{i,i} \in \Zp [X]$). 
+$U_{i,i}=1+XL_{i,i} \mod X^{n+1}$ (with $L_{i,i} \in O_K[X]$). 
 
 \noindent 4.\    {\bf for} $i=1,\dots,n-1$ {\bf do} 
 
@@ -684,7 +684,8 @@ using the invertible pivot $U_{i,i}.$
 
 \begin{theo}
 Let $H \in M_n(O_K)$ be an approximate Hessenberg matrix.
-Then, using Algorithm 2, one can compute $\com (X -H)$ in 
+Then, using Algorithm 2, one can compute $\com (X -H)$
+and $\chi_M$ in 
 $\softO (n^3)$ operations in $O_K$ at the precision given by $H.$
 \end{theo}
 \begin{proof}
@@ -714,11 +715,33 @@ product on line 8 is in $\softO (n^3).$
 We emphasize that no division has been done throughout the algorithm.
 Line 9 is costless, and the result is then proved.
 \end{proof}
+\begin{rem}
+If $M \in M_n(K)$ does not have coefficients in $O_K,$
+then, by an appropriate scaling, we can still use
+Algorithms 1 and 2 to get $\chi_M$
+in $\softO (n^3)$ operations in $O_K$ at some shift
+of the initial precision.
+\end{rem}
 
+We will see in Section \ref{sec:optjagged} that for an
+entry matrix with coefficients known at flat precision,
+Algorithms 1 and 2 are enough to
+know the optimal jagged precision on $\chi_M.$
 
 \subsection{The comatrix of $X{-}M$}
 
-
+In this Subsection, we are interested in a special
+case of the computation of the comatrix of $X-M,$
+when $\chi_M$ is square-free (which is the 
+generic case).
+We observe that it is possible to combine
+the result of Proposition \ref{prop:shortcom}
+with Algorithm 2 to actually compute
+the comatrix of $X-M.$
+It leads to a $\softO (n^3)$ algorithm
+where the only divisions are for
+gcd and modular inverse computations.
+ 
 
 \noindent\hrulefill
 
@@ -755,9 +778,11 @@ by inverting $C_{1,1} \mod \chi(M).$
 
 
 \begin{theo}
+For $M \in M_n(O_K)$ such that $discr( \chi_M) \neq 0,$
 Algorithm 3 compute 
 $\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3)$
-operations in $O_K$ at initial precision.
+operations in $K$ at initial precision.
+The only divisions are in steps 4 and 5.
 \end{theo}
 \begin{proof}
 As we have already seen, completing Step 1 and 2 is in $\softO (n^3).$
@@ -768,7 +793,7 @@ Thus, it is in $\softO (n^3).$
 Step 5 and 6 are also in $\softO (n^3).$
 All that is to prove is that the set of $P$ and $S$ to avoid
 is of dimension at most $n-1.$
-As in the proof of \ref{prop:factor_com}, we can work modulo $X-\lambda$
+The idea is to work modulo $X-\lambda$
 for $\lambda$ a root of $\chi (M)$ (in an algebraic closure)
 and then apply Chinese Remainder Theorem.
 The goal of the Step $2$ is to ensure the first row of $B$ contains an
@@ -783,8 +808,25 @@ hyperplane is to avoid.
 Hence, the set that the $\mu_i$'s have to avoid is a finite union
 of hyperplane, and hence, is of dimension at most $n-1.$
 Thus, almost any $\mu_i$ lead to a matrix $C$ passing the test
-on Step 4, which concludes the proof.
+on Step 4.
+Now, it is clear that the only divisions happening are on steps 4 and 5.
+This concludes the proof.
 \end{proof}
+
+
+\begin{rem}
+As in the previous section, it is possible
+to scale $M \in M_n(K)$ so as to
+get coefficients in $O_K$ and apply the previous algorithm.
+\end{rem}
+\begin{rem}
+We refer to \cite{caruso:15a} for the handling
+of the precision on gcd and modular inverse computations.
+In this article, ways to tame the loss of precision
+coming from divisions are explored, following
+the methods of \cite{caruso-roe-vaccon:14a}.
+\end{rem}
+
 
 \section{Differential\\via Frobenius form}
 \label{sec:diffFrob}
@@ -824,6 +866,7 @@ for the Zariski topology. It then happens with high probability as soon
 as it is not empty, that is as soon as $M$ admits a cyclic vector, which
 holds by assumption.
 
+
 The characteristic polynomial $\chi_M$ can be recovered thanks to the
 relation $(a_0, a_1, \ldots, a_{n-1}) = -c_n \cdot P$.
 
@@ -854,7 +897,16 @@ No further computation are then needed to derive the value of $\alpha$.
 \section{Optimal jagged precision}
 \label{sec:optjagged}
 
-\todo{Write a small introduction}
+In the previous Sections, \ref{sec:diffHess} and \ref{sec:diffHess},
+we have proposed algorithms to obtain the comatrix of 
+$X-M.$ Our motivation for these computations is to then
+be able to understand what is the optimal precision on $\chi_M.$
+In this section, we provide some answers to this question of
+the optimal precision on $\chi_M,$ along with
+numerical evidence.
+We also show that it is then possible to derive 
+optimal precision on eigenvalues of $M.$ 
+
 
 \subsection{On the characteristic polynomial}
 
@@ -961,7 +1013,7 @@ $k$-th coefficient of the characteristic polynomial of $M$.
 
 \begin{rem}
 The keyword \texttt{algorithm="df"} forces \texttt{SageMath} to use the 
-division free algorithm of \cite{}. It is likely that, proceeding so, we 
+division free algorithm of \cite{seifullin:02a}. It is likely that, proceeding so, we 
 limit the loss of precision.
 \end{rem}
 
