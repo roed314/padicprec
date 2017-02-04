@@ -40,6 +40,7 @@
 \DeclareMathOperator{\cond}{cond}
 \DeclareMathOperator{\disc}{Disc}
 \DeclareMathOperator{\row}{row}
+\DeclareMathOperator{\col}{col}
 
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
@@ -206,7 +207,7 @@ further explanation, and \cite{caruso:17a}*{\S 3.2.2} for a specific example of 
 relationship between $\chi_M$ and $\chi_{1+M}$.
 
 \subsection*{Previous contributions.} 
-%\todo{Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?}
+\todo{Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?}
 
 Since the description of Kedlaya's algorithm in
 \cite{kedlaya:01a}, the computation of characteristic polynomials
@@ -282,6 +283,8 @@ $I_n$ will denote the identity matrix of rank $n$ in $M_n(K).$
 When there is no ambiguity, we will drop this $I_n$
 for scalar matrices, \textit{e.g.} for $\lambda \in K$
 and $M \in M_n (K),$ $\lambda-M$ denotes $\lambda I_n -M.$
+Finally, we write $\sigma_1(M), \dots, \sigma_n(M)$ for the
+elementary divisors of $M$, sorted in increasing order of valuation.
 
 \section{Theoretical study}
 \label{sec:theo_study}
@@ -357,7 +360,7 @@ For $M \in M_n(\OK)$, the following conditions are equivalent:
 \begin{enumerate}[(i)]
 \renewcommand{\itemsep}{0pt}
 \item \label{pt:surjp} the image of $M_n(\OK)$ under $d\chi_M$ is $\OK[X] \cap K_{<n}[X]$.
-\item \label{pt:cycp} the reduction of $M$ modulo $\pi$ has a cyclic vector
+\item \label{pt:cycp} the reduction of $M$ modulo $\pi$ has a cyclic vector.
 \end{enumerate}
 \end{prop}
 \begin{proof}
@@ -443,8 +446,7 @@ We assume that $A=\com (X-M)$ is such that $gcd(A_{1,1}, \chi (M))=1$
 Then for $U=col(A,1)$ and $V=A_{1,1}^{-1} row(A,1) \mod \chi (M),$
 both in $\OK[X]^n,$ we have: 
 \[ \com (X-M)= U \cdot {}^t V \mod \chi (M).\]
-\todo{I think that the correct condition is $d \chi_M$ surjective (which
-is a bit weaker).}
+\todo{I think that the correct condition is $d \chi_M$ surjective (which is a bit weaker).}
 \end{prop}
 
 
@@ -539,7 +541,7 @@ then the corresponding quadruple for
 $UMU^{-1}$ is
 $(\alpha, UP, U^{t,-1}Q, \chi_M),$
 which can be computed in $O(n^\omega)$ operations in $K.$
-This is faster than computing $U com(X-M) U^{-1},$
+This is faster than computing $U \com(X-M) U^{-1},$
 which is, at first sight, in $O(n^4)$ operations in $K.$
 \end{rem}
 
@@ -828,7 +830,7 @@ divisions are for gcd and modular inverse computations.
 \noindent 0.\ Find $P \in GL_n(\OK)$ and $H \in M_n(\OK),$ approximate Hessenberg,
 such that $M=PHP^{-1},$ using Algorithm 1. 
 
-\noindent 1.\ Compute $A=\com (X-H)$ and $\chi(M) = \chi(H)$ using Algorithm 2.
+\noindent 1.\ Compute $A=\com (X-H)$ and $\chi_M = \chi_H$ using Algorithm 2.
 
 
 \noindent 2.\ Do $\row(A,1) \leftarrow \row(A,1)+\sum_{i=2}^n \mu_i \row(A,i),$ for
@@ -839,12 +841,13 @@ Compute $B:=TAT^{-1}.$
 adding a random linear combination of the columns of index $j \ge 2$
 to the first column of $B.$ 
 
-\noindent 4.\  \textbf{If} $gcd(C_{1,1}, \chi(M)) \neq 1,$ \textbf{then} go to 2.
+\noindent 4.\  \textbf{If} $gcd(C_{1,1}, \chi_M) \neq 1,$ \textbf{then} go to 2.
 
-\noindent 5. \ Compute $U,V \in \OK[X]^n$ such that $C=U {}^t V \mod \chi (M),$
-by inverting $C_{1,1} \mod \chi(M).$
+\noindent 5. \ Let $F$ be the inverse of $C_{1,1} \mod \chi_M$.
 
-\noindent 6. \ Return $\com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi (M).$
+\noindent 6. \ Let $U = \col(C,1)$ and $V = F \cdot \row(C,1) \mod \chi_M$.
+
+\noindent 7. \ Return $\com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi_M.$
 
 \vspace{-1ex}\noindent\hrulefill
 
@@ -856,7 +859,7 @@ For $M \in M_n(\OK)$ such that $\disc( \chi_M) \neq 0,$
 Algorithm 3 computes
 $\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3)$
 operations in $K$.
-The only divisions are in steps 4 and 5.
+The only divisions occur in taking gcds and inverses modulo $\chi_M$.
 \end{theo}
 \begin{proof}
 As we have already seen, completing Steps 0 and 1 is in $\softO (n^3).$
@@ -864,7 +867,7 @@ Multiplying by $T$ or $S$ or their inverse corresponds
 to $n$ operations on rows or columns over a matrix with coefficients
 in $\OK[X]$ of degree at most $n.$
 Thus, it is in $\softO (n^3).$
-Step 5 and 6 are also in $\softO (n^3).$
+Step 5 and 6 are in $\softO (n).$
 All that is to prove is that the set of $P$ and $S$ to avoid
 is of dimension at most $n-1.$
 The idea is to work modulo $X-\lambda$
@@ -873,10 +876,10 @@ and then apply Chinese Remainder Theorem.
 The goal of the Step $2$ is to ensure the first row of $B$ contains an
 invertible modulo $\chi (M).$
 Since $A(\lambda)$ is of rank one, the $\mu_i$'s have to avoid an
-affine hyperplane so that $row(B,1) \mod (X-\lambda)$ is a non-zero vector.
-Hence for $row(B,1) \mod \chi (M)$ to contain an invertible coefficient,
+affine hyperplane so that $\row(B,1) \mod (X-\lambda)$ is a non-zero vector.
+Hence for $\row(B,1) \mod \chi (M)$ to contain an invertible coefficient,
 a finite union of affine hyperplane is to avoid.
-Similarily, the goal of Step 3 is to put an invertible coefficient (modulo
+Similarly, the goal of Step 3 is to put an invertible coefficient (modulo
 $\chi(M)$) on $C_{1,1},$ and again, only a finite union of affine
 hyperplane is to avoid.
 Hence, the set that the $\mu_i$'s have to avoid is a finite union
