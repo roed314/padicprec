@@ -143,8 +143,6 @@ satisfied, and give examples when the precision is larger than $O(p^k)$.
 
 \section{Introduction}
 
-\todo{Explain here why computing characteristic polynomial is so important.}
-
 The characteristic polynomial is a fundamental invariant of a matrix: its roots
 give the eigenvalues, and the trace and determinant can be extracted from its coefficients.
 In fact, the best known division-free algorithm for computing determinants
@@ -152,8 +150,6 @@ over arbitrary rings \cite{kaltofen:92a} does so using the characteristic polyno
 Over $p$-adic fields, computing the characteristic polynomial is a key ingredient in
 algorithms for counting points of varieties over finite fields. \todo{list some point counting references.}
 \todo{Application to characteristic polynomials of elements of p-adic field extensions?}
-
-\todo{Explain also why taking care of precision is important.}
 
 When computing with $p$-adic matrices, the lack of infinite memory implies
 that the entries may only be approximated at some finite precision $O(p^m)$.  As a
@@ -171,7 +167,7 @@ long as $M \in M_n(\Zp)$, they still do not yield the optimal precision.
 
 A faster approach over a field is to compute the Frobenius normal form of $M$,
 which is achievable in running time $\softO(n^\omega)$ \cite{storjohann:01a}.
-However, the fact that it uses division frequently leads to catastrophic losses of division.
+However, the fact that it uses division frequently leads to catastrophic losses of precision.
 In many examples, no precision remains at the end of the calculation.
 
 Instead, we separate the computation of the precision of $\chi_M$ from the computation
@@ -181,17 +177,24 @@ of much of this paper.  With this precision known, the actual calculation of $\c
 may proceed by lifting $M$ to a temporarily higher precision and then using a sufficiently
 stable algorithm. \todo{reference a place with more detail.}
 
-\todo{Example of $M$ and $M + 1$.}
-
 One benefit of this approach is that we may account for diffuse precision:
 precision that is not localized on any single coefficient of $\chi_M$.  For example,
 let $0 \le \alpha_1 \le \alpha_2 \le \dots \le \alpha_n$, consider a
 diagonal matrix $D$ with diagonal entries $(p^{\alpha_1}, \dots, p^{\alpha_n})$,
 let $P, Q \in \GL_n(\Zp)$ and set $M = PDQ$.  The valuation of the coefficient
-of $X^{n-k}$ in $\chi_M$ will be $\sum_{i=1}^k \alpha_i$, and if $M$ is known
-with precision $O(p^m)$ then $\chi_M$ will be known with some precision
-larger than $O(p^m)$ (see Proposition \ref{prop:mainlem}).
+of $X^{n-k}$ in $\chi_M$ will be $\sum_{i=1}^k \alpha_i$, and if $\alpha_{n-1} > 0$
+and $M$ is known with precision $O(p^m)$ then the constant term of $\chi_M$
+will be known with precision larger than $O(p^m)$ (see
+\cite{caruso-roe-vaccon:15a}*{Prop. 3.2}).
 
+As long as none of the eigenvalues of $M$ are congruent to $-1$ modulo $p$,
+then none of the coefficients of the characteristic polynomial of $1+M$ will have
+precision larger than $O(p^m)$.  But $\chi_{1+M}(X) = \chi_M(X-1)$, so the precision
+content of these two polynomials should be equivalent. The solution is that the
+extra precision in $\chi_{1+M}$ is diffuse and not visible on any individual coefficient.
+We formalize this phenomenon using lattices; see Section \ref{sec:padicprec} for
+further explanation, and \cite{caruso:17a}*{\S 3.2.2} for a specific example of the
+relationship between $\chi_M$ and $\chi_{1+M}$.
 
 \subsection*{Previous contributions.} 
 %\todo{Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?}
@@ -224,11 +227,11 @@ how to achieve this optimal precision.
 
 \subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
 discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
-$\OK$ its ring of integers and $\pi$ a uniformizer. \todo{Soft-Oh}
+$\OK$ its ring of integers and $\pi$ a uniformizer. \todo{$\softO$, $\omega$, scalar matrices and $I_n$}
 
 \section{Theoretical study}
 
-\subsection{The theory of p-adic precision}
+\subsection{The theory of p-adic precision} \label{sec:padicprec}
 
 We recall some of the definitions and results of \cite{caruso-roe-vaccon:14a}
 as a foundation for our discussion of the precision for the characteristic polynomial
@@ -304,15 +307,19 @@ For $M \in M_n(\OK)$, the following conditions are equivalent:
 \end{prop}
 \begin{proof}
 The condition \eqref{pt:surjp} is equivalent to the surjectivity of $d\chi_M$ modulo $\pi$.  The equivalence with
-\eqref{pt:cycp} follows the same argument as Proposition \ref{prop:surjectivity}, but over $\OK / \pi\OK$.
+\eqref{pt:cycp} follows the same argument as Proposition \ref{prop:surjectivity}, but over the residue field of $K$.
 \end{proof}
 
-Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$.
+Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$, and let
+$\sigma_1(M), \dots, \sigma_n(M)$ denote the elementary divisors of $M$.
 
 \begin{prop} \label{prop:mainlem}
-Suppose that $M \in M_n(K)$ satisfies one of the conditions in Proposition \ref{prop:surjectivity}, and
-let $\alpha = \max(\lvert \det(M)^{-1} \rvert, 1)$.  \todo{What if $\det(M) = 0$?}. Then, for all $\rho \in (0, 1]$ and all
-$r \in (0, \alpha \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
+Suppose that $M \in M_n(K)$ satisfies one of the conditions in Proposition \ref{prop:surjectivity}, and let 
+\[
+\alpha = \min\left(\prod_{i=1}^{n-1} \left\vert \sigma_i(M) \right\vert, 1\right).
+\]
+Then, for all $\rho \in (0, 1]$ and all
+$r \in (0, \alpha^{-1} \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
 satisfies:
 \begin{equation}
 \chi(M + H) = \chi(M) + d\chi_M(H).
@@ -323,9 +330,9 @@ satisfies:
 
 Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
 of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X-M)$.
-Since the precision polygon lies below the Newton polygon of $M$ \cite{caruso-roe-vaccon:15a}*{Prop. 3.4},
-and since the smallest entry of the Newton polygon occurs either with the leading
-coefficient or the constant term, $B_W(1) \subset d\chi(M)(B_V(\alpha))$.
+By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
+occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
+$B_W(1) \subset d\chi(M)(B_V(\alpha^{-1}))$.
 
 Since the coefficients of $\chi(M)$ are given by polynomials in the entries of $M$
 with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
@@ -336,17 +343,13 @@ The relationship between precision and the images of lattices under $d\chi_M$ al
 apply Proposition \ref{prop:intsurj} to determine when the precision of the characteristic polynomial
 is the minimum possible.
 
-\begin{cor}
+\begin{cor} \label{cor:prec_gain}
 Suppose that $M \in \GL_n(\OK)$ is known with precision $O(p^m)$.
-Then the characteristic polynomial of $M$ has precision larger than $O(p^m)$
+Then the characteristic polynomial of $M$ has precision lattice strictly contained in $O(p^m)$
 if and only if the reduction of $M$ modulo $\pi$ does not have a cyclic vector.
 \end{cor}
 
-Note that this criterion is checkable using $\softO(n^\omega)$ operations in the residue field,
-the running time of matrix multiplication.
-
-\todo{Image modulo $p$ and elementary divisors. 
-Consequences: (1)~computation in $\softO(n^\omega)$ and (2)~gain criterium.}  
+Note that this criterion is checkable using $\softO(n^\omega)$ operations in the residue field \cite{storjohann:01a}.
 
 \subsection{Stability under multiplication by $X$}
 
@@ -454,10 +457,10 @@ for some $\alpha \in K[X]$.
 
 \begin{proof}
 Write $C = \com(X{-}M)$. From $(X{-}M) \cdot C \equiv 0 
-\pmod{\chi_M}$, we deduce $(X{-}N) \cdot P^{-1} C \equiv 0 \pmod{\chi_M}$. 
-Therefore each column of $P^{-1} C$ lies in the right kernel of $X{-}N$
+\pmod{\chi_M}$, we deduce $(X{-}\mathscr{C}) \cdot P^{-1} C \equiv 0 \pmod{\chi_M}$. 
+Therefore each column of $P^{-1} C$ lies in the right kernel of $X{-}\mathscr{C}$
 modulo $\chi_M$. On the other hand, a direct computation shows that
-every column vector $W$ lying in the right kernel of $X{-}N$ modulo 
+every column vector $W$ lying in the right kernel of $X{-}\mathscr{C}$ modulo 
 $\chi_M$ can be written as $W = w \cdot V^t$ for some $w \in 
 K[X]/\chi_M$. We deduce that $C \equiv P \cdot V^t B \pmod{\chi_M}$
 for some row vector $B$.
@@ -469,49 +472,45 @@ we are done.
 Proposition~\ref{prop:shortcom} shows that $\com(X{-}M)$ can be encoded 
 by the datum of the quadruple $(\alpha, P, Q, \chi_M)$ whose total size 
 stays within $O(n^2)$ : the polynomials $\alpha$ and $\chi_M$ are 
-determined by $2n$ coefficients while we need $2n^2$ coefficients to 
+determined by $2n$ coefficients while we need $2n^2$ entries to 
 write down the matrices $P$ and $Q$. 
-We shall see moreover in Subsection \ref{ssec:eigenvalues} that interesting
-informations can be read off on this short form $(\alpha, P, Q, 
+We shall see moreover in Section \ref{sec:diffFrob} that interesting
+information can be read off of this short form $(\alpha, P, Q, 
 \chi_M)$.
 
 \section{Differential\\via Hessenberg form}
 \label{sec:diffHess}
 
-In this section, we combine the computation of an Hessenberg form
-of a matrix and the computation of the inverse through the SNF
-over a complete discrete valuation field
-to compute $\com (X-M)$ and $d \chi$
-in a way such that if $M \in M_n(O_K),$
-only division by invertible elements of $O_K$
-occur.
-%The computation of an Hessenberg form provides an $O(n^3)$
+In this section, we combine the computation of a Hessenberg form
+of a matrix and the computation of the inverse through the Smith normal form (SNF)
+over a complete discrete valuation field (CDVF)
+to compute $\com(X-M)$ and $d \chi$.
+If $M \in M_n(O_K)$, then only division by invertible
+elements of $O_K$ will occur.
+%The computation of a Hessenberg form provides an $O(n^3)$
 %algorithm to compute the characteristic polynomial.
 
 \subsection{Hessenberg form}
 
-We begin with the study of the computation of
+We begin with the computation of
 an approximate Hessenberg form.
 
 \begin{deftn}
-$M \in M_n (k)$ is said to be an Hessenberg matrix if
-\[\forall i \in \llbracket 3, n \rrbracket, 
-\forall j \in \llbracket 1, i-2 \rrbracket, M_{i,j}=0. \]
-If $M \in M_n (k)$ and $H \in M_n (k)$ is an Hessenberg 
-matrix such that there exists $P \in GL_n(k)$
-with $H=PMP^{-1},$ we say that H is an Hessenberg form
-of $M.$
-\end{deftn}
-
-\begin{deftn}
-In the previous definition of an Hessenberg matrix $M,$
- if we only have $M_{i,j}= O(\pi^{n_{i,j}}),$ then we say
- that $M$ is an approximate Hessenberg matrix.
- This generalize directly to approximate Hessenberg form. 
+A \emph{Hessenberg matrix} is a matrix $M \in M_n(K)$ with
+\[
+M_{i,j}=0 \mbox{ for $j \le i-2$.}
+\]
+Given integers $n_{i,j}$, an \emph{approximate Hessenberg matrix}
+is a matrix $M \in M_n(K)$ with
+\[
+M_{i,j} = O(\pi^{n_{i,j}}) \mbox{ for $j \le i-2$.}
+\]
+If $M \in M_n (K)$ and $H \in M_n (K)$ is an (approximate) Hessenberg matrix
+similar to $M$, we say that H is an \emph{(approximate) Hessenberg form} of $M.$
 \end{deftn}
 
 It is not hard to prove that every matrix over a field admits
-an Hessenberg form.
+a Hessenberg form.
 We prove here that over $K,$ if a matrix is 
 known at finite (jagged) precision,
 we can compute an approximate Hessenberg form of it.
@@ -532,7 +531,7 @@ It relies on the following algorithm.
 
 \noindent 1.\ {\bf for} $j=1,\dots,n-1$ {\bf do} 
 
-\noindent 2.\  \:  {\bf swap} the row $j+1$ with a row $i_{min}$ ($i_{min} \geq 2$) s.t. $val(H_{i_{min},j})$ is minimal. 
+\noindent 2.\  \:  {\bf swap} the row $j+1$ with a row $i_{min}$ ($i_{min} \geq 2$) s.t. $\val(H_{i_{min},j})$ is minimal. 
 
 \noindent 3.\  \:  {\bf for} $i=j+2,\dots,n$ {\bf do} 
 
@@ -563,19 +562,17 @@ The rest is clear.
 \end{proof}
 
 \begin{rem} \label{rem:char_pol_from_hessenberg}
-From an Hessenberg form of $M,$ it is well known
+From a Hessenberg form of $M,$ it is well known
 that one can compute the characteristic polynomial of 
-$M$ in $O(n^3)$ operations in $K.$ See \cite{Cohen:2013} page
-55 and 56.
-However, this computation involves some divisions, and its
-behaviour regarding to precision is not easy to
-quantify.
+$M$ in $O(n^3)$ operations in $K$ \cite{Cohen:2013}*{pp. 55--56}.
+However, this computation involves division, and its
+precision behavior is not easy to quantify.
 \end{rem}
 
 
 \subsection{Computation of the inverse}
 
-In this Subsection, we prove that to compute the inverse of
+In this section, we prove that to compute the inverse of
 a matrix over a CDVF $K$, SNF is precision-wise optimal in the flat-precision case.
 We first recall what is the differential of the computation of the inverse of a matrix.
 
@@ -619,7 +616,7 @@ which concludes the proof.
 In this subsection, we want to compute $\com (X Id -H)$
 by using the SNF computation of the previous subsection.
 As it is, in a way, optimal for the computation of the
-inverse in a CDVF, we hope to get reasonnable behaviour
+inverse in a CDVF, we hope to get reasonable behavior
 for the computation of $\com (X-M)$ even though the coefficients
 are not, \textit{a priori}, set to live in a CDVF.
 We show that we can reduce this task to the computation
@@ -986,11 +983,14 @@ where $C^H_{i,j}$ is the $(i,j)$ entry of $\com(X{-}H)$,
 where $H$ is the Hessenberg form of $M$.
 \end{rem}
 
+\begin{rem}
 As a consequence of the previous discussion, once the optimal jagged 
-precision is known, it is possible to lift arbitrarily the precision on 
-$M$ and then to perform a computation of the characteristic polynomial 
+precision is known, it is possible to lift the entries of $M$ to a sufficiently
+large precision and then use 
+and then to perform a computation of the characteristic polynomial 
 at the optimal precision. This requires $\softO(n^3)$ operations in $K$ 
 but, for several instances, may require to increase a lot the precision.
+\end{rem}
 
 \medskip
 
@@ -1036,7 +1036,7 @@ $k$-th coefficient of the characteristic polynomial of $M$.
 
 \begin{rem}
 The keyword \texttt{algorithm="df"} forces \texttt{SageMath} to use the 
-division free algorithm of \cite{}. It is likely that, proceeding so, we 
+division free algorithm of \cite{seifullin:02a}. It is likely that, proceeding so, we 
 limit the loss of precision.
 \end{rem}
 
