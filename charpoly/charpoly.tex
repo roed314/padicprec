@@ -145,7 +145,7 @@ satisfied, and give examples when the precision is larger than $O(p^k)$.
 The characteristic polynomial is a fundamental invariant of a matrix: its roots
 give the eigenvalues, and the trace and determinant can be extracted from its coefficients.
 In fact, the best known division-free algorithm for computing determinants
-over arbitrary rings \cite{kartofen:92a} does so using the characteristic polynomial.
+over arbitrary rings \cite{kaltofen:92a} does so using the characteristic polynomial.
 Over $p$-adic fields, computing the characteristic polynomial is a key ingredient in
 algorithms for counting points of varieties over finite fields. \todo{list some point counting references.}
 \todo{Application to characteristic polynomials of elements of p-adic field extensions?}
@@ -160,7 +160,7 @@ not only the running time of the algorithm but also the accuracy of the result.
 Let $M \in M_n(\Qp)$ be known at precision $O(p^m)$.
 The simplest approach for computing the characteristic polynomial of $M$
 is to compute $\det(X-M)$ either using recursive row expansion or various division free
-algorithms \cites{\cite{seifullin:02a} \cite{kartofen:92a}}.  There are two issues
+algorithms \cites{\cite{seifullin:02a} \cite{kaltofen:92a}}.  There are two issues
 with these methods.  First, they are slower than alternatives that allow division,
 requiring $O(n!)$, $O(n^4)$ and $\softO(n^{2 + \omega/2})$ operations.  Second,
 while the lack of division implies that the result is accurate modulo $p^m$ as
@@ -950,7 +950,7 @@ characteristic polynomial of $M$ computed \emph{via} the call:
 \hfill$M\texttt{.charpoly(algorithm="df")}$\hfill\null
 
 \item in the model of floating-point arithmetic (see 
-\cite{caruso-coursepadic}*{\S 2.3}), the number of correct digits of the 
+\cite{caruso:17a}*{\S 2.3}), the number of correct digits of the 
 $k$-th coefficient of the characteristic polynomial of $M$.
 \end{enumerate}
 
