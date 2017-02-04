@@ -207,7 +207,7 @@ further explanation, and \cite{caruso:17a}*{\S 3.2.2} for a specific example of 
 relationship between $\chi_M$ and $\chi_{1+M}$.
 
 \subsection*{Previous contributions.} 
-\todo{Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?}
+%\todo{Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?}
 
 Since the description of Kedlaya's algorithm in
 \cite{kedlaya:01a}, the computation of characteristic polynomials
@@ -233,23 +233,24 @@ how to attain this optimal precision algorithmicaly.
 
 \subsection*{The contribution of this paper.}
 
-Thanks to the application the framework of differential precision of \cite{caruso-roe-vaccon:14a} in \cite{caruso-roe-vaccon:15a},
-we known that
-the precision on the characteristic polynomial
-$\chi_M$ of a matrix $M \in M_n(\mathbb{Q}_p)$
-is determined by the comatrix $com(X I_n -M).$
+Thanks to the application the framework of differential precision of 
+\cite{caruso-roe-vaccon:14a} in \cite{caruso-roe-vaccon:15a}, we known 
+that the precision on the characteristic polynomial $\chi_M$ of a matrix 
+$M \in M_n(\mathbb{Q}_p)$ is determined by the comatrix $com(X I_n -M).$ 
 In this article, we provide:
 \begin{enumerate}
-\item A factorization of $com(X I_n -M)$ (when $M$ has a cyclic vector).
+\renewcommand{\itemsep}{0pt}
+%\item A factorization of $com(X I_n -M)$ (when $M$ has a cyclic vector).
 \item A simple criterion to decide whether there can be a gain in precision
 on $\chi_M$ when $M \in M_n(\mathbb{Z}_p).$
-\item A $\softO (n^3)$ algorithm with operations in $\Zp$
-to compute the optimal precision on each coefficient of $\chi_M$ when $M$
-is given with uniform precision on its entries.
+\item A $\softO (n^3)$ algorithm with operations in $\Zp$ to compute the 
+optimal precision on each coefficient of $\chi_M$ when $M$ is given with 
+uniform precision on its entries.
 \item A $\softO (n^\omega)$ algorithm to compute the 
 optimal precision on each coefficient of $\chi_M$
-for $M \in M_n (\Qp),$
-using divisions.
+for $M \in M_n (\Qp)$, using divisions.
+\item A $\softO (n^\omega)$ algorithm to compute the 
+optimal precision on an eigenvalue of $M$.
 \end{enumerate}
 
 
