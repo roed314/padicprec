@@ -223,7 +223,27 @@ on the characteristic polynomials, but have not studied
 how to attain this optimal precision algorithmicaly.
 
 
-\subsection*{The contribution of this paper.} % Or \textbf
+\subsection*{The contribution of this paper.}
+
+Thanks to the application the framework of differential precision of \cite{caruso-roe-vaccon:14a} in \cite{caruso-roe-vaccon:15a},
+we known that
+the precision on the characteristic polynomial
+$\chi_M$ of a matrix $M \in M_n(\mathbb{Q}_p)$
+is determined by the comatrix $com(X I_n -M).$
+In this article, we provide:
+\begin{enumerate}
+\item A factorization of $com(X I_n -M)$ (when $M$ has a cyclic vector).
+\item A simple criterion to decide whether there can be a gain in precision
+on $\chi_M$ when $M \in M_n(\mathbb{Z}_p).$
+\item A $\softO (n^3)$ algorithm with operations in $O_K$
+to compute the optimal precision on each coefficient of $\chi_M$ when $M$
+is given with uniform precision on its entries.
+\item A $\softO (n^\omega)$ algorithm to compute the 
+optimal precision on each coefficient of $\chi_M$
+for $M \in M_n (K),$
+using divisions.
+\end{enumerate}
+
 
 \subsection*{Organization of the article.}
 
@@ -244,7 +264,18 @@ of the characteristic polynomial.
 
 \subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
 discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
-$\OK$ its ring of integers and $\pi$ a uniformizer. \todo{$\softO$, $\omega$, scalar matrices and $I_n$}
+$\OK$ its ring of integers and $\pi$ a uniformizer. 
+We will write that $f(n)=\softO (g(n))$ if there exists some
+$k \in \mathbb{N}$ such that $f(n)=O(g(n) \log (n)^k.$
+We fix an $\omega \in \mathbb{R}$ such that the multiplication
+of two matrices over a ring is in $O(n^\omega)$ operations in the
+ring. Currently, the smallest proved $\omega$ is less than
+$2.3728639 $ thanks to \cite{legall:14a}. 
+$I_n$ will denote the identity matrix of rank $n$ in $M_n(K).$
+When there is no ambiguity, we will drop this $I_n$
+for scalar matrices, \textit{e.g.} for $\lambda \in K$
+and $M \in M_n (K),$ $\lambda-M$ denotes $\lambda I_n -M.$
+
 
 \section{Theoretical study}
 \label{sec:theo_study}
