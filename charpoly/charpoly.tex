@@ -1107,7 +1107,7 @@ N' & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
 where $P_i$ denotes the $i$-th row of $P$ and, similarly, $Q_j$
 denotes the $j$-th row of $Q$. Note moreover that $V(\lambda)$ is
 the row vector $(1, \lambda, \ldots, \lambda^{n-1})$.
-By the discussion of \S \ref{}, the exact value of $N'$ can be 
+By the discussion of \S \ref{sec:diffFrob}, the exact value of $N'$ can be 
 determined for a cost of $\softO(n^\omega)$ operations in $K$ and
 $O(n^2)$ operations on integers. 
 
@@ -1146,7 +1146,7 @@ on integers.
 \begin{proof}
 The $\alpha(\lambda_k)$'s and the $\chi'_M(\lambda_k)$'s can be computed 
 for a cost of $\softO(ns)$ operations in $K$ using fast multipoint 
-evaluation methods~\cite{}.
+evaluation methods (see 10.7 of \cite{gathen-gerhard:13a}).
 On the other hand, we observe that $P_i V(\lambda_k)^t$ is nothing but
 the $(i,k)$ entry of the matrix:
 $$P \cdot \left( \begin{matrix}
