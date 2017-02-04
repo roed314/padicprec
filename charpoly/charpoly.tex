@@ -151,7 +151,7 @@ Over $p$-adic fields, computing the characteristic polynomial is a key ingredien
 algorithms for counting points of varieties over finite fields (see
 \cite{kedlaya:01a, harvey:07a, harvey:14a}.
 
-\todo{Application to characteristic polynomials of elements of p-adic field extensions?}
+%\todo{Application to characteristic polynomials of elements of p-adic field extensions?}
 
 When computing with $p$-adic matrices, the lack of infinite memory implies
 that the entries may only be approximated at some finite precision $O(p^m)$.  As a
@@ -177,7 +177,7 @@ of an approximation to $\chi_M$.  Given some precision on $M$, we use \cite{caru
 to find the best possible precision for $\chi_M$.  The analysis of this precision is the subject
 of much of this paper.  With this precision known, the actual calculation of $\chi_M$
 may proceed by lifting $M$ to a temporarily higher precision and then using a sufficiently
-stable algorithm. \todo{reference a place with more detail.}
+stable algorithm (see Remark \ref{rem:lift_for_optimal}).
 
 One benefit of this approach is that we may account for diffuse precision:
 precision that is not localized on any single coefficient of $\chi_M$.  For example,
@@ -1060,13 +1060,16 @@ where $C^H_{i,j}$ is the $(i,j)$ entry of $\com(X{-}H)$,
 where $H$ is the Hessenberg form of $M$.
 \end{rem}
 
-\begin{rem}
+\begin{rem} \label{rem:lift_for_optimal}
 As a consequence of the previous discussion, once the optimal jagged 
 precision is known, it is possible to lift the entries of $M$ to a sufficiently
-large precision and then use 
-and then to perform a computation of the characteristic polynomial 
-at the optimal precision. This requires $\softO(n^3)$ operations in $K$ 
-but, for several instances, may require to increase a lot the precision.
+large precision, rescale them to have entries in $O_K$
+and then use Algorithm 2 to
+compute the characteristic polynomial.
+The output might then need to be rescaled and
+ truncated at the optimal precision. 
+This requires $\softO(n^3)$ operations in $O_K$ 
+and unfortunately, for several instances, may require to increase a lot the precision.
 \end{rem}
 
 \medskip
