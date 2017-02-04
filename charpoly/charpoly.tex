@@ -45,9 +45,12 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\OK}{\mathcal{O}_K}
 
+\newcommand{\calU}{\mathcal{U}}
+
 \newcommand{\softO}{O\tilde{~}}
 
 \newcommand{\inv}{\text{\rm inv}}
+\newcommand{\app}{\text{\rm app}}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
@@ -168,11 +171,15 @@ which is achievable in running time $\softO(n^\omega)$ \cite{storjohann:01a}.
 However, the fact that it uses division frequently leads to catastrophic losses of division.
 In many examples, no precision remains at the end of the calculation.
 
+Instead 
+
 \todo{Example of $M$ and $M + 1$.}
+
+
 
 \subsection*{Previous contributions.} Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?
 
-\subsection*{The contribution of this paper.}
+\subsection*{The contribution of this paper.} % Or \textbf
 
 \subsection*{Organization of the article.}
 
@@ -442,7 +449,7 @@ informations can be read off on this short form $(\alpha, P, Q,
 \chi_M)$.
 
 \section{Differential\\via Hessenberg form}
-%\section{Computation of the characteristic polynomial and its derivative}
+\label{sec:diffHess}
 
 In this section, we combine the computation of an Hessenberg form
 of a matrix and the computation of the inverse through the SNF
@@ -523,7 +530,7 @@ $P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k((X))$, and the comp
 Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k((X)).$
 Inside the nested \textbf{for} loop, if we want to eliminate $p^{u_y} \varepsilon_y+O(p^{n_y})$ with pivot $p^{u_x} \varepsilon_x+O(p^{n_x}),$
 with the $\varepsilon$'s being units,
-the corresponding coefficient of the corresponding shear matrix is the lift (in $\mathbb{Z}, $  $k[X]$ or adequate extension) of $p^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{\min (n_x,n_y)}.$
+the corresponding coefficient of the corresponding shear matrix is the lift(in $\mathbb{Z}, $  $\mathbb{F}_q[X],$ $\mathbb{Q}[X]$ or adequate extension) of $p^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{\min (n_x,n_y)}.$
 Exactness follows directly. Over other fields, we can not lift, but the computations are still valid.
 The rest is clear.
 \end{proof}
@@ -600,23 +607,35 @@ $M_1=PM_2P^{-1},$ then:
 \[ \com (X-M_1)=P \com (X-M_2) P^{-1}. \] 
 \end{lem}
 
-The second ingredient we need is the reciprocal polynomial.
+The second ingredient we need is reciprocal polynomials.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
-Let $P \in K[X]$ be of degree $d \leq n.$ 
-We define its reciprocal polynomial as $P^{rec}=X^d P \left( 1/X \right).$
-Let $A \in M_n(K[X]).$ We denote by $A^{rec}$ the matrix
-whose coefficients are the reciprocal polynomials of the
-coefficients of $A.$ 
+Let $d \in \mathbb{N}$ and $P \in K[X]$ of degree at most $d.$ 
+We define the reciprocal polynomial of order $f$ of $P$ as $P^{rec,d}=X^d P \left( 1/X \right).$
+Let $A \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
+We denote by $A^{rec,d}$ the matrix
+whose coefficients are the reciprocal polynomials of order $d$ 
+of the coefficients of $A.$ 
 \end{deftn}
 We then have the following result :
 \begin{lem}
 Let $M \in M_n(K).$ Then:
 \begin{eqnarray*}
-com(1-XM)^{rec}=&com(X-M), \\
-(\chi_M \times 1)^{rec}=&(1-XM) com(1-XM).\\
+com(1-XM)^{rec,n-1}=&com(X-M), \\
+(\chi_M \times 1)^{rec,n}=&(1-XM) com(1-XM).\\
 \end{eqnarray*}
 \end{lem}
+\begin{proof}
+It all comes down to the following result:
+let $A \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
+then $det (A^{rec,1})=det(A)^{rec,d}.$
+Indeed, one can use multilinearity of the determinant on $X^d det(A(1/X))$
+to prove this result.
+It directly implies the second part of the lemma.
+As for the first part, since coefficients of the comatrix we are interested in
+are determinants of a matrix of polynomials of degree at most 1, the result
+is also clear.
+\end{proof}
 
 This lemma allows us to compute $com(1-XM)$ instead of $com(X-M).$
 This has a remarkable advantage: the pivots during the computation of
@@ -656,7 +675,7 @@ using the invertible pivot $U_{i,i}.$
 
 \noindent 8. \ $V:=\psi \times P^{-1} \times Q^{-1}   \mod X^{n+1}.$
 
-\noindent 9. \ \textbf{Return} $V^{rec}, \psi^{rec}.$
+\noindent 9. \ \textbf{Return} $V^{rec,n-1}, \psi^{rec,n}.$
 
 \vspace{-1ex}\noindent\hrulefill
 
@@ -767,29 +786,28 @@ on Step 4, which concludes the proof.
 \end{proof}
 
 \section{Differential\\via Frobenius form}
+\label{sec:diffFrob}
 
 The algorithm designed in the previous section computes the differential 
 $d \chi_M$ of $\chi$ at a given matrix $M \in M_n(K)$ for a cost of 
 $O(n^3)$ operations in $K$. This seems to be optimal given that the 
 (naive) size of the $d \chi_M$ is $n^3$: it is a matrix of size $n
 \times n^2$. It turns out however that improvements are still possible!
-
-Precisely, we will prove in this section that $d \chi_M$ has a very 
-special form, allowing a compact encoding using only $O(n^2)$ coefficients. 
-We shall moreover design fast algorithms (with complexity $\softO
-(n^\omega)$) for computing it. The price to pay is that divisions in
-$K$ appear, which can be an issue regarding to precision in particular
-cases.
+Indeed, thanks to Proposition~\ref{prop:shortcom}, the matrix of 
+$d \chi_M$ admits a compact form which can be encoded using only $O(n^2)$ 
+coefficients. The aim of this short section is to design a fast 
+algorithm (with complexity $\softO(n^\omega)$) for computing this short 
+form. The price to pay is that divisions in $K$ appear, which can be an 
+issue regarding to precision in particular cases.
 
 From now on, we fix a matrix $M \in M_n(K)$ for which $d \chi_M$ is 
-surjective.
-
-\subsection{Fast computation}
-
-We now move to algorithms and show that the quadruple $(\alpha, P, Q, 
-\chi_M)$ can be computed for a cost of $\softO(n^\omega)$ operations
-in the ground field $K$ with high probability.
-
+surjective. Let $(\alpha, P, Q, \chi_M)$ be the quadruaple encoding
+the short form of $d \chi_M$; we recall that they are related by the
+relations:
+\begin{align*}
+d \chi_M(dM) & =\tr(\com(X{-}M) \cdot dM) \\
+\com(X{-}M) & = \alpha \cdot P V^t \cdot V Q^t \mod \chi_M.
+\end{align*}
 The matrix $P$ can be computed as follows. Pick $c \in K^n$. Define 
 $c_i = M^i c$ for all $i \geq 1$. The $c_i$'s can be computed in 
 $\softO(n^\omega)$ operations in $K$ using \cite{}. Let $P_\inv$ be the 
@@ -815,7 +833,7 @@ that, for $1 \leq i \leq n{-}1$, the vector $N^i e$ has the shape:
 $$N^i e = (0, \ldots, 0, -a_0, \star, \ldots, \star)$$
 with $n{-}i$ starting zeros. Therefore the $N^i e$'s form a basis of
 $K^n$, \emph{i.e.} $e$ is always a cyclic vector of $N$. Once $R$ has
-been compute, we recover $Q$ using the relation $Q = P_\inv^t R$.
+been computed, we recover $Q$ using the relation $Q = P_\inv^t R$.
 
 It remains to compute the scaling factor $\alpha$. For this, we write
 the relation:
@@ -831,62 +849,120 @@ relation:
 $$\alpha = a_1 + a_2 X + \cdots + a_{n-1} X^{n-2} + X^{n-1}.$$
 No further computation are then needed to derive the value of $\alpha$.
 
-
-
 \section{Optimal jagged precision}
+\label{sec:optjagged}
+
+\todo{Write a small introduction}
 
 \subsection{On the characteristic polynomial}
 
-\todo{Reorganize...}
+For $0 \leq k < n$, let $\pi_k : K[X] \to K$ be the mapping taking a 
+polynomial to its coefficients in $X^k$. By applying 
+\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} to the composite $\pi_k 
+\circ \chi_M$, one can figure out the optimal precision on the
+$k$-th coefficient of the characteristic polynomial of $M$ (at
+least if $M$ is given at enough precision).
 
-\begin{prop} \label{prop:optimal_flat}
-If $M \in M_n(O_K)$ is known at flat precision $dM$ (high enough), then 
-we can compute the optimal jagged precision on $\chi (M)$
-in $\softO (n^3)$ operations in $O_K$ at the initial flat precision.
+Let us consider more precisely the case where $M$ is given at 
+jagged precision: the $(i,j)$ entry of $M$ is given at precision 
+$O(\pi^{N_{i,j}})$ for some integers $N_{i,j}$. 
+Lemma 3.4 of \cite{caruso-roe-vaccon:14a} then shows that
+the optimal precision on the $k$-th coefficient of $\chi_M$ is 
+$O(\pi^{N'_k})$ where $N'_k$ is given by the formula:
+\begin{equation}
+\label{eq:optjagged}
+N'_k = \min_{1 \leq i, j\leq n} N_{j,i} + \val(\pi_k(C_{i,j})),
+\end{equation}
+where $C_{i,j}$ is the $(i,j)$ entry of the comatrix $\com(X{-}M)$.
+
+\begin{prop} \label{prop:optimal_jagged}
+If $M \in M_n(O_K)$ is given at (high enough) jagged precision, 
+then we can compute the optimal jagged precision on $\chi_M$ in 
+$\softO (n^3)$ operations in $K$.
 \end{prop}
+
 \begin{proof}
-Computing $M=PHP^{-1},$ an approximate Hessenberg form, can be done in
-$O(n^3)$ with no division.
-Computing $\com (X-H)$ can be done in $\softO (n^3)$ with no division.
-Then, by Lemma \ref{lem:comatrix_of_similar}, $tr(\com (X-M) \cdot dM)=tr(P\com (X-H)P^{-1} \cdot dM).$
-thus, \[tr(\com (X-M) \cdot dM)=tr(\com (X-H) P^{-1}  dM P). \]
-$dM$ being flat, so is $P^{-1}  dM P$ with same precision, 
-and the jagged precision on $\chi (M)$ can then directly be read on $\com (X-H).$
+We have seen in \S \ref{sec:diffHess} and \S \ref{sec:diffFrob}
+that the computation of the matrix $C = \com(X{-}M)$ can be carried out 
+within $\softO(n^3)$ operations in $K$ (either with the Hessenberg 
+method or the Frobenius method). We conclude by applying 
+Eq.~\eqref{eq:optjagged} which requires no further operation in $K$
+(but $n^3$ evaluations of valuations and $n^3$ manipulations of 
+integers).
 \end{proof}
 
-When this time $dM$ is jagged, the trick of the proof of Proposition
-\ref{prop:optimal_flat} can not work anymore.
-Indeed, the computation of $P^{-1}  dM P$ and then of $\com (X-H) P^{-1}  dM P$
-are not easy, as $P^{-1}  dM P$ is not jagged anymore.
-Fortunately, Proposition~\ref{prop:factom_com} will be enough to 
-conclude that optimal precision can still be read in $\softO (n^3)$ 
-operations in $O_K.$
-
 \begin{rem}
-If $dM$ is jagged, we can read the optimal
-jagged precision from $\com (X-M).$
-Indeed, we can write $\com (X-M)=\sum_{i=1}^{n-1} A_i X^i$
-for some matrices $A_i \in M_n(O_K).$
-Then the best jagged precision on the coefficient of 
-$X^i$ can be read from $tr (A_i dM).$
-What then is to do is to find the smallest 
-$val((A_i)_{j,k} dM_{k,j}).$
+If $M \in M_n(O_K)$ is given at (high enough) \emph{flat} precision, 
+then we can avoid the final base change step in the Hessenberg method.
+Indeed, observe that, thanks to Lemma \ref{lem:comatrix_of_similar}, 
+we can write:
+$$\tr(\com (X{-}M) \cdot dM)=\tr(\com (X{-}H)\cdot P^{-1} dM P)$$
+where $P$ lies in $\GL_n(\OK)$. Moreover, the latter condition implies
+that $P^{-1} dM P$ runs over $M_n(\OK)$ when $P$ runs over $M_n(\OK)$.
+As a consequence, the integer $N'_k$ giving the optimal precision on the 
+$k$-th coefficient of $M$ is also equal to
+$N + \min_{1 \leq i, j\leq n} \val(\pi_k(C^H_{i,j}))$
+where $C^H_{i,j}$ is the $(i,j)$ entry of $\com(X{-}H)$,
+where $H$ is the Hessenberg form of $M$.
 \end{rem}
 
+As a consequence of the previous discussion, once the optimal jagged 
+precision is known, it is possible to lift arbitrarily the precision on 
+$M$ and then to perform a computation of the characteristic polynomial 
+at the optimal precision. This requires $\softO(n^3)$ operations in $K$ 
+but, for several instances, may require to increase a lot the precision.
+
+\medskip
+
+\noindent
+{\bf Numerical experiments.}
+We have made numerical experiments in \textsc{SageMath}~\cite{sage}
+in order to compare the optimal precision obtained with the methods
+explained above with the actual precision obtained by the software.
+For doing so, we picked a sample of $1000$ random matrices $M$ in 
+$M_9(\Q_2)$ where all the entries at the same \emph{relative
+precision}.
+We recall that, in \textsc{SageMath}, random elements $x \in \Q_p$ are 
+generated as follows. We fix an integer $N$ --- the so-called relative
+precision --- and generate elements of $\Q_p$ of the shape
+$$x = p^v \cdot \big(a + O\big(p^{N+v_p(a)}\big)\big)$$
+where $v$ is a random integer generated according to the distribution:
+$$\mathbb P [v = 0] = \frac 1 5 \quad ; \quad
+\mathbb P [v = n] = \frac 2 {5\cdot |n| \cdot (|n|+1)} \text{ for }
+|n| \geq 1$$
+and $a$ is an integer in the range $[0, p^N)$, selected uniformly at random.
+
+Once this sample has been generated, we computed, for each $k \in \{0, 
+1, \ldots, 8\}$, the three following quantities:
+
+\vspace{-2mm}
+
+\begin{enumerate}[$\bullet$]
+\renewcommand{\itemsep}{0pt}
+\item the optimal precision on the $k$-th coefficient of the 
+characteristic polynomial of $M$ given by Eq.~\eqref{eq:optjagged}
+\item in the capped relative model\footnote{Each 
+coefficient carries its own precision which is updated after each 
+elementary arithmetical operation.},
+the precision gotten on the $k$-th coefficient of the 
+characteristic polynomial of $M$ computed \emph{via} the call:
+
+\hfill$M\texttt{.charpoly(algorithm="df")}$\hfill\null
+
+\item in the model of floating-point arithmetic (see 
+\cite{caruso-coursepadic}*{\S 2.3}), the number of correct digits of the 
+$k$-th coefficient of the characteristic polynomial of $M$.
+\end{enumerate}
+
 \begin{rem}
-As a consequence of the previous remark, once the optimal jagged
-precision is known, it is possible to lift arbitrarily
-the precision on $M$ and then to perform
-a computation of the characteristic polynomial
-from an Hessenberg form as in \ref{rem:char_pol_from_hessenberg},
-in $O(n^3).$
-By truncating afterward at the optimal jagged precision,
-we can achieve by this way this optimal precision.
+The keyword \texttt{algorithm="df"} forces \texttt{SageMath} to use the 
+division free algorithm of \cite{}. It is likely that, proceeding so, we 
+limit the loss of precision.
 \end{rem}
 
-
-{\bf Numerical experiments}
-
+\noindent
+The table of Figure~\ref{fig:exp} summarizes the results obtained. 
+%
 \begin{figure}
 \hfill
 {\renewcommand*{\arraystretch}{1.3}
@@ -942,22 +1018,156 @@ $X^8$ & $0.99$ &   $0.99$           &   $0.99$ \vspace{-1.5ex} \\
 \caption{Average loss of accuracy on the coefficients
 of the characteristic polynomial of a random $9 \times 9$
 matrix over $\Q_2$}
+\label{fig:exp}
 
 \end{figure}
+%
+It should be read as follows. First, the acronyms CR and FP 
+refers to ``capped relative'' and ``floating-point'' respectively.
+The numbers displayed in the table are the average loss of
+\emph{relative} precision. 
+More precisely, if $N$ is the relative precision at
+which the entries of the input random matrix $M$ have been generated
+and $v$ is the valuation of the $k$-th coefficient of $\chi_M$, then:
 
+\vspace{-2mm}
 
+\begin{enumerate}[$\bullet$]
+\renewcommand{\itemsep}{0pt}
+\item the column ``Optimal'' is the average of the quantities 
+$(N'_k{-}v) - N$ (where $N'_k$ is defined by Eq.~\eqref{eq:optjagged}): 
+$N'_k{-}v$ is the optimal \emph{relative} precision, so that the
+difference $(N'_k{-}v) - N$ is the loss of relative precision;
+\item the column ``CR'' is the average of the quatities 
+$(\text{CR}_k{-}v) - N$ where $\text{CR}_k$ is the computed (absolute) 
+precision on the $k$-th coefficient of $\chi_M$;
+\item the column ``FP'' is the average of the quatities 
+$(\text{FP}_k{-}v) - N$ where $\text{FP}_k$ is the first position of
+an incorrect digit on the $k$-th coefficient of $\chi_M$.
+\end{enumerate}
+
+We observe that the loss of relative accuracy stays under control in the 
+``Optimal'' column whereas it has a very erratic behavior --- very large 
+values and very large deviation as well --- in the two other columns. 
+These experiments thus demonstrate the utility of the methods developed
+in this paper.
 
 \subsection{On eigenvalues}
 \label{ssec:eigenvalues}
 
-\todo{Optimal precision on $P(\lambda_i)$ and on $\lambda_i$}
+Let $M \in M_n(K)$ and $\lambda \in K$ be a \emph{simple}
+\footnote{the corresponding generalized eigenspace has dimension $1$} eigenvalue 
+of $M$. We are interesting in quantifying the optimal precision on 
+$\lambda$ when $M$ is given with some uncertainty.
 
-\subsection{Legendre precision}
+To do so, we fix an approximation $M_\app \in M_n(K)$ of $M$ and 
+suppose that the uncertainty of $M$ is ``jagged'' in the sense that
+each entry of $M$ is given at some precision $O(\pi^{N_{i,j}})$.
+Let $\lambda_\app$ be the relevant eigenvalue of $M_\app$. We remark 
+that it is possible to follow the eigenvalue $\lambda_\app$ on a small 
+neighborhood $\calU$ of $M$. More precisely, there exists a unique continuous 
+function $f : \calU \to K$ such that:
+\begin{enumerate}[$\bullet$]
+\renewcommand{\itemsep}{0pt}
+\item $f(M_\app) = \lambda_\app$, and
+\item $f(M')$ is an eigenvalue of $M'$ for all $M' \in \calU$.
+\end{enumerate}
 
-\todo{Describe Legendre precision and show that it is optimal for
-a diagonalizable matrix over $\Zp$.}
+\begin{lem}
+The function $f$ is strictly differentiable on a neighborhood of 
+$M_\app$.
+The differential of $f$ at $M$ is the linear mapping:
+$$dM \mapsto d \lambda = - \frac{\tr(\com(\lambda-M) \cdot dM)}
+{\chi'_M(\lambda)}$$
+where $\chi'_M$ is the usual derivative of $\chi_M$.
+\end{lem}
 
-%\subsection{Algorithm}
+\begin{proof}
+The first assertion follows from the implicit function Theorem.
+Differentiating the relation $\chi_M(\lambda) = 0$, we get
+$\chi'_M(\lambda) \cdot d \lambda + \tr(\com(X-M) \cdot dM)(\lambda) = 0$,
+from which the Lemma follows.
+\end{proof}
+
+\noindent
+Lemma 3.4 of \cite{caruso-roe-vaccon:14a} now implies that, if the
+$N_{i,j}$'s are large enough and sufficiently well balanced, the optimal
+precision on the eigenvalue $\lambda$ is $O(p^{N'})$ with:
+$$N' = \min_{1 \leq i, j\leq n} \big(N_{j,i} + \val(C_{i,j}(\lambda)) - 
+\val(\chi'_M(\lambda))\big)$$
+where $C_{i,j}$ denotes as above the $(i,j)$ entry of $\com(X{-}M)$.
+Writing
+$\com(X{-}M) = \alpha \cdot P V^t \cdot V Q^t \text{ mod } \chi_M$
+as in Proposition~\ref{prop:shortcom}, we find:
+\begin{align*}
+N' & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+& \hspace{2mm} + \min_{1 \leq i, j\leq n} \big(N_{j,i} + 
+\val(P_i V(\lambda)^t) + \val(V(\lambda) Q_j^t)\big)
+\end{align*}
+where $P_i$ denotes the $i$-th row of $P$ and, similarly, $Q_j$
+denotes the $j$-th row of $Q$. Note moreover that $V(\lambda)$ is
+the row vector $(1, \lambda, \ldots, \lambda^{n-1})$.
+By the discussion of \S \ref{}, the exact value of $M$ can be 
+determined for a cost of $\softO(n^\omega)$ operations in $K$ and
+$O(n^2)$ operations on integers. 
+
+When $M$ is given at flat precision, \emph{i.e.} the $N_{i,j}$'s are all 
+equal to some $N$, the formula for $N'$ may be rewritten:
+\begin{align*}
+N' & = N + \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+& \hspace{2mm} + \min_{1 \leq i \leq n} \val(P_i V(\lambda)^t)
++ \min_{1 \leq j \leq n} \val(V(\lambda) Q_j^t)\big)
+\end{align*}
+and can therefore now be evaluated for a cost of $\softO(n^\omega)$
+operations in $K$ and only $O(n)$ operations on integers.
+
+\medskip
+
+To conclude with, let us discuss briefly the situation where we want
+to figure out the optimal jagged precision on a tuple $(\lambda_1,
+\ldots, \lambda_s)$ of eigenvalues. Applying what we have done
+previously, we find that the optimal precision on $\lambda_k$ is 
+\begin{align*}
+N'_k & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+& \hspace{2mm} + \min_{1 \leq i, j\leq n} \big(N_{j,i} + 
+\val(P_i V(\lambda)^t) + \val(V(\lambda) Q_j^t)\big).
+\end{align*}
+
+\begin{prop}
+\label{prop:opteigenvalues}
+The $N'_k$'s can be all computed in $\softO(n^\omega)$ operations
+in $K$ and $O(n^2 s)$ operations on integers.
+
+If the $N_{i,j}$'s are all equal, the above complexity can be 
+lowered to $\softO(n^\omega)$ operations in $K$ and $O(n s)$ operations 
+on integers.
+\end{prop}
+
+\begin{proof}
+The $\alpha(\lambda_k)$'s and the $\chi'_M(\lambda_k)$'s can be computed 
+for a cost of $\softO(ns)$ operations in $K$ using fast multipoint 
+evaluation methods~\cite{}.
+On the other hand, we observe that $P_i V(\lambda_k)^t$ is nothing but
+the $(i,k)$ entry of the matrix:
+$$P \cdot \left( \begin{matrix}
+\lambda_1 & \cdots & \lambda_s \\
+\lambda_1^2 & \cdots & \lambda_s^2 \\
+\vdots & & \vdots \\
+\lambda_1^{n-1} & \cdots & \lambda_s^{n-1}
+\end{matrix} \right).$$
+The latter product can be computed in $\softO(n^\omega)$ operations in 
+$K$\footnote{It turns out that $\softO(n^2)$ is also possible because
+the right factor is a structured matrix (a truncated Vandermonde):
+computing the above product reduces to evaluate a polynomial at the
+points $\lambda_1, \ldots, \lambda_s$.}. Therefore all the $P_i 
+V(\lambda_k)^t$'s (for $i$ and $k$ varying) 
+can be determined with the same complexity. 
+Similarly all the $V(\lambda) Q_j^t$ are computed for the same cost.
+The first assertion of Proposition~\ref{prop:opteigenvalues} follows.
+The second assertion is now proved similarly to the case of a unique
+eigenvalue.
+\end{proof}
+
 
 \bibliographystyle{plain}
 \bibliography{charpoly}
