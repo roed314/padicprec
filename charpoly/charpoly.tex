@@ -206,83 +206,95 @@ We formalize this phenomenon using lattices; see Section \ref{sec:padicprec} for
 further explanation, and \cite{caruso:17a}*{\S 3.2.2} for a specific example of the
 relationship between $\chi_M$ and $\chi_{1+M}$.
 
-\subsection*{Previous contributions.} 
-\todo{Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?}
+\subsection*{Previous contributions.}
 
 Since the description of Kedlaya's algorithm in
 \cite{kedlaya:01a}, the computation of characteristic polynomials
 over $p$-adic numbers
-has become a crucial point in many counting-points algorithms.
-We can cite for example \cite{harvey:07a, harvey:14a} for
-algorithms to count points on hyperelliptic curves.
+has become a crucial ingredient in many counting-points algorithms.
+For example, \cite{harvey:07a, harvey:14a} use $p$-adic cohomology
+and the characteristic polynomial of Frobenius to compute zeta functions
+of hyperelliptic curves.
 
 In most of these papers, the precision analysis usually
-deals with great details on how to obtain the matrices (\textit{e.g.} of action of Frobenius)  that are involved in the point-counting schemes.
+deals with great details on how to obtain the matrices (\textit{e.g.} of action of Frobenius)
+that are involved in the point-counting schemes.
 However, the computation of their characteristic polynomials is often
 a little bit less thoroughly studied: some
-refer to fast algorithms (using divisions), while others
-refer to division-free algorithms.
+refer to fast algorithms (using division), while others
+apply division-free algorithms.
 
 In \cite{caruso-roe-vaccon:15a}, the authors have begun the application
 of the theory of differential precision of \cite{caruso-roe-vaccon:14a}
-to stable computation of characteristic polynomials.
+to the stable computation of characteristic polynomials.
 They have obtained a way to express the optimal precision
-on the characteristic polynomials, but have not studied 
-how to attain this optimal precision algorithmicaly.
-
+on the characteristic polynomial, but have not given practical algorithms
+to attain this optimal precision.
 
 \subsection*{The contribution of this paper.}
 
-Thanks to the application the framework of differential precision of \cite{caruso-roe-vaccon:14a} in \cite{caruso-roe-vaccon:15a},
-we known that
-the precision on the characteristic polynomial
+Thanks to the application the framework of differential precision
+of \cite{caruso-roe-vaccon:14a} in \cite{caruso-roe-vaccon:15a},
+we know that the precision of the characteristic polynomial
 $\chi_M$ of a matrix $M \in M_n(\mathbb{Q}_p)$
-is determined by the comatrix $com(X I_n -M).$
+is determined by the comatrix $\com(X -M).$
 In this article, we provide:
 \begin{enumerate}
-\item A factorization of $com(X I_n -M)$ (when $M$ has a cyclic vector).
-\item A simple criterion to decide whether there can be a gain in precision
-on $\chi_M$ when $M \in M_n(\mathbb{Z}_p).$
-\item A $\softO (n^3)$ algorithm with operations in $\Zp$
-to compute the optimal precision on each coefficient of $\chi_M$ when $M$
-is given with uniform precision on its entries.
-\item A $\softO (n^\omega)$ algorithm to compute the 
-optimal precision on each coefficient of $\chi_M$
-for $M \in M_n (\Qp),$
-using divisions.
+\renewcommand{\itemsep}{0pt}
+\item Proposition \ref{prop:shortcom}: a factorization of $\com(X -M)$
+as a product of two rank-$1$ matrices (when $M$ has a cyclic vector),
+computable in $\softO(n^\omega)$ operations by Theorem \ref{thm:compute_shortcom}
+\item Corollary \ref{cor:prec_gain}: a simple, $\softO(n^\omega)$ criterion
+to decide whether $\chi_M$ is defined at precision
+higher than the precision of $M$ (when $M \in M_n(\mathbb{Z}_p)$).
+\item Theorem \ref{thm:alg3}: a $\softO(n^3)$ algorithm with operations in $\Zp$
+to compute the optimal precision on each coefficient of $\chi_M$ (when $M$
+is given with uniform precision on its entries).
+\item Proposition \ref{prop:opteigenvalues}: a $\softO(n^\omega)$
+algorithm to compute the optimal precision on each eigenvalue of $M$
 \end{enumerate}
 
 
 \subsection*{Organization of the article.}
 
-In Section \ref{sec:theo_study}, we study the
-differential of the characteristic polynomial so as
-to get optimal information on precision 
-and a compact writing of this differential.
-Then, in Sections \ref{sec:diffHess} and \ref{sec:diffFrob}
-we propose algorithms to compute this differential
-either through Hessenberg or going through
-some Frobenius normal form.
+In Section \ref{sec:theo_study}, we review the differential
+theory of precision developed in \cite{caruso-roe-vaccon:14a}
+and apply it to the specific case of the characteristic polynomial,
+giving conditions under which the differential will be surjective
+(and thus provide a good measure of precision).  We also give
+a condition based on reduction modulo $p$ that determines
+whether the characteristic polynomial will have a higher
+precision that the input matrix, and show that the image
+of the set of integral matrices has the structure of an $\OK[X]$-module
+when $M$ is itself integral. Finally, we give a compact description
+of $\com(X-M)$, the main ingredient in the differential.
+
+In Section \ref{sec:diffHess}, we develop $\softO(n^3)$ algorithms to approximate
+the Hessenberg form of $M$, and through it to find $\com(X-M)$ and thus
+find the precision of the characteristic polynomial of $M$.  In Section \ref{sec:diffFrob},
+we give a $\softO(n^\omega)$ algorithm to compute the compact description of $\com(X-M)$.
+
 Finally, we propose in Section \ref{sec:optjagged}
-algorithms to compute the optimal precision
-coefficient-wise on the characteristic polynomial
-and on some eigenvalues along with
-numerical evidence of the behaviour of the computation
-of the characteristic polynomial.
+algorithms to compute the optimal coefficient-wise precision
+for the characteristic polynomial.  We also give the results
+of some experiments demonstrating that these methods can lead
+to dramatic gains in precision over standard interval arithmetic.
+We close with results describing the precision associated to
+eigenvalues of a matrix.
 
 \subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
 discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
 $\OK$ its ring of integers and $\pi$ a uniformizer. 
 We will write that $f(n)=\softO (g(n))$ if there exists some
-$k \in \mathbb{N}$ such that $f(n)=O(g(n) \log (n)^k.$
+$k \in \mathbb{N}$ such that $f(n)=O(g(n) \log (n)^k).$
 We fix an $\omega \in \mathbb{R}$ such that the multiplication
 of two matrices over a ring is in $O(n^\omega)$ operations in the
-ring. Currently, the smallest proved $\omega$ is less than
+ring. Currently, the smallest known $\omega$ is less than
 $2.3728639 $ thanks to \cite{legall:14a}. 
-$I_n$ will denote the identity matrix of rank $n$ in $M_n(K).$
+We will denote by $I_n$ the identity matrix of rank $n$ in $M_n(K).$
 When there is no ambiguity, we will drop this $I_n$
 for scalar matrices, \textit{e.g.} for $\lambda \in K$
-and $M \in M_n (K),$ $\lambda-M$ denotes $\lambda I_n -M.$
+and $M \in M_n (K),$ $\lambda-M$ denotes $\lambda I_n - M.$
 Finally, we write $\sigma_1(M), \dots, \sigma_n(M)$ for the
 elementary divisors of $M$, sorted in increasing order of valuation.
 
@@ -441,7 +453,7 @@ is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
 \begin{comment}
 \begin{prop} \label{prop:factor_com}
 Let $M \in M_n (\OK)$ be such that $discr(\chi (M)) \neq 0.$
-We assume that $A=\com (X-M)$ is such that $gcd(A_{1,1}, \chi (M))=1$
+We assume that $A=\com (X-M)$ is such that $\gcd(A_{1,1}, \chi (M))=1$
 (in $K[X]$).
 Then for $U=col(A,1)$ and $V=A_{1,1}^{-1} row(A,1) \mod \chi (M),$
 both in $\OK[X]^n,$ we have: 
@@ -459,7 +471,7 @@ Indeed, $A(\lambda) \times (\lambda-M) =0.$
 Since $\chi (M)$ is square-free, then $\lambda-M$ is of rank $n-1$
 and then $A(\lambda)$ is of rank at most one.
 Nevertheless, we can remark that
- $gcd(A_{1,1}, \chi (M))=1,$ $A_{1,1} \neq 0 \mod (X-\lambda)$
+ $\gcd(A_{1,1}, \chi (M))=1,$ $A_{1,1} \neq 0 \mod (X-\lambda)$
 and thus, $A(\lambda)$ is of rank exactly one.
 As a consequence, all $2 \times 2$-minors of $A(\lambda)$ are zero.
 It means that \[A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod (X-\lambda). \]
@@ -536,10 +548,10 @@ information can be read off of this short form $(\alpha, P, Q,
 \chi_M)$.
 
 \begin{rem}
-Keeping the previous notation, if $U \in GL_n(K),$
-then the corresponding quadruple for 
+With the previous notation, if $U \in GL_n(K),$
+the quadruple for 
 $UMU^{-1}$ is
-$(\alpha, UP, U^{t,-1}Q, \chi_M),$
+$(\alpha, UP, (U^t)^{-1}Q, \chi_M),$
 which can be computed in $O(n^\omega)$ operations in $K.$
 This is faster than computing $U \com(X-M) U^{-1},$
 which is, at first sight, in $O(n^4)$ operations in $K.$
@@ -841,7 +853,7 @@ Compute $B:=TAT^{-1}.$
 adding a random linear combination of the columns of index $j \ge 2$
 to the first column of $B.$ 
 
-\noindent 4.\  \textbf{If} $gcd(C_{1,1}, \chi_M) \neq 1,$ \textbf{then} go to 2.
+\noindent 4.\  \textbf{If} $\gcd(C_{1,1}, \chi_M) \neq 1,$ \textbf{then} go to 2.
 
 \noindent 5. Let $F$ be the inverse of $C_{1,1} \mod \chi_M$.
 
@@ -855,6 +867,7 @@ to the first column of $B.$
 
 
 \begin{theo}
+\label{thm:alg3}
 For $M \in M_n(\OK)$ such that $\disc( \chi_M) \neq 0,$
 Algorithm 3 computes
 $\com (X-M) \pmod{\chi_M}$ in average complexity $\softO (n^3)$
@@ -929,8 +942,7 @@ relations:
 d \chi_M(dM) & =\tr(\com(X{-}M) \cdot dM) \\
 \com(X{-}M) & = \alpha \cdot P V^t \cdot V Q^t \mod \chi_M.
 \end{align*}
-
-$\chi_M$ can be computed in $\softO(n^\omega)$ operations in $K$
+An approximation to $\chi_M$ can be computed in $\softO(n^\omega)$ operations in $K$
 (\textit{e.g.} as a by-product of \cite{storjohann:01a}).
 
 The matrix $P$ can be computed as follows. Pick $c \in K^n$. Define 
@@ -943,31 +955,32 @@ Remark that $P_\inv$ is invertible if and only if $(c_0, c_1, \ldots,
 c_{n-1})$ is a basis of $K^n$ if and only if $c$ is a cyclic vector. 
 Moreover after base change to the basis $(c_0, \ldots, c_{n-1})$, the matrix 
 $M$ takes the shape \eqref{eq:companion}. In other words, if $P_\inv$
-is invertible, then $P = P_\inv^{-1}$ is a solution of $M = P N P^{-1}$.
-Observe moreover that the condition ``$P_\inv$ is invertible'' is open
+is invertible, then $P = P_\inv^{-1}$ is a solution of $M = P \mathscr{C} P^{-1}$,
+where $\mathscr{C}$ is the companion matrix similar to $M$.
+Moreover, observe that the condition ``$P_\inv$ is invertible'' is open
 for the Zariski topology. It then happens with high probability as soon
 as it is not empty, that is as soon as $M$ admits a cyclic vector, which
 holds by assumption.
 
 
 The characteristic polynomial $\chi_M$ can be recovered thanks to the
-relation $(a_0, a_1, \ldots, a_{n-1}) = -c_n \cdot P$.
+relation $a_0c_0 + a_1c_1 + \dots + a_{n-1}c_{n-1} = -c_{n-1} \cdot P$.
 
-Now, instead of computing directly $Q$, we first compute a matrix $R$ 
-with the property that $N^t = R N R^{-1}$. For that, we apply the same
-strategy as above except that we start with the vector $e = (1, 0, 
-\ldots, 0)$ (and not with a random vector). A simple computation shows
-that, for $1 \leq i \leq n{-}1$, the vector $N^i e$ has the shape:
-$$N^i e = (0, \ldots, 0, -a_0, \star, \ldots, \star)$$
-with $n{-}i$ starting zeros. Therefore the $N^i e$'s form a basis of
-$K^n$, \emph{i.e.} $e$ is always a cyclic vector of $N$. Once $R$ has
+Now, instead of directly computing $Q$, we first compute a matrix $R$ 
+with the property that $\mathscr{C}^t = R \mathscr{C} R^{-1}$. To do so,
+we apply the same strategy as above except that we start with the vector
+$e = (1, 0, \ldots, 0)$ (and not with a random vector). A simple computation shows
+that, for $1 \leq i \leq n{-}1$, the vector $\mathscr{C}^i e$ has the shape:
+$$\mathscr{C}^i e = (0, \ldots, 0, -a_0, \star, \ldots, \star)$$
+with $n{-}i$ starting zeros. Therefore the $\mathscr{C}^i e$'s form a basis of
+$K^n$, \emph{i.e.} $e$ is always a cyclic vector of $\mathscr{C}$. Once $R$ has
 been computed, we recover $Q$ using the relation $Q = P_\inv^t R$.
 
 It remains to compute the scaling factor $\alpha$. For this, we write
 the relation:
 \begin{equation}
 \label{eq:shortcomN}
-\com(X{-}N) = \alpha \cdot V^t \cdot V R^t \mod \chi_M
+\com(X{-}\mathscr{C}) = \alpha \cdot V^t \cdot V R^t \mod \chi_M
 \end{equation}
 which comes from Eq.~\eqref{eq:shortcom} after multiplication on the 
 left by $P^{-1}$ and multiplication on the right by $P$. We observe
@@ -975,10 +988,11 @@ moreover that the first row of $R$ is $(1, 0, \ldots, 0)$. Evaluating
 the top left entry of Eq.~\eqref{eq:shortcomN}, we end up with the 
 relation:
 $$\alpha = a_1 + a_2 X + \cdots + a_{n-1} X^{n-2} + X^{n-1}.$$
-No further computation are then needed to derive the value of $\alpha$
-and we can conclude with the following theorem.
+No further computation are then needed to derive the value of $\alpha$.
+We summarize this section with the following theorem:
 
 \begin{theo}
+\label{thm:compute_shortcom}
 Given $M \in M_n(K)$ such that $d \chi_M$ is surjective,
 then one can compute $(\alpha, P, Q, \chi_M)$
 in $K[X]$ such that
@@ -995,12 +1009,10 @@ In the previous Sections, \ref{sec:diffHess} and \ref{sec:diffFrob},
 we have proposed algorithms to obtain the comatrix of 
 $X-M.$ Our motivation for these computations is to then
 be able to understand what is the optimal precision on $\chi_M.$
-In this section, we provide some answers to this question of
-the optimal precision on $\chi_M,$ along with
-numerical evidence.
+In this section, we provide some answers to this question,
+along with numerical evidence.
 We also show that it is then possible to derive 
-optimal precision on eigenvalues of $M.$ 
-
+optimal precision of eigenvalues of $M.$ 
 
 \subsection{On the characteristic polynomial}
 
