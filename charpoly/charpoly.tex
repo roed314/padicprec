@@ -287,6 +287,11 @@ discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to i
 $\OK$ its ring of integers and $\pi$ a uniformizer. 
 We will write that $f(n)=\softO (g(n))$ if there exists some
 $k \in \mathbb{N}$ such that $f(n)=O(g(n) \log (n)^k).$
+We will write $M$ for an $n \times n$ matrix over $K$,
+and $\chi$ the characteristic polynomial map, $\chi_M \in K[X]$ for
+the characteristic polynomial of $M$ and $d\chi_M$ for the differential
+of $\chi$ at $M$, as a linear map from $M_n(K)$ to the space
+of polynomials of degree less than $n$.
 We fix an $\omega \in \mathbb{R}$ such that the multiplication
 of two matrices over a ring is in $O(n^\omega)$ operations in the
 ring. Currently, the smallest known $\omega$ is less than
@@ -322,7 +327,7 @@ Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map.
 Our analysis of the precision behavior of $\chi$ rests upon
 the computation of its derivative $d\chi$, using \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
 For a matrix $M \in M_n(K)$, we identify the tangent space $V$
-at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi(M)$ with
+at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi_M$ with
 the space $K_{<n}[X]$ of polynomials of degree less than $n$.
 Let $\com(M)$ denote the comatrix of $M$ (when $M \in \GL_n(K)$,
 we have $\com(M) = \det(M) M^{-1}$) and $d\chi_M$ the differential at $M$.  Recall
@@ -402,9 +407,9 @@ Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
 of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X-M)$.
 By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
 occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
-$B_W(1) \subset d\chi(M)(B_V(\alpha^{-1}))$.
+$B_W(1) \subset d\chi_M(B_V(\alpha^{-1}))$.
 
-Since the coefficients of $\chi(M)$ are given by polynomials in the entries of $M$
+Since the coefficients of $\chi_M$ are given by polynomials in the entries of $M$
 with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
 the conclusion.
 \end{proof}
@@ -438,7 +443,7 @@ multiplication by $A$.
 \begin{proof}
 Let $C = \com(X-M)$ and $P \in A$.  By \eqref{eq:dchi}, $V$ is given by
 the $\OK$-span of the entries of $C$.   Using the fact that the product of matrix
-with its comatrix is the determinant, $(X - M) \cdot C = \chi(M)$ and thus
+with its comatrix is the determinant, $(X - M) \cdot C = \chi_M$ and thus
 $P(X) \cdot C \equiv P(M) \cdot C \pmod{\chi_M(X)}$.  The span of the entries
 of the left hand side is precisely $P(X) \cdot V$, while the span of the entries
 of the right hand side is contained within $V$ since $P(M) \in M_n(\OK)$.
@@ -487,7 +492,7 @@ Then thanks to \eqref{eqn:2-minors-com}, $U$ and $V$ satisfy the desired equalit
 If $M \in M_n (\OK)$ is such that for some $U,V \in O_{K}[X]^n$
 we have $\com (X-M)= U \cdot {}^t V \mod \chi (M)$ and if 
 $P\in GL_n (\OK)$ then
-\[\com (X-PMP^{-1})=(PU) \cdot ( {}^tV P^{-1}) \mod \chi(M).\]
+\[\com (X-PMP^{-1})=(PU) \cdot ( {}^tV P^{-1}) \mod \chi_M.\]
 In other words, factorizability of $\com(X-M)$ is stable
 by change of basis.
 \end{rem}
@@ -893,7 +898,7 @@ affine hyperplane so that $\row(B,1) \mod (X-\lambda)$ is a non-zero vector.
 Hence for $\row(B,1) \mod \chi (M)$ to contain an invertible coefficient,
 a finite union of affine hyperplane is to avoid.
 Similarly, the goal of Step 3 is to put an invertible coefficient (modulo
-$\chi(M)$) on $C_{1,1},$ and again, only a finite union of affine
+$\chi_M$) on $C_{1,1},$ and again, only a finite union of affine
 hyperplane is to avoid.
 Hence, the set that the $\mu_i$'s have to avoid is a finite union
 of hyperplane, and hence, is of dimension at most $n-1.$
