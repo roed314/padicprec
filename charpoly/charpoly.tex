@@ -38,6 +38,8 @@
 \DeclareMathOperator{\lcm}{lcm}
 \DeclareMathOperator{\rec}{rec}
 \DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\disc}{Disc}
+\DeclareMathOperator{\row}{row}
 
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
@@ -47,6 +49,11 @@
 \newcommand{\Fp}{\mathbb{F}_p}
 \newcommand{\R}{\mathbb R}
 \newcommand{\OK}{\mathcal{O}_K}
+
+\newcommand{\llb}{[\mkern-2.5mu[}
+\newcommand{\rrb}{]\mkern-2.5mu]}
+\newcommand{\llp}{(\mkern-2.5mu(}
+\newcommand{\rrp}{)\mkern-2.5mu)}
 
 \newcommand{\calU}{\mathcal{U}}
 
@@ -384,11 +391,11 @@ is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
 
 \begin{comment}
 \begin{prop} \label{prop:factor_com}
-Let $M \in M_n (O_K)$ be such that $discr(\chi (M)) \neq 0.$
+Let $M \in M_n (\OK)$ be such that $discr(\chi (M)) \neq 0.$
 We assume that $A=\com (X-M)$ is such that $gcd(A_{1,1}, \chi (M))=1$
 (in $K[X]$).
 Then for $U=col(A,1)$ and $V=A_{1,1}^{-1} row(A,1) \mod \chi (M),$
-both in $O_K[X]^n,$ we have: 
+both in $\OK[X]^n,$ we have: 
 \[ \com (X-M)= U \cdot {}^t V \mod \chi (M).\]
 \todo{I think that the correct condition is $d \chi_M$ surjective (which
 is a bit weaker).}
@@ -417,9 +424,9 @@ Then thanks to \eqref{eqn:2-minors-com}, $U$ and $V$ satisfy the desired equalit
 \end{proof}
 
 \begin{rem}
-If $M \in M_n (O_K)$ is such that for some $U,V \in O_{K}[X]^n$
+If $M \in M_n (\OK)$ is such that for some $U,V \in O_{K}[X]^n$
 we have $\com (X-M)= U \cdot {}^t V \mod \chi (M)$ and if 
-$P\in GL_n (O_K)$ then
+$P\in GL_n (\OK)$ then
 \[\com (X-PMP^{-1})=(PU) \cdot ( {}^tV P^{-1}) \mod \chi(M).\]
 In other words, factorizability of $\com(X-M)$ is stable
 by change of basis.
@@ -487,8 +494,8 @@ In this section, we combine the computation of a Hessenberg form
 of a matrix and the computation of the inverse through the Smith normal form (SNF)
 over a complete discrete valuation field (CDVF)
 to compute $\com(X-M)$ and $d \chi$.
-If $M \in M_n(O_K)$, then only division by invertible
-elements of $O_K$ will occur.
+If $M \in M_n(\OK)$, then only division by invertible
+elements of $\OK$ will occur.
 %The computation of a Hessenberg form provides an $O(n^3)$
 %algorithm to compute the characteristic polynomial.
 
@@ -552,10 +559,10 @@ using a matrix $T.$
 
 \begin{prop} 
 Algorithm 1 computes $H$ and $P$ realizing an approximate Hessenberg form of $M.$
-$P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k((X))$, and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coefficent in $M.$
+$P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k\llp X\rrp$, and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coefficent in $M.$
 \end{prop}
 \begin{proof}
-Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k((X)).$
+Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k\llp X \rrp.$
 Inside the nested \textbf{for} loop, if we want to eliminate $\pi^{u_y} \varepsilon_y+O(\pi^{n_y})$ with pivot $\pi^{u_x} \varepsilon_x+O(\pi^{n_x}),$
 with the $\varepsilon$'s being units,
 the corresponding coefficient of the corresponding shear matrix is the lift(in $\mathbb{Z}, $  $\mathbb{F}_q[X],$ $\mathbb{Q}[X]$ or adequate extension) of $\pi^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{u_y-u_x\min (n_x-u_x,n_y-u_y)}.$
@@ -603,8 +610,8 @@ $m$ is large \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
 
 Now, the computation of the Smith normal form was described in \cite{Vaccon-these}.
 From $M$ known at flat precision $O(\pi^m),$ we can obtain an exact $\Delta$, and $P$ and $Q$ 
-known at precision at least $O(\pi^{m-\cond(M)})$, with coefficients in $O_K$
-and determinant in $O_K^\times$ realizing an Smith normal form of $M.$
+known at precision at least $O(\pi^{m-\cond(M)})$, with coefficients in $\OK$
+and determinant in $\OK^\times$ realizing an Smith normal form of $M.$
 There is no loss in precision when computing $P^{-1}$ and $Q^{-1}.$
 Since the smallest valuation occurring in $\Delta^{-1}$ is $-\cond(M),$
 we see that $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ is known at precision at least $O(\pi^{m-2\cond(M)}),$
@@ -618,7 +625,7 @@ using the Smith normal form computation of the previous section.
 The entries of $\com(X-H)$ lie in $K[X]$, which is not a CDVF,
 so we may not directly apply the methods of the previous section.
 However, we may relate $\com(X-H)$ to $\com(1-XH)$, whose
-entries lie in the CDVF $K((X))$.  In this way, we compute $\com(X-H)$
+entries lie in the CDVF $K\llp X\rrp$.  In this way, we compute $\com(X-H)$
 using an SNF method, with no division in $K$.
 
 First, we need a lemma relating comatrices of
@@ -636,16 +643,14 @@ We extend its definition to matrices of polynomials.
 Let $d \in \mathbb{N}$ and $P \in K[X]$ of degree at most $d.$ 
 We define the reciprocal polynomial of order $d$ of $P$ as $P^{\rec,d}=X^d P \left( 1/X \right).$
 Let $A \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
-We denote by $A^{\rec,d}$ the matrix
-whose coefficients are the reciprocal polynomials of order $d$ 
-of the coefficients of $A.$ 
+We denote by $A^{\rec,d}$ the matrix with $(A^{\rec,d})_{i,j} = (A_{i,j})^{\rec,d}$.
 \end{deftn}
 We then have the following result :
 \begin{lem}
 Let $M \in M_n(K).$ Then:
 \begin{eqnarray*}
 \com(1-XM)^{\rec,n-1}=&\com(X-M), \\
-(\chi_M \times 1)^{\rec,n}=&(1-XM) \com(1-XM).\\
+(\chi_M I_n)^{\rec,n}=&(1-XM) \com(1-XM).\\
 \end{eqnarray*}
 \end{lem}
 \begin{proof}
@@ -654,49 +659,48 @@ let $A \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
 then $\det (A^{\rec,1})=\det(A)^{\rec,d}.$
 Indeed, one can use multilinearity of the determinant on $X^d \det(A(1/X))$
 to prove this result.
-It directly implies the second part of the lemma.
-As for the first part, since coefficients of the comatrix we are interested in
-are determinants of a matrix of polynomials of degree at most 1, the result
-is also clear.
+It directly implies the second part of the lemma; the first part follows
+from the fact that the entries of $\com(X-M)$ and of $\com(1-XM)$
+are determinants of size $n-1$.
 \end{proof}
 
 This lemma allows us to compute $\com(1-XM)$ instead of $\com(X-M).$
 This has a remarkable advantage: the pivots during the computation of
-the SNF of $\com(1-XM)$ are units of $O_K[[X]],$ and are known
+the SNF of $\com(1-XM)$ are units of $\OK\llb X\rrb,$ and are known
 in advance to be on the diagonal. This leads to a very smooth
-precision and complexity behaviour when the entry matrix lives in 
-$M_n(O_K).$ 
+precision and complexity behaviour when the input matrix lives in 
+$M_n(\OK).$ 
 
 \noindent\hrulefill
 
 \noindent {\bf Algorithm 2:} {\tt Approximate $\com (X -H)$ }
 
-\noindent{\bf Input:} an approximate Hessenberg matrix $H$ in $M_n(O_K).$
+\noindent{\bf Input:} an approximate Hessenberg matrix $H$ in $M_n(\OK).$
 
 \smallskip
 
 \noindent 0.\ $U:=1-XH.$ $U_0:=1-XH.$
 
-\noindent 1.\ \textbf{Track} the following operations to get $P^{-1}$ and $Q^{-1},$
-such that $U=PU_0Q.$
-
+\noindent 1.\ While updating $U$, \textbf{track} $P$ and $Q$ so that $U_0=PUQ$ is always satisfied.
 
 \noindent 2.\ {\bf for} $i=1,\dots,n-1$ {\bf do} 
 
 \noindent 3.\  \:  \textbf{Eliminate}, modulo $X^{n+1}$ the coefficients $U_{i,j},$ for $j\geq i+1$ 
 using the invertible pivot
-$U_{i,i}=1+XL_{i,i} \mod X^{n+1}$ (with $L_{i,i} \in O_K[X]$). 
+$U_{i,i}=1+XL_{i,i} \mod X^{n+1}$ (with $L_{i,i} \in \OK[X]$). 
 
 \noindent 4.\    {\bf for} $i=1,\dots,n-1$ {\bf do} 
 
-\noindent 5. \  \:  \textbf{Eliminate}, modulo $X^{n+1}$ the coefficients $U_{i,i+1},$
+\noindent 5. \  \:  \textbf{Eliminate}, modulo $X^{n+1}$ the coefficients $U_{i+1,i},$
 using the invertible pivot $U_{i,i}.$
 
 \noindent 6. \ $\psi:=\prod_i U_{i,i}.$
 
-\noindent 7. \ Rescale to get $U = Id \mod X^{n+1}.$
+\noindent 7. \ Rescale to get $U = I_n \mod X^{n+1}.$
 
-\noindent 8. \ $V:=\psi \times P^{-1} \times Q^{-1}   \mod X^{n+1}.$
+\noindent 8. \ $V:=\psi \times P \times Q   \mod X^{n+1}.$ \footnote{The product $P \times Q$
+should be implemented by sequential row operations corresponding to the eliminations in Step 5
+in order to avoid a product of two matrices in $M_n(\OK[X])$.}
 
 \noindent 9. \ \textbf{Return} $V^{\rec,n-1}, \psi^{\rec,n}.$
 
@@ -705,29 +709,27 @@ using the invertible pivot $U_{i,i}.$
 \medskip
 
 \begin{theo}
-Let $H \in M_n(O_K)$ be an approximate Hessenberg matrix.
+Let $H \in M_n(\OK)$ be an approximate Hessenberg matrix.
 Then, using Algorithm 2, one can compute $\com (X -H)$
-and $\chi_M$ in 
-$\softO (n^3)$ operations in $O_K$ at the precision given by $H.$
+and $\chi_H$ in 
+$\softO (n^3)$ operations in $\OK$ at the precision given by $H.$
 \end{theo}
 \begin{proof}
-Firstly, the operations of the lines 2 and 3 are in $\softO (n^3)$ operations
-in $O_K$ at the precision given by $H.$
-Indeed, since $H$ is an approximate matrix, when we use $U_{i,i}$ as pivot:
-on its columns, only $U_{i+1,i}$ can be a non zero-approximate coefficient.
+First, the operations of the lines 2 and 3 use $\softO (n^3)$ operations
+in $\OK$ at the precision given by $H.$
+Indeed, since $H$ is an approximate Heisenberg matrix, when we use $U_{i,i}$ as pivot
+the only other nonzero coefficient in its column is $U_{i+1,i}$.
 As a consequence, when performing this column-pivoting, only two rows ($i$ and
-$i+1$) lead to operations in $O_K [[K]]$ other than checking precision.
+$i+1$) lead to operations in $\OK \llb X \rrb$ other than checking precision.
 Hence, line 3 costs $\softO (n^2)$ for the computation of $U.$
-Following line 1, the computation of $Q^{-1}$ is done by operations on rows, starting from the identity matrix.
-Corresponding coefficient for the corresponding shear matrix
- is the opposite of the one defined by pivoting
-and the indices for the receiving and giving rows are swapped compared to the operations on columns.
-Thus, we can show that it requires no additional operation in $O_K[[X]].$ $Q^{-1}$ is just filled as
-an upper-triangular matrix.
-This proves that the resulting cost for lines 2 and 3 is indeed in $\softO (n^3)$ operations.
+Following line 1, the computation of $Q$ is done by operations on rows, starting from the identity matrix.
+The order in which the entries of $U$ are cleared implies that $Q$ is just filled in as an upper triangular matrix:
+no additional operations in $\OK\llb X\rrb$ are required. Thus the total cost
+for lines 2 and 3 is indeed $\softO (n^3)$ operations.
 
-As for line 4 and 5, there are only $n-1$ eliminations, resulting again in a $\softO (n^3)$ cost
-for the computation of $P^{-1}$ and $U.$
+For lines 4 and 5, there are only $n-1$ eliminations, resulting in a $\softO (n^2)$ cost
+for the computation of $U.$. Rather than actually construct $P$, we just track the eliminations
+performed in order to do the corresponding row operations on $Q$, since we only need the product $P \times Q$.
 
 Line 6 is in $\softO (n^2)$ and 7 in $\softO (n^3).$
 
@@ -738,11 +740,10 @@ We emphasize that no division has been done throughout the algorithm.
 Line 9 is costless, and the result is then proved.
 \end{proof}
 \begin{rem}
-If $M \in M_n(K)$ does not have coefficients in $O_K,$
-then, by an appropriate scaling, we can still use
-Algorithms 1 and 2 to get $\chi_M$
-in $\softO (n^3)$ operations in $O_K$ at some shift
-of the initial precision.
+If $M \in M_n(K)$ does not have coefficients in $\OK,$
+we may apply Algorithms 1 and 2 to $p^v M \in M_n(\OK)$
+in $\softO (n^3)$ operations in $\OK$, and then divide
+the coefficient of $X^k$ in the resulting polynomial by $p^{kv}$.
 \end{rem}
 
 We will see in Section \ref{sec:optjagged} that for an
@@ -752,44 +753,39 @@ know the optimal jagged precision on $\chi_M.$
 
 \subsection{The comatrix of $X{-}M$}
 
-In this Subsection, we are interested in a special
-case of the computation of the comatrix of $X-M,$
-when $\chi_M$ is square-free (which is the 
-generic case).
-We observe that it is possible to combine
-the result of Proposition \ref{prop:shortcom}
-with Algorithm 2 to actually compute
-the comatrix of $X-M.$
-It leads to a $\softO (n^3)$ algorithm
-where the only divisions are for
-gcd and modular inverse computations.
- 
+In this section, we combine Proposition \ref{prop:shortcom}
+with Algorithm 2 to compute the comatrix of $X-M$
+when $\chi_M$ is squarefree.   Note that this condition on
+$\chi_M$ is equivalent to $M$ being diagonalizable under
+the assumption that $d\chi_M$ is surjective.  The result is
+the following $\softO(n^3)$ algorithm, where the only
+divisions are for gcd and modular inverse computations.
 
 \noindent\hrulefill
 
 \noindent {\bf Algorithm 3:} {\tt Approximate $\com (X{-}M)$ }
 
-\noindent{\bf Input:} an approx. $M \in M_n(O_K),$ with $discr(\chi_M) \neq 0.$ 
+\noindent{\bf Input:} an approx. $M \in M_n(\OK),$ with $\disc(\chi_M) \neq 0.$ 
 
 \smallskip
 
-\noindent 0.\ Find $P \in GL_n(O_K)$ and $H \in M_n(O_K),$ approximate Hessenberg,
+\noindent 0.\ Find $P \in GL_n(\OK)$ and $H \in M_n(\OK),$ approximate Hessenberg,
 such that $M=PHP^{-1},$ using Algorithm 1. 
 
-\noindent 1.\ Compute $A=\com (X-H)$ using Algorithm 2.
+\noindent 1.\ Compute $A=\com (X-H)$ and $\chi(M) = \chi(H)$ using Algorithm 2.
 
 
-\noindent 2.\ Do $row(A,1) \leftarrow row(A,1)+\sum_{i=2}^n \mu_i row(A,i),$ for
-random $\mu_i \in O_K,$ by doing $T \times A$ for some $T \in GL_n(O_K).$
+\noindent 2.\ Do $\row(A,1) \leftarrow \row(A,1)+\sum_{i=2}^n \mu_i \row(A,i),$ for
+random $\mu_i \in \OK,$ by doing $T \times A$ for some $T \in GL_n(\OK).$
 Compute $B:=TAT^{-1}.$
 
-\noindent 3.\ Similarily compute $C:=S^{-1}BS$ for $S \in GL_n(O_K)$ corresponding to
-sending a random linear combination of the columns of index $j \in \llbracket 2,n \rrbracket$
+\noindent 3.\ Similarily compute $C:=S^{-1}BS$ for $S \in GL_n(\OK)$ corresponding to
+adding a random linear combination of the columns of index $j \ge 2$
 to the first column of $B.$ 
 
 \noindent 4.\  \textbf{If} $gcd(C_{1,1}, \chi(M)) \neq 1,$ \textbf{then} go to 2.
 
-\noindent 5. \ Compute $U,V \in O_K[X]^n$ such that $C=U {}^t V \mod \chi (M),$
+\noindent 5. \ Compute $U,V \in \OK[X]^n$ such that $C=U {}^t V \mod \chi (M),$
 by inverting $C_{1,1} \mod \chi(M).$
 
 \noindent 6. \ Return $\com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi (M).$
@@ -800,17 +796,17 @@ by inverting $C_{1,1} \mod \chi(M).$
 
 
 \begin{theo}
-For $M \in M_n(O_K)$ such that $discr( \chi_M) \neq 0,$
-Algorithm 3 compute 
+For $M \in M_n(\OK)$ such that $\disc( \chi_M) \neq 0,$
+Algorithm 3 computes
 $\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3)$
-operations in $K$ at initial precision.
+operations in $K$.
 The only divisions are in steps 4 and 5.
 \end{theo}
 \begin{proof}
-As we have already seen, completing Step 1 and 2 is in $\softO (n^3).$
+As we have already seen, completing Steps 0 and 1 is in $\softO (n^3).$
 Multiplying by $T$ or $S$ or their inverse corresponds
 to $n$ operations on rows or columns over a matrix with coefficients
-in $O_K[X]$ of degree at most $n.$
+in $\OK[X]$ of degree at most $n.$
 Thus, it is in $\softO (n^3).$
 Step 5 and 6 are also in $\softO (n^3).$
 All that is to prove is that the set of $P$ and $S$ to avoid
@@ -839,7 +835,7 @@ This concludes the proof.
 \begin{rem}
 As in the previous section, it is possible
 to scale $M \in M_n(K)$ so as to
-get coefficients in $O_K$ and apply the previous algorithm.
+get coefficients in $\OK$ and apply the previous algorithm.
 \end{rem}
 \begin{rem}
 We refer to \cite{caruso:15a} for the handling
@@ -970,7 +966,7 @@ N'_k = \min_{1 \leq i, j\leq n} N_{j,i} + \val(\pi_k(C_{i,j})),
 where $C_{i,j}$ is the $(i,j)$ entry of the comatrix $\com(X{-}M)$.
 
 \begin{prop} \label{prop:optimal_jagged}
-If $M \in M_n(O_K)$ is given at (high enough) jagged precision, 
+If $M \in M_n(\OK)$ is given at (high enough) jagged precision, 
 then we can compute the optimal jagged precision on $\chi_M$ in 
 $\softO (n^3)$ operations in $K$.
 \end{prop}
@@ -986,7 +982,7 @@ integers).
 \end{proof}
 
 \begin{rem}
-If $M \in M_n(O_K)$ is given at (high enough) \emph{flat} precision, 
+If $M \in M_n(\OK)$ is given at (high enough) \emph{flat} precision, 
 then we can avoid the final base change step in the Hessenberg method.
 Indeed, observe that, thanks to Lemma \ref{lem:comatrix_of_similar}, 
 we can write:
