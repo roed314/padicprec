@@ -9,6 +9,7 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{amsthmnoproof}
+\usepackage{mathrsfs}
 \usepackage{amsrefs}
 \usepackage[usenames,dvipsnames]{color}
 \usepackage{stmaryrd}
@@ -145,7 +146,7 @@ satisfied, and give examples when the precision is larger than $O(p^k)$.
 The characteristic polynomial is a fundamental invariant of a matrix: its roots
 give the eigenvalues, and the trace and determinant can be extracted from its coefficients.
 In fact, the best known division-free algorithm for computing determinants
-over arbitrary rings \cite{kartofen:92a} does so using the characteristic polynomial.
+over arbitrary rings \cite{kaltofen:92a} does so using the characteristic polynomial.
 Over $p$-adic fields, computing the characteristic polynomial is a key ingredient in
 algorithms for counting points of varieties over finite fields. \todo{list some point counting references.}
 \todo{Application to characteristic polynomials of elements of p-adic field extensions?}
@@ -160,7 +161,7 @@ not only the running time of the algorithm but also the accuracy of the result.
 Let $M \in M_n(\Qp)$ be known at precision $O(p^m)$.
 The simplest approach for computing the characteristic polynomial of $M$
 is to compute $\det(X-M)$ either using recursive row expansion or various division free
-algorithms \cites{\cite{seifullin:02a} \cite{kartofen:92a}}.  There are two issues
+algorithms \citelist{\cite{seifullin:02a} \cite{kaltofen:92a}}.  There are two issues
 with these methods.  First, they are slower than alternatives that allow division,
 requiring $O(n!)$, $O(n^4)$ and $\softO(n^{2 + \omega/2})$ operations.  Second,
 while the lack of division implies that the result is accurate modulo $p^m$ as
@@ -171,7 +172,7 @@ which is achievable in running time $\softO(n^\omega)$ \cite{storjohann:01a}.
 However, the fact that it uses division frequently leads to catastrophic losses of division.
 In many examples, no precision remains at the end of the calculation.
 
-Instead 
+Instead, 
 
 \todo{Example of $M$ and $M + 1$.}
 
@@ -230,24 +231,25 @@ For $M \in M_n(K)$, the following conditions are equivalent:
 to a companion matrix)
 \item \label{pt:1d} the eigenspaces of $M$ over the algebraic
 closure $\bar{K}$ of $K$ all have dimension $1$
-%\item the Jordan blocks of $M$ all have distinct generalized eigenvalues
+\item \label{pt:charmin} the characteristic polynomial of $M$ is equal to the minimal polynomial of $M$.
 \end{enumerate}
 \end{prop}
 
 \begin{proof}
-The equivalence of \eqref{pt:cyc} and \eqref{pt:1d} is standard; see
+The equivalence of \eqref{pt:cyc}, \eqref{pt:1d}, and \eqref{pt:charmin} is standard; see
 \cite{hoffman-kunze:LinearAlgebra}*{\S 7.1} for example.  We now show
-that \eqref{pt:surj} and \eqref{pt:cyc} are equivalent.
+\eqref{pt:cyc} $\Rightarrow$ \eqref{pt:surj} and \eqref{pt:surj} $\Rightarrow$ \eqref{pt:1d}
 
 For any $A \in \GL_n(K)$, the image of $d\chi$ at $M$ will be the same
 as the image of $d\chi$ at $AMA^{-1}$, so we may assume that
 $M$ is a companion matrix.  For a companion matrix, the bottom row of
 $\com(X-M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi_M$ is surjective.
 
-To show the inverse, suppose that $M$ has a repeated eigenvalue $\lambda$ over $\bar{K}$.
+Now suppose that $M$ has a repeated eigenvalue $\lambda$ over $\bar{K}$.
 After conjugating into Jordan normal form over $\bar{K}$, the entries of $\com(X-M)$
-will also be block diagonal, and divisible within each block by the product of $(X-\mu)$
-for each other eigenvalue $\mu$.  Since $\lambda$ occurs twice as an eigenvalue,
+will also be block diagonal, and divisible within each block by the product of $(X-\mu)^{d_\mu}$,
+where $\mu, d_\mu$ ranges over the eigenvalues and dimensions of the other Jordan blocks.
+Since $\lambda$ occurs in two Jordan blocks,
 $X - \lambda$ will divide every entry of $\com(X-M)$ and $d\chi_M$ will not be surjective.
 \end{proof}
 
@@ -336,19 +338,6 @@ If $M \in M_n(\OK)$, then $d \chi_M \big(M_n(\OK)\big)$
 is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
 \end{cor}
 
-We can also give a criterion on $M$ that allows an easy description of the image of flat
-precision lattices under $d\chi(M)$.
-\begin{prop}
-Suppose that $M \in M_n(\OK)$, and that the reduction $\bar{M}$ of $M$ modulo $\pi$ has
-a cyclic vector.  Then $d\chi_M\big(M_n(\OK)\big) = \OK[X] / \chi(M)$.
-\end{prop}
-\begin{proof}
-It suffices to check that $d\chi_M$ is surjective modulo $\pi$.
-Surjectivity of differential
-can be seen: write matrix in Jordan normal form.  Comatrix(X - M) surjective iff when you write it
-in Frobenius normal form it has only one block.
-\end{proof}
-
 
 \begin{comment}
 \begin{prop} \label{prop:factor_com}
@@ -396,22 +385,22 @@ by change of basis.
 
 \subsection{Compact form of $d \chi_M$}
 
-Let $C$ be the companion matrix associated to $\chi_M$:
+Let $\mathscr{C}$ be the companion matrix associated to $\chi_M$:
 \begin{equation}
 \label{eq:companion}
-N = \left( \begin{matrix}
+\mathscr{C} = \left( \begin{matrix}
 0 & 1 & 0 & \cdots & 0 \\
-\vdots & \ddots & 1 & \ddots & \vdots \\
-\vdots & & \ddots & \ddots & 0 \\
-0 & \cdots & \cdots & 0 & 1 \\
+0 & 0 & 1 & \ddots & \vdots \\
+\vdots & \vdots & \ddots & \ddots & 0 \\
+0 & 0 & \cdots & 0 & 1 \\
 -a_0 & -a_1 & \cdots & \cdots & -a_{n-1}
 \end{matrix} \right)
 \end{equation}
 with $\chi_M = a_0 + a_1 X + \cdots + a_{n-1} X^{n-1} + X^n$.
 By Proposition~\ref{prop:surjectivity}, there exists a matrix 
-$P \in \GL_n(K)$ such that $M = P N P^{-1}$. Applying the same
+$P \in \GL_n(K)$ such that $M = P \mathscr{C} P^{-1}$. Applying the same
 result to the transpose of $M$, we find that there exists another
-invertible matrix $Q \in \GL_n(K)$ such that $M^t = Q N Q^{-1}$.
+invertible matrix $Q \in \GL_n(K)$ such that $M^t = Q \mathscr{C} Q^{-1}$.
 
 \begin{prop}
 \label{prop:shortcom}
@@ -1099,11 +1088,11 @@ where $C_{i,j}$ denotes as above the $(i,j)$ entry of $\com(X{-}M)$.
 Writing
 $\com(X{-}M) = \alpha \cdot P V^t \cdot V Q^t \text{ mod } \chi_M$
 as in Proposition~\ref{prop:shortcom}, we find:
-\begin{align*}
-N' & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+\begin{align}
+N' & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \nonumber \\
 & \hspace{2mm} + \min_{1 \leq i, j\leq n} \big(N_{j,i} + 
-\val(P_i V(\lambda)^t) + \val(V(\lambda) Q_j^t)\big)
-\end{align*}
+\val(P_i V(\lambda)^t) + \val(V(\lambda) Q_j^t)\big) \label{eq:Nprime}
+\end{align}
 where $P_i$ denotes the $i$-th row of $P$ and, similarly, $Q_j$
 denotes the $j$-th row of $Q$. Note moreover that $V(\lambda)$ is
 the row vector $(1, \lambda, \ldots, \lambda^{n-1})$.
@@ -1113,34 +1102,34 @@ $O(n^2)$ operations on integers.
 
 When $M$ is given at flat precision, \emph{i.e.} the $N_{i,j}$'s are all 
 equal to some $N$, the formula for $N'$ may be rewritten:
-\begin{align*}
-N' & = N + \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+\begin{align}
+N' & = N + \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \nonumber \\
 & \hspace{2mm} + \min_{1 \leq i \leq n} \val(P_i V(\lambda)^t)
-+ \min_{1 \leq j \leq n} \val(V(\lambda) Q_j^t)\big)
-\end{align*}
++ \min_{1 \leq j \leq n} \val(V(\lambda) Q_j^t)\big) \label{eq:Nprimeflat}
+\end{align}
 and can therefore now be evaluated for a cost of $\softO(n^\omega)$
-operations in $K$ and only $O(n)$ operations on integers.
+operations in $K$ and only $O(n)$ operations with integers.
 
 \medskip
 
-To conclude with, let us discuss briefly the situation where we want
+To conclude, let us briefly discuss the situation where we want
 to figure out the optimal jagged precision on a tuple $(\lambda_1,
-\ldots, \lambda_s)$ of simple eigenvalues. Applying what we have done
-previously, we find that the optimal precision on $\lambda_k$ is 
+\ldots, \lambda_s)$ of simple eigenvalues. Applying \eqref{eq:Nprime},
+we find that the optimal precision on $\lambda_k$ is 
 \begin{align*}
-N'_k & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
+N'_k & = \val(\alpha(\lambda_k)) - \val(\chi'_M(\lambda_k)) \\
 & \hspace{2mm} + \min_{1 \leq i, j\leq n} \big(N_{j,i} + 
-\val(P_i V(\lambda)^t) + \val(V(\lambda) Q_j^t)\big).
+\val(P_i V(\lambda_k)^t) + \val(V(\lambda_k) Q_j^t)\big).
 \end{align*}
 
 \begin{prop}
 \label{prop:opteigenvalues}
 The $N'_k$'s can be all computed in $\softO(n^\omega)$ operations
-in $K$ and $O(n^2 s)$ operations on integers.
+in $K$ and $O(n^2 s)$ operations with integers.
 
 If the $N_{i,j}$'s are all equal, the above complexity can be 
 lowered to $\softO(n^\omega)$ operations in $K$ and $O(n s)$ operations 
-on integers.
+with integers.
 \end{prop}
 
 \begin{proof}
@@ -1158,7 +1147,7 @@ $$P \cdot \left( \begin{matrix}
 The latter product can be computed in $\softO(n^\omega)$ operations in 
 $K$\footnote{It turns out that $\softO(n^2)$ is also possible because
 the right factor is a structured matrix (a truncated Vandermonde):
-computing the above product reduces to evaluate a polynomial at the
+computing the above product reduces to evaluating a polynomial at the
 points $\lambda_1, \ldots, \lambda_s$.}. Therefore all the $P_i 
 V(\lambda_k)^t$'s (for $i$ and $k$ varying) 
 can be determined with the same complexity. 
