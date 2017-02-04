@@ -920,7 +920,7 @@ We have made numerical experiments in \textsc{SageMath}~\cite{sage}
 in order to compare the optimal precision obtained with the methods
 explained above with the actual precision obtained by the software.
 For doing so, we picked a sample of $1000$ random matrices $M$ in 
-$M_9(\Q_2)$ where all the entries at the same \emph{relative
+$M_9(\Q_2)$ where all the entries are given at the same \emph{relative
 precision}.
 We recall that, in \textsc{SageMath}, random elements $x \in \Q_p$ are 
 generated as follows. We fix an integer $N$ --- the so-called relative
@@ -1107,7 +1107,7 @@ N' & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
 where $P_i$ denotes the $i$-th row of $P$ and, similarly, $Q_j$
 denotes the $j$-th row of $Q$. Note moreover that $V(\lambda)$ is
 the row vector $(1, \lambda, \ldots, \lambda^{n-1})$.
-By the discussion of \S \ref{}, the exact value of $M$ can be 
+By the discussion of \S \ref{}, the exact value of $N'$ can be 
 determined for a cost of $\softO(n^\omega)$ operations in $K$ and
 $O(n^2)$ operations on integers. 
 
@@ -1125,7 +1125,7 @@ operations in $K$ and only $O(n)$ operations on integers.
 
 To conclude with, let us discuss briefly the situation where we want
 to figure out the optimal jagged precision on a tuple $(\lambda_1,
-\ldots, \lambda_s)$ of eigenvalues. Applying what we have done
+\ldots, \lambda_s)$ of simple eigenvalues. Applying what we have done
 previously, we find that the optimal precision on $\lambda_k$ is 
 \begin{align*}
 N'_k & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \\
