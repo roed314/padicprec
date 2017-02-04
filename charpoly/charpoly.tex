@@ -36,6 +36,7 @@
 \DeclareMathOperator{\round}{round}
 \DeclareMathOperator{\rank}{rank}
 \DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\rec}{rec}
 
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
@@ -172,10 +173,23 @@ which is achievable in running time $\softO(n^\omega)$ \cite{storjohann:01a}.
 However, the fact that it uses division frequently leads to catastrophic losses of division.
 In many examples, no precision remains at the end of the calculation.
 
-Instead, 
+Instead, we separate the computation of the precision of $\chi_M$ from the computation
+of an approximation to $\chi_M$.  Given some precision on $M$, we use \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}
+to find the best possible precision for $\chi_M$.  The analysis of this precision is the subject
+of much of this paper.  With this precision known, the actual calculation of $\chi_M$
+may proceed by lifting $M$ to a temporarily higher precision and then using a sufficiently
+stable algorithm. \todo{reference a place with more detail.}
 
 \todo{Example of $M$ and $M + 1$.}
 
+One benefit of this approach is that we may account for diffuse precision:
+precision that is not localized on any single coefficient of $\chi_M$.  For example,
+let $0 \le \alpha_1 \le \alpha_2 \le \dots \le \alpha_n$, consider a
+diagonal matrix $D$ with diagonal entries $(p^{\alpha_1}, \dots, p^{\alpha_n})$,
+let $P, Q \in \GL_n(\Zp)$ and set $M = PDQ$.  The valuation of the coefficient
+of $X^{n-k}$ in $\chi_M$ will be $\sum_{i=1}^k \alpha_i$, and if $M$ is known
+with precision $O(p^m)$ then $\chi_M$ will be known with some precision
+larger than $O(p^m)$ (see Proposition \ref{prop:mainlem}).
 
 
 \subsection*{Previous contributions.} Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?
@@ -600,9 +614,9 @@ The second ingredient we need is reciprocal polynomials.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
 Let $d \in \mathbb{N}$ and $P \in K[X]$ of degree at most $d.$ 
-We define the reciprocal polynomial of order $f$ of $P$ as $P^{rec,d}=X^d P \left( 1/X \right).$
+We define the reciprocal polynomial of order $f$ of $P$ as $P^{\rec,d}=X^d P \left( 1/X \right).$
 Let $A \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
-We denote by $A^{rec,d}$ the matrix
+We denote by $A^{\rec,d}$ the matrix
 whose coefficients are the reciprocal polynomials of order $d$ 
 of the coefficients of $A.$ 
 \end{deftn}
@@ -610,15 +624,15 @@ We then have the following result :
 \begin{lem}
 Let $M \in M_n(K).$ Then:
 \begin{eqnarray*}
-com(1-XM)^{rec,n-1}=&com(X-M), \\
-(\chi_M \times 1)^{rec,n}=&(1-XM) com(1-XM).\\
+\com(1-XM)^{\rec,n-1}=&\com(X-M), \\
+(\chi_M \times 1)^{\rec,n}=&(1-XM) \com(1-XM).\\
 \end{eqnarray*}
 \end{lem}
 \begin{proof}
 It all comes down to the following result:
 let $A \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
-then $det (A^{rec,1})=det(A)^{rec,d}.$
-Indeed, one can use multilinearity of the determinant on $X^d det(A(1/X))$
+then $\det (A^{\rec,1})=\det(A)^{\rec,d}.$
+Indeed, one can use multilinearity of the determinant on $X^d \det(A(1/X))$
 to prove this result.
 It directly implies the second part of the lemma.
 As for the first part, since coefficients of the comatrix we are interested in
@@ -626,9 +640,9 @@ are determinants of a matrix of polynomials of degree at most 1, the result
 is also clear.
 \end{proof}
 
-This lemma allows us to compute $com(1-XM)$ instead of $com(X-M).$
+This lemma allows us to compute $\com(1-XM)$ instead of $\com(X-M).$
 This has a remarkable advantage: the pivots during the computation of
-the SNF of $com(1-XM)$ are units of $O_K[[X]],$ and are known
+the SNF of $\com(1-XM)$ are units of $O_K[[X]],$ and are known
 in advance to be on the diagonal. This leads to a very smooth
 precision and complexity behaviour when the entry matrix lives in 
 $M_n(O_K).$ 
@@ -664,7 +678,7 @@ using the invertible pivot $U_{i,i}.$
 
 \noindent 8. \ $V:=\psi \times P^{-1} \times Q^{-1}   \mod X^{n+1}.$
 
-\noindent 9. \ \textbf{Return} $V^{rec,n-1}, \psi^{rec,n}.$
+\noindent 9. \ \textbf{Return} $V^{\rec,n-1}, \psi^{\rec,n}.$
 
 \vspace{-1ex}\noindent\hrulefill
 
@@ -735,7 +749,7 @@ to the first column of $B.$
 \noindent 5. \ Compute $U,V \in O_K[X]^n$ such that $C=U {}^t V \mod \chi (M),$
 by inverting $C_{1,1} \mod \chi(M).$
 
-\noindent 6. \ Return $com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi (M).$
+\noindent 6. \ Return $\com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi (M).$
 
 \vspace{-1ex}\noindent\hrulefill
 
