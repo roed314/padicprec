@@ -227,11 +227,27 @@ how to attain this optimal precision algorithmicaly.
 
 \subsection*{Organization of the article.}
 
+In Section \ref{sec:theo_study}, we study the
+differential of the characteristic polynomial so as
+to get optimal information on precision 
+and a compact writing of this differential.
+Then, in Sections \ref{sec:diffHess} and \ref{sec:diffFrob}
+we propose algorithms to compute this differential
+either through Hessenberg or going through
+some Frobenius normal form.
+Finally, we propose in Section \ref{sec:optjagged}
+algorithms to compute the optimal precision
+coefficient-wise on the characteristic polynomial
+and on some eigenvalues along with
+numerical evidence of the behaviour of the computation
+of the characteristic polynomial.
+
 \subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
 discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
 $\OK$ its ring of integers and $\pi$ a uniformizer. \todo{$\softO$, $\omega$, scalar matrices and $I_n$}
 
 \section{Theoretical study}
+\label{sec:theo_study}
 
 \subsection{The theory of p-adic precision} \label{sec:padicprec}
 
@@ -479,6 +495,16 @@ write down the matrices $P$ and $Q$.
 We shall see moreover in Section \ref{sec:diffFrob} that interesting
 information can be read off of this short form $(\alpha, P, Q, 
 \chi_M)$.
+
+\begin{rem}
+Keeping the previous notation, if $U \in GL_n(K),$
+then the corresponding quadruple for 
+$UMU^{-1}$ is
+$(\alpha, UP, U^{t,-1}Q, \chi_M),$
+which can be computed in $O(n^\omega)$ operations in $K.$
+This is faster than computing $U com(X-M) U^{-1},$
+which is, at first sight, in $O(n^4)$ operations in $K.$
+\end{rem}
 
 \section{Differential\\via Hessenberg form}
 \label{sec:diffHess}
