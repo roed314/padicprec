@@ -193,7 +193,30 @@ with precision $O(p^m)$ then $\chi_M$ will be known with some precision
 larger than $O(p^m)$ (see Proposition \ref{prop:mainlem}).
 
 
-\subsection*{Previous contributions.} Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?
+\subsection*{Previous contributions.} 
+%\todo{Many ad-hoc for Kedlaya-like point counting algorithms.  Our previous papers.  What else?}
+
+Since the description of Kedlaya's algorithm in
+\cite{kedlaya:01a}, the computation of characteristic polynomials
+over $p$-adic numbers
+has become a crucial point in many counting-points algorithms.
+We can cite for example \cite{harvey:07a, harvey:14a} for
+algorithms to count points on hyperelliptic curves.
+
+In most of these papers, the precision analysis usually
+deals with great details on how to obtain the matrices (\textit{e.g.} of action of Frobenius)  that are involved in the point-counting schemes.
+However, the computation of their characteristic polynomials is often
+a little bit less thoroughly studied: some
+refer to fast algorithm (using divisions), while others
+refer to division-free algorithms.
+
+In \cite{caruso-roe-vaccon:15a}, the authors have begun the application
+of the theory of differential precision of \cite{caruso-roe-vaccon:14a}
+to stable computation of characteristic polynomials.
+They have obtained a way to express the optimal precision
+on the characteristic polynomials, but have not studied 
+how to achieve this optimal precision.
+
 
 \subsection*{The contribution of this paper.} % Or \textbf
 
@@ -615,7 +638,7 @@ The second ingredient we need is reciprocal polynomials.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
 Let $d \in \mathbb{N}$ and $P \in K[X]$ of degree at most $d.$ 
-We define the reciprocal polynomial of order $f$ of $P$ as $P^{\rec,d}=X^d P \left( 1/X \right).$
+We define the reciprocal polynomial of order $d$ of $P$ as $P^{\rec,d}=X^d P \left( 1/X \right).$
 Let $A \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
 We denote by $A^{\rec,d}$ the matrix
 whose coefficients are the reciprocal polynomials of order $d$ 
