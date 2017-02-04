@@ -843,11 +843,11 @@ to the first column of $B.$
 
 \noindent 4.\  \textbf{If} $gcd(C_{1,1}, \chi_M) \neq 1,$ \textbf{then} go to 2.
 
-\noindent 5. \ Let $F$ be the inverse of $C_{1,1} \mod \chi_M$.
+\noindent 5. Let $F$ be the inverse of $C_{1,1} \mod \chi_M$.
 
-\noindent 6. \ Let $U = \col(C,1)$ and $V = F \cdot \row(C,1) \mod \chi_M$.
+\noindent 6. Let $U := \col(C,1)$ and $V := F \cdot \row(C,1) \mod \chi_M$.
 
-\noindent 7. \ Return $\com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi_M.$
+\noindent 7. Return $\com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi_M.$
 
 \vspace{-1ex}\noindent\hrulefill
 
@@ -857,7 +857,7 @@ to the first column of $B.$
 \begin{theo}
 For $M \in M_n(\OK)$ such that $\disc( \chi_M) \neq 0,$
 Algorithm 3 computes
-$\com (X-M) \mod (\chi(M))$ in average complexity $\softO (n^3)$
+$\com (X-M) \pmod{\chi_M}$ in average complexity $\softO (n^3)$
 operations in $K$.
 The only divisions occur in taking gcds and inverses modulo $\chi_M$.
 \end{theo}
@@ -867,14 +867,14 @@ Multiplying by $T$ or $S$ or their inverse corresponds
 to $n$ operations on rows or columns over a matrix with coefficients
 in $\OK[X]$ of degree at most $n.$
 Thus, it is in $\softO (n^3).$
-Step 5 and 6 are in $\softO (n).$
+Step 5 is in $\softO (n),$ Step 6 in $\softO(n^2)$ and Step 7 in $\softO(n^3)$.
 All that is to prove is that the set of $P$ and $S$ to avoid
 is of dimension at most $n-1.$
 The idea is to work modulo $X-\lambda$
 for $\lambda$ a root of $\chi (M)$ (in an algebraic closure)
 and then apply Chinese Remainder Theorem.
 The goal of the Step $2$ is to ensure the first row of $B$ contains an
-invertible modulo $\chi (M).$
+invertible entry modulo $\chi_M.$
 Since $A(\lambda)$ is of rank one, the $\mu_i$'s have to avoid an
 affine hyperplane so that $\row(B,1) \mod (X-\lambda)$ is a non-zero vector.
 Hence for $\row(B,1) \mod \chi (M)$ to contain an invertible coefficient,
@@ -884,9 +884,8 @@ $\chi(M)$) on $C_{1,1},$ and again, only a finite union of affine
 hyperplane is to avoid.
 Hence, the set that the $\mu_i$'s have to avoid is a finite union
 of hyperplane, and hence, is of dimension at most $n-1.$
-Thus, almost any $\mu_i$ lead to a matrix $C$ passing the test
-on Step 4.
-Now, it is clear that the only divisions happening are on steps 4 and 5.
+Thus, almost any choice of $\mu_i$ leads to a matrix $C$ passing the test
+in Step 4.
 This concludes the proof.
 \end{proof}
 
@@ -898,7 +897,7 @@ get coefficients in $\OK$ and apply the previous algorithm.
 \end{rem}
 \begin{rem}
 We refer to \cite{caruso:15a} for the handling
-of the precision on gcd and modular inverse computations.
+of the precision of gcd and modular inverse computations.
 In this article, ways to tame the loss of precision
 coming from divisions are explored, following
 the methods of \cite{caruso-roe-vaccon:14a}.
