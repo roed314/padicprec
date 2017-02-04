@@ -37,6 +37,7 @@
 \DeclareMathOperator{\rank}{rank}
 \DeclareMathOperator{\lcm}{lcm}
 \DeclareMathOperator{\rec}{rec}
+\DeclareMathOperator{\cond}{cond}
 
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
@@ -564,15 +565,15 @@ It is always surjective.
 We then have the following result about the loss in precision when computing the inverse.
 
 \begin{prop}
-Let $cond(M)$ be the valuation of the last invariant factor of $M.$
+Let $\cond(M)$ be the valuation of the last invariant factor of $M.$
 If $dM$ is a flat precision of $O(\pi^N)$ on $M$ then $M^{-1}$
-can be computed at precision $O(\pi^{N-2cond(M)})$ by a \textbf{SNF} computation
+can be computed at precision $O(\pi^{N-2\cond(M)})$ by a \textbf{SNF} computation
 and this lower-bound is optimal
 at least when $N$ is large.
 \end{prop}
 \begin{proof}
-The smallest valuation of a coefficient of $M^{-1}$ is $-cond(M).$
-It is $-2cond(M)$ for $M^{-2}$ and it is then clear that $-2cond(M)$
+The smallest valuation of a coefficient of $M^{-1}$ is $-\cond(M).$
+It is $-2\cond(M)$ for $M^{-2}$ and it is then clear that $-2\cond(M)$
 can be obtained as the valuation of a coefficient of $du(M) \cdot dM$
 and the smallest that can be achieved this way for $dM$ in a precision lattice
 of flat precision. Hence the optimality of the bound given, at least when 
@@ -580,11 +581,11 @@ $N$ is large, thanks to Lemma 3.14 of \cite{caruso-roe-vaccon:14a}
 
 Now, the computation of an SNF form over a CDVF was described in \cite{Vaccon-these}.
 From $M$ known at flat precision $O(\pi^N),$ we can obtain an exact $\Delta$ and $P,Q$ 
-known at precision at least $O(\pi^{N-cond(M)})$ with coefficients in $O_K$
+known at precision at least $O(\pi^{N-\cond(M)})$ with coefficients in $O_K$
 and determinant in $O_K^*$ realizing an SNF form of $M.$
 There is no loss in precision when computing $P^{-1}$ and $Q^{-1}.$
-Now, computing $\Delta^{-1}$ exactly, its smallest coefficient being  of valuation $-cond(M),$
-we obtain $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ known at precision at least $O(\pi^{N-2cond(M)}),$
+Now, computing $\Delta^{-1}$ exactly, its smallest coefficient being  of valuation $-\cond(M),$
+we obtain $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ known at precision at least $O(\pi^{N-2\cond(M)}),$
 which concludes the proof.
 \end{proof}
 
