@@ -1,0 +1,59 @@
+Write everything in the framework of CDVR
+
+Add in part 1:
+ . construction on Witt vectors
+ . more on algebraic geometry
+ . proof of Hasse-Minkowski Theorem
+ . Newton polygons
+ . more examples supporting the fact that we want to use p-adic for numerical stability
+
+Add high-level algorithm on p-adics:
+ . on matrices
+   -> Hermite and Smith decomposition (+ complexity)
+   -> determinant, characteristic polynomial
+ . on polynomials
+   -> gcd and resultants
+   -> factorization
+   -> building finite extensions of Qp
+ . on series
+   -> Weierstrass preparation theorem
+
+Add few "sophisticated" algorithms:
+ . counting points
+ . p-adic differential equations
+ . Coleman integration (?)
+
+
+Possible table of contents:
+---------------------------
+Part 1: Introduction to p-adic numbers
+1. Several definitions/representations of p-adics
+2. The framework of discrete valuation rings
+3. The role of p-adics in Number Theory
+4. The role of p-adics in Computer Algebra
+
+Part 2: Low-level implementation of p-adics
+1. Several paradigms
+2. A glance at p-adic analysis
+3. Varieties over the p-adics
+4. The precision Lemma: statement and examples
+5. The method of adaptive precision
+6. Automatic differentiation
+
+Part 3: p-adic linear algebra
+1. Precision models
+2. Hermite/Smith decomposition
+3. Determinant and characteristic polynomial
+4. Subvector spaces and Grassmannians
+
+Part 4: p-adic polynomials and series
+1. Precision models
+2. Slope factorization
+3. Complete factorization
+4. Building finite extensions
+5. Weierstrass preparation theorem
+
+Part 5: Other algorithms
+1. Counting points of algebraic curves
+2. p-adic differential equations
+[...]
