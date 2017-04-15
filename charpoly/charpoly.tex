@@ -110,11 +110,11 @@
 \begin{abstract}
 We analyze the precision of the characteristic polynomial $\chi(A)$ of
 an $n \times n$ $p$-adic matrix $A$ using differential precision methods
-developed previously.  When $A$ is integral with precision $O(p^k)$,
+developed previously.  When $A$ is integral with precision $O(p^N)$,
 we give a criterion (checkable in time $\softO(n^\omega)$) for
-$\chi(A)$ to have precision exactly $O(p^k)$.  We also give a $\softO(n^3)$
+$\chi(A)$ to have precision exactly $O(p^N)$.  We also give a $\softO(n^3)$
 algorithm for determining the optimal precision when the criterion is not
-satisfied, and give examples when the precision is larger than $O(p^k)$.
+satisfied, and give examples when the precision is larger than $O(p^N)$.
 \end{abstract}
 
 \begin{CCSXML}
@@ -132,7 +132,8 @@ satisfied, and give examples when the precision is larger than $O(p^k)$.
 \printccsdesc
 
 \vspace{-1.5mm}
-\keywords{Algorithms, $p$-adic precision, Newton polygon, factorization}
+\keywords{Algorithms, $p$-adic precision, characteristic polynomial,
+eigenvalue}
 
 %\vspace{1mm}
 % \noindent
@@ -162,17 +163,17 @@ algorithms for counting points of varieties over finite fields (see
 %\todo{Application to characteristic polynomials of elements of p-adic field extensions?}
 
 When computing with $p$-adic matrices, the lack of infinite memory implies
-that the entries may only be approximated at some finite precision $O(p^m)$.  As a
+that the entries may only be approximated at some finite precision $O(p^N)$.  As a
 consequence, in designing algorithms for such matrices one must analyze
 not only the running time of the algorithm but also the accuracy of the result.
 
-Let $M \in M_n(\Qp)$ be known at precision $O(p^m)$.
+Let $M \in M_n(\Qp)$ be known at precision $O(p^N)$.
 The simplest approach for computing the characteristic polynomial of $M$
 is to compute $\det(X-M)$ either using recursive row expansion or various division free
 algorithms \citelist{\cite{seifullin:02a} \cite{kaltofen:92a}}.  There are two issues
 with these methods.  First, they are slower than alternatives that allow division,
 requiring $O(n!)$, $O(n^4)$ and $\softO(n^{2 + \omega/2})$ operations.  Second,
-while the lack of division implies that the result is accurate modulo $p^m$ as
+while the lack of division implies that the result is accurate modulo $p^N$ as
 long as $M \in M_n(\Zp)$, they still do not yield the optimal precision.
 
 A faster approach over a field is to compute the Frobenius normal form of $M$,
@@ -193,13 +194,13 @@ let $0 \le \alpha_1 \le \alpha_2 \le \dots \le \alpha_n$, consider a
 diagonal matrix $D$ with diagonal entries $(p^{\alpha_1}, \dots, p^{\alpha_n})$,
 let $P, Q \in \GL_n(\Zp)$ and set $M = PDQ$.  The valuation of the coefficient
 of $X^{n-k}$ in $\chi_M$ will be $\sum_{i=1}^k \alpha_i$, and if $\alpha_{n-1} > 0$
-and $M$ is known with precision $O(p^m)$ then the constant term of $\chi_M$
-will be known with precision larger than $O(p^m)$ (see
+and $M$ is known with precision $O(p^N)$ then the constant term of $\chi_M$
+will be known with precision larger than $O(p^N)$ (see
 \cite{caruso-roe-vaccon:15a}*{Prop. 3.2}).
 
 As long as none of the eigenvalues of $M$ are congruent to $-1$ modulo $p$,
 then none of the coefficients of the characteristic polynomial of $1+M$ will have
-precision larger than $O(p^m)$.  But $\chi_{1+M}(X) = \chi_M(X-1)$, so the precision
+precision larger than $O(p^N)$.  But $\chi_{1+M}(X) = \chi_M(X-1)$, so the precision
 content of these two polynomials should be equivalent. The solution is that the
 extra precision in $\chi_{1+M}$ is diffuse and not visible on any individual coefficient.
 We formalize this phenomenon using lattices; see Section \ref{sec:padicprec} for
@@ -318,7 +319,7 @@ the most general kind of precision structure we may attach to $M$ is a
 arbitrary lattice requires $n^2$ basis vectors, each with $n^2$ entries.  We therefore
 frequently work with certain classes of lattices, either \emph{jagged} lattices
 where we specify a precision for each matrix entry or \emph{flat} lattices where
-every entry is known to a fixed precision $O(p^m)$.  Similarly, precision for
+every entry is known to a fixed precision $O(p^N)$.  Similarly, precision for
 monic polynomials can be specified by giving a lattice in the tangent space
 at $f(X) \in K_n[X]$, or restricted to jagged or flat precision in the interest
 of simplicity.
