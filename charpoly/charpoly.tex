@@ -67,6 +67,9 @@
 \definecolor{purple}{rgb}{0.6,0,0.6}
 \def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
 
+\newcommand{\done}[1]{\textcolor{blue}{#1}}
+\newcommand{\tdo}[1]{\textcolor{red}{#1}}
+
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
 \CopyrightYear{2017}
@@ -151,11 +154,60 @@ eigenvalue}
 %\medskip
 
 \section{Introduction}
+\vspace{0.1in}
+\noindent \textbf{Reviewer 1:}
+\begin{enumerate}
+\item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}
+\item \tdo{In section 3, Algorithm 1: what is the cost of step 5, and how did you avoid quartic complexity?}
+\item \tdo{In section 4, give a concrete construction for approximating the characteristic polynomial as a ``by product'' of the work of [15].}
+\item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
+\item \done{We clarified why we chose the distribution in Figure 1.}
+\item \tdo{Think about whether Proposition 5.6 can be sped up using the work of Kedlaya and Umans.}
+\end{enumerate}
+\textbf{Reviewer 2:}
+\begin{enumerate}
+\item \done{We adjusted the reference as suggested, as also pointed out by Reviewers 3 and 5.}
+\end{enumerate}
+\textbf{Reviewer 3:}
+\begin{enumerate}
+\item \tdo{Convince reviewer that the complexity claimed in Theorem 4.1 is accurate: ``it lacks a precision loss analysis and relies on classic division based algorithms}
+\item \done{We have updated the references for characteristic polynomial using Frobenius normal form as suggested.}
+\item \tdo{The definition of comatrix is usually the matrix formed by the cofactors such that $A^{-1} = \com(A)^T / \det(A)$.}
+\item \tdo{The definitions of companion matrix in the proof of Proposition 2.1 and in Section 2.3 are inconsistent (coefficients on the last column or last row)}
+\item \done{We have clarified the use of ``repeated eigenvalue'' in the proof of Proposition 2.1.}
+\item \done{We have switched from $A^t$ to $A^T$ to denote the transpose.}
+\item \tdo{A few explanations on where does the formula for the differential comes from
+would be most welcome (those of [3 Appendix B] and some connection of the trace
+with the fact that we do degree one approx of a charpoly)}
+\item \tdo{In the experiments, (section 5.1), it is not clear which of the two methods is being used to compute the comatrix.}
+\item \tdo{Further experiments (with higher dimension, or showing how the two methods for computing com(A) differ), would be welcome.}
+\item \tdo{Clarify the intro paragraph just before the Previous contributions section.}
+\item \tdo{Make the relationship between $P$, $Q$ and $R$ in Theorem 4.1 explicit.}
+\item \done{We have carried out the other minor corrections suggested.}
+\end{enumerate}
+\textbf{Reviewer 5:}
+\begin{enumerate}
+\item \tdo{In the abstract, clarify what kind of operations are being counted.}
+\item \tdo{In the abstract, clarify what we mean by ``precision exactly $O(p^k)$.''}
+\item \tdo{In the introduction, we say ``Let $M$ be known at precision $O(p^m)$.''  What does this mean?  Coefficient-wise?  Overall?  This needs to be said clearly.}
+\item \tdo{In the introduction, clarify what kind of operations are being counted.}
+\item \tdo{In the discussion of existing methods, clarify what we mean by the claim that they do not yield optimal precision.}
+\item \tdo{Define comatrix properly, as requested by reviewer 3.}
+\item \tdo{Please define lattice in the tangent space and provide a simple, illustrative example.}
+\item \tdo{The definition of ``flat precision'' and ``jagged precision'' both need to be more clearly defined.}
+\end{enumerate}
+\textbf{General clarity comments:}
+\begin{enumerate}
+\item \tdo{The writing is rather dense and relies too heavily on external material, which makes the reading sometimes unpleasant. (3)}
+\item \tdo{Overall the presentation lacks a minimal set of definitions and terminology regarding the notions of p-adic rings and their precision to make it sufficiently self-contained for an non-expert reader. I believe only a one or two additional paragraphs could be sufficient to drastically improve the presentation of section 2, in particular recalling the various precision models.  The proofs are very concise and rely too heavily on a good command of p-adic precision terminology. (3)}
+\item \tdo{The paper itself is unnecessarily difficult to read, to the extent that it sometimes unclear what is being proven or to verify correctness.  A number of key definitions are not given and there are too few motivating/clarifying examples. (5)}
+\item \tdo{The definitions are unclear and the comparison with previous work is deficient.  If this is to appear the definitions and results must be made very clear, and the results must be demonstrated to be superior to the division-free algorithms cited, both in theory and in practice.}
+\end{enumerate}
 
 The characteristic polynomial is a fundamental invariant of a matrix: its roots
 give the eigenvalues, and the trace and determinant can be extracted from its coefficients.
 In fact, the best known division-free algorithm for computing determinants
-over arbitrary rings \cite{kaltofen:92a} does so using the characteristic polynomial.
+over arbitrary rings \cite{kaltofen-villard:04a} does so using the characteristic polynomial.
 Over $p$-adic fields, computing the characteristic polynomial is a key ingredient in
 algorithms for counting points of varieties over finite fields (see
 \cite{kedlaya:01a, harvey:07a, harvey:14a}.
@@ -177,7 +229,7 @@ while the lack of division implies that the result is accurate modulo $p^N$ as
 long as $M \in M_n(\Zp)$, they still do not yield the optimal precision.
 
 A faster approach over a field is to compute the Frobenius normal form of $M$,
-which is achievable in running time $\softO(n^\omega)$ \cite{storjohann:01a}.
+which is achievable in running time $\softO(n^\omega)$ \citelist{\cite{keller-gehrig:85a} \cite{pernet-storjohann:07a}}.
 However, the fact that it uses division frequently leads to catastrophic losses of precision.
 In many examples, no precision remains at the end of the calculation.
 
@@ -234,7 +286,7 @@ to attain this optimal precision.
 
 \subsection*{The contribution of this paper.}
 
-Thanks to the application the framework of differential precision
+Thanks to the application of the framework of differential precision
 of \cite{caruso-roe-vaccon:14a} in \cite{caruso-roe-vaccon:15a},
 we know that the precision of the characteristic polynomial
 $\chi_M$ of a matrix $M \in M_n(\mathbb{Q}_p)$
@@ -265,7 +317,7 @@ giving conditions under which the differential will be surjective
 (and thus provide a good measure of precision).  We also give
 a condition based on reduction modulo $p$ that determines
 whether the characteristic polynomial will have a higher
-precision that the input matrix, and show that the image
+precision than the input matrix, and show that the image
 of the set of integral matrices has the structure of an $\OK[X]$-module
 when $M$ is itself integral. Finally, we give a compact description
 of $\com(X-M)$, the main ingredient in the differential.
@@ -362,7 +414,7 @@ as the image of $d\chi$ at $AMA^{-1}$, so we may assume that
 $M$ is a companion matrix.  For a companion matrix, the bottom row of
 $\com(X-M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi_M$ is surjective.
 
-Now suppose that $M$ has a repeated eigenvalue $\lambda$ over $\bar{K}$.
+Now suppose that $M$ has an eigenvalue $\lambda$ over $\bar{K}$ occurring in multiple Jordan blocks.
 After conjugating into Jordan normal form over $\bar{K}$, the entries of $\com(X-M)$
 will also be block diagonal, and divisible within each block by the product of $(X-\mu)^{d_\mu}$,
 where $\mu, d_\mu$ ranges over the eigenvalues and dimensions of the other Jordan blocks.
@@ -437,67 +489,23 @@ $M_n(K) \to K[X]/\chi_M(X)$.
 
 \begin{prop}
 Let $A$ be the subring of $K[X]$ consisting of polynomials $P$ for
-which $P(M) \in M_n(\OK)$, and $V = d \chi_M \big(M_n(\OK)\big)$
-as a submodule of $K[X]/\chi_M(X)$.  Then $V$ is stable under 
+which $P(M) \in M_n(\OK)$, and $\Lambda = d \chi_M \big(M_n(\OK)\big)$
+as a submodule of $K[X]/\chi_M(X)$.  Then $\Lambda$ is stable under 
 multiplication by $A$.
 \end{prop}
 \begin{proof}
-Let $C = \com(X-M)$ and $P \in A$.  By \eqref{eq:dchi}, $V$ is given by
-the $\OK$-span of the entries of $C$.   Using the fact that the product of matrix
+Let $C = \com(X-M)$ and $P \in A$.  By \eqref{eq:dchi}, $\Lambda$ is given by
+the $\OK$-span of the entries of $C$.   Using the fact that the product of a matrix
 with its comatrix is the determinant, $(X - M) \cdot C = \chi_M$ and thus
 $P(X) \cdot C \equiv P(M) \cdot C \pmod{\chi_M(X)}$.  The span of the entries
-of the left hand side is precisely $P(X) \cdot V$, while the span of the entries
-of the right hand side is contained within $V$ since $P(M) \in M_n(\OK)$.
+of the left hand side is precisely $P(X) \cdot \Lambda$, while the span of the entries
+of the right hand side is contained within $\Lambda$ since $P(M) \in M_n(\OK)$.
 \end{proof}
 
 \begin{cor}
 If $M \in M_n(\OK)$, then $d \chi_M \big(M_n(\OK)\big)$ 
 is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
 \end{cor}
-
-
-\begin{comment}
-\begin{prop} \label{prop:factor_com}
-Let $M \in M_n (\OK)$ be such that $discr(\chi (M)) \neq 0.$
-We assume that $A=\com (X-M)$ is such that $\gcd(A_{1,1}, \chi (M))=1$
-(in $K[X]$).
-Then for $U=col(A,1)$ and $V=A_{1,1}^{-1} row(A,1) \mod \chi (M),$
-both in $\OK[X]^n,$ we have: 
-\[ \com (X-M)= U \cdot {}^t V \mod \chi (M).\]
-\todo{I think that the correct condition is $d \chi_M$ surjective (which is a bit weaker).}
-\end{prop}
-
-
-\begin{proof}
-We first prove that for all $i,j \in \llbracket 1, n \rrbracket,$ we have
-\begin{equation}A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod \chi (M). \label{eqn:2-minors-com} \end{equation}
-Let $\lambda$ be a root of $\chi (M)$ in an algebraic closure of $K.$
-Then $A(\lambda)$ is of rank one.
-Indeed, $A(\lambda) \times (\lambda-M) =0.$
-Since $\chi (M)$ is square-free, then $\lambda-M$ is of rank $n-1$
-and then $A(\lambda)$ is of rank at most one.
-Nevertheless, we can remark that
- $\gcd(A_{1,1}, \chi (M))=1,$ $A_{1,1} \neq 0 \mod (X-\lambda)$
-and thus, $A(\lambda)$ is of rank exactly one.
-As a consequence, all $2 \times 2$-minors of $A(\lambda)$ are zero.
-It means that \[A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod (X-\lambda). \]
-By the Chinese Remainder Theorem, our first result is then proved.
-
-Now, let us take $U=col(A,1)$ the first column of $A$ and
-$V=A_{1,1}^{-1} row(A,1) \mod \chi (M)$ (as $A_{1,1}$ is
-invertible $\mod \chi (M)).$
-Then thanks to \eqref{eqn:2-minors-com}, $U$ and $V$ satisfy the desired equality. 
-\end{proof}
-
-\begin{rem}
-If $M \in M_n (\OK)$ is such that for some $U,V \in O_{K}[X]^n$
-we have $\com (X-M)= U \cdot {}^t V \mod \chi (M)$ and if 
-$P\in GL_n (\OK)$ then
-\[\com (X-PMP^{-1})=(PU) \cdot ( {}^tV P^{-1}) \mod \chi_M.\]
-In other words, factorizability of $\com(X-M)$ is stable
-by change of basis.
-\end{rem}
-\end{comment}
 
 \subsection{Compact form of $d \chi_M$}
 
@@ -513,18 +521,18 @@ Let $\mathscr{C}$ be the companion matrix associated to $\chi_M$:
 \end{matrix} \right)
 \end{equation}
 with $\chi_M = a_0 + a_1 X + \cdots + a_{n-1} X^{n-1} + X^n$.
-By Proposition~\ref{prop:surjectivity}, there exists a matrix 
-$P \in \GL_n(K)$ such that $M = P \mathscr{C} P^{-1}$. Applying the same
-result to the transpose of $M$, we find that there exists another
-invertible matrix $Q \in \GL_n(K)$ such that $M^t = Q \mathscr{C} Q^{-1}$.
+Assume one of the equivalent conditions of Proposition~\ref{prop:surjectivity}, giving a matrix 
+$P \in \GL_n(K)$ such that $M = P \mathscr{C} P^{-1}$. Then Proposition~\ref{prop:surjectivity}
+also holds for $M^T$, yielding an
+invertible matrix $Q \in \GL_n(K)$ with $M^T = Q \mathscr{C} Q^{-1}$.
 
 \begin{prop}
 \label{prop:shortcom}
 We keep the previous notations and assumptions.
-Let $V$ be the row vector $(1, X, \ldots, X^{n-1})$. Then
+Let $Y$ be the row vector $(1, X, \ldots, X^{n-1})$. Then
 \begin{equation}
 \label{eq:shortcom}
-\com(X{-}M) = \alpha \cdot P V^t \cdot V Q^t
+\com(X{-}M) = \alpha \cdot P Y^T \cdot Y Q^T
 \mod \chi_M
 \end{equation}
 for some $\alpha \in K[X]$.
@@ -536,11 +544,11 @@ Write $C = \com(X{-}M)$. From $(X{-}M) \cdot C \equiv 0
 Therefore each column of $P^{-1} C$ lies in the right kernel of $X{-}\mathscr{C}$
 modulo $\chi_M$. On the other hand, a direct computation shows that
 every column vector $W$ lying in the right kernel of $X{-}\mathscr{C}$ modulo 
-$\chi_M$ can be written as $W = w \cdot V^t$ for some $w \in 
-K[X]/\chi_M$. We deduce that $C \equiv P \cdot V^t B \pmod{\chi_M}$
+$\chi_M$ can be written as $W = w \cdot Y^T$ for some $w \in 
+K[X]/\chi_M$. We deduce that $C \equiv P \cdot Y^T B \pmod{\chi_M}$
 for some row vector $B$.
-Applying the same reasoning with $M^t$, we find that $B$ can be
-written $B = \alpha V Q^t$ for some $\alpha \in K[X]/\chi_M$ and
+Applying the same reasoning with $M^T$, we find that $B$ can be
+written $B = \alpha Y Q^T$ for some $\alpha \in K[X]/\chi_M$ and
 we are done.
 \end{proof}
 
@@ -557,7 +565,7 @@ information can be read off of this short form $(\alpha, P, Q,
 With the previous notation, if $U \in GL_n(K),$
 the quadruple for 
 $UMU^{-1}$ is
-$(\alpha, UP, (U^t)^{-1}Q, \chi_M),$
+$(\alpha, UP, (U^T)^{-1}Q, \chi_M),$
 which can be computed in $O(n^\omega)$ operations in $K.$
 This is faster than computing $U \com(X-M) U^{-1},$
 which is, at first sight, in $O(n^4)$ operations in $K.$
@@ -774,11 +782,11 @@ using the invertible pivot $U_{i,i}.$
 
 \noindent 7. \ Rescale to get $U = I_n \mod X^{n+1}.$
 
-\noindent 8. \ $V:=\psi \times P \times Q   \mod X^{n+1}.$ \footnote{The product $P \times Q$
+\noindent 8. \ $Y:=\psi \times P \times Q   \mod X^{n+1}.$ \footnote{The product $P \times Q$
 should be implemented by sequential row operations corresponding to the eliminations in Step 5
 in order to avoid a product of two matrices in $M_n(\OK[X])$.}
 
-\noindent 9. \ \textbf{Return} $V^{\rec,n-1}, \psi^{\rec,n}.$
+\noindent 9. \ \textbf{Return} $Y^{\rec,n-1}, \psi^{\rec,n}.$
 
 \vspace{-1ex}\noindent\hrulefill
 
@@ -863,9 +871,9 @@ to the first column of $B.$
 
 \noindent 5. Let $F$ be the inverse of $C_{1,1} \mod \chi_M$.
 
-\noindent 6. Let $U := \col(C,1)$ and $V := F \cdot \row(C,1) \mod \chi_M$.
+\noindent 6. Let $U := \col(C,1)$ and $Y := F \cdot \row(C,1) \mod \chi_M$.
 
-\noindent 7. Return $\com(X-M):=(PT^{-1}S U \times V S^{-1} T P^{-1}) \mod \chi_M.$
+\noindent 7. Return $\com(X-M):=(PT^{-1}S U \times Y S^{-1} T P^{-1}) \mod \chi_M.$
 
 \vspace{-1ex}\noindent\hrulefill
 
@@ -946,7 +954,7 @@ the short form of $d \chi_M$; we recall that they are related by the
 relations:
 \begin{align*}
 d \chi_M(dM) & =\tr(\com(X{-}M) \cdot dM) \\
-\com(X{-}M) & = \alpha \cdot P V^t \cdot V Q^t \mod \chi_M.
+\com(X{-}M) & = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M.
 \end{align*}
 An approximation to $\chi_M$ can be computed in $\softO(n^\omega)$ operations in $K$
 (\textit{e.g.} as a by-product of \cite{storjohann:01a}).
@@ -973,20 +981,21 @@ The characteristic polynomial $\chi_M$ can be recovered thanks to the
 relation $a_0c_0 + a_1c_1 + \dots + a_{n-1}c_{n-1} = -c_{n-1} \cdot P$.
 
 Now, instead of directly computing $Q$, we first compute a matrix $R$ 
-with the property that $\mathscr{C}^t = R \mathscr{C} R^{-1}$. To do so,
+with the property that $\mathscr{C}^T = R \mathscr{C} R^{-1}$. To do so,
 we apply the same strategy as above except that we start with the vector
 $e = (1, 0, \ldots, 0)$ (and not with a random vector). A simple computation shows
 that, for $1 \leq i \leq n{-}1$, the vector $\mathscr{C}^i e$ has the shape:
 $$\mathscr{C}^i e = (0, \ldots, 0, -a_0, \star, \ldots, \star)$$
 with $n{-}i$ starting zeros. Therefore the $\mathscr{C}^i e$'s form a basis of
-$K^n$, \emph{i.e.} $e$ is always a cyclic vector of $\mathscr{C}$. Once $R$ has
-been computed, we recover $Q$ using the relation $Q = P_\inv^t R$.
+$K^n$, \emph{i.e.} $e$ is always a cyclic vector of $\mathscr{C}$.
+We may then let $R$ have columns $e, \mathscr{C}e, \dots, \mathscr{C}^{n-1}e$
+and recover $Q$ using the relation $Q = P_\inv^T R$.
 
 It remains to compute the scaling factor $\alpha$. For this, we write
 the relation:
 \begin{equation}
 \label{eq:shortcomN}
-\com(X{-}\mathscr{C}) = \alpha \cdot V^t \cdot V R^t \mod \chi_M
+\com(X{-}\mathscr{C}) = \alpha \cdot Y^T \cdot Y R^T \mod \chi_M
 \end{equation}
 which comes from Eq.~\eqref{eq:shortcom} after multiplication on the 
 left by $P^{-1}$ and multiplication on the right by $P$. We observe
@@ -1002,7 +1011,7 @@ We summarize this section with the following theorem:
 Given $M \in M_n(K)$ such that $d \chi_M$ is surjective,
 then one can compute $(\alpha, P, Q, \chi_M)$
 in $K[X]$ such that
-$\com(X{-}N) = \alpha \cdot V^t \cdot V R^t \mod \chi_M$
+$\com(X{-}N) = \alpha \cdot Y^T \cdot Y R^T \mod \chi_M$
 in $\softO(n^\omega)$ operations in $K.$
 \end{theo}
 
@@ -1022,9 +1031,9 @@ optimal precision of eigenvalues of $M.$
 
 \subsection{On the characteristic polynomial}
 
-For $0 \leq k < n$, let $\pi_k : K[X] \to K$ be the mapping taking a 
+For $0 \leq k < n$, let $\beta_k : K[X] \to K$ be the mapping taking a 
 polynomial to its coefficients in $X^k$. By applying 
-\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} to the composite $\pi_k 
+\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} to the composite $\beta_k 
 \circ \chi_M$, one can figure out the optimal precision on the
 $k$-th coefficient of the characteristic polynomial of $M$ (at
 least if $M$ is given at enough precision).
@@ -1037,7 +1046,7 @@ the optimal precision on the $k$-th coefficient of $\chi_M$ is
 $O(\pi^{N'_k})$ where $N'_k$ is given by the formula:
 \begin{equation}
 \label{eq:optjagged}
-N'_k = \min_{1 \leq i, j\leq n} N_{j,i} + \val(\pi_k(C_{i,j})),
+N'_k = \min_{1 \leq i, j\leq n} N_{j,i} + \val(\beta_k(C_{i,j})),
 \end{equation}
 where $C_{i,j}$ is the $(i,j)$ entry of the comatrix $\com(X{-}M)$.
 
@@ -1067,7 +1076,7 @@ where $P$ lies in $\GL_n(\OK)$. Moreover, the latter condition implies
 that $P^{-1} dM P$ runs over $M_n(\OK)$ when $P$ runs over $M_n(\OK)$.
 As a consequence, the integer $N'_k$ giving the optimal precision on the 
 $k$-th coefficient of $M$ is also equal to
-$N + \min_{1 \leq i, j\leq n} \val(\pi_k(C^H_{i,j}))$
+$N + \min_{1 \leq i, j\leq n} \val(\beta_k(C^H_{i,j}))$
 where $C^H_{i,j}$ is the $(i,j)$ entry of $\com(X{-}H)$,
 where $H$ is the Hessenberg form of $M$.
 \end{rem}
@@ -1091,18 +1100,20 @@ and unfortunately, for several instances, may require to increase a lot the prec
 We have made numerical experiments in \textsc{SageMath}~\cite{sage}
 in order to compare the optimal precision obtained with the methods
 explained above with the actual precision obtained by the software.
-For doing so, we picked a sample of $1000$ random matrices $M$ in 
-$M_9(\Q_2)$ where all the entries are given at the same \emph{relative
-precision}.
-We recall that, in \textsc{SageMath}, random elements $x \in \Q_p$ are 
-generated as follows. We fix an integer $N$ --- the so-called relative
-precision --- and generate elements of $\Q_p$ of the shape
-$$x = p^v \cdot \big(a + O\big(p^{N+v_p(a)}\big)\big)$$
+For doing so, we picked a sample of $1000$ matrices $M$ in 
+$M_9(\Q_2)$ where all the entries are chosen randomly as follows.
+We fix an integer $N$, the relative precision, and generate elements of $\Q_p$ of the shape
+\[
+x = p^v \cdot \big(a + O\big(p^{N+v_p(a)}\big)\big)
+\]
 where $v$ is a random integer generated according to the distribution:
-$$\mathbb P [v = 0] = \frac 1 5 \quad ; \quad
+\[
+\mathbb P [v = 0] = \frac 1 5 \quad ; \quad
 \mathbb P [v = n] = \frac 2 {5\cdot |n| \cdot (|n|+1)} \text{ for }
-|n| \geq 1$$
+|n| \geq 1
+\]
 and $a$ is an integer in the range $[0, p^N)$, selected uniformly at random.
+This distribution is chosen merely because it is the default in \textsc{SageMath}.
 
 Once this sample has been generated, we computed, for each $k \in \{0, 
 1, \ldots, 8\}$, the three following quantities:
@@ -1269,15 +1280,15 @@ $$N' = \min_{1 \leq i, j\leq n} \big(N_{j,i} + \val(C_{i,j}(\lambda)) -
 \val(\chi'_M(\lambda))\big)$$
 where $C_{i,j}$ denotes as above the $(i,j)$ entry of $\com(X{-}M)$.
 Writing
-$\com(X{-}M) = \alpha \cdot P V^t \cdot V Q^t \text{ mod } \chi_M$
+$\com(X{-}M) = \alpha \cdot P Y^T \cdot Y Q^T \text{ mod } \chi_M$
 as in Proposition~\ref{prop:shortcom}, we find:
 \begin{align}
 N' & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \nonumber \\
 & \hspace{2mm} + \min_{1 \leq i, j\leq n} \big(N_{j,i} + 
-\val(P_i V(\lambda)^t) + \val(V(\lambda) Q_j^t)\big) \label{eq:Nprime}
+\val(P_i Y(\lambda)^T) + \val(Y(\lambda) Q_j^T)\big) \label{eq:Nprime}
 \end{align}
 where $P_i$ denotes the $i$-th row of $P$ and, similarly, $Q_j$
-denotes the $j$-th row of $Q$. Note moreover that $V(\lambda)$ is
+denotes the $j$-th row of $Q$. Note moreover that $Y(\lambda)$ is
 the row vector $(1, \lambda, \ldots, \lambda^{n-1})$.
 By the discussion of \S \ref{sec:diffFrob}, the exact value of $N'$ can be 
 determined for a cost of $\softO(n^\omega)$ operations in $K$ and
@@ -1287,8 +1298,8 @@ When $M$ is given at flat precision, \emph{i.e.} the $N_{i,j}$'s are all
 equal to some $N$, the formula for $N'$ may be rewritten:
 \begin{align}
 N' & = N + \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \nonumber \\
-& \hspace{2mm} + \min_{1 \leq i \leq n} \val(P_i V(\lambda)^t)
-+ \min_{1 \leq j \leq n} \val(V(\lambda) Q_j^t)\big) \label{eq:Nprimeflat}
+& \hspace{2mm} + \min_{1 \leq i \leq n} \val(P_i Y(\lambda)^T)
++ \min_{1 \leq j \leq n} \val(Y(\lambda) Q_j^T)\big) \label{eq:Nprimeflat}
 \end{align}
 and can therefore now be evaluated for a cost of $\softO(n^\omega)$
 operations in $K$ and only $O(n)$ operations with integers.
@@ -1302,7 +1313,7 @@ we find that the optimal precision on $\lambda_k$ is
 \begin{align*}
 N'_k & = \val(\alpha(\lambda_k)) - \val(\chi'_M(\lambda_k)) \\
 & \hspace{2mm} + \min_{1 \leq i, j\leq n} \big(N_{j,i} + 
-\val(P_i V(\lambda_k)^t) + \val(V(\lambda_k) Q_j^t)\big).
+\val(P_i Y(\lambda_k)^T) + \val(Y(\lambda_k) Q_j^T)\big).
 \end{align*}
 
 \begin{prop}
@@ -1319,7 +1330,7 @@ with integers.
 The $\alpha(\lambda_k)$'s and the $\chi'_M(\lambda_k)$'s can be computed 
 for a cost of $\softO(ns)$ operations in $K$ using fast multipoint 
 evaluation methods (see 10.7 of \cite{gathen-gerhard:13a}).
-On the other hand, we observe that $P_i V(\lambda_k)^t$ is nothing but
+On the other hand, we observe that $P_i Y(\lambda_k)^T$ is nothing but
 the $(i,k)$ entry of the matrix:
 $$P \cdot \left( \begin{matrix}
 \lambda_1 & \cdots & \lambda_s \\
@@ -1332,9 +1343,9 @@ $K$\footnote{It turns out that $\softO(n^2)$ is also possible because
 the right factor is a structured matrix (a truncated Vandermonde):
 computing the above product reduces to evaluating a polynomial at the
 points $\lambda_1, \ldots, \lambda_s$.}. Therefore all the $P_i 
-V(\lambda_k)^t$'s (for $i$ and $k$ varying) 
+Y(\lambda_k)^T$'s (for $i$ and $k$ varying) 
 can be determined with the same complexity. 
-Similarly all the $V(\lambda) Q_j^t$ are computed for the same cost.
+Similarly all the $Y(\lambda) Q_j^T$ are computed for the same cost.
 The first assertion of Proposition~\ref{prop:opteigenvalues} follows.
 The second assertion is now proved similarly to the case of a unique
 eigenvalue.
@@ -1345,3 +1356,46 @@ eigenvalue.
 \bibliography{charpoly}
 
 \end{document}
+
+\begin{comment}
+\begin{prop} \label{prop:factor_com}
+Let $M \in M_n (\OK)$ be such that $discr(\chi (M)) \neq 0.$
+We assume that $A=\com (X-M)$ is such that $\gcd(A_{1,1}, \chi (M))=1$
+(in $K[X]$).
+Then for $U=col(A,1)$ and $\Lambda=A_{1,1}^{-1} row(A,1) \mod \chi (M),$
+both in $\OK[X]^n,$ we have: 
+\[ \com (X-M)= U \cdot ^T \mod \chi (M).\]
+\todo{I think that the correct condition is $d \chi_M$ surjective (which is a bit weaker).}
+\end{prop}
+
+
+\begin{proof}
+We first prove that for all $i,j \in \llbracket 1, n \rrbracket,$ we have
+\begin{equation}A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod \chi (M). \label{eqn:2-minors-com} \end{equation}
+Let $\lambda$ be a root of $\chi (M)$ in an algebraic closure of $K.$
+Then $A(\lambda)$ is of rank one.
+Indeed, $A(\lambda) \times (\lambda-M) =0.$
+Since $\chi (M)$ is square-free, then $\lambda-M$ is of rank $n-1$
+and then $A(\lambda)$ is of rank at most one.
+Nevertheless, we can remark that
+ $\gcd(A_{1,1}, \chi (M))=1,$ $A_{1,1} \neq 0 \mod (X-\lambda)$
+and thus, $A(\lambda)$ is of rank exactly one.
+As a consequence, all $2 \times 2$-minors of $A(\lambda)$ are zero.
+It means that \[A_{1,1} A_{i,j}=A_{1,i}A_{1,j} \mod (X-\lambda). \]
+By the Chinese Remainder Theorem, our first result is then proved.
+
+Now, let us take $U=col(A,1)$ the first column of $A$ and
+$V=A_{1,1}^{-1} row(A,1) \mod \chi (M)$ (as $A_{1,1}$ is
+invertible $\mod \chi (M)).$
+Then thanks to \eqref{eqn:2-minors-com}, $U$ and $V$ satisfy the desired equality. 
+\end{proof}
+
+\begin{rem}
+If $M \in M_n (\OK)$ is such that for some $U,V \in O_{K}[X]^n$
+we have $\com (X-M)= U \cdot V^T \mod \chi (M)$ and if 
+$P\in GL_n (\OK)$ then
+\[\com (X-PMP^{-1})=(PU) \cdot ( V^T P^{-1}) \mod \chi_M.\]
+In other words, factorizability of $\com(X-M)$ is stable
+by change of basis.
+\end{rem}
+\end{comment}
