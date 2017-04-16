@@ -30,7 +30,7 @@
 \DeclareMathOperator{\val}{val}
 \DeclareMathOperator{\pr}{pr}
 \DeclareMathOperator{\tr}{Tr}
-\DeclareMathOperator{\com}{Com}
+\DeclareMathOperator{\adj}{Adj}
 \DeclareMathOperator{\Grass}{Grass}
 \DeclareMathOperator{\Lat}{Lat}
 \DeclareMathOperator{\round}{round}
@@ -48,6 +48,7 @@
 \newcommand{\Q}{\mathbb Q}
 \newcommand{\Qp}{\Q_p}
 \newcommand{\Fp}{\mathbb{F}_p}
+\newcommand{\Fq}{\mathbb{F}_q}
 \newcommand{\R}{\mathbb R}
 \newcommand{\OK}{\mathcal{O}_K}
 
@@ -115,11 +116,11 @@
 \maketitle
 
 \begin{abstract}
-We analyze the precision of the characteristic polynomial $\chi(A)$ of
-an $n \times n$ $p$-adic matrix $A$ using differential precision methods
-developed previously.  When $A$ is integral with precision $O(p^N)$,
+We analyze the precision of the characteristic polynomial $\chi(M)$ of
+an $n \times n$ $p$-adic matrix $M$ using differential precision methods
+developed previously.  When $M$ is integral with precision $O(p^N)$,
 we give a criterion (checkable in time $\softO(n^\omega)$) for
-$\chi(A)$ to have precision exactly $O(p^N)$.  We also give a $\softO(n^3)$
+$\chi(M)$ to have precision exactly $O(p^N)$.  We also give a $\softO(n^3)$
 algorithm for determining the optimal precision when the criterion is not
 satisfied, and give examples when the precision is larger than $O(p^N)$.
 \end{abstract}
@@ -178,21 +179,20 @@ eigenvalue}
 \textbf{Reviewer 3:}
 \begin{enumerate}
 \item \tdo{Convince reviewer that the complexity claimed in Theorem 4.1 is accurate: ``it lacks a precision loss analysis and relies on classic division based algorithms}\\
-      \xavier{One can argue that we do not need \emph{a priori} much accuracy on the precision of $\com(A-X)$ because only the valuations of the entries of the latter matrix are relevant. So counting operations in $K$ makes sense. By the way, we could say at some point that a good idea would be to use relaxed algorithms and increase the precision until we are able to read the valuations.}
+      \xavier{One can argue that we do not need \emph{a priori} much accuracy on the precision of $\adj(M-X)$ because only the valuations of the entries of the latter matrix are relevant. So counting operations in $K$ makes sense. By the way, we could say at some point that a good idea would be to use relaxed algorithms and increase the precision until we are able to read the valuations.}
 \item \done{We have updated the references for characteristic polynomial using Frobenius normal form as suggested.}
-\item \tdo{The definition of comatrix is usually the matrix formed by the cofactors such that $A^{-1} = \com(A)^T / \det(A)$.}
-      \xavier{Ok pour switching $\com$ to $\text{Adj}$ (and adding a sentence explaining the difference with the previous paper).}
+\item \done{We have switched to using the term ``adjugate'' rather than ``comatrix.''}
 \item \tdo{The definitions of companion matrix in the proof of Proposition 2.1 and in Section 2.3 are inconsistent (coefficients on the last column or last row)}\\
       \xavier{Is that enough to replace ``the bottom row'' by ``the last column'' in the proof of Proposition 2.1?}
 \item \done{We have clarified the use of ``repeated eigenvalue'' in the proof of Proposition 2.1.}
-\item \done{We have switched from $A^t$ to $A^T$ to denote the transpose.}
+\item \done{We have switched from $M^t$ to $M^T$ to denote the transpose.}
 \item \tdo{A few explanations on where does the formula for the differential comes from
 would be most welcome (those of [3 Appendix B] and some connection of the trace
 with the fact that we do degree one approx of a charpoly)}
       \xavier{FWIW, I wrote a proof in my lecture at JNCF. Maybe we can just cite it.}
 \item \tdo{In the experiments, (section 5.1), it is not clear which of the two methods is being used to compute the comatrix.}\\
       \xavier{Ok but it is not important (since we are just interested in the result). Should we really say more about that? (In practice, I think that we used the \texttt{adjoint} method of \textsc{sage}.)}
-\item \tdo{Further experiments (with higher dimension, or showing how the two methods for computing com(A) differ), would be welcome.}
+\item \tdo{Further experiments (with higher dimension, or showing how the two methods for computing adj(M) differ), would be welcome.}
 \item \tdo{Clarify the intro paragraph just before the Previous contributions section.}
 \item \tdo{Make the relationship between $P$, $Q$ and $R$ in Theorem 4.1 explicit.}\\
       \xavier{\done{Done.} I've rewritten everything in terms of $P$ and $Q$ only.}
@@ -207,7 +207,7 @@ with the fact that we do degree one approx of a charpoly)}
       \xavier{Well, it is the same, isn't it? Anyway, we may add ``coefficient-wise'' if it's not clear.}
 \item \tdo{In the introduction, clarify what kind of operations are being counted.}
 \item \tdo{In the discussion of existing methods, clarify what we mean by the claim that they do not yield optimal precision.}
-\item \tdo{Define comatrix properly, as requested by reviewer 3.}
+\item \done{We've switched from using ``comatrix'' to using ``adjugate,'' as also requested by reviewer 3.}
 \item \tdo{Please define lattice in the tangent space and provide a simple, illustrative example.}\\
       \xavier{Maybe we should instead remove any mention to the tangent space: it's not really necessary.}
 \item \tdo{The definition of ``flat precision'' and ``jagged precision'' both need to be more clearly defined.}
@@ -316,11 +316,11 @@ Thanks to the application of the framework of differential precision
 of \cite{caruso-roe-vaccon:14a} in \cite{caruso-roe-vaccon:15a},
 we know that the precision of the characteristic polynomial
 $\chi_M$ of a matrix $M \in M_n(\mathbb{Q}_p)$
-is determined by the comatrix $\com(X -M).$
+is determined by the adjugate $\adj(X -M).$
 In this article, we provide:
 \begin{enumerate}
 \renewcommand{\itemsep}{0pt}
-\item Proposition \ref{prop:shortcom}: a factorization of $\com(X -M)$
+\item Proposition \ref{prop:shortcom}: a factorization of $\adj(X -M)$
 as a product of two rank-$1$ matrices (when $M$ has a cyclic vector),
 computable in $\softO(n^\omega)$ operations by Theorem \ref{thm:compute_shortcom}
 \item Corollary \ref{cor:prec_gain}: a simple, $\softO(n^\omega)$ criterion
@@ -346,12 +346,12 @@ whether the characteristic polynomial will have a higher
 precision than the input matrix, and show that the image
 of the set of integral matrices has the structure of an $\OK[X]$-module
 when $M$ is itself integral. Finally, we give a compact description
-of $\com(X-M)$, the main ingredient in the differential.
+of $\adj(X-M)$, the main ingredient in the differential.
 
 In Section \ref{sec:diffHess}, we develop $\softO(n^3)$ algorithms to approximate
-the Hessenberg form of $M$, and through it to find $\com(X-M)$ and thus
+the Hessenberg form of $M$, and through it to find $\adj(X-M)$ and thus
 find the precision of the characteristic polynomial of $M$.  In Section \ref{sec:diffFrob},
-we give a $\softO(n^\omega)$ algorithm to compute the compact description of $\com(X-M)$.
+we give a $\softO(n^\omega)$ algorithm to compute the compact description of $\adj(X-M)$.
 
 Finally, we propose in Section \ref{sec:optjagged}
 algorithms to compute the optimal coefficient-wise precision
@@ -371,7 +371,7 @@ and $\chi$ the characteristic polynomial map, $\chi_M \in K[X]$ for
 the characteristic polynomial of $M$ and $d\chi_M$ for the differential
 of $\chi$ at $M$, as a linear map from $M_n(K)$ to the space
 of polynomials of degree less than $n$.
-We fix an $\omega \in \mathbb{R}$ such that the multiplication
+We fix an $\omega \in \R$ such that the multiplication
 of two matrices over a ring is in $O(n^\omega)$ operations in the
 ring. Currently, the smallest known $\omega$ is less than
 $2.3728639 $ thanks to \cite{legall:14a}. 
@@ -408,12 +408,12 @@ the computation of its derivative $d\chi$, using \cite{caruso-roe-vaccon:14a}*{L
 For a matrix $M \in M_n(K)$, we identify the tangent space $V$
 at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi_M$ with
 the space $K_{<n}[X]$ of polynomials of degree less than $n$.
-Let $\com(M)$ denote the comatrix of $M$ (when $M \in \GL_n(K)$,
-we have $\com(M) = \det(M) M^{-1}$) and $d\chi_M$ the differential at $M$.  Recall
+Let $\adj(M)$ denote the adjugate\footnote{In \citelist{\cite{caruso-roe-vaccon:14a} \cite{caruso-roe-vaccon:15a}} the adjugate was referred to using the non-standard term \emph{comatrix}} of $M$ (when $M \in \GL_n(K)$,
+we have $\adj(M) = \det(M) M^{-1}$) and $d\chi_M$ the differential at $M$.  Recall
 \citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}
 that $d\chi_M$ is given by
 \begin{equation} \label{eq:dchi}
-d\chi_M: dM \mapsto \tr(\com(X-M) \cdot dM).
+d\chi_M: dM \mapsto \tr(\adj(X-M) \cdot dM).
 \end{equation}
 
 \begin{prop}
@@ -435,17 +435,17 @@ The equivalence of \eqref{pt:cyc}, \eqref{pt:1d}, and \eqref{pt:charmin} is stan
 \cite{hoffman-kunze:LinearAlgebra}*{\S 7.1} for example.  We now show
 \eqref{pt:cyc} $\Rightarrow$ \eqref{pt:surj} and \eqref{pt:surj} $\Rightarrow$ \eqref{pt:1d}
 
-For any $A \in \GL_n(K)$, the image of $d\chi$ at $M$ will be the same
-as the image of $d\chi$ at $AMA^{-1}$, so we may assume that
+For any $P \in \GL_n(K)$, the image of $d\chi$ at $M$ will be the same
+as the image of $d\chi$ at $PMP^{-1}$, so we may assume that
 $M$ is a companion matrix.  For a companion matrix, the bottom row of
-$\com(X-M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi_M$ is surjective.
+$\adj(X-M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi_M$ is surjective.
 
 Now suppose that $M$ has an eigenvalue $\lambda$ over $\bar{K}$ occurring in multiple Jordan blocks.
-After conjugating into Jordan normal form over $\bar{K}$, the entries of $\com(X-M)$
+After conjugating into Jordan normal form over $\bar{K}$, the entries of $\adj(X-M)$
 will also be block diagonal, and divisible within each block by the product of $(X-\mu)^{d_\mu}$,
 where $\mu, d_\mu$ ranges over the eigenvalues and dimensions of the other Jordan blocks.
 Since $\lambda$ occurs in two Jordan blocks,
-$X - \lambda$ will divide every entry of $\com(X-M)$ and $d\chi_M$ will not be surjective.
+$X - \lambda$ will divide every entry of $\adj(X-M)$ and $d\chi_M$ will not be surjective.
 \end{proof}
 
 We also have an analogue of Proposition \ref{prop:surjectivity} for integral matrices.
@@ -483,7 +483,7 @@ satisfies:
 \begin{proof}
 
 Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
-of $M$ is the lower convex hull of the Newton polygons of the entries of $\com(X-M)$.
+of $M$ is the lower convex hull of the Newton polygons of the entries of $\adj(X-M)$.
 By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
 occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
 $B_W(1) \subset d\chi_M(B_V(\alpha^{-1}))$.
@@ -514,18 +514,18 @@ often be convenient to view $d \chi_M$ as an $K$-linear mapping
 $M_n(K) \to K[X]/\chi_M(X)$.
 
 \begin{prop}
-Let $A$ be the subring of $K[X]$ consisting of polynomials $P$ for
-which $P(M) \in M_n(\OK)$, and $\Lambda = d \chi_M \big(M_n(\OK)\big)$
+Let $R$ be the subring of $K[X]$ consisting of polynomials $f$ for
+which $f(M) \in M_n(\OK)$, and $\Lambda = d \chi_M \big(M_n(\OK)\big)$
 as a submodule of $K[X]/\chi_M(X)$.  Then $\Lambda$ is stable under 
-multiplication by $A$.
+multiplication by $R$.
 \end{prop}
 \begin{proof}
-Let $C = \com(X-M)$ and $P \in A$.  By \eqref{eq:dchi}, $\Lambda$ is given by
-the $\OK$-span of the entries of $C$.   Using the fact that the product of a matrix
-with its comatrix is the determinant, $(X - M) \cdot C = \chi_M$ and thus
-$P(X) \cdot C \equiv P(M) \cdot C \pmod{\chi_M(X)}$.  The span of the entries
-of the left hand side is precisely $P(X) \cdot \Lambda$, while the span of the entries
-of the right hand side is contained within $\Lambda$ since $P(M) \in M_n(\OK)$.
+Let $A = \adj(X-M)$ and $f \in R$.  By \eqref{eq:dchi}, $\Lambda$ is given by
+the $\OK$-span of the entries of $A$.   Using the fact that the product of a matrix
+with its adjugate is the determinant, $(X - M) \cdot A = \chi_M$ and thus
+$f(X) \cdot A \equiv f(M) \cdot A \pmod{\chi_M(X)}$.  The span of the entries
+of the left hand side is precisely $f(X) \cdot \Lambda$, while the span of the entries
+of the right hand side is contained within $\Lambda$ since $f(M) \in M_n(\OK)$.
 \end{proof}
 
 \begin{cor}
@@ -558,27 +558,27 @@ We keep the previous notations and assumptions.
 Let $Y$ be the row vector $(1, X, \ldots, X^{n-1})$. Then
 \begin{equation}
 \label{eq:shortcom}
-\com(X{-}M) = \alpha \cdot P Y^T \cdot Y Q^T
+\adj(X{-}M) = \alpha \cdot P Y^T \cdot Y Q^T
 \mod \chi_M
 \end{equation}
 for some $\alpha \in K[X]$.
 \end{prop}
 
 \begin{proof}
-Write $C = \com(X{-}M)$. From $(X{-}M) \cdot C \equiv 0 
-\pmod{\chi_M}$, we deduce $(X{-}\mathscr{C}) \cdot P^{-1} C \equiv 0 \pmod{\chi_M}$. 
-Therefore each column of $P^{-1} C$ lies in the right kernel of $X{-}\mathscr{C}$
+Write $A = \adj(X{-}M)$. From $(X{-}M) \cdot A \equiv 0 
+\pmod{\chi_M}$, we deduce $(X{-}\mathscr{C}) \cdot P^{-1} A \equiv 0 \pmod{\chi_M}$. 
+Therefore each column of $P^{-1} A$ lies in the right kernel of $X{-}\mathscr{C}$
 modulo $\chi_M$. On the other hand, a direct computation shows that
 every column vector $W$ lying in the right kernel of $X{-}\mathscr{C}$ modulo 
 $\chi_M$ can be written as $W = w \cdot Y^T$ for some $w \in 
-K[X]/\chi_M$. We deduce that $C \equiv P \cdot Y^T B \pmod{\chi_M}$
+K[X]/\chi_M$. We deduce that $A \equiv P \cdot Y^T B \pmod{\chi_M}$
 for some row vector $B$.
 Applying the same reasoning with $M^T$, we find that $B$ can be
 written $B = \alpha Y Q^T$ for some $\alpha \in K[X]/\chi_M$ and
 we are done.
 \end{proof}
 
-Proposition~\ref{prop:shortcom} shows that $\com(X{-}M)$ can be encoded 
+Proposition~\ref{prop:shortcom} shows that $\adj(X{-}M)$ can be encoded 
 by the datum of the quadruple $(\alpha, P, Q, \chi_M)$ whose total size 
 stays within $O(n^2)$ : the polynomials $\alpha$ and $\chi_M$ are 
 determined by $2n$ coefficients while we need $2n^2$ entries to 
@@ -593,7 +593,7 @@ the quadruple for
 $UMU^{-1}$ is
 $(\alpha, UP, (U^T)^{-1}Q, \chi_M),$
 which can be computed in $O(n^\omega)$ operations in $K.$
-This is faster than computing $U \com(X-M) U^{-1},$
+This is faster than computing $U \adj(X-M) U^{-1},$
 which is, at first sight, in $O(n^4)$ operations in $K.$
 \end{rem}
 
@@ -603,7 +603,7 @@ which is, at first sight, in $O(n^4)$ operations in $K.$
 In this section, we combine the computation of a Hessenberg form
 of a matrix and the computation of the inverse through the Smith normal form (SNF)
 over a complete discrete valuation field (CDVF)
-to compute $\com(X-M)$ and $d \chi$.
+to compute $\adj(X-M)$ and $d \chi$.
 If $M \in M_n(\OK)$, then only division by invertible
 elements of $\OK$ will occur.
 %The computation of a Hessenberg form provides an $O(n^3)$
@@ -675,7 +675,7 @@ $P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k\llp X\rrp$, and the
 Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k\llp X \rrp.$
 Inside the nested \textbf{for} loop, if we want to eliminate $\pi^{u_y} \varepsilon_y+O(\pi^{n_y})$ with pivot $\pi^{u_x} \varepsilon_x+O(\pi^{n_x}),$
 with the $\varepsilon$'s being units,
-the corresponding coefficient of the corresponding shear matrix is the lift(in $\mathbb{Z}, $  $\mathbb{F}_q[X],$ $\mathbb{Q}[X]$ or adequate extension) of $\pi^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{u_y-u_x\min (n_x-u_x,n_y-u_y)}.$
+the corresponding coefficient of the corresponding shear matrix is the lift(in $\mathbb{Z}, $  $\Fq[X],$ $\Q[X]$ or adequate extension) of $\pi^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{u_y-u_x\min (n_x-u_x,n_y-u_y)}.$
 Exactness follows directly. Over other fields, we can not lift, but the computations are still valid.
 The rest is clear.
 \end{proof}
@@ -728,62 +728,62 @@ we see that $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ is known at precision at least $O
 which concludes the proof.
 \end{proof}
 
-\subsection{The comatrix of $X{-}H$}
+\subsection{The adjugate of $X{-}H$}
 
-In this section, we compute $\com(X-H)$ for a Hessenberg matrix $H$
+In this section, we compute $\adj(X-H)$ for a Hessenberg matrix $H$
 using the Smith normal form computation of the previous section.
-The entries of $\com(X-H)$ lie in $K[X]$, which is not a CDVF,
+The entries of $\adj(X-H)$ lie in $K[X]$, which is not a CDVF,
 so we may not directly apply the methods of the previous section.
-However, we may relate $\com(X-H)$ to $\com(1-XH)$, whose
-entries lie in the CDVF $K\llp X\rrp$.  In this way, we compute $\com(X-H)$
+However, we may relate $\adj(X-H)$ to $\adj(1-XH)$, whose
+entries lie in the CDVF $K\llp X\rrp$.  In this way, we compute $\adj(X-H)$
 using an SNF method, with no division in $K$.
 
 First, we need a lemma relating comatrices of
 similar matrices:
 
-\begin{lem} \label{lem:comatrix_of_similar}
+\begin{lem} \label{lem:adjugate_of_similar}
 If $M_1,M_2 \in M_n(K)$ and $P \in GL_n (K)$ are such that
 $M_1=PM_2P^{-1},$ then:
-\[ \com (X-M_1)=P \com (X-M_2) P^{-1}. \] 
+\[ \adj (X-M_1)=P \adj (X-M_2) P^{-1}. \] 
 \end{lem}
 
 The second ingredient we need is reciprocal polynomials.
 We extend its definition to matrices of polynomials.
 \begin{deftn}
-Let $d \in \mathbb{N}$ and $P \in K[X]$ of degree at most $d.$ 
-We define the reciprocal polynomial of order $d$ of $P$ as $P^{\rec,d}=X^d P \left( 1/X \right).$
-Let $A \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
-We denote by $A^{\rec,d}$ the matrix with $(A^{\rec,d})_{i,j} = (A_{i,j})^{\rec,d}$.
+Let $d \in \mathbb{N}$ and $f \in K[X]$ of degree at most $d.$ 
+We define the reciprocal polynomial of order $d$ of $f$ as $f^{\rec,d}=X^d f \left( 1/X \right).$
+Let $F \in M_n(K[X])$ a matrix of polynomials of degree at most $d.$
+We denote by $F^{\rec,d}$ the matrix with $(F^{\rec,d})_{i,j} = (F_{i,j})^{\rec,d}$.
 \end{deftn}
 We then have the following result :
 \begin{lem}
 Let $M \in M_n(K).$ Then:
 \begin{eqnarray*}
-\com(1-XM)^{\rec,n-1}=&\com(X-M), \\
-(\chi_M I_n)^{\rec,n}=&(1-XM) \com(1-XM).\\
+\adj(1-XM)^{\rec,n-1}=&\adj(X-M), \\
+(\chi_M I_n)^{\rec,n}=&(1-XM) \adj(1-XM).\\
 \end{eqnarray*}
 \end{lem}
 \begin{proof}
 It all comes down to the following result:
-let $A \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
-then $\det (A^{\rec,1})=\det(A)^{\rec,d}.$
-Indeed, one can use multilinearity of the determinant on $X^d \det(A(1/X))$
+let $F \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
+then $\det (F^{\rec,1})=\det(F)^{\rec,d}.$
+Indeed, one can use multilinearity of the determinant on $X^d \det(F(1/X))$
 to prove this result.
 It directly implies the second part of the lemma; the first part follows
-from the fact that the entries of $\com(X-M)$ and of $\com(1-XM)$
+from the fact that the entries of $\adj(X-M)$ and of $\adj(1-XM)$
 are determinants of size $n-1$.
 \end{proof}
 
-This lemma allows us to compute $\com(1-XM)$ instead of $\com(X-M).$
+This lemma allows us to compute $\adj(1-XM)$ instead of $\adj(X-M).$
 This has a remarkable advantage: the pivots during the computation of
-the SNF of $\com(1-XM)$ are units of $\OK\llb X\rrb,$ and are known
+the SNF of $\adj(1-XM)$ are units of $\OK\llb X\rrb,$ and are known
 in advance to be on the diagonal. This leads to a very smooth
 precision and complexity behaviour when the input matrix lives in 
 $M_n(\OK).$ 
 
 \noindent\hrulefill
 
-\noindent {\bf Algorithm 2:} {\tt Approximate $\com (X -H)$ }
+\noindent {\bf Algorithm 2:} {\tt Approximate $\adj (X -H)$ }
 
 \noindent{\bf Input:} an approximate Hessenberg matrix $H$ in $M_n(\OK).$
 
@@ -820,7 +820,7 @@ in order to avoid a product of two matrices in $M_n(\OK[X])$.}
 
 \begin{theo}
 Let $H \in M_n(\OK)$ be an approximate Hessenberg matrix.
-Then, using Algorithm 2, one can compute $\com (X -H)$
+Then, using Algorithm 2, one can compute $\adj (X -H)$
 and $\chi_H$ in 
 $\softO (n^3)$ operations in $\OK$ at the precision given by $H.$
 \end{theo}
@@ -861,10 +861,10 @@ entry matrix with coefficients known at flat precision,
 Algorithms 1 and 2 are enough to
 know the optimal jagged precision on $\chi_M.$
 
-\subsection{The comatrix of $X{-}M$}
+\subsection{The adjugate of $X{-}M$}
 
 In this section, we combine Proposition \ref{prop:shortcom}
-with Algorithm 2 to compute the comatrix of $X-M$
+with Algorithm 2 to compute the adjugate of $X-M$
 when $\chi_M$ is squarefree.   Note that this condition on
 $\chi_M$ is equivalent to $M$ being diagonalizable under
 the assumption that $d\chi_M$ is surjective.  The result is
@@ -873,7 +873,7 @@ divisions are for gcd and modular inverse computations.
 
 \noindent\hrulefill
 
-\noindent {\bf Algorithm 3:} {\tt Approximate $\com (X{-}M)$ }
+\noindent {\bf Algorithm 3:} {\tt Approximate $\adj (X{-}M)$ }
 
 \noindent{\bf Input:} an approx. $M \in M_n(\OK),$ with $\disc(\chi_M) \neq 0.$ 
 
@@ -882,7 +882,7 @@ divisions are for gcd and modular inverse computations.
 \noindent 0.\ Find $P \in GL_n(\OK)$ and $H \in M_n(\OK),$ approximate Hessenberg,
 such that $M=PHP^{-1},$ using Algorithm 1. 
 
-\noindent 1.\ Compute $A=\com (X-H)$ and $\chi_M = \chi_H$ using Algorithm 2.
+\noindent 1.\ Compute $A=\adj (X-H)$ and $\chi_M = \chi_H$ using Algorithm 2.
 
 
 \noindent 2.\ Do $\row(A,1) \leftarrow \row(A,1)+\sum_{i=2}^n \mu_i \row(A,i),$ for
@@ -899,7 +899,7 @@ to the first column of $B.$
 
 \noindent 6. Let $U := \col(C,1)$ and $Y := F \cdot \row(C,1) \mod \chi_M$.
 
-\noindent 7. Return $\com(X-M):=(PT^{-1}S U \times Y S^{-1} T P^{-1}) \mod \chi_M.$
+\noindent 7. Return $\adj(X-M):=(PT^{-1}S U \times Y S^{-1} T P^{-1}) \mod \chi_M.$
 
 \vspace{-1ex}\noindent\hrulefill
 
@@ -910,7 +910,7 @@ to the first column of $B.$
 \label{thm:alg3}
 For $M \in M_n(\OK)$ such that $\disc( \chi_M) \neq 0,$
 Algorithm 3 computes
-$\com (X-M) \pmod{\chi_M}$ in average complexity $\softO (n^3)$
+$\adj (X-M) \pmod{\chi_M}$ in average complexity $\softO (n^3)$
 operations in $K$.
 The only divisions occur in taking gcds and inverses modulo $\chi_M$.
 \end{theo}
@@ -979,8 +979,8 @@ surjective. Let $(\alpha, P, Q, \chi_M)$ be the quadruple encoding
 the short form of $d \chi_M$; we recall that they are related by the
 relations:
 \begin{align*}
-d \chi_M(dM) & =\tr(\com(X{-}M) \cdot dM) \\
-\com(X{-}M) & = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M.
+d \chi_M(dM) & =\tr(\adj(X{-}M) \cdot dM) \\
+\adj(X{-}M) & = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M.
 \end{align*}
 An approximation to $\chi_M$ can be computed in $\softO(n^\omega)$ operations in $K$
 (\textit{e.g.} as a by-product of \cite{storjohann:01a}).
@@ -1021,7 +1021,7 @@ It remains to compute the scaling factor $\alpha$. For this, we write
 the relation:
 \begin{equation}
 \label{eq:shortcomN}
-\com(X{-}\mathscr{C}) = \alpha \cdot Y^T \cdot Y R^T \mod \chi_M
+\adj(X{-}\mathscr{C}) = \alpha \cdot Y^T \cdot Y R^T \mod \chi_M
 \end{equation}
 which comes from Eq.~\eqref{eq:shortcom} after multiplication on the 
 left by $P^{-1}$ and multiplication on the right by $P$. We observe
@@ -1037,7 +1037,7 @@ We summarize this section with the following theorem:
 Given $M \in M_n(K)$ such that $d \chi_M$ is surjective,
 then one can compute $(\alpha, P, Q, \chi_M)$
 in $K[X]$ such that
-$\com(X{-}N) = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M$
+$\adj(X{-}N) = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M$
 in $\softO(n^\omega)$ operations in $K.$
 \end{theo}
 
@@ -1045,7 +1045,7 @@ in $\softO(n^\omega)$ operations in $K.$
 \label{sec:optjagged}
 
 In the previous Sections, \ref{sec:diffHess} and \ref{sec:diffFrob},
-we have proposed algorithms to obtain the comatrix of 
+we have proposed algorithms to obtain the adjugate of 
 $X-M.$ Our motivation for these computations is to then
 be able to understand what is the optimal precision on $\chi_M.$
 In this section, we provide some answers to this question,
@@ -1070,9 +1070,9 @@ the optimal precision on the $k$-th coefficient of $\chi_M$ is
 $O(\pi^{N'_k})$ where $N'_k$ is given by the formula:
 \begin{equation}
 \label{eq:optjagged}
-N'_k = \min_{1 \leq i, j\leq n} N_{j,i} + \val(\beta_k(C_{i,j})),
+N'_k = \min_{1 \leq i, j\leq n} N_{j,i} + \val(\beta_k(A_{i,j})),
 \end{equation}
-where $C_{i,j}$ is the $(i,j)$ entry of the comatrix $\com(X{-}M)$.
+where $A_{i,j}$ is the $(i,j)$ entry of the adjugate $\adj(X{-}M)$.
 
 \begin{prop} \label{prop:optimal_jagged}
 If $M \in M_n(\OK)$ is given at (high enough) jagged precision, 
@@ -1082,7 +1082,7 @@ $\softO (n^3)$ operations in $K$.
 
 \begin{proof}
 We have seen in \S \ref{sec:diffHess} and \S \ref{sec:diffFrob}
-that the computation of the matrix $C = \com(X{-}M)$ can be carried out 
+that the computation of the matrix $A = \adj(X{-}M)$ can be carried out 
 within $\softO(n^3)$ operations in $K$ (either with the Hessenberg 
 method or the Frobenius method). We conclude by applying 
 Eq.~\eqref{eq:optjagged} which requires no further operation in $K$
@@ -1093,15 +1093,15 @@ integers).
 \begin{rem}
 If $M \in M_n(\OK)$ is given at (high enough) \emph{flat} precision, 
 then we can avoid the final base change step in the Hessenberg method.
-Indeed, observe that, thanks to Lemma \ref{lem:comatrix_of_similar}, 
+Indeed, observe that, thanks to Lemma \ref{lem:adjugate_of_similar}, 
 we can write:
-$$\tr(\com (X{-}M) \cdot dM)=\tr(\com (X{-}H)\cdot P^{-1} dM P)$$
+$$\tr(\adj (X{-}M) \cdot dM)=\tr(\adj (X{-}H)\cdot P^{-1} dM P)$$
 where $P$ lies in $\GL_n(\OK)$. Moreover, the latter condition implies
 that $P^{-1} dM P$ runs over $M_n(\OK)$ when $P$ runs over $M_n(\OK)$.
 As a consequence, the integer $N'_k$ giving the optimal precision on the 
 $k$-th coefficient of $M$ is also equal to
-$N + \min_{1 \leq i, j\leq n} \val(\beta_k(C^H_{i,j}))$
-where $C^H_{i,j}$ is the $(i,j)$ entry of $\com(X{-}H)$,
+$N + \min_{1 \leq i, j\leq n} \val(\beta_k(A^H_{i,j}))$
+where $A^H_{i,j}$ is the $(i,j)$ entry of $\adj(X{-}H)$,
 where $H$ is the Hessenberg form of $M$.
 \end{rem}
 
@@ -1284,7 +1284,7 @@ function $f : \calU \to K$ such that:
 The function $f$ is strictly differentiable on a neighborhood of 
 $M_\app$.
 The differential of $f$ at $M$ is the linear mapping:
-$$dM \mapsto d \lambda = - \frac{\tr(\com(\lambda-M) \cdot dM)}
+$$dM \mapsto d \lambda = - \frac{\tr(\adj(\lambda-M) \cdot dM)}
 {\chi'_M(\lambda)}$$
 where $\chi'_M$ is the usual derivative of $\chi_M$.
 \end{lem}
@@ -1292,7 +1292,7 @@ where $\chi'_M$ is the usual derivative of $\chi_M$.
 \begin{proof}
 The first assertion follows from the implicit function Theorem.
 Differentiating the relation $\chi_M(\lambda) = 0$, we get
-$\chi'_M(\lambda) \cdot d \lambda + \tr(\com(X-M) \cdot dM)(\lambda) = 0$,
+$\chi'_M(\lambda) \cdot d \lambda + \tr(\adj(X-M) \cdot dM)(\lambda) = 0$,
 from which the Lemma follows.
 \end{proof}
 
@@ -1300,11 +1300,11 @@ from which the Lemma follows.
 Lemma 3.4 of \cite{caruso-roe-vaccon:14a} now implies that, if the
 $N_{i,j}$'s are large enough and sufficiently well balanced, the optimal
 precision on the eigenvalue $\lambda$ is $O(\pi^{N'})$ with:
-$$N' = \min_{1 \leq i, j\leq n} \big(N_{j,i} + \val(C_{i,j}(\lambda)) - 
+$$N' = \min_{1 \leq i, j\leq n} \big(N_{j,i} + \val(A_{i,j}(\lambda)) - 
 \val(\chi'_M(\lambda))\big)$$
-where $C_{i,j}$ denotes as above the $(i,j)$ entry of $\com(X{-}M)$.
+where $A_{i,j}$ denotes as above the $(i,j)$ entry of $\adj(X{-}M)$.
 Writing
-$\com(X{-}M) = \alpha \cdot P Y^T \cdot Y Q^T \text{ mod } \chi_M$
+$\adj(X{-}M) = \alpha \cdot P Y^T \cdot Y Q^T \text{ mod } \chi_M$
 as in Proposition~\ref{prop:shortcom}, we find:
 \begin{align}
 N' & = \val(\alpha(\lambda)) - \val(\chi'_M(\lambda)) \nonumber \\
@@ -1384,11 +1384,11 @@ eigenvalue.
 \begin{comment}
 \begin{prop} \label{prop:factor_com}
 Let $M \in M_n (\OK)$ be such that $discr(\chi (M)) \neq 0.$
-We assume that $A=\com (X-M)$ is such that $\gcd(A_{1,1}, \chi (M))=1$
+We assume that $A=\adj (X-M)$ is such that $\gcd(A_{1,1}, \chi (M))=1$
 (in $K[X]$).
 Then for $U=col(A,1)$ and $\Lambda=A_{1,1}^{-1} row(A,1) \mod \chi (M),$
 both in $\OK[X]^n,$ we have: 
-\[ \com (X-M)= U \cdot ^T \mod \chi (M).\]
+\[ \adj (X-M)= U \cdot ^T \mod \chi (M).\]
 \todo{I think that the correct condition is $d \chi_M$ surjective (which is a bit weaker).}
 \end{prop}
 
@@ -1416,10 +1416,10 @@ Then thanks to \eqref{eqn:2-minors-com}, $U$ and $V$ satisfy the desired equalit
 
 \begin{rem}
 If $M \in M_n (\OK)$ is such that for some $U,V \in O_{K}[X]^n$
-we have $\com (X-M)= U \cdot V^T \mod \chi (M)$ and if 
+we have $\adj (X-M)= U \cdot V^T \mod \chi (M)$ and if 
 $P\in GL_n (\OK)$ then
-\[\com (X-PMP^{-1})=(PU) \cdot ( V^T P^{-1}) \mod \chi_M.\]
-In other words, factorizability of $\com(X-M)$ is stable
+\[\adj (X-PMP^{-1})=(PU) \cdot ( V^T P^{-1}) \mod \chi_M.\]
+In other words, factorizability of $\adj(X-M)$ is stable
 by change of basis.
 \end{rem}
 \end{comment}
