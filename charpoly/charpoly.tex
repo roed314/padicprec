@@ -164,9 +164,11 @@ eigenvalue}
 \begin{enumerate}
 \item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}
 \item \tdo{In section 3, Algorithm 1: what is the cost of step 5, and how did you avoid quartic complexity?}\\
-      \xavier{I think that the cost is $O(n^2)$ because it corresponds to an elementary operation of rows/columns. Is that correct?}
+      \xavier{I think that the cost is $O(n^2)$ because it corresponds to an elementary operation of rows/columns. Is that correct?} \\
+      \david{I agree.  I think we just need to explain that the matrix products are just notational, not actually computed.}
 \item \tdo{In section 4, give a concrete construction for approximating the characteristic polynomial as a ``by product'' of the work of [15].}\\
-      \xavier{I do not really understand this remark. I mean: once we have the Frobenius invariants, the characteristic polynomial is just the product of them, isn't it?}
+      \xavier{I do not really understand this remark. I mean: once we have the Frobenius invariants, the characteristic polynomial is just the product of them, isn't it?}\\
+      \david{Agreed.  I think I can clarify the language somewhat, but there's no real work to be done.}
 \item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
 \item \done{We clarified why we chose the distribution in Figure 1.}
 \item \tdo{Think about whether Proposition 5.6 can be sped up using the work of Kedlaya and Umans.}\\
@@ -188,13 +190,13 @@ eigenvalue}
 \item \tdo{A few explanations on where does the formula for the differential comes from
 would be most welcome (those of [3 Appendix B] and some connection of the trace
 with the fact that we do degree one approx of a charpoly)}
-      \xavier{FWIW, I wrote a proof in my lecture at JNCF. Maybe we can just cite it.}
+      \xavier{FWIW, I wrote a proof in my lecture at JNCF. Maybe we can just cite it.}\\
+      \david{Citing it seems reasonable.}
 \item \tdo{In the experiments, (section 5.1), it is not clear which of the two methods is being used to compute the comatrix.}\\
-      \xavier{Ok but it is not important (since we are just interested in the result). Should we really say more about that? (In practice, I think that we used the \texttt{adjoint} method of \textsc{sage}.)}
+      \xavier{Ok but it is not important (since we are just interested in the result). Should we really say more about that? (In practice, I think that we used the \texttt{adjoint} method of \textsc{sage}.)}\\
+      \david{I had the same reaction when I first saw the results.  I think we can say something to make clearer that it doesn't matter how it is computed.}
 \item \tdo{Further experiments (with higher dimension, or showing how the two methods for computing adj(M) differ), would be welcome.}
 \item \tdo{Clarify the intro paragraph just before the Previous contributions section.}
-\item \tdo{Make the relationship between $P$, $Q$ and $R$ in Theorem 4.1 explicit.}\\
-      \xavier{\done{Done.} I've rewritten everything in terms of $P$ and $Q$ only.}
 \item \done{We have carried out the other minor corrections suggested.}
 \end{enumerate}
 \textbf{Reviewer 5:}
@@ -208,7 +210,8 @@ with the fact that we do degree one approx of a charpoly)}
 \item \tdo{In the discussion of existing methods, clarify what we mean by the claim that they do not yield optimal precision.}
 \item \done{We've switched from using ``comatrix'' to using ``adjugate,'' as also requested by reviewer 3.}
 \item \tdo{Please define lattice in the tangent space and provide a simple, illustrative example.}\\
-      \xavier{Maybe we should instead remove any mention to the tangent space: it's not really necessary.}
+      \xavier{Maybe we should instead remove any mention to the tangent space: it's not really necessary.}\\
+      \david{That's probably a good idea.  We'll have to make a remark about ignoring the leading monic term.}
 \item \tdo{The definition of ``flat precision'' and ``jagged precision'' both need to be more clearly defined.}
 \end{enumerate}
 \textbf{General clarity comments:}
