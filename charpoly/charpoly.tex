@@ -182,8 +182,7 @@ eigenvalue}
       \xavier{One can argue that we do not need \emph{a priori} much accuracy on the precision of $\adj(M-X)$ because only the valuations of the entries of the latter matrix are relevant. So counting operations in $K$ makes sense. By the way, we could say at some point that a good idea would be to use relaxed algorithms and increase the precision until we are able to read the valuations.}
 \item \done{We have updated the references for characteristic polynomial using Frobenius normal form as suggested.}
 \item \done{We have switched to using the term ``adjugate'' rather than ``comatrix.''}
-\item \tdo{The definitions of companion matrix in the proof of Proposition 2.1 and in Section 2.3 are inconsistent (coefficients on the last column or last row)}\\
-      \xavier{Is that enough to replace ``the bottom row'' by ``the last column'' in the proof of Proposition 2.1?}
+\item \done{We have given a definition of the companion matrix in our notation section and adjusted the proof of Proposition 2.1 accordingly.}
 \item \done{We have clarified the use of ``repeated eigenvalue'' in the proof of Proposition 2.1.}
 \item \done{We have switched from $M^t$ to $M^T$ to denote the transpose.}
 \item \tdo{A few explanations on where does the formula for the differential comes from
@@ -379,8 +378,20 @@ We will denote by $I_n$ the identity matrix of rank $n$ in $M_n(K).$
 When there is no ambiguity, we will drop this $I_n$
 for scalar matrices, \textit{e.g.} for $\lambda \in K$
 and $M \in M_n (K),$ $\lambda-M$ denotes $\lambda I_n - M.$
-Finally, we write $\sigma_1(M), \dots, \sigma_n(M)$ for the
+We write $\sigma_1(M), \dots, \sigma_n(M)$ for the
 elementary divisors of $M$, sorted in increasing order of valuation.
+Finally, given a polynomial $\chi(X) = a_0 + a_1 X + \cdots + a_{n-1} X^{n-1} + X^n$,
+the \emph{companion matrix} $\mathscr{C}$ associated to $\chi$ is
+\begin{equation}
+\label{eq:companion}
+\mathscr{C} = \left( \begin{matrix}
+0 & 1 & 0 & \cdots & 0 \\
+0 & 0 & 1 & \ddots & \vdots \\
+\vdots & \vdots & \ddots & \ddots & 0 \\
+0 & 0 & \cdots & 0 & 1 \\
+-a_0 & -a_1 & \cdots & \cdots & -a_{n-1}
+\end{matrix} \right).
+\end{equation}
 
 \section{Theoretical study}
 \label{sec:theo_study}
@@ -437,7 +448,7 @@ The equivalence of \eqref{pt:cyc}, \eqref{pt:1d}, and \eqref{pt:charmin} is stan
 
 For any $P \in \GL_n(K)$, the image of $d\chi$ at $M$ will be the same
 as the image of $d\chi$ at $PMP^{-1}$, so we may assume that
-$M$ is a companion matrix.  For a companion matrix, the bottom row of
+$M$ is a companion matrix.  For a companion matrix, the last column of
 $\adj(X-M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi_M$ is surjective.
 
 Now suppose that $M$ has an eigenvalue $\lambda$ over $\bar{K}$ occurring in multiple Jordan blocks.
@@ -535,18 +546,7 @@ is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
 
 \subsection{Compact form of $d \chi_M$}
 
-Let $\mathscr{C}$ be the companion matrix associated to $\chi_M$:
-\begin{equation}
-\label{eq:companion}
-\mathscr{C} = \left( \begin{matrix}
-0 & 1 & 0 & \cdots & 0 \\
-0 & 0 & 1 & \ddots & \vdots \\
-\vdots & \vdots & \ddots & \ddots & 0 \\
-0 & 0 & \cdots & 0 & 1 \\
--a_0 & -a_1 & \cdots & \cdots & -a_{n-1}
-\end{matrix} \right)
-\end{equation}
-with $\chi_M = a_0 + a_1 X + \cdots + a_{n-1} X^{n-1} + X^n$.
+Let $\mathscr{C}$ be the companion matrix associated to $\chi_M$ as in \eqref{eq:companion}.
 Assume one of the equivalent conditions of Proposition~\ref{prop:surjectivity}, giving a matrix 
 $P \in \GL_n(K)$ such that $M = P \mathscr{C} P^{-1}$. Then Proposition~\ref{prop:surjectivity}
 also holds for $M^T$, yielding an
