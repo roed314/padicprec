@@ -69,6 +69,10 @@
 
 \newcommand{\done}[1]{\textcolor{blue}{#1}}
 \newcommand{\tdo}[1]{\textcolor{red}{#1}}
+\definecolor{answer}{rgb}{0,0.5,0.2}
+\newcommand{\xavier}[1]{\textcolor{answer}{{\bf Xavier:} #1}}
+\newcommand{\tristan}[1]{\textcolor{answer}{{\bf Tristan:} #1}}
+\newcommand{\david}[1]{\textcolor{answer}{{\bf David:} #1}}
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
@@ -158,11 +162,14 @@ eigenvalue}
 \noindent \textbf{Reviewer 1:}
 \begin{enumerate}
 \item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}
-\item \tdo{In section 3, Algorithm 1: what is the cost of step 5, and how did you avoid quartic complexity?}
-\item \tdo{In section 4, give a concrete construction for approximating the characteristic polynomial as a ``by product'' of the work of [15].}
+\item \tdo{In section 3, Algorithm 1: what is the cost of step 5, and how did you avoid quartic complexity?}\\
+      \xavier{I think that the cost is $O(n^2)$ because it corresponds to an elementary operation of rows/columns. Is that correct?}
+\item \tdo{In section 4, give a concrete construction for approximating the characteristic polynomial as a ``by product'' of the work of [15].}\\
+      \xavier{I do not really understand this remark. I mean: once we have the Frobenius invariants, the characteristic polynomial is just the product of them, isn't it?}
 \item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
 \item \done{We clarified why we chose the distribution in Figure 1.}
-\item \tdo{Think about whether Proposition 5.6 can be sped up using the work of Kedlaya and Umans.}
+\item \tdo{Think about whether Proposition 5.6 can be sped up using the work of Kedlaya and Umans.}\\
+      \xavier{I cannot see how Kedlaya--Umans can help: the cost $\softO(n^\omega)$ comes from the computation of a Frobenius normal form...}
 \end{enumerate}
 \textbf{Reviewer 2:}
 \begin{enumerate}
@@ -170,30 +177,39 @@ eigenvalue}
 \end{enumerate}
 \textbf{Reviewer 3:}
 \begin{enumerate}
-\item \tdo{Convince reviewer that the complexity claimed in Theorem 4.1 is accurate: ``it lacks a precision loss analysis and relies on classic division based algorithms}
+\item \tdo{Convince reviewer that the complexity claimed in Theorem 4.1 is accurate: ``it lacks a precision loss analysis and relies on classic division based algorithms}\\
+      \xavier{One can argue that we do not need \emph{a priori} much accuracy on the precision of $\com(A-X)$ because only the valuations of the entries of the latter matrix are relevant. So counting operations in $K$ makes sense. By the way, we could say at some point that a good idea would be to use relaxed algorithms and increase the precision until we are able to read the valuations.}
 \item \done{We have updated the references for characteristic polynomial using Frobenius normal form as suggested.}
 \item \tdo{The definition of comatrix is usually the matrix formed by the cofactors such that $A^{-1} = \com(A)^T / \det(A)$.}
-\item \tdo{The definitions of companion matrix in the proof of Proposition 2.1 and in Section 2.3 are inconsistent (coefficients on the last column or last row)}
+      \xavier{Ok pour switching $\com$ to $\text{Adj}$ (and adding a sentence explaining the difference with the previous paper).}
+\item \tdo{The definitions of companion matrix in the proof of Proposition 2.1 and in Section 2.3 are inconsistent (coefficients on the last column or last row)}\\
+      \xavier{Is that enough to replace ``the bottom row'' by ``the last column'' in the proof of Proposition 2.1?}
 \item \done{We have clarified the use of ``repeated eigenvalue'' in the proof of Proposition 2.1.}
 \item \done{We have switched from $A^t$ to $A^T$ to denote the transpose.}
 \item \tdo{A few explanations on where does the formula for the differential comes from
 would be most welcome (those of [3 Appendix B] and some connection of the trace
 with the fact that we do degree one approx of a charpoly)}
-\item \tdo{In the experiments, (section 5.1), it is not clear which of the two methods is being used to compute the comatrix.}
+      \xavier{FWIW, I wrote a proof in my lecture at JNCF. Maybe we can just cite it.}
+\item \tdo{In the experiments, (section 5.1), it is not clear which of the two methods is being used to compute the comatrix.}\\
+      \xavier{Ok but it is not important (since we are just interested in the result). Should we really say more about that? (In practice, I think that we used the \texttt{adjoint} method of \textsc{sage}.)}
 \item \tdo{Further experiments (with higher dimension, or showing how the two methods for computing com(A) differ), would be welcome.}
 \item \tdo{Clarify the intro paragraph just before the Previous contributions section.}
-\item \tdo{Make the relationship between $P$, $Q$ and $R$ in Theorem 4.1 explicit.}
+\item \tdo{Make the relationship between $P$, $Q$ and $R$ in Theorem 4.1 explicit.}\\
+      \xavier{\done{Done.} I've rewritten everything in terms of $P$ and $Q$ only.}
 \item \done{We have carried out the other minor corrections suggested.}
 \end{enumerate}
 \textbf{Reviewer 5:}
 \begin{enumerate}
 \item \tdo{In the abstract, clarify what kind of operations are being counted.}
-\item \tdo{In the abstract, clarify what we mean by ``precision exactly $O(p^k)$.''}
-\item \tdo{In the introduction, we say ``Let $M$ be known at precision $O(p^m)$.''  What does this mean?  Coefficient-wise?  Overall?  This needs to be said clearly.}
+\item \tdo{In the abstract, clarify what we mean by ``precision exactly $O(p^k)$.''}\\
+      \xavier{By the way, we should also mention in the abstract the $\softO(n^\omega)$ algorithm.}
+\item \tdo{In the introduction, we say ``Let $M$ be known at precision $O(p^m)$.''  What does this mean?  Coefficient-wise?  Overall?  This needs to be said clearly.}\\
+      \xavier{Well, it is the same, isn't it? Anyway, we may add ``coefficient-wise'' if it's not clear.}
 \item \tdo{In the introduction, clarify what kind of operations are being counted.}
 \item \tdo{In the discussion of existing methods, clarify what we mean by the claim that they do not yield optimal precision.}
 \item \tdo{Define comatrix properly, as requested by reviewer 3.}
-\item \tdo{Please define lattice in the tangent space and provide a simple, illustrative example.}
+\item \tdo{Please define lattice in the tangent space and provide a simple, illustrative example.}\\
+      \xavier{Maybe we should instead remove any mention to the tangent space: it's not really necessary.}
 \item \tdo{The definition of ``flat precision'' and ``jagged precision'' both need to be more clearly defined.}
 \end{enumerate}
 \textbf{General clarity comments:}
@@ -203,6 +219,16 @@ with the fact that we do degree one approx of a charpoly)}
 \item \tdo{The paper itself is unnecessarily difficult to read, to the extent that it sometimes unclear what is being proven or to verify correctness.  A number of key definitions are not given and there are too few motivating/clarifying examples. (5)}
 \item \tdo{The definitions are unclear and the comparison with previous work is deficient.  If this is to appear the definitions and results must be made very clear, and the results must be demonstrated to be superior to the division-free algorithms cited, both in theory and in practice.}
 \end{enumerate}
+\xavier{I propose to expand the first paragraph of Section 2.1 (and even
+maybe make a separate subsection for it). Concretely, I suggest to 
+(1)~do not talk about the tangent space (but instead consider lattices
+in $M_n(K)$),
+(2)~give precision definition of flat, jagged precisions and relate them 
+with lattices,
+(3)~maybe cite the notes of my recent lecture at JNCF in which all of
+this is detailed.}
+
+\bigskip
 
 The characteristic polynomial is a fundamental invariant of a matrix: its roots
 give the eigenvalues, and the trace and determinant can be extracted from its coefficients.
@@ -1011,11 +1037,9 @@ We summarize this section with the following theorem:
 Given $M \in M_n(K)$ such that $d \chi_M$ is surjective,
 then one can compute $(\alpha, P, Q, \chi_M)$
 in $K[X]$ such that
-$\com(X{-}N) = \alpha \cdot Y^T \cdot Y R^T \mod \chi_M$
+$\com(X{-}N) = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M$
 in $\softO(n^\omega)$ operations in $K.$
 \end{theo}
-
-
 
 \section{Optimal jagged precision}
 \label{sec:optjagged}
