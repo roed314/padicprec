@@ -162,13 +162,11 @@ eigenvalue}
 \vspace{0.1in}
 \noindent \textbf{Reviewer 1:}
 \begin{enumerate}
-\item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}
-\item \tdo{In section 3, Algorithm 1: what is the cost of step 5, and how did you avoid quartic complexity?}\\
-      \xavier{I think that the cost is $O(n^2)$ because it corresponds to an elementary operation of rows/columns. Is that correct?} \\
-      \david{I agree.  I think we just need to explain that the matrix products are just notational, not actually computed.}
-\item \tdo{In section 4, give a concrete construction for approximating the characteristic polynomial as a ``by product'' of the work of [15].}\\
-      \xavier{I do not really understand this remark. I mean: once we have the Frobenius invariants, the characteristic polynomial is just the product of them, isn't it?}\\
-      \david{Agreed.  I think I can clarify the language somewhat, but there's no real work to be done.}
+\item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}\\
+     \david{Do either of you know what Dixon's algorithm refers to in this context?}
+\item \done{In section 3, Algorithm 1, we have clarified why line 5 does not take quartic time} \\
+      \david{Tristan, can you check that my clarification before Proposition 3.2 is correct?}
+\item \done{In section 4, we clarified how the characteristic polynomial is a by-product of [15].}
 \item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
 \item \done{We clarified why we chose the distribution in Figure 1.}
 \item \tdo{Think about whether Proposition 5.6 can be sped up using the work of Kedlaya and Umans.}\\
@@ -189,12 +187,10 @@ eigenvalue}
 \item \done{We have switched from $M^t$ to $M^T$ to denote the transpose.}
 \item \tdo{A few explanations on where does the formula for the differential comes from
 would be most welcome (those of [3 Appendix B] and some connection of the trace
-with the fact that we do degree one approx of a charpoly)}
+with the fact that we do degree one approx of a charpoly)}\\
       \xavier{FWIW, I wrote a proof in my lecture at JNCF. Maybe we can just cite it.}\\
       \david{Citing it seems reasonable.}
-\item \tdo{In the experiments, (section 5.1), it is not clear which of the two methods is being used to compute the comatrix.}\\
-      \xavier{Ok but it is not important (since we are just interested in the result). Should we really say more about that? (In practice, I think that we used the \texttt{adjoint} method of \textsc{sage}.)}\\
-      \david{I had the same reaction when I first saw the results.  I think we can say something to make clearer that it doesn't matter how it is computed.}
+\item \done{In section 5.1, we added a remark noting that the method for computing the adjugate matrix has no effect on the extent of the precision loss, just on the runtime.}
 \item \tdo{Further experiments (with higher dimension, or showing how the two methods for computing adj(M) differ), would be welcome.}
 \item \tdo{Clarify the intro paragraph just before the Previous contributions section.}
 \item \done{We have carried out the other minor corrections suggested.}
@@ -668,7 +664,8 @@ using a matrix $T.$
 
 \medskip
 
-
+Note that we use the notation of matrix multiplication in line 5, but actual updating of
+$H$ and $P$ uses row and column operations.
 
 \begin{prop} 
 Algorithm 1 computes $H$ and $P$ realizing an approximate Hessenberg form of $M.$
@@ -986,7 +983,7 @@ d \chi_M(dM) & =\tr(\adj(X{-}M) \cdot dM) \\
 \adj(X{-}M) & = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M.
 \end{align*}
 An approximation to $\chi_M$ can be computed in $\softO(n^\omega)$ operations in $K$
-(\textit{e.g.} as a by-product of \cite{storjohann:01a}).
+by computing an approximation to the Frobenius normal form of $M$ \cite{storjohann:01a}.
 
 The matrix $P$ can be computed as follows. Pick $c \in K^n$. Define 
 $c_i = M^i c$ for all $i \geq 1$. The $c_i$'s can be computed in 
@@ -1150,14 +1147,16 @@ Once this sample has been generated, we computed, for each $k \in \{0,
 \begin{enumerate}[$\bullet$]
 \renewcommand{\itemsep}{0pt}
 \item the optimal precision on the $k$-th coefficient of the 
-characteristic polynomial of $M$ given by Eq.~\eqref{eq:optjagged}
+characteristic polynomial of $M$ given by Eq.~\eqref{eq:optjagged}.
+Note that it does not matter which method we use to compute $\adj(X-M)$,
+since we are only interested in the precision loss and not the runtime.
 \item in the capped relative model\footnote{Each 
 coefficient carries its own precision which is updated after each 
 elementary arithmetical operation.},
 the precision gotten on the $k$-th coefficient of the 
 characteristic polynomial of $M$ computed \emph{via} the call:
 
-\hfill$M\texttt{.charpoly(algorithm="df")}$\hfill\null
+\hfill$M\texttt{.charpoly(algorithm="df")}.$\hfill\null
 
 \item in the model of floating-point arithmetic (see 
 \cite{caruso:17a}*{\S 2.3}), the number of correct digits of the 
