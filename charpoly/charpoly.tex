@@ -417,6 +417,8 @@ the \emph{companion matrix} $\mathscr{C}$ associated to $\chi$ is
 
 \subsection{The theory of p-adic precision} \label{sec:padicprec}
 
+\todo{Rewrite this subsection with more details.}
+
 We recall some of the definitions and results of \cite{caruso-roe-vaccon:14a}
 as a foundation for our discussion of the precision for the characteristic polynomial
 of a matrix.  We will be concerned with two $K$-manifolds in what follows:
@@ -445,6 +447,10 @@ that $d\chi_M$ is given by
 \begin{equation} \label{eq:dchi}
 d\chi_M: dM \mapsto \tr(\adj(X-M) \cdot dM).
 \end{equation}
+
+\xavier{I propose to move Proposition \ref{prop:mainlem} here.}
+
+\subsection{Several facts about the differential of $\chi$}
 
 \begin{prop}
 \label{prop:surjectivity}
@@ -619,14 +625,21 @@ which is, at first sight, in $O(n^4)$ operations in $K.$
 \section{Differential\\via Hessenberg form}
 \label{sec:diffHess}
 
-In this section, we combine the computation of a Hessenberg form
-of a matrix and the computation of the inverse through the Smith normal form (SNF)
-over a complete discrete valuation field (CDVF)
-to compute $\adj(X-M)$ and $d \chi$.
-If $M \in M_n(\OK)$, then only division by invertible
-elements of $\OK$ will occur.
+In this section, we combine the computation of a Hessenberg form of a 
+matrix and the computation of the inverse through the Smith normal form 
+(SNF) over a complete discrete valuation field (CDVF) to compute 
+$\adj(X{-}M)$ and $d \chi$. If $M \in M_n(\OK)$, then only division 
+by invertible elements of $\OK$ will occur.
 %The computation of a Hessenberg form provides an $O(n^3)$
 %algorithm to compute the characteristic polynomial.
+
+\begin{rem}
+In what follows, we will count operations in $K$ (regardless to 
+precision) for expressing our complexities. This choice makes sense 
+because we will not usually need much precision on the entries of 
+$\adj(X{-}M)$ (roughly only their valuations matter).
+% should we argue more than that?
+\end{rem}
 
 \subsection{Hessenberg form}
 
