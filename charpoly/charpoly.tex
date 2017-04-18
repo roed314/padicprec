@@ -116,13 +116,16 @@
 \maketitle
 
 \begin{abstract}
-We analyze the precision of the characteristic polynomial $\chi(M)$ of
-an $n \times n$ $p$-adic matrix $M$ using differential precision methods
-developed previously.  When $M$ is integral with precision $O(p^N)$,
-we give a criterion (checkable in time $\softO(n^\omega)$) for
-$\chi(M)$ to have precision exactly $O(p^N)$.  We also give a $\softO(n^3)$
-algorithm for determining the optimal precision when the criterion is not
-satisfied, and give examples when the precision is larger than $O(p^N)$.
+We analyze the precision of the characteristic polynomial $\chi(M)$ of 
+an $n \times n$ $p$-adic matrix $M$ using differential precision methods 
+developed previously.  When $M$ is an integral matrix whose entries are 
+all given at the same precision $O(p^N)$, we give a criterion (checkable 
+within $\softO(n^\omega)$ operations in $\Fp$) for the existence of a
+coefficient of $\chi(M)$ with more accuracy that $O(p^N)$.
+In general, we provide two algorithms for determining the optimal 
+precision on the coefficients of $\chi(M)$ and on their eigenvalues.
+We provide evidences showing that classical algorithms do not reach
+this optimal precision in general.
 \end{abstract}
 
 \begin{CCSXML}
@@ -310,27 +313,44 @@ to attain this optimal precision.
 
 \subsection*{The contribution of this paper.}
 
-Thanks to the application of the framework of differential precision
-of \cite{caruso-roe-vaccon:14a} in \cite{caruso-roe-vaccon:15a},
-we know that the precision of the characteristic polynomial
-$\chi_M$ of a matrix $M \in M_n(\mathbb{Q}_p)$
-is determined by the adjugate $\adj(X -M).$
+This paper provides a theoretical and concrete study of the propagation 
+of the precision during the computation of the characteristic polynomial 
+of matrix defined over the $p$-adics. Thanks to the application of the 
+general framework of differential precision developed in 
+\cite{caruso-roe-vaccon:14a,caruso-roe-vaccon:15a}, we know that the 
+optimal precision of the characteristic polynomial $\chi_M$ of a matrix 
+$M \in M_n(\mathbb{Q}_p)$ is controled by the adjugate $\adj(X{-}M).$
 In this article, we provide:
 \begin{enumerate}
 \renewcommand{\itemsep}{0pt}
-\item Proposition \ref{prop:shortcom}: a factorization of $\adj(X -M)$
-as a product of two rank-$1$ matrices (when $M$ has a cyclic vector),
-computable in $\softO(n^\omega)$ operations by Theorem \ref{thm:compute_shortcom}
-\item Corollary \ref{cor:prec_gain}: a simple, $\softO(n^\omega)$ criterion
-to decide whether $\chi_M$ is defined at precision
-higher than the precision of $M$ (when $M \in M_n(\mathbb{Z}_p)$).
-\item Theorem \ref{thm:alg3}: a $\softO(n^3)$ algorithm with operations in $\Zp$
-to compute the optimal precision on each coefficient of $\chi_M$ (when $M$
-is given with uniform precision on its entries).
-\item Proposition \ref{prop:opteigenvalues}: a $\softO(n^\omega)$
-algorithm to compute the optimal precision on each eigenvalue of $M$
+\item Proposition \ref{prop:shortcom}: a short representation of
+the matrix $\adj(X{-}M)$ whose size is $O(n^2)$ elements of the base
+field (instead to $O(n^3)$ for a dense representation);
+\item two algorithms to compute $\adj(X{-}M)$: the first one is 
+division-free and performs $\softO(n^3)$ operations in $\Zp$ while 
+the second one may perform divisions and has complexity $\tilde 
+O(n^\omega)$;
 \end{enumerate}
-
+and deduce from this the following applications to the question
+we are interested in:
+\begin{enumerate}
+\renewcommand{\itemsep}{0pt}
+\setcounter{enumi}{2}
+\item Corollary \ref{cor:prec_gain}: a simple criterion to decide 
+whether $\chi_M$ is defined at precision higher than the precision of 
+$M$ (when $M$ lies in $M_n(\mathbb{Z}_p)$ and all its entries are given 
+at the same precision);
+\item two algorithms to compute the optimal precision on each 
+coefficient of the characteristic polynomial of a matrix $M \in 
+M_n(\Qp)$ (whose entries may be given at different precision): the first 
+one is division-free and has complexity $\softO(n^3)$ while the second 
+one may perform divisions but has complexity $\softO(n^\omega)$;
+\item Proposition \ref{prop:opteigenvalues}: a $\softO(n^\omega)$
+algorithm to compute the optimal precision on each eigenvalue of $M$.
+\end{enumerate}
+Moreover, we provide evidences showing that classical algorithms for 
+computing the characteristic polynomials do not reach the optimal 
+precision on average.
 
 \subsection*{Organization of the article.}
 
