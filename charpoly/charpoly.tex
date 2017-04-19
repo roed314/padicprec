@@ -168,7 +168,8 @@ eigenvalue}
 \item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}\\
      \david{Do either of you know what Dixon's algorithm refers to in this context?}
 \item \done{In section 3, Algorithm 1, we have clarified why line 5 does not take quartic time} \\
-      \david{Tristan, can you check that my clarification before Proposition 3.2 is correct?}
+      \david{Tristan, can you check that my clarification before Proposition 3.2 is correct?} \\
+      \tristan{This is perfect.}
 \item \done{In section 4, we clarified how the characteristic polynomial is a by-product of [15].}
 \item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
 \item \done{We clarified why we chose the distribution in Figure 1.}
@@ -698,7 +699,7 @@ using a matrix $T.$
 \medskip
 
 Note that we use the notation of matrix multiplication in line 5, but actual updating of
-$H$ and $P$ uses row and column operations.
+$H$ and $P$ uses row and column operations (individually using $O(n)$ operations in $K$).
 
 \begin{prop} 
 Algorithm 1 computes $H$ and $P$ realizing an approximate Hessenberg form of $M.$
@@ -771,7 +772,7 @@ However, we may relate $\adj(X-H)$ to $\adj(1-XH)$, whose
 entries lie in the CDVF $K\llp X\rrp$.  In this way, we compute $\adj(X-H)$
 using an SNF method, with no division in $K$.
 
-First, we need a lemma relating comatrices of
+First, we need a lemma relating adjugates of
 similar matrices:
 
 \begin{lem} \label{lem:adjugate_of_similar}
@@ -809,7 +810,7 @@ are determinants of size $n-1$.
 
 This lemma allows us to compute $\adj(1-XM)$ instead of $\adj(X-M).$
 This has a remarkable advantage: the pivots during the computation of
-the SNF of $\adj(1-XM)$ are units of $\OK\llb X\rrb,$ and are known
+the SNF of $\adj(1-XM)$ are units of $K\llb X\rrb$ (of $\OK\llb X\rrb$ if $M \in M_n(\OK)$) and are known
 in advance to be on the diagonal. This leads to a very smooth
 precision and complexity behaviour when the input matrix lives in 
 $M_n(\OK).$ 
@@ -852,7 +853,8 @@ in order to avoid a product of two matrices in $M_n(\OK[X])$.}
 \medskip
 
 \begin{theo}
-Let $H \in M_n(\OK)$ be an approximate Hessenberg matrix.
+Let $H \in M_n(\OK)$ be an approximate Hessenberg matrix with
+coefficient-wise precision $O(\pi^M).$
 Then, using Algorithm 2, one can compute $\adj (X -H)$
 and $\chi_H$ in 
 $\softO (n^3)$ operations in $\OK$ at the precision given by $H.$
@@ -871,7 +873,7 @@ no additional operations in $\OK\llb X\rrb$ are required. Thus the total cost
 for lines 2 and 3 is indeed $\softO (n^3)$ operations.
 
 For lines 4 and 5, there are only $n-1$ eliminations, resulting in a $\softO (n^2)$ cost
-for the computation of $U.$. Rather than actually construct $P$, we just track the eliminations
+for the computation of $U.$ Rather than actually construct $P$, we just track the eliminations
 performed in order to do the corresponding row operations on $Q$, since we only need the product $P \times Q$.
 
 Line 6 is in $\softO (n^2)$ and 7 in $\softO (n^3).$
@@ -995,7 +997,7 @@ the methods of \cite{caruso-roe-vaccon:14a}.
 
 The algorithm designed in the previous section computes the differential 
 $d \chi_M$ of $\chi$ at a given matrix $M \in M_n(K)$ for a cost of 
-$O(n^3)$ operations in $K$. This seems to be optimal given that the 
+$\softO (n^3)$ operations in $K$. This seems to be optimal given that the 
 (naive) size of the $d \chi_M$ is $n^3$: it is a matrix of size $n
 \times n^2$. It turns out however that improvements are still possible!
 Indeed, thanks to Proposition~\ref{prop:shortcom}, the matrix of 
@@ -1125,7 +1127,8 @@ integers).
 
 \begin{rem}
 If $M \in M_n(\OK)$ is given at (high enough) \emph{flat} precision, 
-then we can avoid the final base change step in the Hessenberg method.
+then we can avoid the final base change step in the Hessenberg 
+and thus any division by a non-invertible.
 Indeed, observe that, thanks to Lemma \ref{lem:adjugate_of_similar}, 
 we can write:
 $$\tr(\adj (X{-}M) \cdot dM)=\tr(\adj (X{-}H)\cdot P^{-1} dM P)$$
