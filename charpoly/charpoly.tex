@@ -252,7 +252,7 @@ The simplest approach for computing the characteristic polynomial of $M$
 is to compute $\det(X-M)$ either using recursive row expansion or various division free
 algorithms \citelist{\cite{seifullin:02a} \cite{kaltofen:92a}}.  There are two issues
 with these methods.  First, they are slower than alternatives that allow division,
-requiring $O(n!)$, $O(n^4)$ and $\softO(n^{2 + \omega/2})$ operations.  Second,
+requiring $O(n!)$, $O(n^4)$\tristan{Shouldn't it be $\softO(n^4)$ ?} and $\softO(n^{2 + \omega/2})$ operations.  Second,
 while the lack of division implies that the result is accurate modulo $p^N$ as
 long as $M \in M_n(\Zp)$, they still do not yield the optimal precision.
 
@@ -620,7 +620,7 @@ $UMU^{-1}$ is
 $(\alpha, UP, (U^T)^{-1}Q, \chi_M),$
 which can be computed in $O(n^\omega)$ operations in $K.$
 This is faster than computing $U \adj(X-M) U^{-1},$
-which is, at first sight, in $O(n^4)$ operations in $K.$
+which is, at first sight, in $O(n^4)$\tristan{Shouldn't it be $\softO (n^4)$?} operations in $K.$
 \end{rem}
 
 \section{Differential\\via Hessenberg form}
