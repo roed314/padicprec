@@ -52,6 +52,8 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\OK}{\mathcal{O}_K}
 
+\newcommand{\famN}{\mathcal{N}}
+
 \newcommand{\llb}{[\mkern-2.5mu[}
 \newcommand{\rrb}{]\mkern-2.5mu]}
 \newcommand{\llp}{(\mkern-2.5mu(}
@@ -167,9 +169,7 @@ eigenvalue}
 \begin{enumerate}
 \item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}\\
      \david{Do either of you know what Dixon's algorithm refers to in this context?}
-\item \done{In section 3, Algorithm 1, we have clarified why line 5 does not take quartic time} \\
-      \david{Tristan, can you check that my clarification before Proposition 3.2 is correct?} \\
-      \tristan{This is perfect.}
+\item \done{In section 3, Algorithm 1, we have clarified why line 5 does not take quartic time}
 \item \done{In section 4, we clarified how the characteristic polynomial is a by-product of [15].}
 \item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
 \item \done{We clarified why we chose the distribution in Figure 1.}
@@ -201,17 +201,13 @@ with the fact that we do degree one approx of a charpoly)}\\
 \end{enumerate}
 \textbf{Reviewer 5:}
 \begin{enumerate}
-\item \tdo{In the abstract, clarify what kind of operations are being counted.}
-\item \tdo{In the abstract, clarify what we mean by ``precision exactly $O(p^k)$.''}\\
-      \xavier{By the way, we should also mention in the abstract the $\softO(n^\omega)$ algorithm.}
+\item \done{The abstract has been rewritten. In particular, the kind of operations we are counted and the locution ``precision exactly $O(p^k)$'' have been clarified.}
 \item \tdo{In the introduction, we say ``Let $M$ be known at precision $O(p^m)$.''  What does this mean?  Coefficient-wise?  Overall?  This needs to be said clearly.}\\
       \xavier{Well, it is the same, isn't it? Anyway, we may add ``coefficient-wise'' if it's not clear.}
 \item \tdo{In the introduction, clarify what kind of operations are being counted.}
 \item \tdo{In the discussion of existing methods, clarify what we mean by the claim that they do not yield optimal precision.}
 \item \done{We've switched from using ``comatrix'' to using ``adjugate,'' as also requested by reviewer 3.}
-\item \tdo{Please define lattice in the tangent space and provide a simple, illustrative example.}\\
-      \xavier{Maybe we should instead remove any mention to the tangent space: it's not really necessary.}\\
-      \david{That's probably a good idea.  We'll have to make a remark about ignoring the leading monic term.}
+\item \done{The notion of lattice (in the tangent space) has been defined.}
 \item \tdo{The definition of ``flat precision'' and ``jagged precision'' both need to be more clearly defined.}
 \end{enumerate}
 \textbf{General clarity comments:}
@@ -221,14 +217,23 @@ with the fact that we do degree one approx of a charpoly)}\\
 \item \tdo{The paper itself is unnecessarily difficult to read, to the extent that it sometimes unclear what is being proven or to verify correctness.  A number of key definitions are not given and there are too few motivating/clarifying examples. (5)}
 \item \tdo{The definitions are unclear and the comparison with previous work is deficient.  If this is to appear the definitions and results must be made very clear, and the results must be demonstrated to be superior to the division-free algorithms cited, both in theory and in practice.}
 \end{enumerate}
-\xavier{I propose to expand the first paragraph of Section 2.1 (and even
-maybe make a separate subsection for it). Concretely, I suggest to 
-(1)~do not talk about the tangent space (but instead consider lattices
-in $M_n(K)$),
-(2)~give precision definition of flat, jagged precisions and relate them 
-with lattices,
-(3)~maybe cite the notes of my recent lecture at JNCF in which all of
-this is detailed.}
+
+\done{
+What we have done so far:
+\begin{enumerate}
+\item Section \emph{The contribution of this paper} of the introduction
+has been rewritten and detailed. We split our contributions into two 
+parts: the first part is about the (fast) computation of the adjugate
+of $X{-}M$ while the second part concerns applications to precision.
+We also added a sentence about numerical experiments.
+\item Section 2.1 has been rewritten. We no longer talk about tangent
+spaces. Jagged and flat precisions, together with their relationships with
+lattice precision, are introduced and discussed. 
+Proposition \ref{prop:mainlem} has been moved to Section 2.1 and stated
+in terms of valuations.
+\end{enumerate}
+}
+
 
 \bigskip
 
@@ -267,6 +272,7 @@ to find the best possible precision for $\chi_M$.  The analysis of this precisio
 of much of this paper.  With this precision known, the actual calculation of $\chi_M$
 may proceed by lifting $M$ to a temporarily higher precision and then using a sufficiently
 stable algorithm (see Remark \ref{rem:lift_for_optimal}).
+\xavier{Maybe, we should say that it is not completely satisfying and (maybe) that we plan to come back to this question later.}
 
 One benefit of this approach is that we may account for diffuse precision:
 precision that is not localized on any single coefficient of $\chi_M$.  For example,
@@ -418,13 +424,94 @@ the \emph{companion matrix} $\mathscr{C}$ associated to $\chi$ is
 
 \subsection{The theory of p-adic precision} \label{sec:padicprec}
 
-\todo{Rewrite this subsection with more details.}
+We recall some of the definitions and results of 
+\cite{caruso-roe-vaccon:14a} as a foundation for our discussion of the 
+precision for the characteristic polynomial of a matrix. We will be 
+concerned with two spaces in what follows: the space $M_n(K)$ of $n 
+\times n$ matrices with entries in $K$ and the space $K_n[X]$ of monic 
+degree $n$ polynomials over $K$. We define as well $K_{<n}[X]$ (resp. 
+${\OK}_{<n}[X]$) as the space of polynomials over $K$ (resp. over $\OK$) 
+of degree strictly less than $n$.
 
-We recall some of the definitions and results of \cite{caruso-roe-vaccon:14a}
-as a foundation for our discussion of the precision for the characteristic polynomial
-of a matrix.  We will be concerned with two $K$-manifolds in what follows:
-the space $M_n(K)$ of $n \times n$ matrices with entries in $K$ and the space
-$K_n[X]$ of monic degree $n$ polynomials over $K$.  Given a matrix $M \in M_n(K)$,
+There are several choices for modeling precision on $p$-adic matrices. 
+The first one consists in representing each entry of a matrix as a 
+quantity of the form $a_{i,j} + O(\pi^{N_{i,j}})$. The integer $N_{i,j}$ 
+is called the \emph{absolute precision} and may depend on $(i,j)$. The 
+way of representing precision will be called \emph{jagged} in the 
+sequel. When the $N_{i,j}$ are all equal (\emph{i.e.} when each entry 
+is given at the same precision), we say that the precision datum is 
+\emph{flat}.
+A more flexible way of modeling precision consists in using lattices. We 
+recall that a lattice in a $M_n(K)$ the image of $M_n(\OK)$ under a 
+$\Qp$-linear transformation of $M_n(K)$. Since $\OK$ appears as the 
+closed unit ball of $K$ (for the $p$-adic norm), cosets of the form
+$M + H$ (where $M$ lies in $M_n(K)$ and $H$ is a lattice) are special
+neighborhood of $M$; we will use them for modeling precision on $M$. 
+Given a family of integers $\famN = (N_{i,j})_{i,j}$ the lattice:
+$$H_{\famN} = 
+\big\{ \, M = (a_{i,j})_{i,j} \in M_n(\Qp) \,\, | \,\, \forall i,\!j\!:
+\pi^{N_{i,j}} \text{ divides } a_{i,j} \, \big\}$$
+corresponds to the jagged precision introduced above.
+
+Jagged and flat precisions are defining similarly for monic polynomials 
+(taking care that no precision datum is needed for the leading 
+coefficient which is supposed to be exactly~$1$). Simiarly, the notion 
+of \emph{lattice precision} extends to polynomials. The underlying 
+vector space is now $K_{<n}[X]$ and we define a lattice in it as the
+image of ${\OK}_{<n}[X]$ under some linear mapping.
+
+The benefit of working with lattices is that they behave well under 
+differentiable maps; this is the content of 
+\cite{caruso-roe-vaccon:14a}*{Lem. 3.4}. Write $\chi : M_n(K) \to 
+K_n[X]$ for the characteristic polynomial map and $d \chi_M$ for its 
+differential at $M$. Thanks to 
+Recall from \citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} 
+\cite{caruso-roe-vaccon:15a}*{\S 3.3}} that $d\chi_M$ is given by
+\begin{equation} \label{eq:dchi}
+\begin{array}{rcl}
+d\chi_M: \quad M_n(K) & \to & K_{<n}[X] \smallskip \\
+ dM & \mapsto & \tr(\adj(X{-}M) \cdot dM).
+\end{array}
+\end{equation}
+where $\adj(M)$ denotes the adjugate\footnote{In 
+\citelist{\cite{caruso-roe-vaccon:14a} \cite{caruso-roe-vaccon:15a}} the 
+adjugate was referred to using the non-standard term \emph{comatrix}} of 
+$M$ (when $M \in \GL_n(K)$, we have $\adj(M) = \det(M) M^{-1}$) and 
+$d\chi_M$ the differential at $M$. In this setting, 
+\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} says that
+\begin{equation}
+\label{eq:mainlem}
+\chi(M + H) = \chi(M) + d\chi_M(H)
+\end{equation}
+whenever $H$ is a sufficiently ``small'' and ``regular'' lattice.
+More precisely, let $\sigma_1(M), \dots, \sigma_n(M)$ denote the 
+elementary divisors of $M$.
+
+\begin{prop} \label{prop:mainlem}
+Let $M \in M_n(K)$ and assume that $d \chi_M$ is surjective. Let:
+\[
+\nu = \max\left(\sum_{i=1}^{n-1} \val(\sigma_i(M)), 0\right).
+\]
+Then, for all integers $N, M \geq 0$ with $M + \nu < 2N$
+any lattice $H$ such that $M_n(\pi^N \OK) \subset H \subset
+M_n(\pi^M \OK)$
+satisfies Eq.~\eqref{eq:mainlem}.
+\end{prop}
+
+\begin{proof}
+Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
+of $M$ is the lower convex hull of the Newton polygons of the entries of $\adj(X-M)$.
+By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
+occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
+${\OK}_{<n}[X] \subset d\chi_M(M_n(p^\nu \Zp))$.
+
+Since the coefficients of $\chi_M$ are given by polynomials in the entries of $M$
+with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
+the conclusion.
+\end{proof}
+
+\begin{comment}
+Given a matrix $M \in M_n(K)$,
 the most general kind of precision structure we may attach to $M$ is a
 \emph{lattice} $H$ in the tangent space at $M$.  However, representing an
 arbitrary lattice requires $n^2$ basis vectors, each with $n^2$ entries.  We therefore
@@ -437,21 +524,22 @@ of simplicity.
 
 Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map.
 Our analysis of the precision behavior of $\chi$ rests upon
-the computation of its derivative $d\chi$, using \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
+the computation of its derivative $d\chi$, using 
+\cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
 For a matrix $M \in M_n(K)$, we identify the tangent space $V$
 at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi_M$ with
 the space $K_{<n}[X]$ of polynomials of degree less than $n$.
-Let $\adj(M)$ denote the adjugate\footnote{In \citelist{\cite{caruso-roe-vaccon:14a} \cite{caruso-roe-vaccon:15a}} the adjugate was referred to using the non-standard term \emph{comatrix}} of $M$ (when $M \in \GL_n(K)$,
-we have $\adj(M) = \det(M) M^{-1}$) and $d\chi_M$ the differential at $M$.  Recall
-\citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}
-that $d\chi_M$ is given by
-\begin{equation} \label{eq:dchi}
-d\chi_M: dM \mapsto \tr(\adj(X-M) \cdot dM).
-\end{equation}
-
-\xavier{I propose to move Proposition \ref{prop:mainlem} here.}
+\end{comment}
 
 \subsection{Several facts about the differential of $\chi$}
+
+\smallskip
+
+\noindent
+{\bf About surjectivity.}
+The surjectivity of $d \chi_M$ appeared as an assumption in 
+Proposition~\ref{prop:mainlem}. The next Proposition make it
+entirely explicit.
 
 \begin{prop}
 \label{prop:surjectivity}
@@ -492,42 +580,14 @@ We also have an analogue of Proposition \ref{prop:surjectivity} for integral mat
 For $M \in M_n(\OK)$, the following conditions are equivalent:
 \begin{enumerate}[(i)]
 \renewcommand{\itemsep}{0pt}
-\item \label{pt:surjp} the image of $M_n(\OK)$ under $d\chi_M$ is $\OK[X] \cap K_{<n}[X]$.
+\item \label{pt:surjp} the image of $M_n(\OK)$ under $d\chi_M$ is 
+${\OK}_{<n}[X]$.
 \item \label{pt:cycp} the reduction of $M$ modulo $\pi$ has a cyclic vector.
 \end{enumerate}
 \end{prop}
 \begin{proof}
 The condition \eqref{pt:surjp} is equivalent to the surjectivity of $d\chi_M$ modulo $\pi$.  The equivalence with
 \eqref{pt:cycp} follows the same argument as Proposition \ref{prop:surjectivity}, but over the residue field of $K$.
-\end{proof}
-
-Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$, and let
-$\sigma_1(M), \dots, \sigma_n(M)$ denote the elementary divisors of $M$.
-
-\begin{prop} \label{prop:mainlem}
-Suppose that $M \in M_n(K)$ satisfies one of the conditions in Proposition \ref{prop:surjectivity}, and let 
-\[
-\alpha = \min\left(\prod_{i=1}^{n-1} \left\vert \sigma_i(M) \right\vert, 1\right).
-\]
-Then, for all $\rho \in (0, 1]$ and all
-$r \in (0, \alpha^{-1} \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
-satisfies:
-\begin{equation}
-\chi(M + H) = \chi(M) + d\chi_M(H).
-\end{equation}
-\end{prop}
-
-\begin{proof}
-
-Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
-of $M$ is the lower convex hull of the Newton polygons of the entries of $\adj(X-M)$.
-By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
-occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
-$B_W(1) \subset d\chi_M(B_V(\alpha^{-1}))$.
-
-Since the coefficients of $\chi_M$ are given by polynomials in the entries of $M$
-with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
-the conclusion.
 \end{proof}
 
 The relationship between precision and the images of lattices under $d\chi_M$ allows us to
@@ -542,8 +602,10 @@ if and only if the reduction of $M$ modulo $\pi$ does not have a cyclic vector.
 
 Note that this criterion is checkable using $\softO(n^\omega)$ operations in the residue field \cite{storjohann:01a}.
 
-\subsection{Stability under multiplication by $X$}
+\medskip
 
+\noindent
+{\bf Stability under multiplication by $X$.}
 By definition, the codomain of $d \chi_M$ is $K_{< n}[X]$. 
 However, when $M$ is given, $K_{< n}[X]$ is canonically isomorphic
 to $K[X]/\chi_M(X)$ as a $K$-vector space. For our purpose, it will 
@@ -557,9 +619,9 @@ as a submodule of $K[X]/\chi_M(X)$.  Then $\Lambda$ is stable under
 multiplication by $R$.
 \end{prop}
 \begin{proof}
-Let $A = \adj(X-M)$ and $f \in R$.  By \eqref{eq:dchi}, $\Lambda$ is given by
+Let $A = \adj(X{-}M)$ and $f \in R$.  By \eqref{eq:dchi}, $\Lambda$ is given by
 the $\OK$-span of the entries of $A$.   Using the fact that the product of a matrix
-with its adjugate is the determinant, $(X - M) \cdot A = \chi_M$ and thus
+with its adjugate is the determinant, $(X{-}M) \cdot A = \chi_M$ and thus
 $f(X) \cdot A \equiv f(M) \cdot A \pmod{\chi_M(X)}$.  The span of the entries
 of the left hand side is precisely $f(X) \cdot \Lambda$, while the span of the entries
 of the right hand side is contained within $\Lambda$ since $f(M) \in M_n(\OK)$.
@@ -570,8 +632,10 @@ If $M \in M_n(\OK)$, then $d \chi_M \big(M_n(\OK)\big)$
 is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
 \end{cor}
 
-\subsection{Compact form of $d \chi_M$}
+\medskip
 
+\noindent
+{\bf Compact form of $d \chi_M$.}
 Let $\mathscr{C}$ be the companion matrix associated to $\chi_M$ as in \eqref{eq:companion}.
 Assume one of the equivalent conditions of Proposition~\ref{prop:surjectivity}, giving a matrix 
 $P \in \GL_n(K)$ such that $M = P \mathscr{C} P^{-1}$. Then Proposition~\ref{prop:surjectivity}
@@ -620,7 +684,9 @@ $UMU^{-1}$ is
 $(\alpha, UP, (U^T)^{-1}Q, \chi_M),$
 which can be computed in $O(n^\omega)$ operations in $K.$
 This is faster than computing $U \adj(X-M) U^{-1},$
-which is, at first sight, in $O(n^4)$\tristan{Shouldn't it be $\softO (n^4)$?} operations in $K.$
+which is, at first sight, in $\softO(n^4)$
+%\tristan{Shouldn't it be $\softO (n^4)$?}
+operations in $K.$
 \end{rem}
 
 \section{Differential\\via Hessenberg form}
