@@ -121,10 +121,10 @@ an $n \times n$ $p$-adic matrix $M$ using differential precision methods
 developed previously.  When $M$ is an integral matrix whose entries are 
 all given at the same precision $O(p^N)$, we give a criterion (checkable 
 within $\softO(n^\omega)$ operations in $\Fp$) for the existence of a
-coefficient of $\chi(M)$ with more accuracy that $O(p^N)$.
+coefficient of $\chi(M)$ with more accuracy than $O(p^N)$.
 In general, we provide two algorithms for determining the optimal 
-precision on the coefficients of $\chi(M)$ and on their eigenvalues.
-We provide evidences showing that classical algorithms do not reach
+precision of the coefficients of $\chi(M)$ and of their eigenvalues.
+We provide evidence showing that classical algorithms do not reach
 this optimal precision in general.
 \end{abstract}
 
@@ -167,9 +167,7 @@ eigenvalue}
 \begin{enumerate}
 \item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}\\
      \david{Do either of you know what Dixon's algorithm refers to in this context?}
-\item \done{In section 3, Algorithm 1, we have clarified why line 5 does not take quartic time} \\
-      \david{Tristan, can you check that my clarification before Proposition 3.2 is correct?} \\
-      \tristan{This is perfect.}
+\item \done{In section 3, Algorithm 1, we have clarified why line 5 does not take quartic time}
 \item \done{In section 4, we clarified how the characteristic polynomial is a by-product of [15].}
 \item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
 \item \done{We clarified why we chose the distribution in Figure 1.}
@@ -209,10 +207,8 @@ with the fact that we do degree one approx of a charpoly)}\\
 \item \tdo{In the introduction, clarify what kind of operations are being counted.}
 \item \tdo{In the discussion of existing methods, clarify what we mean by the claim that they do not yield optimal precision.}
 \item \done{We've switched from using ``comatrix'' to using ``adjugate,'' as also requested by reviewer 3.}
-\item \tdo{Please define lattice in the tangent space and provide a simple, illustrative example.}\\
-      \xavier{Maybe we should instead remove any mention to the tangent space: it's not really necessary.}\\
-      \david{That's probably a good idea.  We'll have to make a remark about ignoring the leading monic term.}
-\item \tdo{The definition of ``flat precision'' and ``jagged precision'' both need to be more clearly defined.}
+\item \done{We have expanded upon the discussion of lattices, and removed any reference to tangent spaces (since they were a distraction for matrices and polynomials).}
+\item \done{We have fleshed out the definitions of flat and jagged precision.}
 \end{enumerate}
 \textbf{General clarity comments:}
 \begin{enumerate}
@@ -326,7 +322,7 @@ In this article, we provide:
 \renewcommand{\itemsep}{0pt}
 \item Proposition \ref{prop:shortcom}: a short representation of
 the matrix $\adj(X{-}M)$ whose size is $O(n^2)$ elements of the base
-field (instead to $O(n^3)$ for a dense representation);
+field (instead of $O(n^3)$ for a dense representation);
 \item two algorithms to compute $\adj(X{-}M)$: the first one is 
 division-free and performs $\softO(n^3)$ operations in $\Zp$ while 
 the second one may perform divisions and has complexity $\tilde 
@@ -349,9 +345,9 @@ one may perform divisions but has complexity $\softO(n^\omega)$;
 \item Proposition \ref{prop:opteigenvalues}: a $\softO(n^\omega)$
 algorithm to compute the optimal precision on each eigenvalue of $M$.
 \end{enumerate}
-Moreover, we provide evidences showing that classical algorithms for 
+Moreover, we provide evidence showing that classical algorithms for 
 computing the characteristic polynomials do not reach the optimal 
-precision on average.
+precision in many contexts.
 
 \subsection*{Organization of the article.}
 
@@ -418,29 +414,34 @@ the \emph{companion matrix} $\mathscr{C}$ associated to $\chi$ is
 
 \subsection{The theory of p-adic precision} \label{sec:padicprec}
 
-\todo{Rewrite this subsection with more details.}
+\todo{Rewrite this subsection with more details.  Add references to JNCF notes.}
 
 We recall some of the definitions and results of \cite{caruso-roe-vaccon:14a}
 as a foundation for our discussion of the precision for the characteristic polynomial
 of a matrix.  We will be concerned with two $K$-manifolds in what follows:
 the space $M_n(K)$ of $n \times n$ matrices with entries in $K$ and the space
-$K_n[X]$ of monic degree $n$ polynomials over $K$.  Given a matrix $M \in M_n(K)$,
-the most general kind of precision structure we may attach to $M$ is a
-\emph{lattice} $H$ in the tangent space at $M$.  However, representing an
-arbitrary lattice requires $n^2$ basis vectors, each with $n^2$ entries.  We therefore
-frequently work with certain classes of lattices, either \emph{jagged} lattices
-where we specify a precision for each matrix entry or \emph{flat} lattices where
-every entry is known to a fixed precision $O(p^N)$.  Similarly, precision for
-monic polynomials can be specified by giving a lattice in the tangent space
-at $f(X) \in K_n[X]$, or restricted to jagged or flat precision in the interest
-of simplicity.
+$K_n[X]$ of monic degree $n$ polynomials over $K$.  One cannot represent
+matrices $M \in M_n(K)$ exactly, but instead must specify an approximation
+together with a measure of the approximation's accuracy.  Recall that a
+\emph{lattice} in $M_n(K)$ is an open $\OK$-submodule of $M_n(K)$:
+the $\OK$-span of $n^2$ basis vectors \cite{caruso-roe-vaccon:14a}*{\S 2.2}.
+We record the precision of $M$ with lattice $H$: the matrix $M$ is understood
+as some matrix of the form $M + h$, where $h \in H$.
+
+One problem with representing precision in this way is that storing $H$
+requires $n^2$ basis vectors, each with $n^2$ entries.  We can shrink the
+space required by working only with certain classes of lattices.  When
+using \emph{jagged} precision, the basis matrices for $H$ can only have
+one nonzero entry; this corresponds to specifying a precision for each
+entry of the matrix separately.  Going further, $M$ is said to have \emph{flat}
+precision $O(p^N)$ if every entry has precision $O(p^N)$, or equivalently,
+if $H = p^N M_n(\OK)$.  Similarly, precision for
+monic polynomials can be specified by giving a lattice in $K_{<n}[X]$,
+or specifying precision coefficient-wise in the interest of simplicity.
 
 Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map.
 Our analysis of the precision behavior of $\chi$ rests upon
 the computation of its derivative $d\chi$, using \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
-For a matrix $M \in M_n(K)$, we identify the tangent space $V$
-at $M$ with $M_n(K)$ itself, and the tangent space $W$ at $\chi_M$ with
-the space $K_{<n}[X]$ of polynomials of degree less than $n$.
 Let $\adj(M)$ denote the adjugate\footnote{In \citelist{\cite{caruso-roe-vaccon:14a} \cite{caruso-roe-vaccon:15a}} the adjugate was referred to using the non-standard term \emph{comatrix}} of $M$ (when $M \in \GL_n(K)$,
 we have $\adj(M) = \det(M) M^{-1}$) and $d\chi_M$ the differential at $M$.  Recall
 \citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}
@@ -449,10 +450,39 @@ that $d\chi_M$ is given by
 d\chi_M: dM \mapsto \tr(\adj(X-M) \cdot dM).
 \end{equation}
 
-\xavier{I propose to move Proposition \ref{prop:mainlem} here.}
+When $d\chi_M$ is surjective and $H$ is small enough, we may determine the precision of $\chi(M)$ precisely.
+Write $V$ for $M_n(K)$, $W$ for $K_n[X]$, 
+$B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$, and let
+$\sigma_1(M), \dots, \sigma_n(M)$ denote the elementary divisors of $M$.
+
+\begin{prop} \label{prop:mainlem}
+Let $M \in M_n(K)$ and suppose that $d\chi_M$ is surjective.  Let 
+\[
+\alpha = \min\left(\prod_{i=1}^{n-1} \left\vert \sigma_i(M) \right\vert, 1\right).
+\]
+Then, for all $\rho \in (0, 1]$ and all
+$r \in (0, \alpha^{-1} \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
+satisfies:
+\begin{equation}
+\chi(M + H) = \chi(M) + d\chi_M(H).
+\end{equation}
+\end{prop}
+
+\begin{proof}
+Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
+of $M$ is the lower convex hull of the Newton polygons of the entries of $\adj(X-M)$.
+By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
+occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
+$B_W(1) \subset d\chi_M(B_V(\alpha^{-1}))$.
+
+Since the coefficients of $\chi_M$ are given by polynomials in the entries of $M$
+with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
+the conclusion.
+\end{proof}
 
 \subsection{Several facts about the differential of $\chi$}
 
+We may rephrase the condition that $d\chi_M$ is surjective using more familiar invariants attached to $M$.
 \begin{prop}
 \label{prop:surjectivity}
 For $M \in M_n(K)$, the following conditions are equivalent:
@@ -499,35 +529,6 @@ For $M \in M_n(\OK)$, the following conditions are equivalent:
 \begin{proof}
 The condition \eqref{pt:surjp} is equivalent to the surjectivity of $d\chi_M$ modulo $\pi$.  The equivalence with
 \eqref{pt:cycp} follows the same argument as Proposition \ref{prop:surjectivity}, but over the residue field of $K$.
-\end{proof}
-
-Write $B^-_V(r)$ (resp. $B_V(r)$) for the open (resp. closed) ball of radius $r$ in $V$, and let
-$\sigma_1(M), \dots, \sigma_n(M)$ denote the elementary divisors of $M$.
-
-\begin{prop} \label{prop:mainlem}
-Suppose that $M \in M_n(K)$ satisfies one of the conditions in Proposition \ref{prop:surjectivity}, and let 
-\[
-\alpha = \min\left(\prod_{i=1}^{n-1} \left\vert \sigma_i(M) \right\vert, 1\right).
-\]
-Then, for all $\rho \in (0, 1]$ and all
-$r \in (0, \alpha^{-1} \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
-satisfies:
-\begin{equation}
-\chi(M + H) = \chi(M) + d\chi_M(H).
-\end{equation}
-\end{prop}
-
-\begin{proof}
-
-Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
-of $M$ is the lower convex hull of the Newton polygons of the entries of $\adj(X-M)$.
-By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
-occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
-$B_W(1) \subset d\chi_M(B_V(\alpha^{-1}))$.
-
-Since the coefficients of $\chi_M$ are given by polynomials in the entries of $M$
-with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
-the conclusion.
 \end{proof}
 
 The relationship between precision and the images of lattices under $d\chi_M$ allows us to
