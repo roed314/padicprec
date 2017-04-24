@@ -164,6 +164,7 @@ eigenvalue}
 %\medskip
 
 \section{Introduction}
+%\begin{comment}
 \vspace{0.1in}
 \noindent \textbf{Reviewer 1:}
 \begin{enumerate}
@@ -236,6 +237,7 @@ in terms of valuations.
 
 
 \bigskip
+%\end{comment}
 
 The characteristic polynomial is a fundamental invariant of a matrix: its roots
 give the eigenvalues, and the trace and determinant can be extracted from its coefficients.
@@ -291,7 +293,7 @@ content of these two polynomials should be equivalent. The solution is that the
 extra precision in $\chi_{1+M}$ is diffuse and not visible on any individual coefficient.
 We formalize this phenomenon using lattices; see Section \ref{sec:padicprec} for
 further explanation, and \cite{caruso:17a}*{\S 3.2.2} for a specific example of the
-relationship between $\chi_M$ and $\chi_{1+M}$.
+relationship between $\chi_M$ and $\chi_{1+M}$. % JNCF sec 3.2.2 pg 59; 2.4.3 pg 38
 
 \subsection*{Previous contributions.}
 
@@ -498,19 +500,6 @@ Then, for all integers $a, b \geq 0$ with $a + \nu < 2b$,
 any lattice $H$ such that $M_n(\pi^b \OK) \subset H \subset
 M_n(\pi^a \OK)$
 satisfies Eq.~\eqref{eq:mainlem}
-\end{prop}
-
-\begin{prop} \label{prop:mainlem}
-Let $M \in M_n(K)$ and assume that $d\chi_M$ is surjective.  Let 
-\[
-\alpha = \min\left(\prod_{i=1}^{n-1} \left\vert \sigma_i(M) \right\vert, 1\right).
-\]
-Then, for all $\rho \in (0, 1]$ and all
-$r \in (0, \alpha^{-1} \cdot \rho^{-1})$, any lattice $H$ such that $B_V^-(\rho r) \subset H \subset B_V(r)$
-satisfies:
-\begin{equation}
-\chi(M + H) = \chi(M) + d\chi_M(H).
-\end{equation}
 \end{prop}
 
 \begin{proof}
