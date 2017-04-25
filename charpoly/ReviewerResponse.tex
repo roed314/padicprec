@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+
+\DeclareMathOperator{\adj}{Adj}
+
+\newcommand{\softO}{O\tilde{~}}
+\newcommand{\done}[1]{#1}
+
+\title{Response to Reviewer Comments for \\ ``Characteristic polynomials of $p$-adic matrices''}
+\author{Xavier Caruso, David Roe and Tristan Vaccon}
+
+\begin{document}
+\maketitle
+
+\vspace{0.1in}
+\noindent \textbf{Reviewer 1:}
+\begin{enumerate}
+\item \done{We do not see a direct application of this paper to Dixon's algorithm, since his algorithm solves a $p$-adic system $p$-adically rather than computing a characteristic polynomial.  Moreover, since the prime can be chosen arbitrarily, it will usually not have repeated eigenvalues modulo $p$ and thus there will be no gain in precision.}
+\item \done{In section 3, Algorithm 1, we have clarified why line 5 does not take quartic time}
+\item \done{In section 4, we clarified how the characteristic polynomial is a by-product of [15].}
+\item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
+\item \done{We clarified why we chose the distribution in Figure 1.}
+\item \done{We do not see how to apply Kedlaya-Umans.  Yes, there is multipoint evaluation used in Proposition 5.6, but it is dominated by the computation of the matrix $P$, which requires $\softO(n^\omega)$ operations in $K$.}
+\end{enumerate}
+\textbf{Reviewer 2:}
+\begin{enumerate}
+\item \done{We adjusted the reference as suggested, as also pointed out by Reviewers 3 and 5.}
+\end{enumerate}
+\textbf{Reviewer 3:}
+\begin{enumerate}
+\item \done{We have added Remark 3.1 outlining why we do not need much accuracy in the computation of $\adj(M{-}X)$: it's roughly true that only the valuations of the entries are relevant, since we only care about the lattice that the entries generate.  We hope that this remark is sufficient to convince the reviewer that the lack of precision analysis in the discussion preceding Theorem 4.1 does not invalidate the claimed complexity.}
+\item \done{We have updated the references for characteristic polynomial using Frobenius normal form as suggested.}
+\item \done{We have switched to using the term ``adjugate'' rather than ``comatrix.''}
+\item \done{We have given a definition of the companion matrix in our notation section and adjusted the proof of Proposition 2.1 accordingly.}
+\item \done{We have clarified the use of ``repeated eigenvalue'' in the proof of Proposition 2.1.}
+\item \done{We have switched from $M^t$ to $M^T$ to denote the transpose.}
+\item \done{We have added a reference to course notes of Caruso (now reference [2]) which go into more detail on how the formula for the differential of $\chi_M$ is derived.}
+\item \done{In section 5.1, we added a remark noting that the method for computing the adjugate matrix has no effect on the extent of the precision loss, just on the runtime.}
+\item \done{We agree that further experiments would be beneficial, but we are constrained by space (due to the 8 page limit) and time (due to the limited time to make revisions).  We note that we did perform the current experiment in higher dimension with similar results: dimension $8$ was chosen to be representative without the table taking up too much space in the paper.}
+\item \done{We have removed the two paragraphs before the Previous contributions section.  Some of the material discussed therein has been moved to Section 2.1, and some is now referenced in the course notes [2]}
+\item \done{We have carried out the other minor corrections suggested.}
+\end{enumerate}
+\textbf{Reviewer 5:}
+\begin{enumerate}
+\item \done{The abstract has been rewritten. In particular, the kind of operations we are counted and the locution ``precision exactly $O(p^k)$'' have been clarified.}
+\item \done{We have also clarified what kind of operations are being counted and what is meant by ``precision $O(p^N)$`` in the introduction.}
+\item \done{We have added a discussion of the term \emph{optimal} precision in Section 2.1, after equation (3).}
+\item \done{We've switched from using ``comatrix'' to using ``adjugate,'' as also requested by reviewer 3.}
+\item \done{We have expanded upon the discussion of lattices, and removed any reference to tangent spaces (since they were a distraction for matrices and polynomials).}
+\item \done{We have fleshed out the definitions of flat and jagged precision.}
+\end{enumerate}
+\textbf{General clarity comments:}
+%\begin{enumerate}
+%\item \tdo{The writing is rather dense and relies too heavily on external material, which makes the reading sometimes unpleasant. (3)}
+%\item \tdo{Overall the presentation lacks a minimal set of definitions and terminology regarding the notions of p-adic rings and their precision to make it sufficiently self-contained for an non-expert reader. I believe only a one or two additional paragraphs could be sufficient to drastically improve the presentation of section 2, in particular recalling the various precision models.  The proofs are very concise and rely too heavily on a good command of p-adic precision terminology. (3)}
+%\item \tdo{The paper itself is unnecessarily difficult to read, to the extent that it sometimes unclear what is being proven or to verify correctness.  A number of key definitions are not given and there are too few motivating/clarifying examples. (5)}
+%\item \tdo{The definitions are unclear and the comparison with previous work is deficient.  If this is to appear the definitions and results must be made very clear, and the results must be demonstrated to be superior to the division-free algorithms cited, both in theory and in practice.}
+%\end{enumerate}
+
+\begin{enumerate}
+\item \done{Section \emph{The contribution of this paper} of the introduction
+has been rewritten with additional detail. We split our contributions into two 
+parts: the first part is about the (fast) computation of the adjugate
+of $X{-}M$ while the second part concerns applications to precision.
+We also added a sentence about numerical experiments.}
+\item \done{Section 2.1 has been rewritten. We no longer talk about tangent
+spaces. Jagged and flat precision, together with their relationships with
+lattice precision, are introduced and discussed. 
+Proposition 2.1 has been moved to Section 2.1 and stated
+in terms of valuations.}
+\item \done{Small adjustments have been made throughout the paper to attempt
+to make the prose more readable, though we are constrained by the page
+limit, which hinders us from adding more examples or details.}
+\end{enumerate}
+
+\end{document}
