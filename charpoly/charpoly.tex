@@ -168,14 +168,12 @@ eigenvalue}
 \vspace{0.1in}
 \noindent \textbf{Reviewer 1:}
 \begin{enumerate}
-\item \tdo{What are the implications, if any, of your work on well-known methods such as Dixon's algorithm?}\\
-     \david{Do either of you know what Dixon's algorithm refers to in this context?}
+\item \done{We do not see a direct application of this paper to Dixon's algorithm, since his algorithm solves a $p$-adic system $p$-adically rather than computing a characteristic polynomial.  Moreover, since the prime can be chosen arbitrarily, it will usually not have repeated eigenvalues modulo $p$ and thus there will be no gain in precision.}
 \item \done{In section 3, Algorithm 1, we have clarified why line 5 does not take quartic time}
 \item \done{In section 4, we clarified how the characteristic polynomial is a by-product of [15].}
 \item \done{In section 5.1, we replaced $\pi$ by $\beta$.}
 \item \done{We clarified why we chose the distribution in Figure 1.}
-\item \tdo{Think about whether Proposition 5.6 can be sped up using the work of Kedlaya and Umans.}\\
-      \xavier{I cannot see how Kedlaya--Umans can help: the cost $\softO(n^\omega)$ comes from the computation of a Frobenius normal form...}
+\item \done{We do not see how to apply Kedlaya-Umans.  Yes, there is multipoint evaluation used in Proposition 5.6, but it is dominated by the computation of the matrix $P$, which requires $\softO(n^\omega)$ operations in $K$.}
 \end{enumerate}
 \textbf{Reviewer 2:}
 \begin{enumerate}
@@ -183,57 +181,50 @@ eigenvalue}
 \end{enumerate}
 \textbf{Reviewer 3:}
 \begin{enumerate}
-\item \tdo{Convince reviewer that the complexity claimed in Theorem 4.1 is accurate: ``it lacks a precision loss analysis and relies on classic division based algorithms}\\
-      \xavier{One can argue that we do not need \emph{a priori} much accuracy on the precision of $\adj(M-X)$ because only the valuations of the entries of the latter matrix are relevant. So counting operations in $K$ makes sense. By the way, we could say at some point that a good idea would be to use relaxed algorithms and increase the precision until we are able to read the valuations.}
+\item \done{We have added Remark 3.1 outlining why we do not need much accuracy in the computation of $\adj(M{-}X)$: it's roughly true that only the valuations of the entries are relevant, since we only care about the lattice that the entries generate.  We hope that this remark is sufficient to convince the reviewer that the lack of precision analysis in the discussion preceding Theorem 4.1 does not invalidate the claimed complexity.}
 \item \done{We have updated the references for characteristic polynomial using Frobenius normal form as suggested.}
 \item \done{We have switched to using the term ``adjugate'' rather than ``comatrix.''}
 \item \done{We have given a definition of the companion matrix in our notation section and adjusted the proof of Proposition 2.1 accordingly.}
 \item \done{We have clarified the use of ``repeated eigenvalue'' in the proof of Proposition 2.1.}
 \item \done{We have switched from $M^t$ to $M^T$ to denote the transpose.}
-\item \tdo{A few explanations on where does the formula for the differential comes from
-would be most welcome (those of [3 Appendix B] and some connection of the trace
-with the fact that we do degree one approx of a charpoly)}\\
-      \xavier{FWIW, I wrote a proof in my lecture at JNCF. Maybe we can just cite it.}\\
-      \david{Citing it seems reasonable.}
+\item \done{We have added a reference to course notes of Caruso (now reference [2]) which go into more detail on how the formula for the differential of $\chi_M$ is derived.}
 \item \done{In section 5.1, we added a remark noting that the method for computing the adjugate matrix has no effect on the extent of the precision loss, just on the runtime.}
-\item \tdo{Further experiments (with higher dimension, or showing how the two methods for computing adj(M) differ), would be welcome.}
-\item \tdo{Clarify the intro paragraph just before the Previous contributions section.}
+\item \done{We agree that further experiments would be beneficial, but we are constrained by space (due to the 8 page limit) and time (due to the limited time to make revisions).  We note that we did perform the current experiment in higher dimension with similar results: dimension $8$ was chosen to be representative without the table taking up too much space in the paper.}
+\item \done{We have removed the two paragraphs before the Previous contributions section.  Some of the material discussed therein has been moved to Section 2.1, and some is now referenced in the course notes [2]}
 \item \done{We have carried out the other minor corrections suggested.}
 \end{enumerate}
 \textbf{Reviewer 5:}
 \begin{enumerate}
 \item \done{The abstract has been rewritten. In particular, the kind of operations we are counted and the locution ``precision exactly $O(p^k)$'' have been clarified.}
-\item \tdo{In the introduction, we say ``Let $M$ be known at precision $O(p^m)$.''  What does this mean?  Coefficient-wise?  Overall?  This needs to be said clearly.}\\
-      \xavier{Well, it is the same, isn't it? Anyway, we may add ``coefficient-wise'' if it's not clear.}
-\item \tdo{In the introduction, clarify what kind of operations are being counted.}
-\item \tdo{In the discussion of existing methods, clarify what we mean by the claim that they do not yield optimal precision.}
+\item \done{We have also clarified what kind of operations are being counted and what is meant by ``precision $O(p^N)$`` in the introduction.}
+\item \done{We have added a discussion of the term \emph{optimal} precision in Section 2.1, after equation (3).}
 \item \done{We've switched from using ``comatrix'' to using ``adjugate,'' as also requested by reviewer 3.}
 \item \done{We have expanded upon the discussion of lattices, and removed any reference to tangent spaces (since they were a distraction for matrices and polynomials).}
 \item \done{We have fleshed out the definitions of flat and jagged precision.}
 \end{enumerate}
 \textbf{General clarity comments:}
-\begin{enumerate}
-\item \tdo{The writing is rather dense and relies too heavily on external material, which makes the reading sometimes unpleasant. (3)}
-\item \tdo{Overall the presentation lacks a minimal set of definitions and terminology regarding the notions of p-adic rings and their precision to make it sufficiently self-contained for an non-expert reader. I believe only a one or two additional paragraphs could be sufficient to drastically improve the presentation of section 2, in particular recalling the various precision models.  The proofs are very concise and rely too heavily on a good command of p-adic precision terminology. (3)}
-\item \tdo{The paper itself is unnecessarily difficult to read, to the extent that it sometimes unclear what is being proven or to verify correctness.  A number of key definitions are not given and there are too few motivating/clarifying examples. (5)}
-\item \tdo{The definitions are unclear and the comparison with previous work is deficient.  If this is to appear the definitions and results must be made very clear, and the results must be demonstrated to be superior to the division-free algorithms cited, both in theory and in practice.}
-\end{enumerate}
+%\begin{enumerate}
+%\item \tdo{The writing is rather dense and relies too heavily on external material, which makes the reading sometimes unpleasant. (3)}
+%\item \tdo{Overall the presentation lacks a minimal set of definitions and terminology regarding the notions of p-adic rings and their precision to make it sufficiently self-contained for an non-expert reader. I believe only a one or two additional paragraphs could be sufficient to drastically improve the presentation of section 2, in particular recalling the various precision models.  The proofs are very concise and rely too heavily on a good command of p-adic precision terminology. (3)}
+%\item \tdo{The paper itself is unnecessarily difficult to read, to the extent that it sometimes unclear what is being proven or to verify correctness.  A number of key definitions are not given and there are too few motivating/clarifying examples. (5)}
+%\item \tdo{The definitions are unclear and the comparison with previous work is deficient.  If this is to appear the definitions and results must be made very clear, and the results must be demonstrated to be superior to the division-free algorithms cited, both in theory and in practice.}
+%\end{enumerate}
 
-\done{
-What we have done so far:
 \begin{enumerate}
-\item Section \emph{The contribution of this paper} of the introduction
-has been rewritten and detailed. We split our contributions into two 
+\item \done{Section \emph{The contribution of this paper} of the introduction
+has been rewritten with additional detail. We split our contributions into two 
 parts: the first part is about the (fast) computation of the adjugate
 of $X{-}M$ while the second part concerns applications to precision.
-We also added a sentence about numerical experiments.
-\item Section 2.1 has been rewritten. We no longer talk about tangent
-spaces. Jagged and flat precisions, together with their relationships with
+We also added a sentence about numerical experiments.}
+\item \done{Section 2.1 has been rewritten. We no longer talk about tangent
+spaces. Jagged and flat precision, together with their relationships with
 lattice precision, are introduced and discussed. 
-Proposition \ref{prop:mainlem} has been moved to Section 2.1 and stated
-in terms of valuations.
+Proposition 2.1 has been moved to Section 2.1 and stated
+in terms of valuations.}
+\item \done{Small adjustments have been made throughout the paper to attempt
+to make the prose more readable, though we are constrained by the page
+limit, which hinders us from adding more examples or details.}
 \end{enumerate}
-}
 
 
 \bigskip
@@ -249,23 +240,23 @@ algorithms for counting points of varieties over finite fields (see
 
 %\todo{Application to characteristic polynomials of elements of p-adic field extensions?}
 
-When computing with $p$-adic matrices, the lack of infinite memory implies
-that the entries may only be approximated at some finite precision $O(p^N)$.  As a
+When computing with $p$-adic matrices, entries may only be approximated
+at some finite precision $O(p^N)$.  As a
 consequence, in designing algorithms for such matrices one must analyze
 not only the running time of the algorithm but also the accuracy of the result.
 
-Let $M \in M_n(\Qp)$ be known at precision $O(p^N)$.
+Let $M \in M_n(\Qp)$, with every entry given at precision $O(p^N)$.
 The simplest approach for computing the characteristic polynomial of $M$
 is to compute $\det(X-M)$ either using recursive row expansion or various division free
 algorithms \citelist{\cite{seifullin:02a} \cite{kaltofen:92a}}.  There are two issues
 with these methods.  First, they are slower than alternatives that allow division,
-requiring $O(n!)$, $O(n^4)$\tristan{Shouldn't it be $\softO(n^4)$ ?} and $\softO(n^{2 + \omega/2})$ operations.  Second,
+requiring $O((n+1)!)$, $\softO(n^5)$ and $\softO(n^{3 + \omega/2})$ operations in $K$.  Second,
 while the lack of division implies that the result is accurate modulo $p^N$ as
 long as $M \in M_n(\Zp)$, they still do not yield the optimal precision.
 
 A faster approach over a field is to compute the Frobenius normal form of $M$,
 which is achievable in running time $\softO(n^\omega)$ \citelist{\cite{keller-gehrig:85a} \cite{pernet-storjohann:07a}}.
-However, the fact that it uses division frequently leads to catastrophic losses of precision.
+However, the use of division frequently leads to catastrophic losses of precision.
 In many examples, no precision remains at the end of the calculation.
 
 Instead, we separate the computation of the precision of $\chi_M$ from the computation
@@ -274,26 +265,6 @@ to find the best possible precision for $\chi_M$.  The analysis of this precisio
 of much of this paper.  With this precision known, the actual calculation of $\chi_M$
 may proceed by lifting $M$ to a temporarily higher precision and then using a sufficiently
 stable algorithm (see Remark \ref{rem:lift_for_optimal}).
-\xavier{Maybe, we should say that it is not completely satisfying and (maybe) that we plan to come back to this question later.}
-
-One benefit of this approach is that we may account for diffuse precision:
-precision that is not localized on any single coefficient of $\chi_M$.  For example,
-let $0 \le \alpha_1 \le \alpha_2 \le \dots \le \alpha_n$, consider a
-diagonal matrix $D$ with diagonal entries $(p^{\alpha_1}, \dots, p^{\alpha_n})$,
-let $P, Q \in \GL_n(\Zp)$ and set $M = PDQ$.  The valuation of the coefficient
-of $X^{n-k}$ in $\chi_M$ will be $\sum_{i=1}^k \alpha_i$, and if $\alpha_{n-1} > 0$
-and $M$ is known with precision $O(p^N)$ then the constant term of $\chi_M$
-will be known with precision larger than $O(p^N)$ (see
-\cite{caruso-roe-vaccon:15a}*{Prop. 3.2}).
-
-As long as none of the eigenvalues of $M$ are congruent to $-1$ modulo $p$,
-then none of the coefficients of the characteristic polynomial of $1+M$ will have
-precision larger than $O(p^N)$.  But $\chi_{1+M}(X) = \chi_M(X-1)$, so the precision
-content of these two polynomials should be equivalent. The solution is that the
-extra precision in $\chi_{1+M}$ is diffuse and not visible on any individual coefficient.
-We formalize this phenomenon using lattices; see Section \ref{sec:padicprec} for
-further explanation, and \cite{caruso:17a}*{\S 3.2.2} for a specific example of the
-relationship between $\chi_M$ and $\chi_{1+M}$. % JNCF sec 3.2.2 pg 59; 2.4.3 pg 38
 
 \subsection*{Previous contributions.}
 
@@ -306,18 +277,18 @@ and the characteristic polynomial of Frobenius to compute zeta functions
 of hyperelliptic curves.
 
 In most of these papers, the precision analysis usually
-deals with great details on how to obtain the matrices (\textit{e.g.} of action of Frobenius)
+dwells on how to obtain the matrices (\textit{e.g.} of action of Frobenius)
 that are involved in the point-counting schemes.
-However, the computation of their characteristic polynomials is often
-a little bit less thoroughly studied: some
+However, the computation of their characteristic polynomials 
+attracts less attention: some
 refer to fast algorithms (using division), while others
 apply division-free algorithms.
 
 In \cite{caruso-roe-vaccon:15a}, the authors have begun the application
 of the theory of differential precision of \cite{caruso-roe-vaccon:14a}
 to the stable computation of characteristic polynomials.
-They have obtained a way to express the optimal precision
-on the characteristic polynomial, but have not given practical algorithms
+They describe the optimal precision
+for the characteristic polynomial, but do not give practical algorithms
 to attain this optimal precision.
 
 \subsection*{The contribution of this paper.}
@@ -385,7 +356,7 @@ algorithms to compute the optimal coefficient-wise precision
 for the characteristic polynomial.  We also give the results
 of some experiments demonstrating that these methods can lead
 to dramatic gains in precision over standard interval arithmetic.
-We close with results describing the precision associated to
+We close by describing the precision associated to
 eigenvalues of a matrix.
 
 \subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
@@ -426,8 +397,6 @@ the \emph{companion matrix} $\mathscr{C}$ associated to $\chi$ is
 
 \subsection{The theory of p-adic precision} \label{sec:padicprec}
 
-\todo{Rewrite this subsection with more details.  Add references to JNCF notes.}
-
 We recall some of the definitions and results of \cite{caruso-roe-vaccon:14a}
 as a foundation for our discussion of the precision for the characteristic polynomial
 of a matrix.  We will be concerned with two spaces in what follows:
@@ -461,10 +430,9 @@ The benefit of working with lattices is that they behave well under
 differentiable maps \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}, but they
 require more space and time to compute. 
 
-Jagged and flat precision is defined similarly for monic polynomials, 
+Jagged, flat and lattice precision is defined similarly for monic polynomials, 
 taking care that no precision is specified for the leading 
-coefficient which is supposed to be exactly~$1$. The notion 
-of \emph{lattice precision} also extends to polynomials. The underlying 
+coefficient which must be exactly~$1$. The underlying 
 vector space is now $K_{<n}[X]$ and we define a lattice in it as the
 image of ${\OK}_{<n}[X]$ under some linear mapping.
 
@@ -472,8 +440,8 @@ Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map
 and $d \chi_M$ for its differential at $M$.
 Our analysis of the precision behavior of $\chi$ rests upon
 the computation of its derivative $d\chi$, using \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
-Let $\adj(M)$ denote the adjugate\footnote{In \citelist{\cite{caruso-roe-vaccon:14a} \cite{caruso-roe-vaccon:15a}} the adjugate was referred to using the non-standard term \emph{comatrix}} of $M$ (when $M \in \GL_n(K)$,
-we have $\adj(M) = \det(M) M^{-1}$).  Recall
+Let $\adj(M)$ denote the adjugate\footnote{In \citelist{\cite{caruso-roe-vaccon:14a} \cite{caruso-roe-vaccon:15a}} the adjugate was referred to as the \emph{comatrix}} of $M$ (when $M \in \GL_n(K)$,
+we have $\adj(M) {=} \det(M) M^{-1}$).  Recall
 \citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}
 that $d\chi_M$ is given by
 \begin{equation} \label{eq:dchi}
@@ -483,12 +451,14 @@ d\chi_M: \quad M_n(K) & \to & K_{<n}[X] \smallskip \\
 \end{array}
 \end{equation}
 
-When $d\chi_M$ is surjective and $H$ is sufficiently ``small'' and ``regular,'' we may determine
+When $d\chi_M$ is surjective and $H$ is sufficiently ``small'' and ``regular,'' we may give
 the precision of $\chi(M)$ precisely as
 \begin{equation} \label{eq:mainlem}
 \chi(M + H) = \chi(M) + d\chi_M(H).
 \end{equation}
-More precisely, let
+The equality in \eqref{eq:mainlem} justifies our use of the phrase \emph{optimal} precision
+to denote the lattice precision $d\chi_M(H)$. To make the conditions on $H$ under
+which \eqref{eq:mainlem} holds more precise, let
 $\sigma_1(M), \dots, \sigma_n(M)$ denote the elementary divisors of $M$.
 
 \begin{prop} \label{prop:mainlem}
@@ -514,6 +484,11 @@ with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
 the conclusion.
 \end{proof}
 
+For further discussion of using lattices to measure precision,
+details on the computation of $d\chi_M$ in \eqref{eq:dchi}, and 
+examples of additional precision in $\chi(M)$,
+see \cite{caruso:17a}*{\S 2.4.3 and \S 3.2.2}
+
 \subsection{Several facts about the differential of $\chi$}
 
 We may rephrase the condition that $d\chi_M$ is surjective using more familiar invariants attached to $M$.
@@ -533,8 +508,8 @@ closure $\bar{K}$ of $K$ all have dimension $1$
 \end{prop}
 
 \begin{proof}
-The equivalence of \eqref{pt:cyc}, \eqref{pt:1d}, and \eqref{pt:charmin} is standard; see
-\cite{hoffman-kunze:LinearAlgebra}*{\S 7.1} for example.  We now show
+The equivalence of \eqref{pt:cyc}, \eqref{pt:1d}, and \eqref{pt:charmin} is standard; see \emph{e.g.}
+\cite{hoffman-kunze:LinearAlgebra}*{\S 7.1}.  We now show
 \eqref{pt:cyc} $\Rightarrow$ \eqref{pt:surj} and \eqref{pt:surj} $\Rightarrow$ \eqref{pt:1d}
 
 For any $P \in \GL_n(K)$, the image of $d\chi$ at $M$ will be the same
@@ -550,7 +525,7 @@ Since $\lambda$ occurs in two Jordan blocks,
 $X - \lambda$ will divide every entry of $\adj(X-M)$ and $d\chi_M$ will not be surjective.
 \end{proof}
 
-We also have an analogue of Proposition \ref{prop:surjectivity} for integral matrices.
+We also have an integral analogue of Proposition \ref{prop:surjectivity}.
 
 \begin{prop}
 \label{prop:intsurj}
@@ -564,7 +539,7 @@ ${\OK}_{<n}[X]$.
 \end{prop}
 \begin{proof}
 The condition \eqref{pt:surjp} is equivalent to the surjectivity of $d\chi_M$ modulo $\pi$.  The equivalence with
-\eqref{pt:cycp} follows the same argument as Proposition \ref{prop:surjectivity}, but over the residue field of $K$.
+\eqref{pt:cycp} is as in Proposition \ref{prop:surjectivity}, but over the residue field of $K$.
 \end{proof}
 
 The relationship between precision and the images of lattices under $d\chi_M$ allows us to
@@ -606,7 +581,7 @@ of the right hand side is contained within $\Lambda$ since $f(M) \in M_n(\OK)$.
 
 \begin{cor}
 If $M \in M_n(\OK)$, then $d \chi_M \big(M_n(\OK)\big)$ 
-is stable under multiplication by $X$ and hence is a module over $\OK[X]$.
+is stable under multiplication by $X$, so is a module over $\OK[X]$.
 \end{cor}
 
 \medskip
@@ -666,7 +641,7 @@ which is, at first sight, in $\softO(n^4)$
 operations in $K.$
 \end{rem}
 
-\section{Differential\\via Hessenberg form}
+\section{Hessenberg form}
 \label{sec:diffHess}
 
 In this section, we combine the computation of a Hessenberg form of a 
@@ -706,12 +681,9 @@ similar to $M$, we say that H is an \emph{(approximate) Hessenberg form} of $M.$
 
 It is not hard to prove that every matrix over a field admits
 a Hessenberg form.
-We prove here that over $K,$ if a matrix is 
-known at finite (jagged) precision,
-we can compute an approximate Hessenberg form of it.
-Moreover, we can provide an exact change of basis matrix.
-It relies on the following algorithm.
-
+We prove here that we may compute an approximate Hessenberg form 
+for any matrix known at finite (jagged) precision over $K$.
+Moreover, we provide an exact change of basis matrix.
 
 \noindent\hrulefill
 
@@ -745,8 +717,8 @@ Note that we use the notation of matrix multiplication in line 5, but actual upd
 $H$ and $P$ uses row and column operations (individually using $O(n)$ operations in $K$).
 
 \begin{prop} 
-Algorithm 1 computes $H$ and $P$ realizing an approximate Hessenberg form of $M.$
-$P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k\llp X\rrp$, and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coefficent in $M.$
+Algorithm 1 computes $H$ and $P$ realizing an approximate Hessenberg form of $M$.
+$P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k\llp X\rrp$, and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coefficient in $M.$
 \end{prop}
 \begin{proof}
 Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k\llp X \rrp.$
@@ -791,9 +763,9 @@ at least when $m$ is large.
 The smallest valuation of a coefficient of $M^{-1}$ is $-\cond(M).$
 It is $-2\cond(M)$ for $M^{-2}$ and it is then clear that $m-2\cond(M)$
 can be obtained as the valuation of a coefficient of $du_M(dM)$
-and the smallest that can be achieved this way for $dM$ in a precision lattice
-of flat precision. Hence the optimality of the bound given, at least when 
-$m$ is large \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
+and the smallest that can be achieved this way for $dM$ in a flat precision lattice.
+Hence the optimality of the bound given, for large 
+$m$ \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
 
 Now, the computation of the Smith normal form was described in \cite{Vaccon-these}.
 From $M$ known at flat precision $O(\pi^m),$ we can obtain an exact $\Delta$, and $P$ and $Q$ 
@@ -815,7 +787,7 @@ However, we may relate $\adj(X-H)$ to $\adj(1-XH)$, whose
 entries lie in the CDVF $K\llp X\rrp$.  In this way, we compute $\adj(X-H)$
 using an SNF method, with no division in $K$.
 
-First, we need a lemma relating adjugates of
+We begin by relating adjugates of
 similar matrices:
 
 \begin{lem} \label{lem:adjugate_of_similar}
@@ -853,10 +825,9 @@ are determinants of size $n-1$.
 
 This lemma allows us to compute $\adj(1-XM)$ instead of $\adj(X-M).$
 This has a remarkable advantage: the pivots during the computation of
-the SNF of $\adj(1-XM)$ are units of $K\llb X\rrb$ (of $\OK\llb X\rrb$ if $M \in M_n(\OK)$) and are known
+the SNF of $\adj(1-XM)$ are units in $K\llb X\rrb$ (in $\OK\llb X\rrb$ if $M \in M_n(\OK)$) and are known
 in advance to be on the diagonal. This leads to a very smooth
-precision and complexity behaviour when the input matrix lives in 
-$M_n(\OK).$ 
+precision and complexity behavior when $M \in M_n(\OK).$ 
 
 \noindent\hrulefill
 
@@ -924,8 +895,8 @@ Line 6 is in $\softO (n^2)$ and 7 in $\softO (n^3).$
 Thanks to the fact that the $P$ only corresponds to the product of $n-1$ 
 shear matrices, the
 product on line 8 is in $\softO (n^3).$
-We emphasize that no division has been done throughout the algorithm.
-Line 9 is costless, and the result is then proved.
+We emphasize that no division has been done.
+Line 9 is costless, and the result is proven.
 \end{proof}
 \begin{rem}
 If $M \in M_n(K)$ does not have coefficients in $\OK,$
@@ -943,9 +914,9 @@ know the optimal jagged precision on $\chi_M.$
 
 In this section, we combine Proposition \ref{prop:shortcom}
 with Algorithm 2 to compute the adjugate of $X-M$
-when $\chi_M$ is squarefree.   Note that this condition on
-$\chi_M$ is equivalent to $M$ being diagonalizable under
-the assumption that $d\chi_M$ is surjective.  The result is
+when $\chi_M$ is squarefree.   Note that, under
+the assumption that $d\chi_M$ is surjective,
+$\chi_M$ is squarefree if and only if $M$ is diagonalizable.  The result is
 the following $\softO(n^3)$ algorithm, where the only
 divisions are for gcd and modular inverse computations.
 
@@ -996,28 +967,27 @@ The only divisions occur in taking gcds and inverses modulo $\chi_M$.
 As we have already seen, completing Steps 0 and 1 is in $\softO (n^3).$
 Multiplying by $T$ or $S$ or their inverse corresponds
 to $n$ operations on rows or columns over a matrix with coefficients
-in $\OK[X]$ of degree at most $n.$
-Thus, it is in $\softO (n^3).$
-Step 5 is in $\softO (n),$ Step 6 in $\softO(n^2)$ and Step 7 in $\softO(n^3)$.
-All that is to prove is that the set of $P$ and $S$ to avoid
-is of dimension at most $n-1.$
+in $\OK[X]$ of degree at most $n$.
+Thus, it is in $\softO(n^3).$
+Step 5 is in $\softO(n)$, Step 6 in $\softO(n^2)$ and Step 7 in $\softO(n^3)$.
+We need only prove that the set of $P$ and $S$ to avoid
+is of dimension at most $n-1$.
+
 The idea is to work modulo $X-\lambda$
 for $\lambda$ a root of $\chi (M)$ (in an algebraic closure)
 and then apply Chinese Remainder Theorem.
 The goal of the Step $2$ is to ensure the first row of $B$ contains an
-invertible entry modulo $\chi_M.$
+invertible entry modulo $\chi_M$.
 Since $A(\lambda)$ is of rank one, the $\mu_i$'s have to avoid an
 affine hyperplane so that $\row(B,1) \mod (X-\lambda)$ is a non-zero vector.
-Hence for $\row(B,1) \mod \chi (M)$ to contain an invertible coefficient,
-a finite union of affine hyperplane is to avoid.
-Similarly, the goal of Step 3 is to put an invertible coefficient (modulo
-$\chi_M$) on $C_{1,1},$ and again, only a finite union of affine
-hyperplane is to avoid.
-Hence, the set that the $\mu_i$'s have to avoid is a finite union
-of hyperplane, and hence, is of dimension at most $n-1.$
-Thus, almost any choice of $\mu_i$ leads to a matrix $C$ passing the test
-in Step 4.
-This concludes the proof.
+Hence we need only avoid a finite union of affine hyperplanes
+in order for $\row(B,1) \mod \chi (M)$ to contain an invertible coefficient.
+
+Similarly, the goal of Step 3 is make $C_{1,1}$ invertible modulo
+$\chi_M$.  Again, only a finite union of affine
+hyperplane need be avoided.
+Thus, almost any choice of $\mu_i$ leads to a matrix $C$ passing
+Step 4, concluding the proof.
 \end{proof}
 
 
@@ -1035,7 +1005,7 @@ the methods of \cite{caruso-roe-vaccon:14a}.
 \end{rem}
 
 
-\section{Differential\\via Frobenius form}
+\section{Frobenius form}
 \label{sec:diffFrob}
 
 The algorithm designed in the previous section computes the differential 
@@ -1050,9 +1020,9 @@ algorithm (with complexity $\softO(n^\omega)$) for computing this short
 form. The price to pay is that divisions in $K$ appear, which can be an 
 issue regarding to precision in particular cases.
 In this section, we only estimate the number of operations in $K$
-and not their behaviour on precision.
+and not their behavior on precision.
 
-From now on, we fix a matrix $M \in M_n(K)$ for which $d \chi_M$ is 
+We now fix a matrix $M \in M_n(K)$ for which $d \chi_M$ is 
 surjective. Let $(\alpha, P, Q, \chi_M)$ be the quadruple encoding
 the short form of $d \chi_M$; we recall that they are related by the
 relations:
@@ -1060,8 +1030,8 @@ relations:
 d \chi_M(dM) & =\tr(\adj(X{-}M) \cdot dM) \\
 \adj(X{-}M) & = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M.
 \end{align*}
-An approximation to $\chi_M$ can be computed in $\softO(n^\omega)$ operations in $K$
-by computing an approximation to the Frobenius normal form of $M$ \cite{storjohann:01a}.
+We may approximate $\chi_M$ in $\softO(n^\omega)$ operations in $K$
+by approximating the Frobenius normal form of $M$ \cite{storjohann:01a}.
 
 The matrix $P$ can be computed as follows. Pick $c \in K^n$. Define 
 $c_i = M^i c$ for all $i \geq 1$. The $c_i$'s can be computed in 
@@ -1095,14 +1065,13 @@ $K^n$, \emph{i.e.} $e$ is always a cyclic vector of $\mathscr{C}$.
 We may then let $R$ have columns $e, \mathscr{C}e, \dots, \mathscr{C}^{n-1}e$
 and recover $Q$ using the relation $Q = P_\inv^T R$.
 
-It remains to compute the scaling factor $\alpha$. For this, we write
-the relation:
+It remains to compute the scaling factor $\alpha$. We write
 \begin{equation}
 \label{eq:shortcomN}
 \adj(X{-}\mathscr{C}) = \alpha \cdot Y^T \cdot Y R^T \mod \chi_M
 \end{equation}
-which comes from Eq.~\eqref{eq:shortcom} after multiplication on the 
-left by $P^{-1}$ and multiplication on the right by $P$. We observe
+by multiplying Eq.~\eqref{eq:shortcom} on the 
+left by $P^{-1}$ and on the right by $P$. We observe
 moreover that the first row of $R$ is $(1, 0, \ldots, 0)$. Evaluating
 the top left entry of Eq.~\eqref{eq:shortcomN}, we end up with the 
 relation:
@@ -1112,11 +1081,10 @@ We summarize this section with the following theorem:
 
 \begin{theo}
 \label{thm:compute_shortcom}
-Given $M \in M_n(K)$ such that $d \chi_M$ is surjective,
-then one can compute $(\alpha, P, Q, \chi_M)$
-in $K[X]$ such that
-$\adj(X{-}N) = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M$
-in $\softO(n^\omega)$ operations in $K.$
+Given $M \in M_n(K)$ with $d \chi_M$ surjective,
+one can compute $\alpha, P, Q, \chi_M) \in K[X]$ with
+$\softO(n^\omega)$ operations in $K$ such that
+$\adj(X{-}N) = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M$.
 \end{theo}
 
 \section{Optimal jagged precision}
@@ -1191,9 +1159,12 @@ large precision, rescale them to have entries in $O_K$
 and then use Algorithm 2 to
 compute the characteristic polynomial.
 The output might then need to be rescaled and
- truncated at the optimal precision. 
+ truncated to the optimal precision. 
 This requires $\softO(n^3)$ operations in $O_K$ 
-and unfortunately, for several instances, may require to increase a lot the precision.
+and may require a large intermediate precision.
+Better methods for approximating $\chi_M$ with
+lower intermediate precision would be a valuable
+future contribution.
 \end{rem}
 
 \medskip
@@ -1209,7 +1180,7 @@ We fix an integer $N$, the relative precision, and generate elements of $\Q_p$ o
 \[
 x = p^v \cdot \big(a + O\big(p^{N+v_p(a)}\big)\big)
 \]
-where $v$ is a random integer generated according to the distribution:
+where $v$ is an integer generated according to the distribution:
 \[
 \mathbb P [v = 0] = \frac 1 5 \quad ; \quad
 \mathbb P [v = n] = \frac 2 {5\cdot |n| \cdot (|n|+1)} \text{ for }
@@ -1227,13 +1198,13 @@ Once this sample has been generated, we computed, for each $k \in \{0,
 \renewcommand{\itemsep}{0pt}
 \item the optimal precision on the $k$-th coefficient of the 
 characteristic polynomial of $M$ given by Eq.~\eqref{eq:optjagged}.
-Note that it does not matter which method we use to compute $\adj(X-M)$,
-since we are only interested in the precision loss and not the runtime.
+Note that the method for computing $\adj(X-M)$ is irrelevant
+since we only record the precision loss, not the runtime.
 \item in the capped relative model\footnote{Each 
 coefficient carries its own precision which is updated after each 
-elementary arithmetical operation.},
-the precision gotten on the $k$-th coefficient of the 
-characteristic polynomial of $M$ computed \emph{via} the call:
+elementary arithmetic operation.},
+the precision on the $k$-th coefficient of the 
+characteristic polynomial of $M$ is computed \emph{via} the call:
 
 \hfill$M\texttt{.charpoly(algorithm="df")}.$\hfill\null
 
@@ -1242,11 +1213,11 @@ characteristic polynomial of $M$ computed \emph{via} the call:
 $k$-th coefficient of the characteristic polynomial of $M$.
 \end{enumerate}
 
-\begin{rem}
-The keyword \texttt{algorithm="df"} forces \texttt{SageMath} to use the 
-division free algorithm of \cite{seifullin:02a}. It is likely that, proceeding so, we 
-limit the loss of precision.
-\end{rem}
+%\begin{rem}
+%The keyword \texttt{algorithm="df"} forces \texttt{SageMath} to use the 
+%division free algorithm of \cite{seifullin:02a}. It is likely that, proceeding so, we 
+%limit the loss of precision.
+%\end{rem}
 
 \noindent
 The table of Figure~\ref{fig:exp} summarizes the results obtained. 
@@ -1303,20 +1274,20 @@ $X^8$ & $0.99$ &   $0.99$           &   $0.99$ \vspace{-1.5ex} \\
 {\footnotesize Results for a sample of $1000$ instances}
 \hfill\null
 
-\caption{Average loss of accuracy on the coefficients
-of the characteristic polynomial of a random $9 \times 9$
+\caption{Average precision loss on 
+the characteristic polynomial of a random $9 \times 9$
 matrix over $\Q_2$}
 \label{fig:exp}
 
 \end{figure}
 %
-It should be read as follows. First, the acronyms CR and FP 
-refers to ``capped relative'' and ``floating-point'' respectively.
-The numbers displayed in the table are the average loss of
+It should be read as follows. The acronyms CR and FP 
+refer to ``capped relative'' and ``floating-point'' respectively.
+The numbers displayed are the average loss of
 \emph{relative} precision. 
-More precisely, if $N$ is the relative precision at
-which the entries of the input random matrix $M$ have been generated
-and $v$ is the valuation of the $k$-th coefficient of $\chi_M$, then:
+More precisely, if $N$ is the relative precision of
+the entries of $M$ and $v$ is the valuation of
+the $k$-th coefficient of $\chi_M$, then:
 
 \vspace{-2mm}
 
@@ -1335,10 +1306,8 @@ an incorrect digit on the $k$-th coefficient of $\chi_M$.
 \end{enumerate}
 
 We observe that the loss of relative accuracy stays under control in the 
-``Optimal'' column whereas it has a very erratic behavior --- very large 
-values and very large deviation as well --- in the two other columns. 
-These experiments thus demonstrate the utility of the methods developed
-in this paper.
+``Optimal'' column whereas it has very erratic behavior in the two other columns,
+demonstrating the utility of the methods developed in this paper.
 
 \subsection{On eigenvalues}
 \label{ssec:eigenvalues}
@@ -1363,18 +1332,19 @@ function $f : \calU \to K$ such that:
 
 \begin{lem}
 The function $f$ is strictly differentiable on a neighborhood of 
-$M_\app$.
-The differential of $f$ at $M$ is the linear mapping:
-$$dM \mapsto d \lambda = - \frac{\tr(\adj(\lambda-M) \cdot dM)}
-{\chi'_M(\lambda)}$$
+$M_\app$, with differential at $M$ the map
+\[
+dM \mapsto d \lambda = - \frac{\tr(\adj(\lambda-M) \cdot dM)}
+{\chi'_M(\lambda)},
+\]
 where $\chi'_M$ is the usual derivative of $\chi_M$.
 \end{lem}
 
 \begin{proof}
-The first assertion follows from the implicit function Theorem.
-Differentiating the relation $\chi_M(\lambda) = 0$, we get
-$\chi'_M(\lambda) \cdot d \lambda + \tr(\adj(X-M) \cdot dM)(\lambda) = 0$,
-from which the Lemma follows.
+The first assertion follows from the implicit function theorem,
+the second from differentiating $\chi_M(\lambda) = 0$, which gives
+$\chi'_M(\lambda) \cdot d \lambda + \tr(\adj(X-M) \cdot dM)(\lambda) = 0$.
+%from which the Lemma follows.
 \end{proof}
 
 \noindent
@@ -1435,7 +1405,7 @@ with integers.
 The $\alpha(\lambda_k)$'s and the $\chi'_M(\lambda_k)$'s can be computed 
 for a cost of $\softO(ns)$ operations in $K$ using fast multipoint 
 evaluation methods (see 10.7 of \cite{gathen-gerhard:13a}).
-On the other hand, we observe that $P_i Y(\lambda_k)^T$ is nothing but
+On the other hand, we observe that $P_i Y(\lambda_k)^T$ is
 the $(i,k)$ entry of the matrix:
 $$P \cdot \left( \begin{matrix}
 \lambda_1 & \cdots & \lambda_s \\
