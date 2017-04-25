@@ -118,14 +118,14 @@
 \maketitle
 
 \begin{abstract}
-We analyze the precision of the characteristic polynomial $\chi(M)$ of 
+We analyze the precision of the characteristic polynomial $\chi_M$ of 
 an $n \times n$ $p$-adic matrix $M$ using differential precision methods 
 developed previously.  When $M$ is an integral matrix whose entries are 
 all given at the same precision $O(p^N)$, we give a criterion (checkable 
 within $\softO(n^\omega)$ operations in $\Fp$) for the existence of a
-coefficient of $\chi(M)$ with more accuracy than $O(p^N)$.
+coefficient of $\chi_M$ with more accuracy than $O(p^N)$.
 In general, we provide two algorithms for determining the optimal 
-precision of the coefficients of $\chi(M)$ and of their eigenvalues.
+precision of the coefficients of $\chi_M$ and of their eigenvalues.
 We provide evidence showing that classical algorithms do not reach
 this optimal precision in general.
 \end{abstract}
@@ -164,7 +164,7 @@ eigenvalue}
 %\medskip
 
 \section{Introduction}
-%\begin{comment}
+\begin{comment}
 \vspace{0.1in}
 \noindent \textbf{Reviewer 1:}
 \begin{enumerate}
@@ -189,7 +189,7 @@ eigenvalue}
 \item \done{We have switched from $M^t$ to $M^T$ to denote the transpose.}
 \item \done{We have added a reference to course notes of Caruso (now reference [2]) which go into more detail on how the formula for the differential of $\chi_M$ is derived.}
 \item \done{In section 5.1, we added a remark noting that the method for computing the adjugate matrix has no effect on the extent of the precision loss, just on the runtime.}
-\item \done{We agree that further experiments would be beneficial, but we are constrained by space (due to the 8 page limit) and time (due to the limited time to make revisions).  We note that we did perform the current experiment in higher dimension with similar results: dimension $8$ was chosen to be representative without the table taking up too much space in the paper.}
+\item \done{We agree that further experiments would be beneficial, but we are constrained by space (due to the 8 page limit) and time (due to the limited time to make revisions).  We note that we did perform the current experiment in higher dimension with similar results: dimension $9$ was chosen to be representative without the table taking up too much space in the paper.}
 \item \done{We have removed the two paragraphs before the Previous contributions section.  Some of the material discussed therein has been moved to Section 2.1, and some is now referenced in the course notes [2]}
 \item \done{We have carried out the other minor corrections suggested.}
 \end{enumerate}
@@ -228,7 +228,7 @@ limit, which hinders us from adding more examples or details.}
 
 
 \bigskip
-%\end{comment}
+\end{comment}
 
 The characteristic polynomial is a fundamental invariant of a matrix: its roots
 give the eigenvalues, and the trace and determinant can be extracted from its coefficients.
@@ -247,7 +247,7 @@ not only the running time of the algorithm but also the accuracy of the result.
 
 Let $M \in M_n(\Qp)$, with every entry given at precision $O(p^N)$.
 The simplest approach for computing the characteristic polynomial of $M$
-is to compute $\det(X-M)$ either using recursive row expansion or various division free
+is to compute $\det(X{-}M)$ either using recursive row expansion or various division free
 algorithms \citelist{\cite{seifullin:02a} \cite{kaltofen:92a}}.  There are two issues
 with these methods.  First, they are slower than alternatives that allow division,
 requiring $O((n+1)!)$, $\softO(n^5)$ and $\softO(n^{3 + \omega/2})$ operations in $K$.  Second,
@@ -260,7 +260,7 @@ However, the use of division frequently leads to catastrophic losses of precisio
 In many examples, no precision remains at the end of the calculation.
 
 Instead, we separate the computation of the precision of $\chi_M$ from the computation
-of an approximation to $\chi_M$.  Given some precision on $M$, we use \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}
+of an approximation to $\chi_M$.  Given some precision on $M$, we use the theory developed in \cite{caruso-roe-vaccon:14a}
 to find the best possible precision for $\chi_M$.  The analysis of this precision is the subject
 of much of this paper.  With this precision known, the actual calculation of $\chi_M$
 may proceed by lifting $M$ to a temporarily higher precision and then using a sufficiently
@@ -308,8 +308,7 @@ the matrix $\adj(X{-}M)$ whose size is $O(n^2)$ elements of the base
 field (instead of $O(n^3)$ for a dense representation);
 \item two algorithms to compute $\adj(X{-}M)$: the first one is 
 division-free and performs $\softO(n^3)$ operations in $\Zp$ while 
-the second one may perform divisions and has complexity $\tilde 
-O(n^\omega)$;
+the second one may perform divisions and has complexity $\softO(n^\omega)$;
 \end{enumerate}
 and deduce from this the following applications to the question
 we are interested in:
@@ -323,7 +322,8 @@ at the same precision);
 \item two algorithms to compute the optimal precision on each 
 coefficient of the characteristic polynomial of a matrix $M \in 
 M_n(\Qp)$ (whose entries may be given at different precision): the first 
-one is division-free and has complexity $\softO(n^3)$ while the second 
+one is division-free and has complexity $\softO(n^3)$ (operations in
+$\Zp$) while the second 
 one may perform divisions but has complexity $\softO(n^\omega)$;
 \item Proposition \ref{prop:opteigenvalues}: a $\softO(n^\omega)$
 algorithm to compute the optimal precision on each eigenvalue of $M$.
@@ -408,7 +408,7 @@ of degree strictly less than $n$.
 One cannot represent
 matrices $M \in M_n(K)$ exactly, but instead must specify an approximation
 together with a measure of the approximation's accuracy; there are several ways to do so.
-When using \emph{jagged} precision, on gives a precision on each entry,
+When using \emph{jagged} precision, one gives a precision on each entry,
 representing the $(i,j)$ entry as $a_{i,j} + O(\pi^{N_{i,j}})$. The integer $N_{i,j}$ 
 is called the \emph{absolute precision} and may depend on $(i,j)$.
 When the $N_{i,j}$ are all equal, we say that the precision datum is 
@@ -452,7 +452,7 @@ d\chi_M: \quad M_n(K) & \to & K_{<n}[X] \smallskip \\
 \end{equation}
 
 When $d\chi_M$ is surjective and $H$ is sufficiently ``small'' and ``regular,'' we may give
-the precision of $\chi(M)$ precisely as
+the precision of $\chi_M$ precisely as
 \begin{equation} \label{eq:mainlem}
 \chi(M + H) = \chi(M) + d\chi_M(H).
 \end{equation}
@@ -486,8 +486,8 @@ the conclusion.
 
 For further discussion of using lattices to measure precision,
 details on the computation of $d\chi_M$ in \eqref{eq:dchi}, and 
-examples of additional precision in $\chi(M)$,
-see \cite{caruso:17a}*{\S 2.4.3 and \S 3.2.2}
+examples of additional precision in $\chi_M$,
+see \cite{caruso:17a}*{\S 2.4.3 and \S 3.2.2}.
 
 \subsection{Several facts about the differential of $\chi$}
 
@@ -515,14 +515,14 @@ The equivalence of \eqref{pt:cyc}, \eqref{pt:1d}, and \eqref{pt:charmin} is stan
 For any $P \in \GL_n(K)$, the image of $d\chi$ at $M$ will be the same
 as the image of $d\chi$ at $PMP^{-1}$, so we may assume that
 $M$ is a companion matrix.  For a companion matrix, the last column of
-$\adj(X-M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi_M$ is surjective.
+$\adj(X{-}M)$ consists of $1, X, X^2, \dots, X^{n-1}$ so $d\chi_M$ is surjective.
 
 Now suppose that $M$ has an eigenvalue $\lambda$ over $\bar{K}$ occurring in multiple Jordan blocks.
-After conjugating into Jordan normal form over $\bar{K}$, the entries of $\adj(X-M)$
+After conjugating into Jordan normal form over $\bar{K}$, the entries of $\adj(X{-}M)$
 will also be block diagonal, and divisible within each block by the product of $(X-\mu)^{d_\mu}$,
 where $\mu, d_\mu$ ranges over the eigenvalues and dimensions of the other Jordan blocks.
 Since $\lambda$ occurs in two Jordan blocks,
-$X - \lambda$ will divide every entry of $\adj(X-M)$ and $d\chi_M$ will not be surjective.
+$X - \lambda$ will divide every entry of $\adj(X{-}M)$ and $d\chi_M$ will not be surjective.
 \end{proof}
 
 We also have an integral analogue of Proposition \ref{prop:surjectivity}.
@@ -547,8 +547,8 @@ apply Proposition \ref{prop:intsurj} to determine when the precision of the char
 is the minimum possible.
 
 \begin{cor} \label{cor:prec_gain}
-Suppose that $M \in \GL_n(\OK)$ is known with precision $O(\pi^m)$.
-Then the characteristic polynomial of $M$ has precision lattice strictly contained in $O(\pi^m)$
+Suppose that $M \in \GL_n(\OK)$ is known with flat precision $O(\pi^N)$.
+Then the characteristic polynomial of $M$ has precision lattice strictly contained in $O(\pi^N)$
 if and only if the reduction of $M$ modulo $\pi$ does not have a cyclic vector.
 \end{cor}
 
@@ -561,7 +561,7 @@ Note that this criterion is checkable using $\softO(n^\omega)$ operations in the
 By definition, the codomain of $d \chi_M$ is $K_{< n}[X]$. 
 However, when $M$ is given, $K_{< n}[X]$ is canonically isomorphic
 to $K[X]/\chi_M(X)$ as a $K$-vector space. For our purpose, it will 
-often be convenient to view $d \chi_M$ as an $K$-linear mapping
+often be convenient to view $d \chi_M$ as a $K$-linear mapping
 $M_n(K) \to K[X]/\chi_M(X)$.
 
 \begin{prop}
@@ -622,7 +622,7 @@ we are done.
 
 Proposition~\ref{prop:shortcom} shows that $\adj(X{-}M)$ can be encoded 
 by the datum of the quadruple $(\alpha, P, Q, \chi_M)$ whose total size 
-stays within $O(n^2)$ : the polynomials $\alpha$ and $\chi_M$ are 
+stays within $O(n^2)$: the polynomials $\alpha$ and $\chi_M$ are 
 determined by $2n$ coefficients while we need $2n^2$ entries to 
 write down the matrices $P$ and $Q$. 
 We shall see moreover in Section \ref{sec:diffFrob} that interesting
@@ -682,7 +682,7 @@ similar to $M$, we say that H is an \emph{(approximate) Hessenberg form} of $M.$
 It is not hard to prove that every matrix over a field admits
 a Hessenberg form.
 We prove here that we may compute an approximate Hessenberg form 
-for any matrix known at finite (jagged) precision over $K$.
+for any matrix known at finite jagged precision over $K$.
 Moreover, we provide an exact change of basis matrix.
 
 \noindent\hrulefill
@@ -718,14 +718,20 @@ $H$ and $P$ uses row and column operations (individually using $O(n)$ operations
 
 \begin{prop} 
 Algorithm 1 computes $H$ and $P$ realizing an approximate Hessenberg form of $M$.
-$P$ is exact over finite extensions of $\mathbb{Q}_p$ and $k\llp X\rrp$, and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coefficient in $M.$
+$P$ is exact 
+%over finite extensions of $\mathbb{Q}_p$ and $k\llp X\rrp$, 
+and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coefficient in $M.$
 \end{prop}
 \begin{proof}
-Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k\llp X \rrp.$
+%Let us assume that $K$ is a finite extensions of $\mathbb{Q}_p$ or $k\llp X \rrp.$
 Inside the nested \textbf{for} loop, if we want to eliminate $\pi^{u_y} \varepsilon_y+O(\pi^{n_y})$ with pivot $\pi^{u_x} \varepsilon_x+O(\pi^{n_x}),$
 with the $\varepsilon$'s being units,
-the corresponding coefficient of the corresponding shear matrix is the lift(in $\mathbb{Z}, $  $\Fq[X],$ $\Q[X]$ or adequate extension) of $\pi^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{u_y-u_x\min (n_x-u_x,n_y-u_y)}.$
-Exactness follows directly. Over other fields, we can not lift, but the computations are still valid.
+the corresponding coefficient of the corresponding shear matrix is 
+%the lift(in $\mathbb{Z}, $  $\Fq[X],$ $\Q[X]$ or adequate extension) of 
+any exact element of $K$ congruent to 
+$\pi^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{u_y-u_x\min (n_x-u_x,n_y-u_y)}$.
+Exactness follows directly. 
+%Over other fields, we can not lift, but the computations are still valid.
 The rest is clear.
 \end{proof}
 
@@ -741,7 +747,7 @@ precision behavior is not easy to quantify.
 \subsection{Computation of the inverse}
 
 In this section, we prove that to compute the inverse of
-a matrix over a CDVF $K$, the Smith normal form is precision-wise optimal in the flat-precision case.
+a matrix over $K$, the Smith normal form is precision-wise optimal in the flat-precision case.
 We first recall the differential of matrix inversion.
 
 \begin{lem}
@@ -754,26 +760,28 @@ We then have the following result about the loss in precision when computing the
 
 \begin{prop}
 Let $\cond(M) = \val(\sigma_n(M))$.
-If $dM$ is a flat precision of $O(\pi^m)$ on $M$ then $M^{-1}$
-can be computed at precision $O(\pi^{m-2\cond(M)})$ by a \textbf{SNF} computation
+If $dM$ is a flat precision of $O(\pi^N)$ on $M$ then $M^{-1}$
+can be computed at precision $O(\pi^{N-2\cond(M)})$ by a \textbf{SNF} computation
 and this lower-bound is optimal,
-at least when $m$ is large.
+at least when $N$ is large.
 \end{prop}
+
 \begin{proof}
-The smallest valuation of a coefficient of $M^{-1}$ is $-\cond(M).$
-It is $-2\cond(M)$ for $M^{-2}$ and it is then clear that $m-2\cond(M)$
+The smallest valuation of a coefficient of $M^{-1}$ is $-\cond(M)$.
+%It is $-2\cond(M)$ for $M^{-2}$ and it is then clear that 
+Consequently $N - 2\cond(M)$
 can be obtained as the valuation of a coefficient of $du_M(dM)$
-and the smallest that can be achieved this way for $dM$ in a flat precision lattice.
+and it is the smallest that can be achieved this way for $dM$ in a flat precision lattice.
 Hence the optimality of the bound given, for large 
-$m$ \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
+$N$ \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
 
 Now, the computation of the Smith normal form was described in \cite{Vaccon-these}.
-From $M$ known at flat precision $O(\pi^m),$ we can obtain an exact $\Delta$, and $P$ and $Q$ 
-known at precision at least $O(\pi^{m-\cond(M)})$, with coefficients in $\OK$
+From $M$ known at flat precision $O(\pi^N),$ we can obtain an exact $\Delta$, and $P$ and $Q$ 
+known at precision at least $O(\pi^{N-\cond(M)})$, with coefficients in $\OK$
 and determinant in $\OK^\times$ realizing an Smith normal form of $M.$
 There is no loss in precision when computing $P^{-1}$ and $Q^{-1}.$
 Since the smallest valuation occurring in $\Delta^{-1}$ is $-\cond(M),$
-we see that $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ is known at precision at least $O(\pi^{m-2\cond(M)}),$
+we see that $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ is known at precision at least $O(\pi^{N-2\cond(M)}),$
 which concludes the proof.
 \end{proof}
 
@@ -781,10 +789,11 @@ which concludes the proof.
 
 In this section, we compute $\adj(X-H)$ for a Hessenberg matrix $H$
 using the Smith normal form computation of the previous section.
-The entries of $\adj(X-H)$ lie in $K[X]$, which is not a CDVF,
+The entries of $\adj(X-H)$ lie in $K[X]$, which is not a complete
+discrete valuation field,
 so we may not directly apply the methods of the previous section.
 However, we may relate $\adj(X-H)$ to $\adj(1-XH)$, whose
-entries lie in the CDVF $K\llp X\rrp$.  In this way, we compute $\adj(X-H)$
+entries lie in $K\llp X\rrp$.  In this way, we compute $\adj(X-H)$
 using an SNF method, with no division in $K$.
 
 We begin by relating adjugates of
@@ -807,17 +816,16 @@ We denote by $F^{\rec,d}$ the matrix with $(F^{\rec,d})_{i,j} = (F_{i,j})^{\rec,
 We then have the following result :
 \begin{lem}
 Let $M \in M_n(K).$ Then:
-\begin{eqnarray*}
-\adj(1-XM)^{\rec,n-1}=&\adj(X-M), \\
-(\chi_M I_n)^{\rec,n}=&(1-XM) \adj(1-XM).\\
-\end{eqnarray*}
+\begin{align*}
+\adj(1-XM)^{\rec,n-1}&=\adj(X-M), \\
+(\chi_M I_n)^{\rec,n}&=(1-XM) \adj(1-XM).\\
+\end{align*}
 \end{lem}
 \begin{proof}
 It all comes down to the following result:
 let $F \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
 then $\det (F^{\rec,1})=\det(F)^{\rec,d}.$
-Indeed, one can use multilinearity of the determinant on $X^d \det(F(1/X))$
-to prove this result.
+%Indeed, one can use multilinearity of the determinant on $X^d \det(F(1/X))$ to prove this result.
 It directly implies the second part of the lemma; the first part follows
 from the fact that the entries of $\adj(X-M)$ and of $\adj(1-XM)$
 are determinants of size $n-1$.
@@ -868,14 +876,14 @@ in order to avoid a product of two matrices in $M_n(\OK[X])$.}
 
 \begin{theo}
 Let $H \in M_n(\OK)$ be an approximate Hessenberg matrix with
-coefficient-wise precision $O(\pi^M).$
-Then, using Algorithm 2, one can compute $\adj (X -H)$
+flat precision $O(\pi^N).$
+Then, using Algorithm 2, one can compute $\adj (X{-}H)$
 and $\chi_H$ in 
-$\softO (n^3)$ operations in $\OK$ at the precision given by $H.$
+$\softO (n^3)$ operations in $\OK$ at precision $O(\pi^N).$
 \end{theo}
 \begin{proof}
 First, the operations of the lines 2 and 3 use $\softO (n^3)$ operations
-in $\OK$ at the precision given by $H.$
+in $\OK$ at precision $O(\pi^N).$
 Indeed, since $H$ is an approximate Heisenberg matrix, when we use $U_{i,i}$ as pivot
 the only other nonzero coefficient in its column is $U_{i+1,i}$.
 As a consequence, when performing this column-pivoting, only two rows ($i$ and
@@ -886,13 +894,13 @@ The order in which the entries of $U$ are cleared implies that $Q$ is just fille
 no additional operations in $\OK\llb X\rrb$ are required. Thus the total cost
 for lines 2 and 3 is indeed $\softO (n^3)$ operations.
 
-For lines 4 and 5, there are only $n-1$ eliminations, resulting in a $\softO (n^2)$ cost
-for the computation of $U.$ Rather than actually construct $P$, we just track the eliminations
+For lines 4 and 5, there are only $n{-}1$ eliminations, resulting in a $\softO (n^2)$ cost
+for the computation of $U.$ Rather than actually constructing $P$, we just track the eliminations
 performed in order to do the corresponding row operations on $Q$, since we only need the product $P \times Q$.
 
-Line 6 is in $\softO (n^2)$ and 7 in $\softO (n^3).$
+Line 6 is in $\softO (n^2)$ and line 7 in $\softO (n^3).$
 
-Thanks to the fact that the $P$ only corresponds to the product of $n-1$ 
+Thanks to the fact that the $P$ only corresponds to the product of $n{-}1$ 
 shear matrices, the
 product on line 8 is in $\softO (n^3).$
 We emphasize that no division has been done.
@@ -913,7 +921,7 @@ know the optimal jagged precision on $\chi_M.$
 \subsection{The adjugate of $X{-}M$}
 
 In this section, we combine Proposition \ref{prop:shortcom}
-with Algorithm 2 to compute the adjugate of $X-M$
+with Algorithm 2 to compute the adjugate of $X{-}M$
 when $\chi_M$ is squarefree.   Note that, under
 the assumption that $d\chi_M$ is surjective,
 $\chi_M$ is squarefree if and only if $M$ is diagonalizable.  The result is
@@ -974,7 +982,7 @@ We need only prove that the set of $P$ and $S$ to avoid
 is of dimension at most $n-1$.
 
 The idea is to work modulo $X-\lambda$
-for $\lambda$ a root of $\chi (M)$ (in an algebraic closure)
+for $\lambda$ a root of $\chi_M$ (in an algebraic closure)
 and then apply Chinese Remainder Theorem.
 The goal of the Step $2$ is to ensure the first row of $B$ contains an
 invertible entry modulo $\chi_M$.
@@ -1010,16 +1018,16 @@ the methods of \cite{caruso-roe-vaccon:14a}.
 
 The algorithm designed in the previous section computes the differential 
 $d \chi_M$ of $\chi$ at a given matrix $M \in M_n(K)$ for a cost of 
-$\softO (n^3)$ operations in $K$. This seems to be optimal given that the 
-(naive) size of the $d \chi_M$ is $n^3$: it is a matrix of size $n
-\times n^2$. It turns out however that improvements are still possible!
-Indeed, thanks to Proposition~\ref{prop:shortcom}, the matrix of 
-$d \chi_M$ admits a compact form which can be encoded using only $O(n^2)$ 
+$\softO (n^3)$ operations in $K$. This seems to be optimal given that 
+the (naive) size of the $d \chi_M$ is $n^3$: it is a matrix of size $n 
+\times n^2$. It turns out however that improvements are still possible! 
+Indeed, thanks to Proposition~\ref{prop:shortcom}, the matrix of $d 
+\chi_M$ admits a compact form which can be encoded using only $O(n^2)$ 
 coefficients. The aim of this short section is to design a fast 
-algorithm (with complexity $\softO(n^\omega)$) for computing this short 
-form. The price to pay is that divisions in $K$ appear, which can be an 
-issue regarding to precision in particular cases.
-In this section, we only estimate the number of operations in $K$
+algorithm (with complexity $\softO(n^\omega)$ operations in $K$) for 
+computing this short form. The price to pay is that divisions in $K$ 
+appear, which can be an issue regarding to precision in particular 
+cases. In this section, we only estimate the number of operations in $K$ 
 and not their behavior on precision.
 
 We now fix a matrix $M \in M_n(K)$ for which $d \chi_M$ is 
@@ -1082,9 +1090,9 @@ We summarize this section with the following theorem:
 \begin{theo}
 \label{thm:compute_shortcom}
 Given $M \in M_n(K)$ with $d \chi_M$ surjective,
-one can compute $\alpha, P, Q, \chi_M) \in K[X]$ with
+one can compute $(\alpha, P, Q, \chi_M) \in K[X]$ with
 $\softO(n^\omega)$ operations in $K$ such that
-$\adj(X{-}N) = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M$.
+$\adj(X{-}M) = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M$.
 \end{theo}
 
 \section{Optimal jagged precision}
@@ -1092,7 +1100,7 @@ $\adj(X{-}N) = \alpha \cdot P Y^T \cdot Y Q^T \mod \chi_M$.
 
 In the previous Sections, \ref{sec:diffHess} and \ref{sec:diffFrob},
 we have proposed algorithms to obtain the adjugate of 
-$X-M.$ Our motivation for these computations is to then
+$X{-}M.$ Our motivation for these computations is to then
 be able to understand what is the optimal precision on $\chi_M.$
 In this section, we provide some answers to this question,
 along with numerical evidence.
@@ -1198,11 +1206,11 @@ Once this sample has been generated, we computed, for each $k \in \{0,
 \renewcommand{\itemsep}{0pt}
 \item the optimal precision on the $k$-th coefficient of the 
 characteristic polynomial of $M$ given by Eq.~\eqref{eq:optjagged}.
-Note that the method for computing $\adj(X-M)$ is irrelevant
-since we only record the precision loss, not the runtime.
-\item in the capped relative model\footnote{Each 
+(Note that the method for computing $\adj(X{-}M)$ is irrelevant
+since we only record the precision loss, not the runtime.)
+\item in the capped relative mode (each 
 coefficient carries its own precision which is updated after each 
-elementary arithmetic operation.},
+elementary arithmetic operation),
 the precision on the $k$-th coefficient of the 
 characteristic polynomial of $M$ is computed \emph{via} the call:
 
@@ -1318,17 +1326,14 @@ of $M$. We are interesting in quantifying the optimal precision on
 $\lambda$ when $M$ is given with some uncertainty.
 
 To do so, we fix an approximation $M_\app \in M_n(K)$ of $M$ and 
-suppose that the uncertainty of $M$ is ``jagged'' in the sense that
+suppose that the uncertainty of $M$ is jagged:
 each entry of $M$ is given at some precision $O(\pi^{N_{i,j}})$.
 Let $\lambda_\app$ be the relevant eigenvalue of $M_\app$. We remark 
 that it is possible to follow the eigenvalue $\lambda_\app$ on a small 
 neighborhood $\calU$ of $M$. More precisely, there exists a unique continuous 
-function $f : \calU \to K$ such that:
-\begin{enumerate}[$\bullet$]
-\renewcommand{\itemsep}{0pt}
-\item $f(M_\app) = \lambda_\app$, and
-\item $f(M')$ is an eigenvalue of $M'$ for all $M' \in \calU$.
-\end{enumerate}
+function $f : \calU \to K$ such that
+$f(M_\app) = \lambda_\app$, and
+$f(M')$ is an eigenvalue of $M'$ for all $M' \in \calU$.
 
 \begin{lem}
 The function $f$ is strictly differentiable on a neighborhood of 
@@ -1404,7 +1409,7 @@ with integers.
 \begin{proof}
 The $\alpha(\lambda_k)$'s and the $\chi'_M(\lambda_k)$'s can be computed 
 for a cost of $\softO(ns)$ operations in $K$ using fast multipoint 
-evaluation methods (see 10.7 of \cite{gathen-gerhard:13a}).
+evaluation methods (see \S 10.7 of \cite{gathen-gerhard:13a}).
 On the other hand, we observe that $P_i Y(\lambda_k)^T$ is
 the $(i,k)$ entry of the matrix:
 $$P \cdot \left( \begin{matrix}
@@ -1413,11 +1418,11 @@ $$P \cdot \left( \begin{matrix}
 \vdots & & \vdots \\
 \lambda_1^{n-1} & \cdots & \lambda_s^{n-1}
 \end{matrix} \right).$$
-The latter product can be computed in $\softO(n^\omega)$ operations in 
-$K$\footnote{It turns out that $\softO(n^2)$ is also possible because
-the right factor is a structured matrix (a truncated Vandermonde):
+The latter product can be computed in $\softO(n^2)$ operations in 
+$K$. Indeed,
+the right factor is a truncated Vandermonde matrix, so that
 computing the above product reduces to evaluating a polynomial at the
-points $\lambda_1, \ldots, \lambda_s$.}. Therefore all the $P_i 
+points $\lambda_1, \ldots, \lambda_s$. Therefore all the $P_i 
 Y(\lambda_k)^T$'s (for $i$ and $k$ varying) 
 can be determined with the same complexity. 
 Similarly all the $Y(\lambda) Q_j^T$ are computed for the same cost.
