@@ -11,16 +11,16 @@
 %\usepackage{amsthmnoproof}
 \usepackage{amsthm}
 \usepackage{mathrsfs}
-\let\bibsection\relax
-\usepackage{amsrefs}
+%\let\bibsection\relax
+%\usepackage{amsrefs}
 %\usepackage[usenames,dvipsnames]{color}
 \usepackage{stmaryrd}
 \usepackage{enumerate}
-\usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
+%\usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
 %\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{comment}
 \usepackage{multirow}
-\usepackage{tikz}
+%\usepackage{tikz}
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
@@ -155,7 +155,7 @@ In fact, the best known division-free algorithm for computing determinants
 over arbitrary rings \cite{kaltofen-villard:04a} does so using the characteristic polynomial.
 Over $p$-adic fields, computing the characteristic polynomial is a key ingredient in
 algorithms for counting points of varieties over finite fields (see
-\cite{kedlaya:01a, harvey:07a, harvey:14a}.
+\cite{kedlaya:01a, harvey:07a, harvey:14a}).
 
 When computing with $p$-adic matrices, entries may only be approximated
 at some finite precision $O(p^N)$.  As a
@@ -165,14 +165,14 @@ not only the running time of the algorithm but also the accuracy of the result.
 Let $M \in M_n(\Qp)$, with every entry given at precision $O(p^N)$.
 The simplest approach for computing the characteristic polynomial of $M$
 is to compute $\det(X{-}M)$ either using recursive row expansion or various division free
-algorithms \citelist{\cite{seifullin:02a} \cite{kaltofen:92a}}.  There are two issues
+algorithms \cite{seifullin:02a,kaltofen:92a}.  There are two issues
 with these methods.  First, they are slower than alternatives that allow division,
 requiring $O((n+1)!)$, $\softO(n^5)$ and $\softO(n^{3 + \omega/2})$ operations in $K$.  Second,
 while the lack of division implies that the result is accurate modulo $p^N$ as
 long as $M \in M_n(\Zp)$, they still do not yield the optimal precision.
 
 A faster approach over a field is to compute the Frobenius normal form of $M$,
-which is achievable in running time $\softO(n^\omega)$ \citelist{\cite{keller-gehrig:85a} \cite{pernet-storjohann:07a}}.
+which is achievable in running time $\softO(n^\omega)$ \cite{keller-gehrig:85a,pernet-storjohann:07a}.
 However, the use of division frequently leads to catastrophic losses of precision.
 In many examples, no precision remains at the end of the calculation.
 
@@ -183,8 +183,10 @@ of much of this paper.  With this precision known, the actual calculation of $\c
 may proceed by lifting $M$ to a temporarily higher precision and then using a sufficiently
 stable algorithm (see Remark \ref{rem:lift_for_optimal}).
 
-\subsection*{Previous contributions.}
+\medskip
 
+\noindent
+{\bf Previous contributions.}
 Since the description of Kedlaya's algorithm in
 \cite{kedlaya:01a}, the computation of characteristic polynomials
 over $p$-adic numbers
@@ -208,8 +210,10 @@ They describe the optimal precision
 for the characteristic polynomial, but do not give practical algorithms
 to compute this optimal precision.
 
-\subsection*{The contribution of this paper.}
+\medskip
 
+\noindent
+{\bf The contribution of this paper.}
 This paper provides a theoretical and concrete study of the propagation 
 of the precision during the computation of the characteristic polynomial 
 of matrix defined over the $p$-adics. Thanks to the application of the 
@@ -251,8 +255,10 @@ precision in many contexts.
 Note that we focus on computing the precision of $\chi_M$: we do not give a stable
 algorithm for computing the characteristic polynomial itself.
 
-\subsection*{Organization of the article.}
+\medskip
 
+\noindent
+{\bf Organization of the article.}
 In Section \ref{sec:theo_study}, we review the differential
 theory of precision developed in \cite{caruso-roe-vaccon:14a}
 and apply it to the specific case of the characteristic polynomial.
@@ -273,7 +279,11 @@ to dramatic gains in precision over standard interval arithmetic.
 We close by describing the precision associated to
 eigenvalues of a matrix.
 
-\subsection*{Notation} Throughout the paper, $K$ will refer to a complete,
+\medskip
+
+\noindent
+{\bf Notations.} 
+Throughout the paper, $K$ will refer to a complete,
 discrete valuation field, $\val : K \twoheadrightarrow \Z \cup \{+\infty\}$ to its valuation,
 $\OK$ its ring of integers and $\pi$ a uniformizer. 
 We will write that $f(n)=\softO (g(n))$ if there exists some
@@ -331,7 +341,7 @@ When the $N_{i,j}$ are all equal, we say that the precision datum is
 We may also model precision more flexibly by using lattices.  We 
 recall that a \emph{lattice} $H$ in $M_n(K)$ is the $\OK$-span of a vector
 space basis, or equivalently the image of $M_n(\OK)$ under a 
-$K$-linear transformation of $M_n(K)$ \cite{caruso-roe-vaccon:14a}*{\S 2.2}.
+$K$-linear transformation of $M_n(K)$ \cite[\S 2.2]{caruso-roe-vaccon:14a}.
 For $M \in M_n(K)$, cosets of the form $M + H$ are special
 neighborhoods of $M$; we will use them for modeling precision on $M$. 
 Given a family of integers $\famN = (N_{i,j})_{i,j}$ the lattice
@@ -341,7 +351,7 @@ H_{\famN} = \big\{ \, M = (a_{i,j})_{i,j} \in M_n(\Qp) \,\, | \,\, \forall i,\!j
 \]
 corresponds to the jagged precision introduced above.
 The benefit of working with lattices is that they behave well under 
-differentiable maps \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}, but they
+differentiable maps \cite[Lemma 3.4]{caruso-roe-vaccon:14a}, but they
 require more space and time to compute. 
 
 Jagged, flat and lattice precision is defined similarly for monic polynomials, 
@@ -353,10 +363,10 @@ image of ${\OK}_{<n}[X]$ under some linear mapping.
 Let $\chi : M_n(K) \to K_n[X]$ be the characteristic polynomial map
 and $d \chi_M$ for its differential at $M$.
 Our analysis of the precision behavior of $\chi$ rests upon
-the computation of its derivative $d\chi$, using \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
-Let $\adj(M)$ denote the adjugate\footnote{In \citelist{\cite{caruso-roe-vaccon:14a} \cite{caruso-roe-vaccon:15a}} the adjugate was referred to as the \emph{comatrix}} of $M$ (when $M \in \GL_n(K)$,
-we have $\adj(M) {=} \det(M) M^{-1}$).  Recall
-\citelist{\cite{caruso-roe-vaccon:14a}*{Appendix B} \cite{caruso-roe-vaccon:15a}*{\S 3.3}}
+the computation of its derivative $d\chi$, using \cite[Lemma 3.4]{caruso-roe-vaccon:14a}
+Let $\adj(M)$ denote the adjugate\footnote{In \cite{caruso-roe-vaccon:14a,caruso-roe-vaccon:15a} the adjugate was referred to as the \emph{comatrix}} of $M$ (when $M \in \GL_n(K)$,
+we have $\adj(M) {=} \det(M) M^{-1}$).  Recall from
+\cite[Appendix B]{caruso-roe-vaccon:14a} and \cite[\S 3.3]{caruso-roe-vaccon:15a}
 that $d\chi_M$ is given by
 \begin{equation} \label{eq:dchi}
 \begin{array}{rcl}
@@ -387,21 +397,21 @@ satisfies Eq.~\eqref{eq:mainlem}
 \end{prop}
 
 \begin{proof}
-Recall \cite{caruso-roe-vaccon:15a}*{Def. 3.3} that the \emph{precision polygon}
+Recall \cite[Definition 3.3]{caruso-roe-vaccon:15a} that the \emph{precision polygon}
 of $M$ is the lower convex hull of the Newton polygons of the entries of $\adj(X-M)$.
-By \cite{caruso-roe-vaccon:15a}*{Prop. 3.4}, the endpoints of the precision polygon
+By \cite[Proposition 3.4]{caruso-roe-vaccon:15a}, the endpoints of the precision polygon
 occur at height $0$ and $\sum_{i=1}^{n-1} \val(\sigma_i(M))$.  By convexity,
 ${\OK}_{<n}[X] \subset d\chi_M(M_n(\pi^\nu \OK))$.
 
 Since the coefficients of $\chi_M$ are given by polynomials in the entries of $M$
-with integral coefficients, \cite{caruso-roe-vaccon:15a}*{Prop. 2.2} implies
+with integral coefficients, \cite[Proposition 2.2]{caruso-roe-vaccon:15a} implies
 the conclusion.
 \end{proof}
 
 For further discussion of using lattices to measure precision,
 details on the computation of $d\chi_M$ in \eqref{eq:dchi}, and 
 examples of additional precision in $\chi_M$,
-see \cite{caruso:17a}*{\S 2.4.3 and \S 3.2.2}.
+see \cite[\S\S 2.4.3, 3.2.2]{caruso:17a}.
 
 \subsection{Several facts about the differential of $\chi$}
 
@@ -423,7 +433,7 @@ closure $\bar{K}$ of $K$ all have dimension $1$
 
 \begin{proof}
 The equivalence of \eqref{pt:cyc}, \eqref{pt:1d}, and \eqref{pt:charmin} is standard; see \emph{e.g.}
-\cite{hoffman-kunze:LinearAlgebra}*{\S 7.1}.  We now show
+\cite[\S 7.1]{hoffman-kunze:LinearAlgebra}.  We now show
 \eqref{pt:cyc} $\Rightarrow$ \eqref{pt:surj} and \eqref{pt:surj} $\Rightarrow$ \eqref{pt:1d}
 
 For any $P \in \GL_n(K)$, the image of $d\chi$ at $M$ will be the same
@@ -643,7 +653,7 @@ The rest is clear.
 \begin{rem} \label{rem:char_pol_from_hessenberg}
 From a Hessenberg form of $M,$ it is well known
 that one can compute the characteristic polynomial of 
-$M$ in $O(n^3)$ operations in $K$ \cite{Cohen:2013}*{pp. 55--56}.
+$M$ in $O(n^3)$ operations in $K$ \cite[pp. 55--56]{Cohen:2013}
 However, this computation involves division, and its
 precision behavior is not easy to quantify.
 \end{rem}
@@ -677,7 +687,7 @@ Consequently, $N - 2\cond(M)$
 can be obtained as the valuation of a coefficient of $du_M(dM)$,
 and it is the smallest that can be achieved this way for $dM$ in a flat precision lattice.
 Hence the optimality of the bound given for large 
-$N$ \cite{caruso-roe-vaccon:14a}*{Lem. 3.4}.
+$N$ \cite[Lemma 3.4]{caruso-roe-vaccon:14a}.
 
 Now, the computation of the Smith normal form was described in \cite{Vaccon-these}.
 From $M$ known at flat precision $O(\pi^N),$ we can obtain an exact $\Delta$, and $P$ and $Q$ 
@@ -1014,7 +1024,7 @@ optimal precision of eigenvalues of $M.$
 
 For $0 \leq k < n$, let $\beta_k : K[X] \to K$ be the mapping taking a 
 polynomial to its coefficients in $X^k$. By applying 
-\cite{caruso-roe-vaccon:14a}*{Lem. 3.4} to the composite $\beta_k 
+\cite[Lemma 3.4]{caruso-roe-vaccon:14a} to the composite $\beta_k 
 \circ \chi_M$, one can figure out the optimal precision on the
 $k$-th coefficient of the characteristic polynomial of $M$ (at
 least if $M$ is given at enough precision).
@@ -1103,7 +1113,7 @@ This distribution is chosen merely because it is the default in \textsc{SageMath
 Once this sample has been generated, we computed, for each $k \in \{0, 
 1, \ldots, 8\}$, the three following quantities:
 
-\vspace{-2mm}
+%\vspace{-2mm}
 
 \begin{enumerate}[$\bullet$]
 \renewcommand{\itemsep}{0pt}
@@ -1117,13 +1127,18 @@ elementary arithmetic operation),
 the precision on the $k$-th coefficient of the 
 characteristic polynomial of $M$ is computed \emph{via} the call:
 
+\smallskip
+
 \hfill$M\texttt{.charpoly(algorithm="df")}.$\hfill\null
 
+\smallskip
+
+\noindent 
 Note that the precision behavior described persists when using algorithms
 other than the division-free method.
 
 \item in the model of floating-point arithmetic (see 
-\cite{caruso:17a}*{\S 2.3}), the number of correct digits of the 
+\cite[\S 2.3]{caruso:17a}), the number of correct digits of the 
 $k$-th coefficient of the characteristic polynomial of $M$.
 \end{enumerate}
 
@@ -1196,7 +1211,7 @@ More precisely, if $N$ is the relative precision of
 the entries of $M$ and $v$ is the valuation of
 the $k$-th coefficient of $\chi_M$, then:
 
-\vspace{-2mm}
+%\vspace{-2mm}
 
 \begin{enumerate}[$\bullet$]
 \renewcommand{\itemsep}{0pt}
@@ -1328,7 +1343,6 @@ The first assertion of Proposition~\ref{prop:opteigenvalues} follows.
 The second assertion is now proved similarly to the case of a unique
 eigenvalue.
 \end{proof}
-
 
 \bibliographystyle{plain}
 \bibliography{charpoly}
