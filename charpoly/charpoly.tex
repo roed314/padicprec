@@ -1,4 +1,4 @@
-\documentclass{sig-alternate-05-2015}
+\documentclass[sigconf]{acmart}
 
 \setlength{\paperheight}{11in}
 \setlength{\paperwidth}{8.5in}
@@ -8,14 +8,16 @@
 \hyphenation{regarding}
 
 \usepackage{amsmath,amssymb}
-\usepackage{amsthmnoproof}
+%\usepackage{amsthmnoproof}
+\usepackage{amsthm}
 \usepackage{mathrsfs}
+\let\bibsection\relax
 \usepackage{amsrefs}
-\usepackage[usenames,dvipsnames]{color}
+%\usepackage[usenames,dvipsnames]{color}
 \usepackage{stmaryrd}
 \usepackage{enumerate}
 \usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
-\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
+%\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{comment}
 \usepackage{multirow}
 \usepackage{tikz}
@@ -79,15 +81,8 @@
 
 \def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
 
-\CopyrightYear{2017}
-\setcopyright{acmcopyright}
-\conferenceinfo{ISSAC '17,}{July 25-28, 2017, Kaiserslautern, Germany}
-\isbn{***-*-****-****-0/17/07}\acmPrice{\$15.00}
-\doi{http://dx.doi.org/10.1145/*******.*******}
-
-\permission{Publication rights licensed to ACM. ACM acknowledges that this contribution was authored or co-authored by an employee, contractor or affiliate of a national government. As such, the Government retains a nonexclusive, royalty-free right to publish or reproduce this article, or to allow others to do so, for Government purposes only.}
-
-\begin{document}
+\clubpenalty=10000
+\widowpenalty = 10000
 
 \newtheorem{theo}{Theorem}[section]
 \newtheorem{lem}[theo]{Lemma}
@@ -100,35 +95,27 @@
 \newtheorem{ex}[theo]{Example}
 \newtheorem{deftn}[theo]{Definition}
 
+\begin{document}
+
 \title{Characteristic polynomials of p-adic matrices}
 
-\numberofauthors{3}
-\author{
-\alignauthor Xavier Caruso\\
-  \affaddr{Universit\'e Rennes 1}\\
-  \affaddr{\textsf{xavier.caruso@normalesup.org}}
-\alignauthor David Roe\\
-  \affaddr{University of Pittsburg}\\
-  \affaddr{\textsf{roed@pitt.edu}}
-\alignauthor Tristan Vaccon\\
-  \affaddr{Universit\'e de Limoges}\\
-  \affaddr{\textsf{tristan.vaccon@unilim.fr}}
-}
+\author{Xavier Caruso}
+\affiliation{Universit\'e Rennes 1}
+\email{xavier.caruso@normalesup.org}
+\author{David Roe}
+\affiliation{University of Pittsburg}
+\email{roed@pitt.edu}
+\author{Tristan Vaccon}
+\affiliation{Universit\'e de Limoges}
+\email{tristan.vaccon@unilim.fr}
 
-\maketitle
-
-\begin{abstract}
-We analyze the precision of the characteristic polynomial $\chi_M$ of 
-an $n \times n$ $p$-adic matrix $M$ using differential precision methods 
-developed previously.  When $M$ is an integral matrix whose entries are 
-all given at the same precision $O(p^N)$, we give a criterion (checkable 
-within $\softO(n^\omega)$ operations in $\Fp$) for the existence of a
-coefficient of $\chi_M$ with more accuracy than $O(p^N)$.
-In general, we provide two algorithms for determining the optimal 
-precision of the coefficients of $\chi_M$ and of their eigenvalues.
-We provide evidence showing that classical algorithms do not reach
-this optimal precision in general.
-\end{abstract}
+\copyrightyear{2017}
+\acmYear{2017}
+\setcopyright{acmlicensed}
+\acmConference{ISSAC '17}{July 25-28, 2017}{Kaiserslautern, Germany}
+\acmPrice{15.00}
+\acmDOI{http://dx.doi.org/10.1145/3087604.3087618}
+\acmISBN{978-1-4503-5064-8/17/07}
 
 \begin{CCSXML}
 <ccs2012>
@@ -140,13 +127,25 @@ this optimal precision in general.
 </ccs2012>
 \end{CCSXML}
 
-\vspace{-1mm}
 \ccsdesc[500]{Computing methodologies~Algebraic algorithms}
-\printccsdesc
 
-\vspace{-1.5mm}
 \keywords{Algorithms, $p$-adic precision, characteristic polynomial,
 eigenvalue}
+
+\begin{abstract}
+We analyze the precision of the characteristic polynomial $\chi_M$ of 
+an $n \times n$ $p$-adic matrix $M$ using differential precision methods 
+developed previously.  When $M$ is an integral matrix whose entries are 
+all given at the same precision $O(p^N)$, we give a criterion (checkable 
+within $\softO(n^\omega)$ operations in $\Fp$) for the existence of a
+coefficient of $\chi_M$ with more accuracy than $O(p^N)$.
+In general, we provide two algorithms for determining the optimal 
+precision of the coefficients of $\chi_M$ and of $M$'s eigenvalues.
+We provide evidence showing that classical algorithms do not reach
+this optimal precision in general.
+\end{abstract}
+
+\maketitle
 
 \section{Introduction}
 
