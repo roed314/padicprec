@@ -225,7 +225,7 @@ In this article, we provide:
 \begin{enumerate}
 \renewcommand{\itemsep}{0pt}
 \item Proposition \ref{prop:shortcom}: a short representation of
-the matrix $\adj(X{-}M)$ whose size is $O(n^2)$ elements of the base
+the adjugate matrix $\adj(X{-}M)$ whose size is $O(n^2)$ elements of the base
 field (instead of $O(n^3)$ for a dense representation);
 \item two algorithms to compute $\adj(X{-}M)$: the first one is 
 division-free and performs $\softO(n^3)$ operations in $\Zp$ while 
@@ -413,7 +413,7 @@ details on the computation of $d\chi_M$ in \eqref{eq:dchi}, and
 examples of additional precision in $\chi_M$,
 see \cite[\S\S 2.4.3, 3.2.2]{caruso:17a}.
 
-\subsection{Several facts about the differential of $\chi$}
+\subsection{Several facts about the differential of \texorpdfstring{$\chi$}{x}}
 
 We may rephrase the condition that $d\chi_M$ is surjective using more familiar invariants attached to $M$.
 
@@ -641,8 +641,7 @@ $P$ is exact
 and the computation is in $O(n^3)$ operations in $K$ at precision the maximum precision of a coefficient in $M.$
 \end{prop}
 \begin{proof}
-Inside the nested \textbf{for} loop, if we want to eliminate $\pi^{u_y} \varepsilon_y+O(\pi^{n_y})$ with pivot $\pi^{u_x} \varepsilon_x+O(\pi^{n_x}),$
-with the $\varepsilon$'s being units,
+Inside the nested \textbf{for} loop, to eliminate $\pi^{u_y} \varepsilon_y+O(\pi^{n_y})$ with pivot $\pi^{u_x} \varepsilon_x+O(\pi^{n_x}),$
 the corresponding coefficient of the corresponding shear matrix is 
 any exact element of $K$ congruent to 
 $\pi^{u_y-u_x} \varepsilon_y \varepsilon_x^{-1} \mod \pi^{u_y-u_x\min (n_x-u_x,n_y-u_y)}$.
@@ -682,9 +681,9 @@ at least when $N$ is large.
 \end{prop}
 
 \begin{proof}
-The smallest valuation of a coefficient of $M^{-1}$ is $-\cond(M)$.
+The smallest valuation of an entry of $M^{-1}$ is $-\cond(M)$.
 Consequently, $N - 2\cond(M)$
-can be obtained as the valuation of a coefficient of $du_M(dM)$,
+can be obtained as the valuation of an entry of $du_M(dM)$,
 and it is the smallest that can be achieved this way for $dM$ in a flat precision lattice.
 Hence the optimality of the bound given for large 
 $N$ \cite[Lemma 3.4]{caruso-roe-vaccon:14a}.
@@ -699,7 +698,7 @@ we see that $M^{-1}=Q^{-1} \Delta^{-1} P^{-1}$ is known at precision at least $O
 which concludes the proof.
 \end{proof}
 
-\subsection{The adjugate of $X{-}H$}
+\subsection{The adjugate of \texorpdfstring{$X{-}H$}{X-H}}
 
 In this section, we compute $\adj(X-H)$ for a Hessenberg matrix $H$
 using the Smith normal form computation of the previous section.
@@ -736,10 +735,9 @@ Let $M \in M_n(K).$ Then:
 \end{align*}
 \end{lem}
 \begin{proof}
-It all comes down to the following result:
-let $F \in M_d(K[X])$ a matrix of polynomials of degree at most $1,$
-then $\det (F^{\rec,1})=\det(F)^{\rec,d}.$
-It directly implies the second part of the lemma; the first part follows
+For any matrix $F \in M_d(K[X])$ of polynomials of degree at most $1$,
+we have $\det (F^{\rec,1})=\det(F)^{\rec,d}.$
+This result directly implies the second part of the lemma; the first part follows
 from the fact that the entries of $\adj(X-M)$ and of $\adj(1-XM)$
 are determinants of size $n-1$.
 \end{proof}
@@ -831,7 +829,7 @@ entry matrix with coefficients known at flat precision,
 Algorithms 1 and 2 are enough to
 know the optimal jagged precision on $\chi_M.$
 
-\subsection{The adjugate of $X{-}M$}
+\subsection{The adjugate of \texorpdfstring{$X{-}M$}{X-M}}
 
 In this section, we combine Proposition \ref{prop:shortcom}
 with Algorithm 2 to compute the adjugate of $X{-}M$
