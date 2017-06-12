@@ -1,0 +1,114 @@
+1. Calcul du logarithme
+-----------------------
+
+On se donne a dans [1/2,3/2] disons (pour l'instant).
+Pour calculer log(a) à precision 2^(-N), on peut procéder selon 
+les grandes lignes suivantes :
+
+1. on écrit
+     1/a = (1 + a_0/2) * (1 + a_1/2^2) * ... * (1 + a_i/2^(2^i)) * ...
+   où |a_i| <~ 2^(2^(i-1))
+
+2. on calcule chaque log(1 + a_i/2^(2^i)) en développant la série 
+   du log jusqu'à N/2^i
+   pour ce faire, on pose h = a_i/2^(2^i), on écrit les coeffs du
+   développement du log :
+     1  1/2  1/3  1/4  ...  1/n     (avec n ~ N/2^i)
+   et on remplace deux coefficients successifs a et b par a + h*b,
+   obtenant ainsi :
+     1+h/2  1/3+h/4  1/5+h/6  ...
+   puis on recommence en remplaçant h par h^2. Quand il ne reste
+   plus qu'un nombre, c'est le bon
+
+3. on somme toutes les contributions
+
+Complexité binaire quasi-linéaire (exercice).
+
+En p-adique, on peut faire exactement pareil en remplaçant 1/2 par p
+(et en faisant un peu attention à la précision).
+Ai-je besoin de rappeler ce que sont les nombres p-adiques ? :-)
+
+Implémentation en C (postée sur trac.sagemath.fr, ticket #23043).
+Entre 10% et 30% plus rapide que FLINT (qui utilise un algorithme
+analogue mais récursif) pour des grandes précisions.
+
+
+2. Calcul de l'exponentielle
+----------------------------
+
+Attention au rayon de convergence en p-adique.
+Il faut que l'argument soit multiple de p, et même multiple de 4
+lorsque p=2.
+
+1ère méthode
+~~~~~~~~~~~~
+
+On procède selon les mêmes grandes lignes.
+Pour calculer exp(a) :
+
+1. on écrit
+     a = a_0/2 + a_1/2^2 + a_i/2^(2^i) + ...
+   où |a_i| <~ 2^(2^(i-1))
+
+2. on calcule chaque exp(a_i/2^(2^i)) en développant la série de
+   l'exponentielle
+   pour faire le développement rapidement, on adapte la méthode du
+   log au cas où il y a des factorielles (un peu plus difficile à
+   écrire mais une multiplication de moins par itération au final)
+
+3. on multiplie toutes les contributions
+
+Ça passe en p-adique (attention quand même : il faut développer la
+série nettement plus loin à cause de la division par n!).
+Même complexité que pour le log et approximativement le même temps 
+de calcul. Même comparaison avec FLINT.
+
+
+2ème méthode
+~~~~~~~~~~~~
+
+On résout l'équation log(x) = a par la méthode de Newton.
+Le schéma de Newton s'écrit ici :
+  x_(i+1) = x_i * (1 + a - log(x_i))
+
+Bien sûr, comme toujours avec Newton, on peut tronquer les x_i
+à chaque itération, ce qui permet de limiter les calculs.
+
+Précisément, posons l_i = log(x_i) et y_i = a - l_i. 
+On a :
+  x_(i+1) = x_i * (1 + y_i)
+  l_(i+1) = l_i + log(1 + y_i)
+  y_(i+1) = a - l_(i+1)
+et on va remplacer la dernière ligne par :
+  y_(i+1) = a - l_(i+1)   à  eps_i près
+                          mod p^(2^i)  en  p-adique  (à peu près)
+
+Donc, en gros, ça revient à ajouter une multiplication et une addition 
+dans le schéma du log qu'on a vu avant. C'est donc rapide.
+
+
+Un exemple subtil
+-----------------
+
+Considérons la fonction f solution de l'équation différentielle 
+sur les 2-adiques :
+  y'(x) = (1+x) * y(x)
+avec condition initiale :
+  y(0) = 1
+On peut vérifier que y(x) a un rayon de convengence qui fait que
+y(x) peut être évalué dès que x est multiple de 2
+
+On a envie d'écrire :
+  y(x) = exp(x + x^2/2)
+C'est vrai formellement et c'est vrai si x est multiple de 4. Par 
+contre, c'est pas vrai si x est seulement multiple de 2 (bien que 
+les deux côtés de l'égalité ait un sens) !
+
+Par contre, ce qui est toujours vrai, c'est que :
+  log y(x) = x + x^2/2
+Du coup, on peut utiliser la deuxième méthode en initialisant avec
+suffisamment de précision. En pratique y_0(x) = 1+x suffit.
+
+Il ne s'agit bien d'un exemple idiot mais en fait d'un avatar de
+l'exponentielle de Artin-Hasse défini *formellement* par :
+  AH(x) = exp(x + x^p/p + x^(p^2)/p^2 + ...)
