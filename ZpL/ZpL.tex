@@ -1,0 +1,205 @@
+\documentclass[sigconf]{acmart}
+
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+
+\usepackage[utf8]{inputenc}
+
+\hyphenation{regarding}
+
+\usepackage{amsmath,amssymb}
+%\usepackage{amsthmnoproof}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+%\let\bibsection\relax
+%\usepackage{amsrefs}
+%\usepackage[usenames,dvipsnames]{color}
+\usepackage{stmaryrd}
+\usepackage{enumerate}
+%\usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
+%\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
+\usepackage{comment}
+\usepackage{multirow}
+%\usepackage{tikz}
+
+\newcommand{\noopsort}[1]{}
+\DeclareMathOperator{\NP}{NP}
+\DeclareMathOperator{\HP}{HP}
+\DeclareMathOperator{\PP}{PP}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\tr}{Tr}
+\DeclareMathOperator{\adj}{Adj}
+\DeclareMathOperator{\Grass}{Grass}
+\DeclareMathOperator{\Lat}{Lat}
+\DeclareMathOperator{\round}{round}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\rec}{rec}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\disc}{Disc}
+\DeclareMathOperator{\row}{row}
+\DeclareMathOperator{\col}{col}
+
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Zp}{\Z_p}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Qp}{\Q_p}
+\newcommand{\Fp}{\mathbb{F}_p}
+\newcommand{\Fq}{\mathbb{F}_q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\OK}{\mathcal{O}_K}
+
+\newcommand{\ZpL}{\texttt{ZpL}}
+\newcommand{\ZpLCA}{\texttt{ZpLCA}}
+\newcommand{\ZpLCR}{\texttt{ZpLCR}}
+\newcommand{\ZpLF}{\texttt{ZpLF}}
+
+\newcommand{\famN}{\mathcal{N}}
+
+\newcommand{\llb}{[\mkern-2.5mu[}
+\newcommand{\rrb}{]\mkern-2.5mu]}
+\newcommand{\llp}{(\mkern-2.5mu(}
+\newcommand{\rrp}{)\mkern-2.5mu)}
+
+\newcommand{\calU}{\mathcal{U}}
+
+\newcommand{\softO}{O\tilde{~}}
+
+\newcommand{\inv}{\text{\rm inv}}
+\newcommand{\app}{\text{\rm app}}
+
+\def\todo#1{\ \!\!{\color{red} #1}}
+\definecolor{purple}{rgb}{0.6,0,0.6}
+\def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
+
+\newcommand{\done}[1]{\textcolor{blue}{#1}}
+\newcommand{\tdo}[1]{\textcolor{red}{#1}}
+\definecolor{answer}{rgb}{0,0.5,0.2}
+\newcommand{\xavier}[1]{\textcolor{answer}{{\bf Xavier:} #1}}
+\newcommand{\tristan}[1]{\textcolor{answer}{{\bf Tristan:} #1}}
+\newcommand{\david}[1]{\textcolor{answer}{{\bf David:} #1}}
+
+\def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
+
+\clubpenalty=10000
+\widowpenalty = 10000
+
+\newtheorem{theo}{Theorem}[section]
+\newtheorem{lem}[theo]{Lemma}
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{cor}[theo]{Corollary}
+\newtheorem{quest}[theo]{Question}
+\newtheorem{conj}[theo]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rem}[theo]{Remark}
+\newtheorem{ex}[theo]{Example}
+\newtheorem{deftn}[theo]{Definition}
+
+\fancyhead{}
+
+\begin{document}
+
+\title{ZpL: a p-adic precision package}
+
+\author{Xavier Caruso}
+  \affiliation{Universit\'e Rennes 1; \\
+  \institution{IRMAR}
+  \city{Rennes, France}
+  \postcode{35042}
+}
+\email{xavier.caruso@normalesup.org}
+\author{David Roe}
+  \affiliation{University of Pittsburg; \\
+  \institution{Department of Mathematics}
+  \city{Pittsburgh, PA, USA}
+  \postcode{15260}
+}
+\email{roed@pitt.edu}
+\author{Tristan Vaccon}
+  \affiliation{Universit\'e de Limoges; \\
+  \institution{CNRS, XLIM UMR 7252}
+  \city{Limoges, France}  
+  \postcode{87060}  
+  }
+\email{tristan.vaccon@unilim.fr}
+
+\ccsdesc[500]{Computing methodologies~Algebraic algorithms}
+
+\keywords{Algorithms, $p$-adic precision, characteristic polynomial,
+eigenvalue}
+
+\begin{abstract}
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+\begin{itemize}
+\item Interval arithmetic, floating point arithmetic
+\item short introduction of the precision lemma and lattices
+\item goal: tracking precision using this theory
+\item short presentation of the package
+\item plan of the article
+\end{itemize}
+
+\section{Examples}
+
+\begin{itemize}
+\item Elementary arithmetic
+\item Determinant + matrix multiplication
+\item gcd of polynomials
+\item some benchmarks on precision
+\end{itemize}
+
+\section{Theory}
+
+\subsection{The precision Lemma}
+
+\subsection{The way the precision is tracked with \ZpL}
+
+We follow the precision lattice.
+Closely related to automatic differentiation.
+
+\begin{itemize}
+\item \ZpLCR, \ZpLCA: we use a cap to ensure that we have a lattice at
+each step.
+\item \ZpLF: we work with $\Zp$-submodules of possible positive codimension
+and represent them using matrices of floating point $p$-adics.
+\end{itemize}
+
+\subsection{The notion of working precision}
+
+\begin{itemize}
+\item what is it?
+\item how can we compute it? (Answer: Hermite reduction of the transpose)
+\item how can we estimate it?
+\end{itemize}
+
+\subsection{Complexity}
+
+\begin{tabular}{l|c|c|}
+& \ZpLCA/\ZpLCR & \ZpLF \\
+\hline
+Creation of a variable & $O(n)$ & $O(n_0)$ \\
+\hline
+Deletion of a variable & $O(m^2)$ & $-$ \\
+\hline
+\end{tabular}
+
+discussion on temporal locality
+
+\section{Conclusion}
+
+\begin{itemize}
+\item In which case should we use this package? Mainly for exploration
+\item example of $p$-adic differential equations (especially for $p=2$)
+\end{itemize}
+
+\end{document}
+
