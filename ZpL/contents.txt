@@ -1,0 +1,37 @@
+Article sur l'imple de ZpL
+
+1/ Introduction
+--> interval arithmetic, floating points arithmetic
+--> short introduction of the precision lemma and lattices
+--> goal : tracking precision using this theory
+--> short presentation of the package + plan of the article
+
+2/ Examples
+--> Elementary arithmetic
+--> Determinant + matrix multiplication
+--> gcd of polynomials
+--> some benchmarks on precision
+
+3/ Theory
+--> The precision lemma
+--> How we track/represent the precision:
+        ZpLCA, ZpLCR
+		ZpLF
+
+--> Working precision
+how variables are reduced throughout the computation
+--> Complexity                      CA/CR      LF
+        Creating a new variable :   O(n)       O(d)
+		Deleting a variable :       O(m^2)      -
+--> Temporal locality of variables
+
+4/ Presentation of the package
+--> How to access to the precision
+--> Diffused digits
+--> Historic of variables creation/deletion, etc...
+--> Other features?
+
+5/ Conclusion
+When is the package useful?
+--> Exploration
+--> Example of p-adic Differential Equations (p=2?).
