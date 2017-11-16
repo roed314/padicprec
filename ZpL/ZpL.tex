@@ -20,6 +20,7 @@
 %\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
 \usepackage{comment}
 \usepackage{multirow}
+\usepackage{xspace}
 %\usepackage{tikz}
 
 \newcommand{\noopsort}[1]{}
@@ -54,10 +55,10 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\OK}{\mathcal{O}_K}
 
-\newcommand{\ZpL}{\texttt{ZpL}}
-\newcommand{\ZpLCA}{\texttt{ZpLCA}}
-\newcommand{\ZpLCR}{\texttt{ZpLCR}}
-\newcommand{\ZpLF}{\texttt{ZpLF}}
+\newcommand{\ZpL}{\texttt{ZpL}\xspace}
+\newcommand{\ZpLCA}{\texttt{ZpLCA}\xspace}
+\newcommand{\ZpLCR}{\texttt{ZpLCR}\xspace}
+\newcommand{\ZpLF}{\texttt{ZpLF}\xspace}
 
 \newcommand{\famN}{\mathcal{N}}
 
@@ -104,7 +105,7 @@
 
 \begin{document}
 
-\title{ZpL: a p-adic precision package}
+\title{\ZpL: a p-adic precision package}
 
 \author{Xavier Caruso}
   \affiliation{Universit\'e Rennes 1; \\
@@ -179,6 +180,14 @@ and represent them using matrices of floating point $p$-adics.
 \item what is it?
 \item how can we compute it? (Answer: Hermite reduction of the transpose)
 \item how can we estimate it?
+\end{itemize}
+
+\subsection{Correctness}
+
+\begin{itemize}
+\item prove that \ZpLCA and \ZpLCR are correct under some assumptions
+(to be determined)
+\item explain that \ZpLF is not meant to provide proved results
 \end{itemize}
 
 \subsection{Complexity}
