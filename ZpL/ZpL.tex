@@ -151,11 +151,26 @@ eigenvalue}
 
 \section{Examples}
 
+\subsection{Elementary arithmetic}
+
 \begin{itemize}
-\item Elementary arithmetic
-\item Determinant + matrix multiplication
+\item Compare $px$ and $x + x + \cdots +x$ ($p$ times)
+\item Compare $x^p$ and $x \cdot x \cdots x$ ($p$ times)
+\item $x$ and $y$ are given at different precision, compute $u = x+y$,
+$v = x-y$ and $u+v$
+\end{itemize}
+
+\subsection{Linear algebra}
+
+\begin{itemize}
+\item determinant
+\item characteristic polynomial
+\end{itemize}
+
+\subsection{Commutative algebra}
+
+\begin{itemize}
 \item gcd of polynomials
-\item some benchmarks on precision
 \end{itemize}
 
 \section{Theory}
@@ -202,6 +217,26 @@ Deletion of a variable & $O(m^2)$ & $-$ \\
 \end{tabular}
 
 discussion on temporal locality
+
+\section{Presentation of the package}
+
+\begin{itemize}
+\item How to access to the precision
+\item Diffused digits
+\item Historic of variables creation/deletion, etc...
+\item Other features?
+\end{itemize}
+
+\subsection{More examples}
+
+\begin{itemize}
+\item SOMOS sequence
+\item many multiplications of matrices
+\item Dodgson algorithm
+\item subresultants
+\item Grobner basis
+\item $p$-adic differential equations
+\end{itemize}
 
 \section{Conclusion}
 
