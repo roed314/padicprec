@@ -21,6 +21,7 @@
 \usepackage{comment}
 \usepackage{multirow}
 \usepackage{xspace}
+\usepackage{tabularx,multicol}
 %\usepackage{tikz}
 
 \newcommand{\noopsort}[1]{}
@@ -153,12 +154,33 @@ eigenvalue}
 
 \subsection{Elementary arithmetic}
 
-\begin{itemize}
-\item Compare $px$ and $x + x + \cdots +x$ ($p$ times)
-\item Compare $x^p$ and $x \cdot x \cdots x$ ($p$ times)
-\item $x$ and $y$ are given at different precision, compute $u = x+y$,
-$v = x-y$ and $u+v$
-\end{itemize}
+\begin{tabular}{|l|l|}
+\verb?R = Zp(3,5)? & \verb?R = ZpL(3,5)? \\
+\verb?x = R(143,5); x? & \verb?x = R(143,5); x? \\
+\hfill\verb?...12022? & \hfill\verb?...12022? \\
+\verb?3*x? & \verb?3*x? \\
+\hfill\verb?...120220? & \hfill\verb?...120220? \\
+\verb?x + x + x? & \verb?x + x + x? \\
+\hfill\verb?...20220? & \hfill\verb?...120220? \\
+\verb?x^3? & \verb?x^3? \\
+\hfill\verb?...020222? & \hfill\verb?...020222? \\
+\verb?x * x * x? & \verb?x * x * x? \\
+\hfill\verb?...20222? & \hfill\verb?...020222? \\
+\end{tabular}
+
+\begin{tabular}{|l|l|}
+\verb?R = Zp(2,10)? & \verb?R = ZpL(2,10)? \\
+\verb?x = R(987,10); x? & \verb?x = R(987,10); x? \\
+\hfill\verb?...1111011011? & \hfill\verb?...1111011011? \\
+\verb?y = R(21,5); y? & \verb?y = R(21,5); y? \\
+\hfill\verb?...10101? & \hfill\verb?...10101? \\
+\verb?u = x + y; u? & \verb?u = x + y; u? \\
+\hfill\verb?...10000? & \hfill\verb?...10000? \\
+\verb?v = x - y; v? & \verb?v = x - y; v? \\
+\hfill\verb?...00110? & \hfill\verb?...00110? \\
+\verb?u + v? & \verb?u + v? \\
+\hfill\verb?...10110? & \hfill\verb?...11110110110? \\
+\end{tabular}
 
 \subsection{Linear algebra}
 
@@ -221,6 +243,8 @@ discussion on temporal locality
 \section{Presentation of the package}
 
 \begin{itemize}
+\item Discuss coercion/conversion: \texttt{Zp} coerces to \ZpL but no coersion
+in the other direction
 \item How to access to the precision
 \item Diffused digits
 \item Historic of variables creation/deletion, etc...
@@ -228,6 +252,34 @@ discussion on temporal locality
 \end{itemize}
 
 \subsection{More examples}
+
+\begin{tabular}{|l|l|}
+\verb?R = Zp(2)? & \verb?R = ZpL(2)? \\
+\multicolumn{2}{|l|}{\tt x, y, z, t = R(1,15), R(1,15), R(1,15), R(3,15)} \\
+\multicolumn{2}{|l|}{\tt for \_ in range(20):} \\
+\multicolumn{2}{|l|}{\tt \ \ \ \ x, y, z, t = y, z, t, (y*t + z*z)/x} \\
+\multicolumn{2}{|l|}{\tt \ \ \ \ print t} \\
+\hfill\verb?...000000000000100? & \hfill\verb?...000000000000100? \\
+\hfill\verb?...000000000001101? & \hfill\verb?...000000000001101? \\
+\hfill\verb?...000000000110111? & \hfill\verb?...000000000110111? \\
+\hfill\verb?...101010111010111? & \hfill\verb?...101010111010111? \\
+\hfill\verb?...1100111101111? & \hfill\verb?...101100111101111? \\
+\hfill\verb?...1110000010010? & \hfill\verb?...111110000010010? \\
+\hfill\verb?...0001000111001? & \hfill\verb?...100001000111001? \\
+\hfill\verb?...0000011111101? & \hfill\verb?...100000011111101? \\
+\hfill\verb?...1000000110101? & \hfill\verb?...001000000110101? \\
+\hfill\verb?...101101010011? & \hfill\verb?...010101101010011? \\
+\hfill\verb?...110000000000? & \hfill\verb?...001110000000000? \\
+\hfill\verb?...000101011101? & \hfill\verb?...111000101011101? \\
+\hfill\verb?...001001101011? & \hfill\verb?...111001001101011? \\
+\hfill\verb?...000011110011? & \hfill\verb?...111000011110011? \\
+\hfill\verb?...11? & \hfill\verb?...0000000111? \\
+\hfill\verb?...10? & \hfill\verb?...1010001110? \\
+\hfill\verb?...01? & \hfill\verb?...1110110001? \\
+\hfill\verb?...01? & \hfill\verb?...011110111001? \\
+\hfill\verb?...01? & \hfill\verb?...100101101001001? \\
+\hfill\verb?...1? & \hfill\verb?...11111000011? \\
+\end{tabular}
 
 \begin{itemize}
 \item SOMOS sequence

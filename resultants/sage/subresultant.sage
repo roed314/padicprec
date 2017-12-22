@@ -66,7 +66,7 @@ def subresultants_unstable(A, B):
         if R1[d] == 0:
             raise NotImplementedError
         R = my_rem_integral(R0, R1)
-        R *= ~(R0.leading_coefficient())^2
+        R *= ~(R0[d+1])^2
         R0, R1 = R1, R
     return sres
 
