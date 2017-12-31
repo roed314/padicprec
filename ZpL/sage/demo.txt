@@ -1,0 +1,71 @@
+R = Zp(3, print_mode="digits")
+R
+
+# First examples
+
+x = random_element(R,5)
+x
+
+3*x
+
+x + x + x
+
+y = 2*x
+y
+
+x + y
+
+x^3
+
+x * x * x
+
+y = x^2
+y
+
+x * y
+
+# Computations with numbers at different precision
+
+x = random_element(R,10)
+y = random_element(R,5)
+
+u = x+y
+u
+
+v = x-y
+v
+
+u+v
+
+# Computations with matrices
+
+D = diagonal_matrix([ R(1,5), R(9,5), R(27,5), R(81,5) ])
+D
+
+D.determinant()
+
+MS = D.parent()
+P = random_element(MS, prec=5)
+Q = random_element(MS, prec=5)
+
+P.determinant() * D.determinant() * Q.determinant()
+
+M = P*D*Q
+M.determinant()
+
+M.charpoly()
+
+# Computations with polynomials
+
+S.<x> = PolynomialRing(R)
+P = random_element(S, degree=10, prec=5)
+Q = random_element(S, degree=10, prec=5)
+D = x^5 + random_element(S, degree=4, prec=8)
+D
+
+def euclidean(A,B):
+    while B != 0:
+        A, B = B, A % B
+    return A.monic()
+
+euclidean(D*P, D*Q)
