@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Untitled</title>
+<title>Demo for ZpL, a p-adic precision package</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -11768,8 +11768,22 @@ div#notebook {
     <div class="prompt input_prompt"></div>
     <div class="inner_cell">
       <div class="text_cell_render border-box-sizing rendered_html">
-<p>We first create the $p$-adic rings</p>
+<h3 id="Legend">Legend<a class="anchor-link" href="#Legend">&#182;</a></h3><ul>
+<li><em>ZpCR</em> stands for Capped Relative precision: this is roughly the analogue of interval arithmetic (a $p$-adic number is represented by a subset of the shape $x + O(p^n)$ and precision is tracked by operating of these subsets)</li>
+<li><em>ZpFP</em> stands for Floating Point arithmetic: this is the analogue of usual floating point arithmetic (just a certain subset of $p$-adic numbers are available and results are rounded so that they always lie in this subset)</li>
+<li><em>ZpLP</em> stands for Lattice Precision (our package)</li>
+</ul>
 
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt"></div>
+    <div class="inner_cell">
+      <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Creation-of-the-rings">Creation of the rings<a class="anchor-link" href="#Creation-of-the-rings">&#182;</a></h3>
       </div>
     </div>
   </div>
@@ -11779,8 +11793,8 @@ div#notebook {
     <div class="prompt input_prompt">In&nbsp;[1]:</div>
     <div class="inner_cell">
       <div class="input_area">
-<div class="highlight"><pre><span></span><span class="n">Z2</span> <span class="o">=</span> <span class="n">Zp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">print_mode</span><span class="o">=</span><span class="s2">&quot;digits&quot;</span><span class="p">)</span>
-<span class="n">Z3</span> <span class="o">=</span> <span class="n">Zp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">print_mode</span><span class="o">=</span><span class="s2">&quot;digits&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="n">Z2</span> <span class="o">=</span> <span class="n">Zp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">print_mode</span><span class="o">=</span><span class="s2">&quot;digits&quot;</span><span class="p">)</span>
+<span class="n">Z3</span> <span class="o">=</span> <span class="n">Zp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">print_mode</span><span class="o">=</span><span class="s2">&quot;digits&quot;</span><span class="p">)</span>
 </pre></div>
 
       </div>
@@ -12261,7 +12275,7 @@ div#notebook {
       <div class="output_area">
         <div class="prompt output_prompt">ZpFP&nbsp;[12]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...0000000000001001011100</pre>
+          <pre>...00000000000000000000001001011100</pre>
         </div>
       </div>
     </div>
@@ -12304,7 +12318,7 @@ div#notebook {
       <div class="output_area">
         <div class="prompt output_prompt">ZpFP&nbsp;[13]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...0000000000001001010100</pre>
+          <pre>...00000000000000000000001001010100</pre>
         </div>
       </div>
     </div>
@@ -12358,7 +12372,7 @@ Here is what we get:</p>
       <div class="output_area">
         <div class="prompt output_prompt">ZpFP&nbsp;[14]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000010010110000</pre>
+          <pre>...0000000000000000000000010010110000</pre>
         </div>
       </div>
     </div>
@@ -12400,7 +12414,7 @@ Here is what we get:</p>
       <div class="output_area">
         <div class="prompt output_prompt">ZpFP&nbsp;[15]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000010010110000</pre>
+          <pre>...0000000000000000000000010010110000</pre>
         </div>
       </div>
     </div>
@@ -12482,7 +12496,7 @@ For this reason, using the ZpL package can here be decisive.</p>
       <div class="output_area">
         <div class="prompt output_prompt">ZpFP&nbsp;[17]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...01110000010000000111</pre>
+          <pre>...110111001000100100000000000111</pre>
         </div>
       </div>
     </div>
@@ -12492,7 +12506,7 @@ For this reason, using the ZpL package can here be decisive.</p>
       <div class="output_area">
         <div class="prompt output_prompt">ZpLP&nbsp;[17]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...0000000111</pre>
+          <pre>...100000000000111</pre>
         </div>
       </div>
     </div>
@@ -12524,7 +12538,7 @@ For this reason, using the ZpL package can here be decisive.</p>
       <div class="output_area">
         <div class="prompt output_prompt">ZpFP&nbsp;[18]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...10100111011001110001</pre>
+          <pre>...110000101000011001001001110001</pre>
         </div>
       </div>
     </div>
@@ -12534,7 +12548,7 @@ For this reason, using the ZpL package can here be decisive.</p>
       <div class="output_area">
         <div class="prompt output_prompt">ZpLP&nbsp;[18]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...1001110001</pre>
+          <pre>...001001001110001</pre>
         </div>
       </div>
     </div>
@@ -12891,7 +12905,7 @@ This may have important consequences if, at some point, we will test if $M$ is i
       <div class="output_area">
         <div class="prompt output_prompt">ZpCR&nbsp;[25]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>(...00000000000000000001)*x^5 + (...00001111)*x^4 + (...10111111)*x^3 + (...11011011)*x^2 + (...10110110)*x + (...11110111)</pre>
+          <pre>(...000000000000000000000000000001)*x^5 + (...00001111)*x^4 + (...10111111)*x^3 + (...11011011)*x^2 + (...10110110)*x + (...11110111)</pre>
         </div>
       </div>
     </div>
@@ -12901,7 +12915,7 @@ This may have important consequences if, at some point, we will test if $M$ is i
       <div class="output_area">
         <div class="prompt output_prompt">ZpFP&nbsp;[25]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000000000001*x^5 + ...00000000000000001111*x^4 + ...00000000000010111111*x^3 + ...00000000000011011011*x^2 + ...000000000000010110110*x + ...00000000000011110111</pre>
+          <pre>...000000000000000000000000000001*x^5 + ...000000000000000000000000001111*x^4 + ...000000000000000000000010111111*x^3 + ...000000000000000000000011011011*x^2 + ...0000000000000000000000010110110*x + ...000000000000000000000011110111</pre>
         </div>
       </div>
     </div>
@@ -12911,7 +12925,7 @@ This may have important consequences if, at some point, we will test if $M$ is i
       <div class="output_area">
         <div class="prompt output_prompt">ZpLP&nbsp;[25]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000000000001*x^5 + ...00001111*x^4 + ...10111111*x^3 + ...11011011*x^2 + ...10110110*x + ...11110111</pre>
+          <pre>...000000000000000000000000000001*x^5 + ...00001111*x^4 + ...10111111*x^3 + ...11011011*x^2 + ...10110110*x + ...11110111</pre>
         </div>
       </div>
     </div>
@@ -12970,7 +12984,7 @@ However, we observe that we do not always get this expected result:</p>
       <div class="output_area">
         <div class="prompt output_prompt">ZpFP&nbsp;[27]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000000000001</pre>
+          <pre>...000000000000000000000000000001</pre>
         </div>
       </div>
     </div>
@@ -12980,7 +12994,7 @@ However, we observe that we do not always get this expected result:</p>
       <div class="output_area">
         <div class="prompt output_prompt">ZpLP&nbsp;[27]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000001*x^5 + ...00001111*x^4 + ...10111111*x^3 + ...11011011*x^2 + ...10110110*x + ...11110111</pre>
+          <pre>...0000000000000000000000000001*x^5 + ...00001111*x^4 + ...10111111*x^3 + ...11011011*x^2 + ...10110110*x + ...11110111</pre>
         </div>
       </div>
     </div>

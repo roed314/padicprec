@@ -2,10 +2,16 @@
 # ZpL: a p-adic precision package
 
 %% markdown
-We first create the $p$-adic rings
+### Legend
+- _ZpCR_ stands for Capped Relative precision: this is roughly the analogue of interval arithmetic (a $p$-adic number is represented by a subset of the shape $x + O(p^n)$ and precision is tracked by operating of these subsets)
+- _ZpFP_ stands for Floating Point arithmetic: this is the analogue of usual floating point arithmetic (just a certain subset of $p$-adic numbers are available and results are rounded so that they always lie in this subset)
+- _ZpLP_ stands for Lattice Precision (our package)
 
-Z2 = Zp(2, print_mode="digits")
-Z3 = Zp(3, print_mode="digits")
+%% markdown
+### Creation of the rings
+
+Z2 = Zp(2, prec=30, print_mode="digits")
+Z3 = Zp(3, prec=20, print_mode="digits")
 
 %% markdown
 ## First examples
