@@ -1,12 +1,25 @@
-R = Zp(3, print_mode="digits")
-R
+%% markdown
+# ZpL: a p-adic precision package
 
-# First examples
+%% markdown
+We first create the $p$-adic rings
 
-x = random_element(R,5)
+Z2 = Zp(2, print_mode="digits")
+Z3 = Zp(3, print_mode="digits")
+
+%% markdown
+## First examples
+
+x = random_element(Z3,5)
 x
 
+%% markdown
+When we multiply by $p$, we gain one digit of absolute precision:
+
 3*x
+
+%% markdown
+The ZpL package sees this gain of precision even if the computation is split into several steps:
 
 x + x + x
 
@@ -14,6 +27,9 @@ y = 2*x
 y
 
 x + y
+
+%% markdown
+The same with multiplication:
 
 x^3
 
@@ -24,10 +40,11 @@ y
 
 x * y
 
-# Computations with numbers at different precision
+%% markdown
+## Computations with numbers at different precision
 
-x = random_element(R,10)
-y = random_element(R,5)
+x = random_element(Z2,10)
+y = random_element(Z2,5)
 
 u = x+y
 u
@@ -35,33 +52,77 @@ u
 v = x-y
 v
 
+%% markdown
+Now we compute $u + v$, which is also $2x$.
+Here is what we get:
+
 u+v
 
-# Computations with matrices
+2*x
 
-D = diagonal_matrix([ R(1,5), R(9,5), R(27,5), R(81,5) ])
+%% markdown
+## The SOMOS 4 sequence
+
+%% markdown
+The SOMOS 4 sequence is the sequence defined by the recurrence
+$$u_{n+4} = \frac{u_{n+1}u_{n+3} + u_{n+2}^2}{u_n}.$$
+It turns out that its computation is highly unstable.  
+For this reason, using the ZpL package can here be decisive.
+
+def somos(u0, u1, u2, u3, n):
+    a, b, c, d = u0, u1, u2, u3
+    for _ in range(4, n+1):
+        a, b, c, d = b, c, d, (b*d + c*c) / a
+    return d
+
+somos(Z2(1,15), Z2(1,15), Z2(1,15), Z2(3,15), 18)
+
+somos(Z2(1,15), Z2(1,15), Z2(1,15), Z2(3,15), 100)
+
+%% markdown
+## Computations with matrices
+
+D = diagonal_matrix([ Z3(1,5), Z3(9,5), Z3(27,5), Z3(81,5) ])
 D
 
+%% markdown
+The determinant of $D$ is known at higher precision.
+This is due to the particular shape of $D$.
+
 D.determinant()
+
+%% markdown
+This phenomenon is preserved when $D$ is modified by (left and right) multiplication by some matrix.
+However the software may or may not see it, depending on the method it uses for tracking precision
 
 MS = D.parent()
 P = random_element(MS, prec=5)
 Q = random_element(MS, prec=5)
+M = P*D*Q
+M
+
+M.determinant()
 
 P.determinant() * D.determinant() * Q.determinant()
 
-M = P*D*Q
-M.determinant()
+%% markdown
+Notice that ZpCR cannot decide whether the determinant $M$ vanishes.
+This may have important consequences if, at some point, we will test if $M$ is invertible or not and jump to one branch or another one depending on the result.
 
 M.charpoly()
 
-# Computations with polynomials
+%% markdown
+## Computations with polynomials
 
-S.<x> = PolynomialRing(R)
+S.<x> = PolynomialRing(Z2)
 P = random_element(S, degree=10, prec=5)
 Q = random_element(S, degree=10, prec=5)
 D = x^5 + random_element(S, degree=4, prec=8)
 D
+
+%% markdown
+With high probability, $P$ and $Q$ are coprime, implying that the gcd of $DP$ is $DQ$ is $D$.  
+However, we observe that we do not always get this expected result:
 
 def euclidean(A,B):
     while B != 0:
@@ -69,3 +130,9 @@ def euclidean(A,B):
     return A.monic()
 
 euclidean(D*P, D*Q)
+
+%% markdown
+More precisely, ZpCR often found a gcd of higher degree.
+Indeed the Euclidean algorithm stops prematurely because the software believes that some early remainder vanishes due to the lack of precision.  
+The situation with ZpFP is the exact opposite:
+since the precision is too high (always the maximal cap), the software does not notice that the remainder vanishes. Therefore the Euclidean algorithm does not stop until it obtains a remainder of degree $0$.

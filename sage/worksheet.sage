@@ -4,7 +4,11 @@ import io
 
 import pygments
 lexer = pygments.lexers.PythonLexer()
-formatter = pygments.formatters.HtmlFormatter()
+html_formatter = pygments.formatters.HtmlFormatter()
+latex_formatter = pygments.formatters.LatexFormatter()
+
+from nbconvert.filters.markdown import markdown2html
+
 
 randints = [ ]
 def random_element(ring, prec=None, degree=None):
@@ -39,6 +43,7 @@ def my_exec(code, ring=Zp):
         Out.append(None)
         length = len(cmd)
         if length == 0: continue
+        if cmd[0] == "%% markdown\n": continue
         cmd_exec = ""
         for n in range(length-1):
             cmd_exec += preparse(cmd[n])
@@ -48,6 +53,8 @@ def my_exec(code, ring=Zp):
             Out[-1] = eval(cmd_eval)
         except SyntaxError:
             exec(cmd_eval)
+        except Exception as e:
+            Out[-1] = e.__class__.__name__ + ": " + str(e)
     return Out
     
 
@@ -114,17 +121,32 @@ def to_html(filename, outfile=None):
     OutFP = my_exec(code, ZpFP)
     OutLP = my_exec(code, ZpLP)
 
-    s = ""
+    fhead = io.open("head.html")
+    if fhead:
+        s = fhead.read()
+        fhead.close()
+    else:
+        s = ""
+
+    nn = 0
     for n in range(len(code)):
-        no = "&nbsp;[" + str(n+1) + "]:"
         s += " <div class=\"cell border-box-sizing code_cell rendered\">\n"
 
         # Input
         s += "  <div class=\"input\">\n"
-        s += "    <div class=\"prompt input_prompt\">In" + no + "</div>\n"
-        s += "    <div class=\"inner_cell\">\n"
-        s += "      <div class=\"input_area\">\n"
-        s += pygments.highlight("".join(code[n]), lexer, formatter) + "\n"
+        if code[n][0] == "%% markdown\n":
+            no = ""
+            s += "    <div class=\"prompt input_prompt\"></div>\n"
+            s += "    <div class=\"inner_cell\">\n"
+            s += "      <div class=\"text_cell_render border-box-sizing rendered_html\">\n"
+            s += markdown2html("".join(code[n][1:])) + "\n"
+        else:
+            nn += 1
+            no = "&nbsp;[" + str(nn) + "]:"
+            s += "    <div class=\"prompt input_prompt\">In" + no + "</div>\n"
+            s += "    <div class=\"inner_cell\">\n"
+            s += "      <div class=\"input_area\">\n"
+            s += pygments.highlight("".join(code[n]), lexer, html_formatter) + "\n"
         s += "      </div>\n";
         s += "    </div>\n";
         s += "  </div>\n";
@@ -166,7 +188,55 @@ def to_html(filename, outfile=None):
 
         s += "</div>\n";
 
+    ffoot = io.open("foot.html")
+    if ffoot:
+        s += ffoot.read()
+        ffoot.close()
+
     if fh:
         fh.write(s)
         fh.close()
-    return s
+    else:
+        return s
+
+
+def to_latex(filename, outfile=None):
+    fh = None
+    if outfile is not None:
+        fh = io.open(outfile, "w")
+    code = readfile(filename)
+    OutCR = my_exec(code, ZpCR)
+    OutFP = my_exec(code, ZpFP)
+    OutLP = my_exec(code, ZpLP)
+
+    nn = 0
+    s = ""
+    for n in range(len(code)):
+        # Input
+        if code[n][0] == "%% markdown\n":
+            no = ""
+            s += "Markdown"
+        else:
+            nn += 1
+            no = "~[" + str(nn) + "]:"
+            s += "{\\color{blue} In" + no + "}\n"
+            s += pygments.highlight("".join(code[n]), lexer, latex_formatter) + "\n\n"
+
+        # Output
+        if OutCR[n] is not None:
+            s += "{\\color{red} ZpCR" + no + "}\n"
+            s += "\\hbox{$" + str(latex(OutCR[n])) + "$}\n\n"
+        if OutFP[n] is not None:
+            s += "{\\color{red} ZpFP" + no + "}\n"
+            s += "{$" + str(latex(OutFP[n])) + "$}\n\n"
+        if OutLP[n] is not None:
+            s += "{\\color{red} ZpCR" + no + "}\n"
+            s += "{$" + str(latex(OutLP[n])) + "$}\n\n"
+
+        s += "\n\\bigskip\n\n"
+
+    if fh:
+        fh.write(unicode(s))
+        fh.close()
+    else:
+        return s
