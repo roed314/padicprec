@@ -88,6 +88,20 @@ somos(Z2(1,15), Z2(1,15), Z2(1,15), Z2(3,15), 100)
 %% markdown
 ## Computations with matrices
 
+%% markdown
+### Product of many matrices
+
+MS = MatrixSpace(Z2,2)
+
+M = MS(1)
+for _ in range(60):
+    M *= random_element(MS, prec=8)
+
+M
+
+%% markdown
+### Determinants
+
 D = diagonal_matrix([ Z3(1,5), Z3(9,5), Z3(27,5), Z3(81,5) ])
 D
 
@@ -116,6 +130,30 @@ Notice that ZpCR cannot decide whether the determinant $M$ vanishes.
 This may have important consequences if, at some point, we will test if $M$ is invertible or not and jump to one branch or another one depending on the result.
 
 M.charpoly()
+
+%% markdown
+### Dodgson condensation algorithm
+Dodgson condensation is a recursive method for computing the determinant of a matrix.
+A description of the method can be found [here](https://en.wikipedia.org/wiki/Dodgson_condensation).
+
+def dodgson(M):   # M must be a square matrix
+    n = M.nrows() - 1
+    A = M
+    B = matrix(n, n, 
+               [ [ M[i,j]*M[i+1,j+1] - M[i+1,j]*M[i,j+1] 
+                   for j in range(n) ] for i in range(n) ])
+    for m in range(n-1, 0, -1):
+        A, B = B, matrix(m, m, 
+                         [ [ (B[i,j]*B[i+1,j+1] - B[i+1,j]*B[i,j+1]) / A[i+1,j+1] 
+                             for j in range(m) ] for i in range(m) ])
+    return B[0,0]
+
+MS = MatrixSpace(Z2, 6)
+M = random_element(MS, prec=10)
+
+dodgson(M)
+
+M.determinant()
 
 %% markdown
 ## Computations with polynomials
