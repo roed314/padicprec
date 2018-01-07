@@ -297,5 +297,75 @@ in the other direction
 \item example of $p$-adic differential equations (especially for $p=2$)
 \end{itemize}
 
+\subsection{Exploration}
+
+The purpose of this package is that of exploration
+of the $p$-adic precision.
+We conclude with a last example coming
+from the field of the computation of
+isogenies between elliptic curves over finite fields.
+Techniques to compute these isogenies
+through the solving of $p$-adic differential equations
+have a long history, and a first
+analysis of the behaviour of precision using
+lattices has been investigated in \cite{LV16}.
+
+In that article, the authors were interested in
+solving $y'^2=g \times h(y)$ with
+$g,h,y \in \mathbb{Z}_p \llbracket x \rrbracket$
+such that $g(0)=h(0)=1$ and $y(0)=0.$
+
+The main result was that the intrinsic loss in precision
+when computing the coefficient $x^n$ of $y$
+from $g$ and $h$ was in $\log_p(n)$
+even though a naive analysis of
+the Newton method for solving the equation
+yield a loss in $\log_p(n)^2.$
+
+However, this does not encompass the case of 
+elliptic curves defined and isogeneous 
+over $\mathbb{Q},$ which can yield a differential 
+equation with a solution $y$ whose coefficients
+have negative valuation.
+
+For instance, the curves 
+$E: \: y^2=x^3+1$
+and $E': \: y^2=+ (m^2-1)x^2/4 + m^6$ are isogeneous
+over $\mathbb{Q}$ if  $m$ is an odd integer.
+We take $m=67.$ The corresponding isogeny has coefficients with possibly
+negative $3$-adic valuation.
+
+We can solve numerically 
+the corresponding differential equation
+using the algorithm of \cite{Lercier-Sirvent:08}
+over $\mathbb{Q}_3$ with lattice precision.
+Any generic implementation of the Newton
+method of \cite{Lercier-Sirvent:08} is enough.
+
+\begin{tabular}{|l|}
+\verb?    A = QpL(3)? \\
+\verb?    R.<x> = PolynomialRing(A)?\\
+\verb?    m=67?\\
+\verb?    g=1+(1/4)*x^2+x^6?\\
+\verb?    h=1+((m^2)/4)*x^2+m^6* x^6?\\
+\verb?    y=Lercier_Sirvent(g,h,64)?\\
+\verb?    y[31]?\\
+\verb?(467995903278061284942799/3^14 + O(3^36))*x^31?\\
+\end{tabular}
+
+We can then see that up to $63,$ the behaviour
+of the loss in relative precision is the same
+as for the coefficient in $x^{31}$: \textbf{no loss
+occured}.
+Thus, those simple manipulations
+hint at a different behaviour for the loss 
+in precision in at least some special cases of
+of isogenies defined over $\mathbb{Q}$
+but not necessarily over $\mathbb{Z}_p.$ 
+
+\bibliographystyle{plain}
+\bibliography{ZpL}
+
+
 \end{document}
 
