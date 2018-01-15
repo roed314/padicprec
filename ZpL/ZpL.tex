@@ -290,6 +290,37 @@ in the other direction
 \item $p$-adic differential equations
 \end{itemize}
 
+\subsubsection{$p$-adic differential equations}
+
+
+In \cite{LV16}, the behaviour of the precision when solving
+$p$-adic differential equations with separation of 
+variables has been studied.
+The authors have investigated the gap when that appears
+when applying a Newton-method solver between
+the theoretic loss in precision and the 
+actual loss in precision for a naive implemenationin \verb?Zp(p)?.
+We can reach this theoretical loss in precision using \verb?ZpL?.
+We use a generic \verb?Newton_Iteration_Solver(g,h,N)?
+that applies \verb?N? steps of the Newton method for 
+$y'=g \times h(y)$ as described in \citep{LV16}. 
+
+\begin{tabular}{|l|l|}
+\verb?R = Qp(2,250)? & \verb?R = QpL(2,250)? \\
+\verb?S = Zp(2,250)? & \verb?S = ZpL(2,250)? \\
+\multicolumn{2}{|l|}{\tt A.<x> = PowerSeriesRing(R,32) } \\
+\multicolumn{2}{|l|}{\tt B.<x> = PowerSeriesRing(S,32)) } \\
+\multicolumn{2}{|l|}{\tt h,y =1+x+x\^{}3 , x+x\^{}2*A(B.random\_element()) } \\
+\multicolumn{2}{|l|}{\tt g=y.derivative()/h(y) } \\
+\multicolumn{2}{|l|}{\tt s=Newton\_Iteration\_Solver(g,h,5)} \\
+\multicolumn{2}{|l|}{\tt print 250-(s[31].lift()-y[31].lift()).valuation(2)} \\
+\hfill\verb?9? & \hfill\verb?4? \\
+\end{tabular}
+The theorical loss in precision for the coefficient of $t^{31}$
+is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
+loss in precision for a naive implementation is clearly more severe.
+
+
 \section{Conclusion}
 
 \begin{itemize}
@@ -343,8 +374,8 @@ Any generic implementation of the Newton
 method of \cite{Lercier-Sirvent:08} is enough.
 
 \begin{tabular}{|l|}
-\verb?    A = QpL(3)? \\
-\verb?    R.<x> = PolynomialRing(A)?\\
+\verb?    R = QpL(3)? \\
+\verb?    A.<x> = PolynomialRing(R)?\\
 \verb?    m=67?\\
 \verb?    g=1+(1/4)*x^2+x^6?\\
 \verb?    h=1+((m^2)/4)*x^2+m^6* x^6?\\
