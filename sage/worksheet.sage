@@ -1,4 +1,4 @@
-from sage.misc.misc import walltime
+from sage.misc.misc import walltime, cputime
 
 from sage.rings.polynomial.polynomial_ring import PolynomialRing_general
 from sage.matrix.matrix_space import MatrixSpace
@@ -52,7 +52,7 @@ def my_exec(code, ring=Zp):
         for n in range(length-1):
             cmd_exec += preparse(cmd[n])
         cmd_eval = preparse(cmd[-1])
-        tme = walltime()
+        tme = cputime()
         exec(cmd_exec)
         try:
             Out[-1] = eval(cmd_eval)
@@ -60,7 +60,7 @@ def my_exec(code, ring=Zp):
             exec(cmd_eval)
         except Exception as e:
             Out[-1] = e.__class__.__name__ + ": " + str(e)
-        Tme[-1] = walltime(tme)
+        Tme[-1] = cputime(tme)
     return Out, Tme
     
 
