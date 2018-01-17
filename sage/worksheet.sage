@@ -1,3 +1,5 @@
+from sage.misc.misc import walltime, cputime
+
 from sage.rings.polynomial.polynomial_ring import PolynomialRing_general
 from sage.matrix.matrix_space import MatrixSpace
 import io
@@ -39,8 +41,10 @@ def my_exec(code, ring=Zp):
     random_seed = -1;
     Zp = ring
     Out = [ ]
+    Tme = [ ]
     for cmd in code:
         Out.append(None)
+        Tme.append(None)
         length = len(cmd)
         if length == 0: continue
         if cmd[0] == "%% markdown\n": continue
@@ -48,6 +52,7 @@ def my_exec(code, ring=Zp):
         for n in range(length-1):
             cmd_exec += preparse(cmd[n])
         cmd_eval = preparse(cmd[-1])
+        tme = cputime()
         exec(cmd_exec)
         try:
             Out[-1] = eval(cmd_eval)
@@ -55,7 +60,8 @@ def my_exec(code, ring=Zp):
             exec(cmd_eval)
         except Exception as e:
             Out[-1] = e.__class__.__name__ + ": " + str(e)
-    return Out
+        Tme[-1] = cputime(tme)
+    return Out, Tme
     
 
 def readfile(filename):
@@ -83,7 +89,8 @@ def to_txt(filename, outfile=None):
     code = readfile(filename)
     OutCR = my_exec(code, ZpCR)
     OutFP = my_exec(code, ZpFP)
-    OutLP = my_exec(code, ZpLP)
+    OutLC = my_exec(code, ZpLC)
+    OutLF = my_exec(code, ZpLF)
     s = ""
     for n in range(len(code)):
         for line in code[n]:
@@ -95,8 +102,10 @@ def to_txt(filename, outfile=None):
             s += "ZpCR:\n" + str(OutCR[n]) + "\n"
         if OutFP[n] is not None:
             s += "ZpFP:\n" + str(OutFP[n]) + "\n"
-        if OutLP[n] is not None:
-            s += "ZpLP:\n" + str(OutLP[n]) + "\n"
+        if OutLC[n] is not None:
+            s += "ZpLC:\n" + str(OutLC[n]) + "\n"
+        if OutLF[n] is not None:
+            s += "ZpLF:\n" + str(OutLF[n]) + "\n"
         s += "\n"
 
     if fh:
@@ -117,9 +126,10 @@ def to_html(filename, outfile=None):
     if outfile is not None:
         fh = io.open(outfile, "w")
     code = readfile(filename)
-    OutCR = my_exec(code, ZpCR)
-    OutFP = my_exec(code, ZpFP)
-    OutLP = my_exec(code, ZpLP)
+    OutCR, TmeCR = my_exec(code, ZpCR)
+    OutFP, TmeFP = my_exec(code, ZpFP)
+    OutLC, TmeLC = my_exec(code, ZpLC)
+    OutLF, TmeLF = my_exec(code, ZpLF)
 
     fhead = io.open("head.html")
     if fhead:
@@ -158,6 +168,7 @@ def to_html(filename, outfile=None):
             s += "      <div class=\"output_area\">\n"
             s += "        <div class=\"prompt output_prompt\">ZpCR" + no + "</div>\n"
             s += "        <div class=\"output_text output_subarea output_execute_result\">\n";
+            s += "          <div class=\"timings\">%.3f&nbsp;s</div>\n" % TmeCR[n]
             s += "          <pre>" + htmlspecialchars(str(OutCR[n])) + "</pre>\n"
             s += "        </div>\n";
             s += "      </div>\n";
@@ -169,18 +180,32 @@ def to_html(filename, outfile=None):
             s += "      <div class=\"output_area\">\n"
             s += "        <div class=\"prompt output_prompt\">ZpFP" + no + "</div>\n"
             s += "        <div class=\"output_text output_subarea output_execute_result\">\n";
+            s += "          <div class=\"timings\">%.3f&nbsp;s</div>\n" % TmeFP[n]
             s += "          <pre>" + htmlspecialchars(str(OutFP[n])) + "</pre>\n"
             s += "        </div>\n";
             s += "      </div>\n";
             s += "    </div>\n";
             s += "  </div>\n";
-        if OutLP[n] is not None:
+        if OutLC[n] is not None:
             s += "  <div class=\"output_wrapper\">\n"
             s += "    <div class=\"output\">\n"
             s += "      <div class=\"output_area\">\n"
-            s += "        <div class=\"prompt output_prompt\">ZpLP" + no + "</div>\n"
+            s += "        <div class=\"prompt output_prompt\">ZpLC" + no + "</div>\n"
             s += "        <div class=\"output_text output_subarea output_execute_result\">\n";
-            s += "          <pre>" + htmlspecialchars(str(OutLP[n])) + "</pre>\n"
+            s += "          <div class=\"timings\">%.3f&nbsp;s</div>\n" % TmeLC[n]
+            s += "          <pre>" + htmlspecialchars(str(OutLC[n])) + "</pre>\n"
+            s += "        </div>\n";
+            s += "      </div>\n";
+            s += "    </div>\n";
+            s += "  </div>\n";
+        if OutLF[n] is not None:
+            s += "  <div class=\"output_wrapper\">\n"
+            s += "    <div class=\"output\">\n"
+            s += "      <div class=\"output_area\">\n"
+            s += "        <div class=\"prompt output_prompt\">ZpLF" + no + "</div>\n"
+            s += "        <div class=\"output_text output_subarea output_execute_result\">\n";
+            s += "          <div class=\"timings\">%.3f&nbsp;s</div>\n" % TmeLF[n]
+            s += "          <pre>" + htmlspecialchars(str(OutLF[n])) + "</pre>\n"
             s += "        </div>\n";
             s += "      </div>\n";
             s += "    </div>\n";
@@ -207,7 +232,8 @@ def to_latex(filename, outfile=None):
     code = readfile(filename)
     OutCR = my_exec(code, ZpCR)
     OutFP = my_exec(code, ZpFP)
-    OutLP = my_exec(code, ZpLP)
+    OutLC = my_exec(code, ZpLC)
+    OutLF = my_exec(code, ZpLF)
 
     nn = 0
     s = ""
@@ -229,9 +255,12 @@ def to_latex(filename, outfile=None):
         if OutFP[n] is not None:
             s += "{\\color{red} ZpFP" + no + "}\n"
             s += "{$" + str(latex(OutFP[n])) + "$}\n\n"
-        if OutLP[n] is not None:
-            s += "{\\color{red} ZpCR" + no + "}\n"
-            s += "{$" + str(latex(OutLP[n])) + "$}\n\n"
+        if OutLC[n] is not None:
+            s += "{\\color{red} ZpLC" + no + "}\n"
+            s += "{$" + str(latex(OutLC[n])) + "$}\n\n"
+        if OutLF[n] is not None:
+            s += "{\\color{red} ZpLF" + no + "}\n"
+            s += "{$" + str(latex(OutLF[n])) + "$}\n\n"
 
         s += "\n\\bigskip\n\n"
 
