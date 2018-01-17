@@ -198,6 +198,89 @@ eigenvalue}
 \section{Theory}
 
 \subsection{The precision Lemma}
+In \cite{caruso-roe-vaccon:14a}, we have suggested the 
+use of lattices to represent the precision of elements in 
+$K$-vector spaces.  It contrasts with the
+\emph{coordinate-wise method} (of \textit{e.g.}
+ \verb?Zp(5)?) that is of use in Sage prior to
+ our package, and  
+where the precision of an element is specified by giving the precision
+of each coordinate separately and is updated after each basic
+operation.
+
+Consider a finite 
+dimensional normed vector space $E$ 
+defined over $K$. 
+We use the notation $\Vert \cdot \Vert_E$ for the norm 
+on $E$ and $B^-_E(r)$ (resp. $B^{\phantom -}_E(r)$) for the open (resp. 
+closed) ball of radius $r$ centered at the origin. A \emph{lattice} $L \subset 
+E$ is a sub-$\O_K$-module which generates $E$ over $K$. 
+Because of ultrametricity, the balls $B^{\phantom 
+-}_E(r)$ and $B^-_E(r)$ are examples of lattices. 
+Lattices can be thought of as special neighborhoods of $0,$
+ and therefore are good 
+candidates to model precision data. Moreover, as revealed in 
+\cite{caruso-roe-vaccon:14a}, they behave quite well under (strictly) 
+differentiable maps:
+
+\begin{prop}
+\label{prop:precision}
+Let $E$ and $F$ be two finite dimensional normed vector spaces over $K$ 
+and $f : U \rightarrow F$ be a function defined on an open subset $U$ of 
+$E$. We assume that $f$ is differentiable at some point $v_0 \in U$ and 
+that the differential $f'(v_0)$ is surjective.
+Then, for all $\rho \in (0, 1]$, there exists a positive real
+number $\delta$ such that, for all $r \in (0, \delta)$, any lattice
+$H$ such that $B^-_E(\rho r) \subset H \subset B^{\phantom -}_E(r)$ 
+satisfies:
+\begin{equation}
+\label{eq:firstorder}
+f(v_0 + H) = f(v_0) + f'(v_0) (H).
+\end{equation}
+\end{prop}
+
+This proposition enables the \emph{lattice method} of tracking precision,
+where the precision of the input is specified as a lattice $H$ and precision
+is tracked via differentials of the steps within a given algorithm.
+The equality sign in Eq.~\eqref{eq:firstorder} shows that this method
+yields the optimum possible precision. 
+We refer to \cite[\S 4.1]{caruso-roe-vaccon:14a} for a more complete 
+exposition.
+We emphasize that polynomials, rational fractions (outside of their poles)
+and converging power series are strictly differentiable.
+
+The lemma is more precise in the context of so-called
+integral polynomial functions.
+A function $f : E \to F$ is said to be
+\emph{integral polynomial} if it is given by multivariate polynomial 
+functions with coefficients in $\O_K$ in any (equivalently all) system 
+of coordinates associated to a $\OK$-basis of $B_E(1)$.
+
+\begin{prop}
+\label{prop:precision2}
+We keep the notation of Proposition \ref{prop:precision} and assume 
+in addition that $f$ is integral polynomial. Let $C$ be a positive real
+number such that $B_F(1) \subset f'(v_0)(B_E(C))$. 
+Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
+\rho^{-1}$.
+\end{prop}
+
+We will use the following definition to measure the gap
+between lattice and coordinate-wise methods. 
+Suppose $E$ is equipped with a basis $(e_1, \ldots, e_n)$ and write $\pi_i : E \to Ke_i$ for the projections.
+
+\begin{deftn} \label{def:diffused}
+Let $H \subset E$ be a lattice. The number of 
+\emph{diffused digits of precision} of $H$ is the length of
+$H_0/H$ where $H_0 = \pi_1(H) \oplus \cdots \oplus \pi_n(H)$.
+\end{deftn}
+If $H$ represents the actual precision on some object, then
+$H_0$ is the smallest diagonal lattice containing $H$.
+Coordinate-wise methods, with one precision datum per coordinate,
+corresponds to diagonal lattices.
+Hence, they cannot yield a precision better than $H_0$, and
+then $k$ provides a lower bound on the number of $p$-adic digits
+gained by lattice methods over standard methods.
 
 \subsection{The way the precision is tracked with \ZpL}
 
@@ -316,6 +399,9 @@ $y'=g \times h(y)$ as described in \citep{LV16}.
 \multicolumn{2}{|l|}{\tt print 250-(s[31].lift()-y[31].lift()).valuation(2)} \\
 \hfill\verb?9? & \hfill\verb?4? \\
 \end{tabular}
+The last line provides the loss in precision between the
+original solution of the differential equation and its approximation
+obtained through computation.
 The theorical loss in precision for the coefficient of $t^{31}$
 is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
 loss in precision for a naive implementation is clearly more severe.
@@ -370,11 +456,12 @@ We can solve numerically
 the corresponding differential equation
 using the algorithm of \cite{Lercier-Sirvent:08}
 over $\mathbb{Q}_3$ with lattice precision.
+We use an initial precision of 50 digits.
 Any generic implementation of the Newton
 method of \cite{Lercier-Sirvent:08} is enough.
 
 \begin{tabular}{|l|}
-\verb?    R = QpL(3)? \\
+\verb?    R = QpL(3,50)? \\
 \verb?    A.<x> = PolynomialRing(R)?\\
 \verb?    m=67?\\
 \verb?    g=1+(1/4)*x^2+x^6?\\
