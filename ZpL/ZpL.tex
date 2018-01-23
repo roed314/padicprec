@@ -22,7 +22,7 @@
 \usepackage{multirow}
 \usepackage{xspace}
 \usepackage{tabularx,multicol}
-%\usepackage{tikz}
+\usepackage{tikz}
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
@@ -56,10 +56,21 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\OK}{\mathcal{O}_K}
 
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\ttv}{\texttt{v}\xspace}
+\newcommand{\ttw}{\texttt{w}\xspace}
+\newcommand{\tttmp}{\texttt{tmp}\xspace}
+
+\newcommand{\rem}{\,\%\,}
+
+\newcommand{\sage}{\textsc{SageMath}\xspace}
 \newcommand{\ZpL}{\texttt{ZpL}\xspace}
-\newcommand{\ZpLCA}{\texttt{ZpLCA}\xspace}
-\newcommand{\ZpLCR}{\texttt{ZpLCR}\xspace}
+\newcommand{\ZpLC}{\texttt{ZpLC}\xspace}
 \newcommand{\ZpLF}{\texttt{ZpLF}\xspace}
+
+\newcommand{\card}{\text{Card}\:}
+\newcommand{\ind}{\text{ind}}
+\newcommand{\coind}{\text{coind}}
 
 \newcommand{\famN}{\mathcal{N}}
 
@@ -98,7 +109,7 @@
 \newtheorem{quest}[theo]{Question}
 \newtheorem{conj}[theo]{Conjecture}
 \theoremstyle{definition}
-\newtheorem{rem}[theo]{Remark}
+\newtheorem{rmq}[theo]{Remark}
 \newtheorem{ex}[theo]{Example}
 \newtheorem{deftn}[theo]{Definition}
 
@@ -150,6 +161,8 @@ eigenvalue}
 \item plan of the article
 \end{itemize}
 
+\todo{Convention: in matrices, vectors are represented by row-vector.}
+
 \section{Examples}
 
 \subsection{Elementary arithmetic}
@@ -195,15 +208,39 @@ eigenvalue}
 \item gcd of polynomials
 \end{itemize}
 
-\section{Theory}
+\section{Presentation of the package}
+
+In this Section, we explain how our package \ZpL works and analyze
+its performances.
+The main theoretical result on which our package is based in the 
+ultrametric precision theory developed in \cite{padicprec}, which 
+suggests to track precision \emph{via} lattices and differential 
+computations. For this reason, our approach is very inspired by 
+Automatic Differentiation techniques \cite{} and our implementation 
+follows the usual Operator Overloading strategy \cite{}.
+
+We will introduce two versions of our package, namely \ZpLC and \ZpLF: 
+this former is safer while the latter is faster. They are presented in 
+\S \ref{ssec:ZpLC} and \S \ref{ssec:ZpLF} respectively. As for \S 
+\ref{ssec:preclemma} below, it serves as a short survey on the result of 
+\cite{padicprec} on which our developments are built.
+
+\smallskip
+
+\noindent \textit{Remark about the naming.}
+%
+The letter \texttt{L}, which appears in the name of the package, 
+comes from ``lattices''. The letters \texttt{C} (in \ZpLC) and 
+\texttt{F} (in \ZpLF) stand for ``cap'' and ``float'' respectively.
 
 \subsection{The precision Lemma}
+\label{ssec:preclemma}
+
 In \cite{caruso-roe-vaccon:14a}, we have suggested the 
 use of lattices to represent the precision of elements in 
 $K$-vector spaces.  It contrasts with the
 \emph{coordinate-wise method} (of \textit{e.g.}
- \verb?Zp(5)?) that is of use in Sage prior to
- our package, and  
+ \verb?Zp(5)?) that is used traditionally in \sage and
 where the precision of an element is specified by giving the precision
 of each coordinate separately and is updated after each basic
 operation.
@@ -228,14 +265,14 @@ differentiable maps:
 Let $E$ and $F$ be two finite dimensional normed vector spaces over $K$ 
 and $f : U \rightarrow F$ be a function defined on an open subset $U$ of 
 $E$. We assume that $f$ is differentiable at some point $v_0 \in U$ and 
-that the differential $f'(v_0)$ is surjective.
+that the differential $df_{v_0}$ is surjective.
 Then, for all $\rho \in (0, 1]$, there exists a positive real
 number $\delta$ such that, for all $r \in (0, \delta)$, any lattice
 $H$ such that $B^-_E(\rho r) \subset H \subset B^{\phantom -}_E(r)$ 
 satisfies:
 \begin{equation}
 \label{eq:firstorder}
-f(v_0 + H) = f(v_0) + f'(v_0) (H).
+f(v_0 + H) = f(v_0) + df_{v_0} (H).
 \end{equation}
 \end{prop}
 
@@ -260,7 +297,7 @@ of coordinates associated to a $\OK$-basis of $B_E(1)$.
 \label{prop:precision2}
 We keep the notation of Proposition \ref{prop:precision} and assume 
 in addition that $f$ is integral polynomial. Let $C$ be a positive real
-number such that $B_F(1) \subset f'(v_0)(B_E(C))$. 
+number such that $B_F(1) \subset df_{v_0}(B_E(C))$. 
 Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
 \rho^{-1}$.
 \end{prop}
@@ -282,57 +319,243 @@ Hence, they cannot yield a precision better than $H_0$, and
 then $k$ provides a lower bound on the number of $p$-adic digits
 gained by lattice methods over standard methods.
 
-\subsection{The way the precision is tracked with \ZpL}
+\subsection{\ZpLC}
+\label{ssec:ZpLC}
 
-We follow the precision lattice.
-Closely related to automatic differentiation.
+\todo{Maybe, add a short intro.}
 
-\begin{itemize}
-\item \ZpLCR, \ZpLCA: we use a cap to ensure that we have a lattice at
-each step.
-\item \ZpLF: we work with $\Zp$-submodules of possible positive codimension
+\medskip
+
+\noindent \textbf{Tracking precision.}
+%
+In what follows, it will be convenient to use a notion of discrete time 
+represented by the letter $t$. Rigorously, it is defined as follows: 
+$t=0$ when the $p$-adic ring $\ZpLC(\:\cdots)$ is created and increases by 
+$1$ each time a variable is created, deleted\footnote{The deletion can
+be explicit (through a call to the \texttt{del} operator) or implicit
+(handled by the garbage collector).} or updated.
+
+Let $\calV_t$ be the set of alive variables at time $t$. Set $E_t = 
+\Qp^{\calV_t}$; it is a finite dimensional vector space over $\Qp$ which 
+should be thought as the set of all possible values that can be taken by 
+the variables in $\calV_t$. For $\ttv \in \calV_t$, let $e_\ttv \in
+\Qp^{\calV_t}$ be the vector whose all coordinates vanished except 
+that at position $\ttv$ which takes the value $1$. The family 
+$(e_\ttv)_{\ttv \in \calV_t}$ is obviously a basis of $E_t$; we will 
+refer to it as the \emph{canonical basis}.
+
+The package \ZpLC follows precision by keeping track of a lattice 
+$H_t$ in $E_t$, which is a unique object whose purpose is to model the 
+precision on all the variables in $\calV_t$ together.
+Concretely, this lattice is represented by a matrix $M_t$ in row-echelon 
+form whose lines form a set of generators.
+Below, we explain how the matrices $M_t$ are updated each time
+$t$ increases.
+
+\smallskip
+
+\noindent \textit{Creating a variable.}
+%
+This happens when we encounter an instruction having one of the
+two following forms:
+
+\medskip
+
+\noindent \hspace{5mm} \makebox[2.5cm]{[Computation]\hfill\null}
+\verb?w = ?$f$\verb?(v_1,? \ldots\verb?, v_n)?
+
+\smallskip
+
+\noindent \hspace{5mm} \makebox[2.5cm]{[New value]\hfill\null}
+\verb?w = ?\verb?R(?\text{value}\verb?, ?\text{prec}\verb?)?
+
+\medskip
+
+\noindent
+In both cases, $\ttw$ is the newly created variable. 
+The $\ttv_i$'s stand for already defined variables and $f$ is some 
+$n$-ary builtin function (in most cases it is just addition, 
+subtraction, multiplication or division). On the contrary, the terms 
+``value'' and ``prec'' refer to user-specified constants or integral 
+values which was computed earlier.
+
+\smallskip
+
+Let us first examine the first construction [Computation].
+With our conventions, if $t$ is the time just before the execution of 
+the instruction we are interested in, the $\ttv_i$'s lie in $\calV_t$ 
+while $\ttw$ does not. Moreover $\calV_{t+1} = \calV_t \sqcup \{\ttw\}$, 
+so that $E_{t+1} = E_t \oplus \Qp e_\ttw$.
+The mapping taking the values of variables at time $t$ to that at 
+time $t{+}1$ is:
+$$\begin{array}{rcl}
+F: \quad E_t & \longrightarrow & E_{t+1} \smallskip \\
+\underline x & \mapsto & \underline x \:\oplus f(x_1, \ldots, x_n)
+\end{array}$$
+where $x_i$ is the $\ttv_i$-th coordinate of the vector $\underline x$.
+The Jacobian matrix of $F$ at $\underline x$ is easily computed; it 
+is the block matrix $J_{\underline x}(F) = \big( \begin{matrix} I & L
+\end{matrix} \big)$ where $I$ is the identity matrix of size $\text{Card}
+\:\calV_t$ and $L$ is the column vector whose $\ttv$-th entry is
+$\frac{\partial f}{\partial \ttv} (\underline x)$ if $\ttv$ is one of 
+the $\ttv_i$'s and $0$ otherwise.
+Therefore, the image of $H_t$ under $dF_{\underline x}$ is represented 
+by the matrix $J_{\underline x}(F) \cdot M_t = \big( \begin{matrix} M_t & C
+\end{matrix} \big)$ where $C$ is the column vector:
+$$C = \sum_{i=1}^n \frac{\partial f}{\partial{\ttv_i}} (\underline x)
+\cdot C_i$$
+where $C_i$ is the column vector of $M_t$ corresponding to the
+variable $\ttv_i$.
+Observe that the matrix $J_{\underline x}(F) \cdot M_t$ is no longer a 
+square matrix; it has one extra column. This reflects the fact that 
+$\dim E_{t+1} = \dim E_t + 1$. Rephasing this in a different language, 
+the image of $H_t$ under $dF_{\underline x}$ is no longer a lattice in 
+$E_{t+1}$ but is included in an hyperplane.
+
+The package \ZpLC tackles this issue by introducing a cap: we do not 
+work with $dF_{\underline x}(H_t)$ but instead define the lattice: 
+$$H_{t+1} = dF_{\underline x}(H_t) \oplus p^{N_{t+1}} \Zp e_\ttw$$
+where $N_{t+1}$ is an integer, the so-called \emph{cap}.
+Alternatively, one may introduce the application:
+$$\begin{array}{rcl}
+\tilde F: \quad E_t \oplus \Qp & \longrightarrow & E_{t+1} \smallskip \\
+\underline x \oplus c & \mapsto & \underline x \:\oplus 
+\big(f(x_1, \ldots, x_n) + c\big).
+\end{array}$$
+The lattice $H_{t+1}$ is then the image of $H_t \oplus p^{N_{t+1}}
+\Zp$ under $d\tilde F_{(\underline x, \star)}$ for any value of $\star$.
+The choice of the 
+cap is of course a sensitive question. \ZpLC proceeds as follows. When a 
+ring is created, it comes with two constants (which can be specified by 
+the user): a relative cap \textsc{relcap} and an absolute cap 
+\textsc{abscap}. With these predefined values, the chosen cap is:
+$$N_{t+1} = 
+\min\big(\textsc{abscap},\, \textsc{relcap} + v_p(y)\big)$$
+with $y = f(x_1, \ldots, x_n)$.
+
+In concrete terms, the lattice $H_{t+1}$ is represented by the block 
+matrix:
+$$\left(\begin{matrix}
+M_t & C \smallskip \\ 0 & p^{N_{t+1}}
+\end{matrix}\right).$$
+Performing row operations, we see then the entries of $C$ can be
+reduced modulo $p^{N_{t+1}}$ without changing the lattice. In order
+to optimize the size of the objects, we perform this reduction and
+define $M_{t+1}$ by:
+$$M_{t+1} = \left(\begin{matrix}
+M_t & C \text{ mod } p^{N_{t+1}} \smallskip \\ 0 & p^{N_{t+1}}
+\end{matrix}\right).$$
+We observe in particular that $M_{t+1}$ is still in row-echelon form.
+
+\smallskip
+
+Finally, we need to precise which value is set to the newly created 
+variable $\ttw$. We observe that it cannot be exactly $f(x_1, \ldots, 
+x_n)$ because the latter is \emph{a priori} a $p$-adic number which 
+cannot be computed exactly. For this reason, we have to truncate it at 
+some finite precision. Again we choose the precision $O(p^{N_{t+1}})$,
+\emph{i.e.} we define $x_\ttw$ as $f(x_1, \ldots, x_n) \text{ mod } 
+p^{N_{t+1}}$. This makes sense because:
+$$\bar x \oplus f(x_1, \ldots, x_n) \equiv
+\bar x \oplus x_\ttw \pmod{H_{t+1}}$$
+thanks to the extra generator we have added.
+
+\medskip
+
+\noindent \textit{Deleting a variable.}
+%
+Let us now examine the case where a variable $\ttw$ is deleted (or 
+collected by the garbage collector). Just after the deletion, at
+time $t{+}1$, we then have $\calV_{t+1} = \calV_t \backslash \{\ttw\}$.
+Thus $E_t = E_{t+1} \oplus \Qp e_\ttw$. Moreover, the deletion of $\ttw$
+is modeled by the canonical projection $f : E_t \to E_{t+1}$. Since $f$
+is linear, it is its own differential (at each point) and we set 
+$H_{t+1} = f(H_t)$.
+
+A matrix representing $H_{t+1}$ is deduced from $M_t$ by erasing the
+column corresponding to $\ttw$. However the matrix we get this way
+has the following shape:
+$$\left(\raisebox{-0.5\height}{\begin{tikzpicture}[scale=0.3]
+\fill[black!20] (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2)--(2,-3)
+    --(3,-3)--(3,-5)--(4,-5)--(4,-6)--(5,-6)--(5,-7)--(6,-7)--(6,0)--cycle;
+\draw (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2)--(2,-3)
+    --(3,-3)--(3,-5)--(4,-5)--(4,-6)--(5,-6)--(5,-7)--(6,-7);
+\draw[thin] (6,-7)--(6,0)--(0,0);
+\end{tikzpicture}}\right)$$
+where a cell is colored when it can contain a non-vanishing entry.
+At this point, we encounter an issue: the above matrix is no longer
+echelonized (except the $\ttw$ corresponded to the last column, 
+\emph{i.e.} was the latest created variable which was still alive). 
+We then need to re-echelonize it before proceeding to the next
+instruction. However, we notice that only the left bottom corner
+needs to be echelonized. We will come back to this observation later
+when we will study complexity.
+
+\medskip
+
+\noindent \textit{Updating a variable.}
+%
+Just like for creation, this happens when the program reaches an
+affectation \verb?w = ...? where the variable \ttw is already 
+defined.
+
+This situation can actually be decomposed into three steps: first, we 
+compute the right-hand-side and store it in a temporary variable \tttmp; 
+second, we delete \ttw; third, we rename \tttmp in \ttw. The first step 
+corresponds to the creation of a variable and was then already studied. 
+Similarly, the second step is a variable deletion and again has already 
+been discussed. As for the third step, it just changes the name of an
+element of $\calV_t$ but does not affect the lattice $H_t$, nor the
+matrix $M_t$.
+
+\medskip
+
+\noindent \textbf{Complexity.}
+%
+We now briefly discuss the cost of the above operations. For this,
+it is convenient to introduce a total order on $\calV_t$: for $\ttv, 
+\ttw \in \calV_t$, we convene that $\ttv <_t \ttw$ is \ttv was created 
+before~\ttw. By construction, the columns of the matrix $M_t$ are 
+ordered with respect to $<_t$.
+For $\ttv \in \calV_t$, we define the \emph{index} of \ttv, denoted by 
+$\ind_t(\ttv)$ as the number of elements of $\calV_t$ which are not 
+greater than \ttv. If we sort the elements of $\calV_t$ by increasing 
+order, \ttv then appears in $\ind_t(\ttv)$-th position.
+We also define the \emph{coindex} of \ttv by
+$\coind_t(\ttv) = \card \calV_t - \ind_t(\ttv)$.
+
+
+\medskip
+
+\noindent \textit{Creating a variable.}
+
+$$O\bigg(\sum_{i=1}^n \ind_t(\ttv_i)\bigg) \subset 
+O\big(n \cdot \card \calV_t\big)$$
+
+\medskip
+
+\noindent \textit{Deleting a variable.}
+
+$$O\big(\coind_t(\ttw)^2\big)$$
+
+\medskip
+
+\noindent \textit{Temporal locality.}
+
+\medskip
+
+\noindent \textbf{Correctness.}
+
+
+\subsection{\ZpLF}
+\label{ssec:ZpLF}
+
+we work with $\Zp$-submodules of possible positive codimension
 and represent them using matrices of floating point $p$-adics.
-\end{itemize}
 
-\subsection{The notion of working precision}
+\subsubsection*{Tracking precision}
 
-\begin{itemize}
-\item what is it?
-\item how can we compute it? (Answer: Hermite reduction of the transpose)
-\item how can we estimate it?
-\end{itemize}
-
-\subsection{Correctness}
-
-\begin{itemize}
-\item prove that \ZpLCA and \ZpLCR are correct under some assumptions
-(to be determined)
-\item explain that \ZpLF is not meant to provide proved results
-\end{itemize}
-
-\subsection{Complexity}
-
-\begin{tabular}{l|c|c|}
-& \ZpLCA/\ZpLCR & \ZpLF \\
-\hline
-Creation of a variable & $O(n)$ & $O(n_0)$ \\
-\hline
-Deletion of a variable & $O(m^2)$ & $-$ \\
-\hline
-\end{tabular}
-
-discussion on temporal locality
-
-\section{Presentation of the package}
-
-\begin{itemize}
-\item Discuss coercion/conversion: \texttt{Zp} coerces to \ZpL but no coersion
-in the other direction
-\item How to access to the precision
-\item Diffused digits
-\item Historic of variables creation/deletion, etc...
-\item Other features?
-\end{itemize}
+\subsubsection*{Complexity}
 
 \subsection{More examples}
 
