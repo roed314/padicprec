@@ -1,0 +1,36 @@
+%% markdown
+## Gröbner basis
+
+Z2 = Zp(2, print_mode="digits")
+Q2 = Z2.fraction_field()
+
+from sage.rings.polynomial.toy_buchberger import *
+R.<x,y,z> = PolynomialRing(Q2, order = 'invlex')
+F = [Q2(2,10)*x + Q2(1,10)*z, 
+     Q2(1,10)*x^2 + Q2(1,10)*y^2 - Q2(2,10)*z^2,
+     Q2(4,10)*y^2 + Q2(1,10)*y*z + Q2(8,10)*z^2]
+
+g = buchberger_improved(ideal(F))
+g.sort()
+g
+
+%% markdown
+## $p$-adic differential equations
+
+def edp_simple(g, h, N):
+    S = g.parent()
+    u = S.gen()
+    for i in range(N):
+        u -= h(u) * (u.derivative()/h(u) - g).integral()
+        u = u[:2^(i+1)]
+    return u
+
+N = 4
+S.<t> = PowerSeriesRing(Q2, 2^N)
+
+h = 1 + t + t^3
+y = t + t^2 * random_element(S,10)
+g = y.derivative() / h(y)
+
+u = edp_simple(g, h, N)
+u[15]

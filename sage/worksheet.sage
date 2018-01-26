@@ -1,6 +1,7 @@
 from sage.misc.misc import walltime, cputime
 
 from sage.rings.polynomial.polynomial_ring import PolynomialRing_general
+from sage.rings.power_series_ring import PowerSeriesRing_generic
 from sage.matrix.matrix_space import MatrixSpace
 import io
 
@@ -24,6 +25,12 @@ def random_element(ring, prec=None, degree=None):
         R = ring.base_ring()
         coeffs = [ random_element(R, prec=prec) for _ in range(degree+1) ]
         return ring(coeffs).change_ring(R.fraction_field())
+    elif isinstance(ring, PowerSeriesRing_generic):
+        if degree is None:
+            degree = ring.default_prec()
+        R = ring.base_ring()
+        coeffs = [ random_element(R, prec=prec) for _ in range(degree+1) ]
+        return ring(coeffs)
     elif isinstance(ring, MatrixSpace):
         size = ring.ncols() * ring.nrows()
         R = ring.base_ring()
@@ -230,10 +237,10 @@ def to_latex(filename, outfile=None):
     if outfile is not None:
         fh = io.open(outfile, "w")
     code = readfile(filename)
-    OutCR = my_exec(code, ZpCR)
-    OutFP = my_exec(code, ZpFP)
-    OutLC = my_exec(code, ZpLC)
-    OutLF = my_exec(code, ZpLF)
+    OutCR, TmeCR = my_exec(code, ZpCR)
+    OutFP, TmeFP = my_exec(code, ZpFP)
+    #OutLC, TmeLC = my_exec(code, ZpLC)
+    OutLF, TmeLF = my_exec(code, ZpLF)
 
     nn = 0
     s = ""
@@ -241,28 +248,36 @@ def to_latex(filename, outfile=None):
         # Input
         if code[n][0] == "%% markdown\n":
             no = ""
-            s += "Markdown"
+            #s += "Markdown\n\n"
         else:
             nn += 1
             no = "~[" + str(nn) + "]:"
-            s += "{\\color{blue} In" + no + "}\n"
-            s += pygments.highlight("".join(code[n]), lexer, latex_formatter) + "\n\n"
+            s += "\\begin{tabular}{rl}\n"
+            s += "\\In\n"
+            for bloc in code[n]:
+                for line in bloc.split("\n"):
+                    if line != "": s += " & \\verb?" + line + "? \\\\\n"
+            # s += pygments.highlight("".join(code[n]), lexer, latex_formatter) + "\n\n"
 
-        # Output
-        if OutCR[n] is not None:
-            s += "{\\color{red} ZpCR" + no + "}\n"
-            s += "\\hbox{$" + str(latex(OutCR[n])) + "$}\n\n"
-        if OutFP[n] is not None:
-            s += "{\\color{red} ZpFP" + no + "}\n"
-            s += "{$" + str(latex(OutFP[n])) + "$}\n\n"
-        if OutLC[n] is not None:
-            s += "{\\color{red} ZpLC" + no + "}\n"
-            s += "{$" + str(latex(OutLC[n])) + "$}\n\n"
-        if OutLF[n] is not None:
-            s += "{\\color{red} ZpLF" + no + "}\n"
-            s += "{$" + str(latex(OutLF[n])) + "$}\n\n"
+            # Output
+            if OutCR[n] is not None:
+                s += "\\ZpCR\n"
+                ans = str(OutCR[n])
+                for line in ans.split("\n"):
+                    if line != "": s += " & \\verb?" + line + "? \\\\\n"
+            if OutFP[n] is not None:
+                s += "\\ZpFP\n"
+                ans = str(OutFP[n])
+                for line in ans.split("\n"):
+                    if line != "": s += " & \\verb?" + line + "? \\\\\n"
+            if OutLF[n] is not None:
+                s += "\\ZpLF\n"
+                ans = str(OutLF[n])
+                for line in ans.split("\n"):
+                    if line != "": s += " & \\verb?" + line + "? \\\\\n"
 
-        s += "\n\\bigskip\n\n"
+            s += "\\end{tabular}\n\n"
+            s += "\\bigskip\n\n"
 
     if fh:
         fh.write(unicode(s))

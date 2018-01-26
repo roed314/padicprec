@@ -12,6 +12,8 @@
 ### Creation of the rings
 
 Z2 = Zp(2, prec=30, print_mode="digits")
+Q2 = Z2.fraction_field()
+
 Z3 = Zp(3, prec=20, print_mode="digits")
 
 %% markdown
@@ -159,7 +161,7 @@ M.determinant()
 %% markdown
 ## Computations with polynomials
 
-S.<x> = PolynomialRing(Z2)
+S.<x> = PolynomialRing(Q2)
 P = random_element(S, degree=10, prec=5)
 Q = random_element(S, degree=10, prec=5)
 D = x^5 + random_element(S, degree=4, prec=8)
@@ -181,3 +183,36 @@ More precisely, ZpCR often found a gcd of higher degree.
 Indeed the Euclidean algorithm stops prematurely because the software believes that some early remainder vanishes due to the lack of precision.  
 The situation with ZpFP is the exact opposite:
 since the precision is too high (always the maximal cap), the software does not notice that the remainder vanishes. Therefore the Euclidean algorithm does not stop until it obtains a remainder of degree $0$.
+
+%% markdown
+### Gröbner basis
+
+R.<x,y,z> = PolynomialRing(Q2, order = 'invlex')
+F = [Q2(2,10)*x + Q2(1,10)*z, 
+     Q2(1,10)*x^2 + Q2(1,10)*y^2 - Q2(2,10)*z^2,
+     Q2(4,10)*y^2 + Q2(1,10)*y*z + Q2(8,10)*z^2]
+
+from sage.rings.polynomial.toy_buchberger import buchberger_improved
+g = buchberger_improved(ideal(F)); g.sort()
+g
+
+%% markdown
+## $p$-adic differential equations
+
+def edp_simple(g, h, N):
+    S = g.parent()
+    u = S.gen()
+    for i in range(N):
+        u -= h(u) * (u.derivative()/h(u) - g).integral()
+        u = u[:2^(i+1)]
+    return u
+
+N = 4
+S.<t> = PowerSeriesRing(Q2, 2^N)
+
+h = 1 + t + t^3
+y = t + t^2 * random_element(S,10)
+g = y.derivative() / h(y)
+
+u = edp_simple(g, h, N)
+u[15]
