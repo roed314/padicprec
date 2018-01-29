@@ -216,16 +216,103 @@ Algebra, Commutative Algebra and Differential Equations.
 
 \subsection{Linear algebra}
 
-\begin{itemize}
-\item determinant
-\item characteristic polynomial
-\end{itemize}
+In linear algebra, determinant and 
+characteristic polynomial are notoriously
+hard to compute: see \cite{caruso-roe-vaccon:15, caruso-roe-vaccon:17}. We illustrate this with the following
+example (using a division-free algorithm
+for the computation of the characteristic polynomial) :
+
+\bigskip
+
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?Q2 = Zp(2, prec=10, print_mode="digits")? \\
+ & \verb?MS = MatrixSpace(Q2,3,3)? \\
+ & \verb?Mat = MS.random_element()? \\
+ & \verb?chi = Mat.charpoly()? \\
+ & \verb?deto = Mat.determinant()? \\
+ & \verb?deto? \\
+\cZpCR
+ & \verb?...000100000100? \\
+\cZpFP
+ & \verb? ...11010101010? \\
+\cZpLC
+ & \verb?  ...0110110001? \\
+\cZpLF
+ & \verb?...001110111100? \\
+\end{tabular}
+
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?chi? \\
+\cZpCR
+ & \verb?(...0000000001)*x^3 + (...1001111111)*x^2 ?\\
+ & \verb?+ (...01110101110)*x + (...111011111100)? \\
+\cZpFP
+ & \verb?...0000000001*x^3 + ...1101001001*x^2 + ?\\
+ & \verb?...0100110011*x + ...00101010110? \\
+\cZpLC
+ & \verb?...0000000001*x^3 + ...1011000111*x^2 + ?\\
+ & \verb?...0011101000*x + ...1001001111? \\
+\cZpLF
+ & \verb?...0000000001*x^3 + ...1111000101*x^2 + ?\\
+ & \verb?...0011111111*x + ...110001000100? \\
+\end{tabular}
 
 \subsection{Commutative algebra}
 
-\begin{itemize}
-\item gcd of polynomials
-\end{itemize}
+Our package can be applied to
+computation over $p$-adic polynomials.
+A natural example is that of the computation of GCD,
+whose stability has been studied in \cite{caruso-2017}.
+
+A naive implementation of the Euclide algorithm
+can produce different behaviour depending 
+on the type of implementation of the field
+of $p$-adic coefficients.
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?Z2 = Zp(2, prec=15, print_mode="digits")? \\
+  & \verb?S.<x> = PolynomialRing(Z2)? \\
+ & \verb?P = random_element(S, degree=10, prec=5)? \\
+ & \verb?Q = random_element(S, degree=10, prec=5)? \\
+ & \verb?D = x^5 + random_element(S, degree=4, prec=8)? \\
+ & \verb?def euclidean(A,B):? \\
+ & \verb?    while B != 0:? \\
+ & \verb?        A, B = B, A % B? \\
+ & \verb?    return A.monic()? \\
+\end{tabular}
+
+\bigskip
+
+\begin{tabular}{rl}
+\cIn
+  & \verb?euclidean(D*P, D*Q)? \\
+\cZpCR
+ & \verb?(...1)*x^9 + (0)*x^8 + (...,.1)*x^7 ?\\
+ & \verb?+ (...,.1)*x^6 + (...1)*x^5 + (...1)*x^4?\\
+ & \verb? + (...,.1)*x^3 + (0)*x^2 + (...,.1)*x + (...10)? \\
+\cZpFP
+ & \verb?...000000000000000000000000000001? \\
+\cZpLC
+ & \verb?...1*x^5+...100*x^3+...100*x^2+...1*x+...1? \\
+\end{tabular}
+
+
+With high probability, $P$ and $Q$ are coprime, implying that the gcd of $DP$ is $DQ$ is $D$.  
+However, we observe that we do not always get this expected result.
+More precisely, ZpCR often founds a gcd of higher degree.
+Indeed the Euclidean algorithm stops prematurely because the software believes that some early remainder vanishes due to the lack of precision.  
+The situation with ZpFP is the exact opposite:
+since the precision is too high (always the maximal cap), 
+the software sometimes does not notice that the remainder vanishes.
+Hence, it happens that the Euclidean algorithm 
+obtains a last non-zero remainder of degree less than that of
+$D.$
+
 
 \section{Presentation of the package}
 
@@ -1020,7 +1107,36 @@ $$O\big(\coind_t(\ttw)^2\big)$$
 \item $p$-adic differential equations
 \end{itemize}
 
-\subsubsection{$p$-adic differential equations}
+\subsection{Gröbner bases}
+Our package can be applied 
+on complex computations like that of
+Gröbner bases using generic
+Gröbner bases algorithms.
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?Q2 = Qp(2, prec=50, print_mode="digits")? \\
+ & \verb?R.<x,y,z> = PolynomialRing(Q2, order = 'invlex')? \\
+ & \verb?F = [Q2(2,10)*x + Q2(1,10)*z, ? \\
+ & \verb?     Q2(1,10)*x^2 + Q2(1,10)*y^2 - Q2(2,10)*z^2,? \\
+ & \verb?     Q2(4,10)*y^2 + Q2(1,10)*y*z + Q2(8,10)*z^2]? \\
+ & \verb?from sage.rings.polynomial.toy_buchberger?\\
+ &\verb?  import buchberger_improved? \\
+ & \verb?g = buchberger_improved(ideal(F)); g.sort()? \\
+ & \verb?g? \\
+\cZpCR
+ & \verb?[x^3, x*y + ...1100010*x^2, y^2 + ...11001*x^2,? \\
+ & \verb? z + ...0000000010*x]? \\
+\cZpLC
+ & \verb?[[x^3, x*y + ...111100010*x^2, y^2 + ...1111111001*x^2,? \\
+ & \verb? z + ...0000000010*x]]? \\
+\end{tabular}
+
+As we can see, some loss in precision occurs in the
+Buchberger algorithm.
+Had we used \cZpFP , many padded zeroes or one would have appeared.
+
+\subsection{$p$-adic differential equations}
 
 
 In \cite{LV16}, the behaviour of the precision when solving
