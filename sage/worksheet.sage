@@ -239,7 +239,7 @@ def to_latex(filename, outfile=None):
     code = readfile(filename)
     OutCR, TmeCR = my_exec(code, ZpCR)
     OutFP, TmeFP = my_exec(code, ZpFP)
-    #OutLC, TmeLC = my_exec(code, ZpLC)
+    OutLC, TmeLC = my_exec(code, ZpLC)
     OutLF, TmeLF = my_exec(code, ZpLF)
 
     nn = 0
@@ -253,7 +253,7 @@ def to_latex(filename, outfile=None):
             nn += 1
             no = "~[" + str(nn) + "]:"
             s += "\\begin{tabular}{rl}\n"
-            s += "\\In\n"
+            s += "\\cIn\n"
             for bloc in code[n]:
                 for line in bloc.split("\n"):
                     if line != "": s += " & \\verb?" + line + "? \\\\\n"
@@ -261,17 +261,22 @@ def to_latex(filename, outfile=None):
 
             # Output
             if OutCR[n] is not None:
-                s += "\\ZpCR\n"
+                s += "\\cZpCR\n"
                 ans = str(OutCR[n])
                 for line in ans.split("\n"):
                     if line != "": s += " & \\verb?" + line + "? \\\\\n"
             if OutFP[n] is not None:
-                s += "\\ZpFP\n"
+                s += "\\cZpFP\n"
                 ans = str(OutFP[n])
                 for line in ans.split("\n"):
                     if line != "": s += " & \\verb?" + line + "? \\\\\n"
+            if OutLC[n] is not None:
+                s += "\\cZpLC\n"
+                ans = str(OutLC[n])
+                for line in ans.split("\n"):
+                    if line != "": s += " & \\verb?" + line + "? \\\\\n"
             if OutLF[n] is not None:
-                s += "\\ZpLF\n"
+                s += "\\cZpLF\n"
                 ans = str(OutLF[n])
                 for line in ans.split("\n"):
                     if line != "": s += " & \\verb?" + line + "? \\\\\n"
