@@ -23,6 +23,7 @@
 \usepackage{xspace}
 \usepackage{tabularx,multicol}
 \usepackage{tikz}
+\usetikzlibrary{patterns}
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
@@ -506,7 +507,10 @@ $$\left(\raisebox{-0.5\height}{\begin{tikzpicture}[scale=0.3]
     --(3,-3)--(3,-4)--(4,-4)--(4,-5)--(5,-5)--(5,-6)--(6,-6)
     --(6,-7)--(7,-7);
 \draw[thin] (7,-7)--(7,0)--(0,0);
-\fill (3,0) rectangle (4,-4);
+\begin{scope}
+\clip (3,0.2) rectangle (4,-4.2);
+\draw[pattern=north east lines] (2.5,0.5) rectangle (4.5,-4.5);
+\end{scope}
 \draw[->] (2.9,-4.8)--(3.2,-4.2);
 \node[scale=0.8] at (2,-5.2) { deleted };
 \node[scale=0.8] at (2,-6) { column };
