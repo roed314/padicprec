@@ -43,10 +43,11 @@ def random_element(ring, prec=None, degree=None):
             return ring(randints[random_seed]).add_bigoh(prec)
 
 
-def my_exec(code, ring=Zp):
+def my_exec(code, ring=Zp, field=Qp):
     global random_seed
     random_seed = -1;
     Zp = ring
+    Qp = field
     Out = [ ]
     Tme = [ ]
     for cmd in code:
@@ -94,10 +95,10 @@ def to_txt(filename, outfile=None):
     if outfile is not None:
         fh = io.open(outfile, "w")
     code = readfile(filename)
-    OutCR = my_exec(code, ZpCR)
-    OutFP = my_exec(code, ZpFP)
-    OutLC = my_exec(code, ZpLC)
-    OutLF = my_exec(code, ZpLF)
+    OutCR = my_exec(code, ZpCR, QpCR)
+    OutFP = my_exec(code, ZpFP, QpFP)
+    OutLC = my_exec(code, ZpLC, QpLC)
+    OutLF = my_exec(code, ZpLF, QpLF)
     s = ""
     for n in range(len(code)):
         for line in code[n]:
@@ -133,10 +134,10 @@ def to_html(filename, outfile=None):
     if outfile is not None:
         fh = io.open(outfile, "w")
     code = readfile(filename)
-    OutCR, TmeCR = my_exec(code, ZpCR)
-    OutFP, TmeFP = my_exec(code, ZpFP)
-    OutLC, TmeLC = my_exec(code, ZpLC)
-    OutLF, TmeLF = my_exec(code, ZpLF)
+    OutCR, TmeCR = my_exec(code, ZpCR, QpCR)
+    OutFP, TmeFP = my_exec(code, ZpFP, QpFP)
+    OutLC, TmeLC = my_exec(code, ZpLC, QpLC)
+    OutLF, TmeLF = my_exec(code, ZpLF, QpLF)
 
     fhead = io.open("head.html")
     if fhead:
@@ -237,10 +238,10 @@ def to_latex(filename, outfile=None):
     if outfile is not None:
         fh = io.open(outfile, "w")
     code = readfile(filename)
-    OutCR, TmeCR = my_exec(code, ZpCR)
-    OutFP, TmeFP = my_exec(code, ZpFP)
-    OutLC, TmeLC = my_exec(code, ZpLC)
-    OutLF, TmeLF = my_exec(code, ZpLF)
+    OutCR, TmeCR = my_exec(code, ZpCR, QpCR)
+    OutFP, TmeFP = my_exec(code, ZpFP, QpFP)
+    OutLC, TmeLC = my_exec(code, ZpLC, QpLC)
+    OutLF, TmeLF = my_exec(code, ZpLF, QpLF)
 
     nn = 0
     s = ""
