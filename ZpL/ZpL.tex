@@ -303,38 +303,21 @@ exposition.
 We emphasize that polynomials, rational fractions (outside of their poles)
 and converging power series are strictly differentiable.
 
-The lemma is more precise in the context of so-called
-integral polynomial functions.
-A function $f : E \to F$ is said to be
-\emph{integral polynomial} if it is given by multivariate polynomial 
-functions with coefficients in $\O_K$ in any (equivalently all) system 
-of coordinates associated to a $\OK$-basis of $B_E(1)$.
-
-\begin{prop}
-\label{prop:precision2}
-We keep the notation of Proposition \ref{prop:precision} and assume 
-in addition that $f$ is integral polynomial. Let $C$ be a positive real
-number such that $B_F(1) \subset df_{v_0}(B_E(C))$. 
-Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
-\rho^{-1}$.
-\end{prop}
-
-We will use the following definition to measure the gap
-between lattice and coordinate-wise methods. 
-Suppose $E$ is equipped with a basis $(e_1, \ldots, e_n)$ and write $\pi_i : E \to Ke_i$ for the projections.
-
-\begin{deftn} \label{def:diffused}
-Let $H \subset E$ be a lattice. The number of 
-\emph{diffused digits of precision} of $H$ is the length of
-$H_0/H$ where $H_0 = \pi_1(H) \oplus \cdots \oplus \pi_n(H)$.
-\end{deftn}
-If $H$ represents the actual precision on some object, then
-$H_0$ is the smallest diagonal lattice containing $H$.
-Coordinate-wise methods, with one precision datum per coordinate,
-corresponds to diagonal lattices.
-Hence, they cannot yield a precision better than $H_0$, and
-then $k$ provides a lower bound on the number of $p$-adic digits
-gained by lattice methods over standard methods.
+%The lemma is more precise in the context of so-called
+%integral polynomial functions.
+%A function $f : E \to F$ is said to be
+%\emph{integral polynomial} if it is given by multivariate polynomial 
+%functions with coefficients in $\O_K$ in any (equivalently all) system 
+%of coordinates associated to a $\OK$-basis of $B_E(1)$.
+%
+%\begin{prop}
+%\label{prop:precision2}
+%We keep the notation of Proposition \ref{prop:precision} and assume 
+%in addition that $f$ is integral polynomial. Let $C$ be a positive real
+%number such that $B_F(1) \subset df_{v_0}(B_E(C))$. 
+%Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
+%\rho^{-1}$.
+%\end{prop}
 
 \subsection{Tracking precision}
 
@@ -495,7 +478,6 @@ The corresponding matrix $M_{t+1}$ is then given by:
 $$M_{t+1} = \left(\begin{matrix}
 M_t & 0 \smallskip \\ 0 & p^{\min(\text{prec}, N_{t+1})}
 \end{matrix}\right).$$
-
 
 \medskip
 
@@ -750,7 +732,6 @@ access to the absolute precision.
 \smallskip
 
 \noindent
-
 Both \ZpLC and \ZpLF compute the absolute precision of \ttv (at time 
 $t$) as the smallest valuation of an entry of the column of $M_t$ 
 corresponding to the variable \ttv. Alternatively, it can be defined as 
@@ -844,10 +825,115 @@ likely optimal.
 \end{rmk}
 
 \noindent \textbf{Precision on a subset of elements.}
+%
+Our package implements the method \verb?precision_lattice? through which 
+we can have access to the joint precision on a set of variables: it 
+outputs a matrix (in echelon form) whose rows generates a lattice 
+representing the precision on the subset of given variables.
+
+When the variables are ``independant'', the precision lattice is
+split and the method \verb?precision_lattice? outputs a diagonal
+matrix:
+
+\smallskip
+
+\noindent
+\begin{tabular}{rl}
+\cIn  & \verb?R = ZpLC(2, print_mode='digits')? \\
+      & \verb?x = R(987,10); y = R(21,5)? \\
+      & \verb?R.precision().precision_lattice([x,y])? \\
+\cOut & \verb?[1024    0]? \\
+      & \verb?[   0   32]?
+\end{tabular}
+
+\smallskip
+
+\noindent
+However, after some computations, the precision matrix evolves and 
+does not remain diagonal in general (though it is always triangular
+because it is displayed in row-echelon form):
+
+\smallskip
+
+\noindent
+\begin{tabular}{rl}
+\cIn  & \verb?u, v = x+y, x-y? \\
+      & \verb?R.precision().precision_lattice([u,v])? \\
+\cOut & \verb?[  32 2016]? \\
+      & \verb?[   0 2048]?
+\end{tabular}
+
+\smallskip
+
+\noindent
+The fact that the precision matrix is no longer diagonal indicates
+that some well-chosen linear combinations of $u$ and $v$ are known
+with more digits than $u$ and $v$ themselves. In this particular
+example, the sum $u+v$ is known at precision $O(2^{11})$ while the
+(optimal) precision on $u$ and $v$ separately is only $O(2^5)$.
+
+\smallskip
+
+\noindent
+\begin{tabular}{rl}
+\cIn  & \verb?u? \\
+\cOut & \verb?...10000? \\
+\cIn  & \verb?v? \\
+\cOut & \verb?...00110? \\
+\cIn  & \verb?u + v? \\
+\cOut & \verb?...11110110110? \\
+\end{tabular}
 
 \medskip
 
 \noindent \textit{Diffused digits of precision.}
+%
+The phenomenon observed above is formalized by the notion of
+diffused digits of precision introduced in \cite{}. We recall
+briefly its definition.
+
+\begin{deftn}
+\label{def:diffused}
+Let $E$ be a $\Qp$-vector space endowed with a distinguished basis 
+$(e_1, \ldots, e_n)$ and write $\pi_i : E \to \Qp e_i$ for the 
+projections.
+Let $H \subset E$ be a lattice. The number of \emph{diffused digits of 
+precision} of $H$ is the length of $H_0/H$ where $H_0 = \pi_1(H) \oplus 
+\cdots \oplus \pi_n(H)$.
+\end{deftn}
+
+If $H$ represents the actual precision on some object, then
+$H_0$ is the smallest diagonal lattice containing $H$. It then
+corresponds to the maximal \emph{coordinate-wise} precision we can 
+reach on the set of $n$ variables corresponding to the basis $(e_1,
+\ldots, e_n)$.
+The diffused digits of precision only appear on linear combinations
+of those variables.
+
+The method \verb?number_of_diffused_digits? computes the number of
+diffused digits of precision on a set of variables. Observe:
+
+\smallskip
+
+\noindent
+\begin{tabular}{rl}
+\cIn  & \verb?R.precision().number_of_diffused_digits([x,y])? \\
+\cOut & \verb?0? \\
+\cIn  & \verb?R.precision().number_of_diffused_digits([u,v])? \\
+\cOut & \verb?6? \\
+\end{tabular}
+
+\smallskip
+
+\noindent
+For the last example, we recall that the relevant precision lattice 
+$H$ is generated by the $2 \times 2$ matrix:
+$$\left(\begin{matrix} 2^5 & 2016 \\ 0 & 2^{11} \end{matrix}\right).$$
+The minimal diagonal suplattice $H_0$ is generated by the scalar matrix 
+$2^5 \cdot \text{I}_2$ and contains $H$ with index $2^6$ in it. This is 
+where the six digits of precision comes from.
+There are easily visible here: the sum $u+v$ is known with $11$ digits,
+that is exactly $6$ digits more than the summands $u$ and $v$.
 
 \subsection{Complexity}
 
