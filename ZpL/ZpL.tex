@@ -80,7 +80,7 @@
 \newcommand{\coind}{\text{coind}}
 \newcommand{\hgt}{\text{hgt}}
 \newcommand{\cohgt}{\text{cohgt}}
-\renewcommand{\in}{\text{in}}
+\newcommand{\inp}{\text{in}}
 \newcommand{\out}{\text{out}}
 
 \newcommand{\famN}{\mathcal{N}}
@@ -1356,12 +1356,12 @@ as input. The bias is evident: most of the time $\cohgt_t(\ttw) \leq
 We consider the case of an algorithm with the following characteristics: 
 its complexity is $c$ operations in $\Qp$ (without any tracking of 
 precision), its memory usage is $m$ elements of $\Qp$, its input and its 
-output have size $s_\in$ and $s_\out$ (elements of $\Qp$) respectively.
+output have size $s_\inp$ and $s_\out$ (elements of $\Qp$) respectively.
 
-In the case of \ZpLF, creating a variable has a cost $O(s_\in)$ 
+In the case of \ZpLF, creating a variable has a cost $O(s_\inp)$ 
 whereas deleting a variable is free. 
 Thus when executed with the \ZpLF mecanism, the complexity of our
-algorithm becomes $O(s_\in c)$.
+algorithm becomes $O(s_\inp c)$.
 
 In the \ZpLC framework, creating a variable has a cost $O(m)$. The case 
 of deletion is more difficult to handle. However, by the temporal 
@@ -1369,7 +1369,7 @@ locality principle, it seems safe to assume that it is not the
 bottleneck (which is the case in practice). Therefore, when executed 
 with the \ZpLF mecanism, the cost of our algorithm is expected to be 
 roughly $O(mc)$. Going further in speculation, we might estimate the 
-magnitude of $m$ by $m \simeq O(s + \sqrt c)$ with $s = \max(s_\in, 
+magnitude of $m$ by $m \simeq O(s + \sqrt c)$ with $s = \max(s_\inp, 
 s_\out)$, leading to a complexity of $O(c^{3/2} + sc)$. For 
 quasi-optimal algorithms, the term $sc \simeq c^2$ dominates. However, 
 as soon as the complexity is at least quadratic in $s$, the dominant 
