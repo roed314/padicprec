@@ -69,6 +69,8 @@
 \newcommand{\rem}{\,\%\,}
 
 \newcommand{\sage}{\textsc{SageMath}\xspace}
+\newcommand{\ZpCR}{\text{\rm \tt ZpCR}\xspace}
+\newcommand{\ZpFP}{\text{\rm \tt ZpFP}\xspace}
 \newcommand{\ZpL}{\text{\rm \tt ZpL}\xspace}
 \newcommand{\ZpLC}{\text{\rm \tt ZpLC}\xspace}
 \newcommand{\ZpLF}{\text{\rm \tt ZpLF}\xspace}
@@ -191,33 +193,149 @@ Algebra, Commutative Algebra and Differential Equations.
 
 \subsection{Elementary arithmetic}
 
-\begin{tabular}{|l|l|}
-\verb?R = Zp(3,5)? & \verb?R = ZpL(3,5)? \\
-\verb?x = R(143,5); x? & \verb?x = R(143,5); x? \\
-\hfill\verb?...12022? & \hfill\verb?...12022? \\
-\verb?3*x? & \verb?3*x? \\
-\hfill\verb?...120220? & \hfill\verb?...120220? \\
-\verb?x + x + x? & \verb?x + x + x? \\
-\hfill\verb?...20220? & \hfill\verb?...120220? \\
-\verb?x^3? & \verb?x^3? \\
-\hfill\verb?...020222? & \hfill\verb?...020222? \\
-\verb?x * x * x? & \verb?x * x * x? \\
-\hfill\verb?...20222? & \hfill\verb?...020222? \\
+We begin our tour of the features of the \ZpL package
+with some basic arithmetic computations.
+The first step is the definition of the $p$-adic ring or field.
+\begin{tabular}{rl}
+\cIn
+ & \verb?Z3 = Zp(3, prec=20, print_mode="digits")? \\
+\end{tabular}
+It means that we will work in various implementation of the 
+ring of $3$-adic integers with $20$ digits
+of precision. 
+We show the results for \ZpCR, \ZpFP and \ZpLC.
+Results for \ZpLF are only shown when they differ from \ZpLC.
+We first take some random element $x$.
+\begin{tabular}{rl}
+\cIn
+ & \verb?x = random_element(Z3,5)? \\
+ & \verb?x? \\
+\cZpCR
+ & \verb?...11111? \\
+\cZpFP
+ & \verb?...00000000000000011111? \\
+\cZpLC
+ & \verb?...11111? \\
+\end{tabular}
+Multiplication by $3$ is a shift on the digits, whether it 
+is done by addition or multiplication.
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?3*x? \\
+\cZpCR
+ & \verb?...111110? \\
+\cZpFP
+ & \verb?...000000000000000111110? \\
+\cZpLC
+ & \verb?...111110? \\
+\cIn
+ & \verb?x + x + x? \\
+\cZpCR
+ & \verb?...11110? \\
+\cZpFP
+ & \verb?...000000000000000111110? \\
+\cZpLC
+ & \verb?...111110? \\
 \end{tabular}
 
-\begin{tabular}{|l|l|}
-\verb?R = Zp(2,10)? & \verb?R = ZpL(2,10)? \\
-\verb?x = R(987,10); x? & \verb?x = R(987,10); x? \\
-\hfill\verb?...1111011011? & \hfill\verb?...1111011011? \\
-\verb?y = R(21,5); y? & \verb?y = R(21,5); y? \\
-\hfill\verb?...10101? & \hfill\verb?...10101? \\
-\verb?u = x + y; u? & \verb?u = x + y; u? \\
-\hfill\verb?...10000? & \hfill\verb?...10000? \\
-\verb?v = x - y; v? & \verb?v = x - y; v? \\
-\hfill\verb?...00110? & \hfill\verb?...00110? \\
-\verb?u + v? & \verb?u + v? \\
-\hfill\verb?...10110? & \hfill\verb?...11110110110? \\
+Something is lost however in \ZpCR when performing
+$x+2x.$
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?y = 2*x? \\
+ & \verb?y? \\
+\cZpCR
+ & \verb?...22222? \\
+\cZpFP
+ & \verb?...00000000000000022222? \\
+\cZpLC
+ & \verb?...22222? \\
+\cIn
+ & \verb?x + y? \\
+\cZpCR
+ & \verb?...11110? \\
+\cZpFP
+ & \verb?...000000000000000111110? \\
+\cZpLC
+ & \verb?...111110? \\
 \end{tabular}
+
+The same phenomenon occurs when comparing the computation
+of $x^3$ and $x \times x^2.$
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?x^3? \\
+\cZpCR
+ & \verb?...010101? \\
+\cZpFP
+ & \verb?...00000010100000010101? \\
+\cZpLC
+ & \verb?...010101? \\
+\cIn
+ & \verb?y = x^2? \\
+ & \verb?x * y? \\
+\cZpCR
+ & \verb?...10101? \\
+\cZpFP
+ & \verb?...00000010100000010101? \\
+\cZpLC
+ & \verb?...010101? \\
+
+\end{tabular}
+
+\ZpL is also well suited for working with coefficients 
+with unbalanced precision.
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?x = random_element(Z2,10)? \\
+ & \verb?y = random_element(Z2,5)? \\
+\cIn
+ & \verb?u = x+y? \\
+ & \verb?u? \\
+\cZpCR
+ & \verb?...10111? \\
+\cZpFP
+ & \verb?...000000000000000000000011010111? \\
+\cZpLC
+ & \verb?...10111? \\
+\cIn
+ & \verb?v = x-y? \\
+ & \verb?v? \\
+\cZpCR
+ & \verb?...01111? \\
+\cZpFP
+ & \verb?...000000000000000000000011001111? \\
+\cZpLC
+ & \verb?...01111? \\
+\end{tabular}
+
+Now, let us compute $u+v=2 \times x.$
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?u+v? \\
+\cZpCR
+ & \verb?...00110? \\
+\cZpFP
+ & \verb?...0000000000000000000000110100110? \\
+\cZpLC
+ & \verb?...00110100110? \\
+\cIn
+ & \verb?2*x? \\
+\cZpCR
+ & \verb?...00110100110? \\
+\cZpFP
+ & \verb?...0000000000000000000000110100110? \\
+\cZpLC
+ & \verb?...00110100110? \\
+\end{tabular}
+
+No loss in precision appears in \ZpLC, contrary to \ZpCR.
+We remark that \ZpFP also provides all the correct digits. 
 
 \subsection{Linear algebra}
 
@@ -227,7 +345,6 @@ hard to compute: see \cite{caruso-roe-vaccon:15, caruso-roe-vaccon:17}. We illus
 example (using a division-free algorithm
 for the computation of the characteristic polynomial) :
 
-\bigskip
 
 
 \begin{tabular}{rl}
@@ -291,7 +408,6 @@ of $p$-adic coefficients.
  & \verb?    return A.monic()? \\
 \end{tabular}
 
-\bigskip
 
 \begin{tabular}{rl}
 \cIn
@@ -1256,42 +1372,115 @@ term is $c^{3/2}$ and the impact on the complexity is then diminished.
 
 \section{More examples}
 
-\begin{tabular}{|l|l|}
-\verb?R = Zp(2)? & \verb?R = ZpL(2)? \\
-\multicolumn{2}{|l|}{\tt x, y, z, t = R(1,15), R(1,15), R(1,15), R(3,15)} \\
-\multicolumn{2}{|l|}{\tt for \_ in range(20):} \\
-\multicolumn{2}{|l|}{\tt \ \ \ \ x, y, z, t = y, z, t, (y*t + z*z)/x} \\
-\multicolumn{2}{|l|}{\tt \ \ \ \ print t} \\
-\hfill\verb?...000000000000100? & \hfill\verb?...000000000000100? \\
-\hfill\verb?...000000000001101? & \hfill\verb?...000000000001101? \\
-\hfill\verb?...000000000110111? & \hfill\verb?...000000000110111? \\
-\hfill\verb?...101010111010111? & \hfill\verb?...101010111010111? \\
-\hfill\verb?...1100111101111? & \hfill\verb?...101100111101111? \\
-\hfill\verb?...1110000010010? & \hfill\verb?...111110000010010? \\
-\hfill\verb?...0001000111001? & \hfill\verb?...100001000111001? \\
-\hfill\verb?...0000011111101? & \hfill\verb?...100000011111101? \\
-\hfill\verb?...1000000110101? & \hfill\verb?...001000000110101? \\
-\hfill\verb?...101101010011? & \hfill\verb?...010101101010011? \\
-\hfill\verb?...110000000000? & \hfill\verb?...001110000000000? \\
-\hfill\verb?...000101011101? & \hfill\verb?...111000101011101? \\
-\hfill\verb?...001001101011? & \hfill\verb?...111001001101011? \\
-\hfill\verb?...000011110011? & \hfill\verb?...111000011110011? \\
-\hfill\verb?...11? & \hfill\verb?...0000000111? \\
-\hfill\verb?...10? & \hfill\verb?...1010001110? \\
-\hfill\verb?...01? & \hfill\verb?...1110110001? \\
-\hfill\verb?...01? & \hfill\verb?...011110111001? \\
-\hfill\verb?...01? & \hfill\verb?...100101101001001? \\
-\hfill\verb?...1? & \hfill\verb?...11111000011? \\
+\subsection{SOMOS-4}
+
+The SOMOS-4 sequence is a well-known example
+of a computation with a large gap between
+the theoretical loss in precision
+and that of a naive computation (see \cite{caruso-roe-vaccon:14a}).
+We show here that precision can be saved
+even when using a generic implementation
+of the SOMOS iteration.
+
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?def somos4(u0, u1, u2, u3, n):? \\
+ & \verb?    a, b, c, d = u0, u1, u2, u3? \\
+ & \verb?    for _ in range(4, n+1):? \\
+ & \verb?        a, b, c, d = b, c, d, (b*d + c*c) / a? \\
+ & \verb?    return d? \\
+\end{tabular}
+\begin{tabular}{rl}
+\cIn
+ & \verb?somos4(Z2(1,15), Z2(1,15), Z2(1,15), Z2(3,15), 18)? \\
+\cZpCR
+ & \verb?...11? \\
+\cZpFP
+ & \verb?...110111001000100100000000000111? \\
+\cZpLC
+ & \verb?...100000000000111? \\
+\cIn
+ & \verb?somos4(Z2(1,15), Z2(1,15), Z2(1,15), Z2(3,15), 100)? \\
+\cZpCR
+ & \verb?PrecisionError: cannot divide by something?\\
+ &\verb?indistinguishable from zero.? \\
+\cZpFP
+ & \verb?...110000101000011001001001110001? \\
+\cZpLC
+ & \verb?...001001001110001? \\
+\end{tabular}
+%
+%\begin{tabular}{|l|l|}
+%\verb?R = Zp(2)? & \verb?R = ZpL(2)? \\
+%\multicolumn{2}{|l|}{\tt x, y, z, t = R(1,15), R(1,15), R(1,15), R(3,15)} \\
+%\multicolumn{2}{|l|}{\tt for \_ in range(20):} \\
+%\multicolumn{2}{|l|}{\tt \ \ \ \ x, y, z, t = y, z, t, (y*t + z*z)/x} \\
+%\multicolumn{2}{|l|}{\tt \ \ \ \ print t} \\
+%\hfill\verb?...000000000000100? & \hfill\verb?...000000000000100? \\
+%\hfill\verb?...000000000001101? & \hfill\verb?...000000000001101? \\
+%\hfill\verb?...000000000110111? & \hfill\verb?...000000000110111? \\
+%\hfill\verb?...101010111010111? & \hfill\verb?...101010111010111? \\
+%\hfill\verb?...1100111101111? & \hfill\verb?...101100111101111? \\
+%\hfill\verb?...1110000010010? & \hfill\verb?...111110000010010? \\
+%\hfill\verb?...0001000111001? & \hfill\verb?...100001000111001? \\
+%\hfill\verb?...0000011111101? & \hfill\verb?...100000011111101? \\
+%\hfill\verb?...1000000110101? & \hfill\verb?...001000000110101? \\
+%\hfill\verb?...101101010011? & \hfill\verb?...010101101010011? \\
+%\hfill\verb?...110000000000? & \hfill\verb?...001110000000000? \\
+%\hfill\verb?...000101011101? & \hfill\verb?...111000101011101? \\
+%\hfill\verb?...001001101011? & \hfill\verb?...111001001101011? \\
+%\hfill\verb?...000011110011? & \hfill\verb?...111000011110011? \\
+%\hfill\verb?...11? & \hfill\verb?...0000000111? \\
+%\hfill\verb?...10? & \hfill\verb?...1010001110? \\
+%\hfill\verb?...01? & \hfill\verb?...1110110001? \\
+%\hfill\verb?...01? & \hfill\verb?...011110111001? \\
+%\hfill\verb?...01? & \hfill\verb?...100101101001001? \\
+%\hfill\verb?...1? & \hfill\verb?...11111000011? \\
+%\end{tabular}
+%
+%\begin{itemize}
+%\item SOMOS sequence
+%\item many multiplications of matrices
+%\item Dodgson algorithm
+%\item subresultants
+%\item Grobner basis
+%\item $p$-adic differential equations
+%\end{itemize}
+
+\subsection{Matrix multiplication}
+The multiplication of many matrices has been studied
+in \citep{caruso-roe-vaccon:15} and is known to often 
+provide an heavy diffused digits phenomenon.
+Here is a sample example. the result for \ZpFP has not been
+added, but its first digits coincide with that of \ZpLC.
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?Z2 = Zp(2, prec=100)? \\
+ & \verb?MS2 = MatrixSpace(Z2,2,2)? \\
+ & \verb?Mat = random_element(MS2,prec=5)? \\
+ & \verb?for _ in range(100):? \\
+ & \verb?    Mat = Mat*random_element(MS2, prec=5)? \\
+ & \verb?Mat? \\
+\cZpCR
+ & \verb?[ O(2^9) O(2^11)]? \\
+ & \verb?[ O(2^9) O(2^11)]? \\
+\cZpLC
+ & \verb?[2^9 + 2^10 + 2^11 + O(2^12)  O(2^14)]? \\
+ & \verb?[       2^9 + 2^11 + O(2^12)  O(2^14)]? \\
 \end{tabular}
 
-\begin{itemize}
-\item SOMOS sequence
-\item many multiplications of matrices
-\item Dodgson algorithm
-\item subresultants
-\item Grobner basis
-\item $p$-adic differential equations
-\end{itemize}
+\ZpL can count the number of diffusede digits.
+
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?Z2.precision().number_of_diffused_digits()? \\
+\cZpLC
+ & \verb?604? \\
+\end{tabular}
+
 
 \subsection{Gröbner bases}
 Our package can be applied 
@@ -1314,12 +1503,12 @@ Gröbner bases algorithms.
  & \verb?[x^3, x*y + ...1100010*x^2, y^2 + ...11001*x^2,? \\
  & \verb? z + ...0000000010*x]? \\
 \cZpLC
- & \verb?[[x^3, x*y + ...111100010*x^2, y^2 + ...1111111001*x^2,? \\
- & \verb? z + ...0000000010*x]]? \\
+ & \verb?[[x^3, x*y + ...111100010*x^2,? \\
+ & \verb?y^2 + ...1111111001*x^2, z + ...0000000010*x]]? \\
 \end{tabular}
 
 As we can see, some loss in precision occurs in the
-Buchberger algorithm.
+Buchberger algorithm and is avoided thanks to \ZpL.
 Had we used \ZpFP, many padded zeroes or one would have appeared.
 
 \subsection{$p$-adic differential equations}
@@ -1337,23 +1526,40 @@ We use a generic \verb?Newton_Iteration_Solver(g,h,N)?
 that applies \verb?N? steps of the Newton method for 
 $y'=g \times h(y)$ as described in \citep{LV16}. 
 
-\begin{tabular}{|l|l|}
-\verb?R = Qp(2,250)? & \verb?R = QpL(2,250)? \\
-\verb?S = Zp(2,250)? & \verb?S = ZpL(2,250)? \\
-\multicolumn{2}{|l|}{\tt A.<x> = PowerSeriesRing(R,32) } \\
-\multicolumn{2}{|l|}{\tt B.<x> = PowerSeriesRing(S,32)) } \\
-\multicolumn{2}{|l|}{\tt h,y =1+x+x\^{}3 , x+x\^{}2*A(B.random\_element()) } \\
-\multicolumn{2}{|l|}{\tt g=y.derivative()/h(y) } \\
-\multicolumn{2}{|l|}{\tt s=Newton\_Iteration\_Solver(g,h,5)} \\
-\multicolumn{2}{|l|}{\tt print 250-(s[31].lift()-y[31].lift()).valuation(2)} \\
-\hfill\verb?9? & \hfill\verb?4? \\
+\begin{tabular}{rl}
+\cIn
+ & \verb?N = 4? \\
+ & \verb?Z2 = Zp(2, prec=50, print_mode="digits")? \\
+ & \verb?Q2=Z2.fraction_field()? \\
+ & \verb?S.<t> = PowerSeriesRing(Q2, 2^N)? \\
+ & \verb?h = 1 + t + t^3? \\
+ & \verb?y = t + t^2 * random_element(S,10)? \\
+ & \verb?g = y.derivative() / h(y)? \\
+ & \verb?u = Newton_Iteration_Solver(g, h, N)? \\
+ & \verb?u[15]? \\
+\cZpCR
+ & \verb?...1101? \\
+\cZpLC
+ & \verb?...11011101? \\
 \end{tabular}
-The last line provides the loss in precision between the
-original solution of the differential equation and its approximation
-obtained through computation.
-The theorical loss in precision for the coefficient of $t^{31}$
-is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
-loss in precision for a naive implementation is clearly more severe.
+
+%\begin{tabular}{|l|l|}
+%\verb?R = Qp(2,250)? & \verb?R = QpL(2,250)? \\
+%\verb?S = Zp(2,250)? & \verb?S = ZpL(2,250)? \\
+%\multicolumn{2}{|l|}{\tt A.<x> = PowerSeriesRing(R,32) } \\
+%\multicolumn{2}{|l|}{\tt B.<x> = PowerSeriesRing(S,32)) } \\
+%\multicolumn{2}{|l|}{\tt h,y =1+x+x\^{}3 , x+x\^{}2*A(B.random\_element()) } \\
+%\multicolumn{2}{|l|}{\tt g=y.derivative()/h(y) } \\
+%\multicolumn{2}{|l|}{\tt s=Newton\_Iteration\_Solver(g,h,5)} \\
+%\multicolumn{2}{|l|}{\tt print 250-(s[31].lift()-y[31].lift()).valuation(2)} \\
+%\hfill\verb?9? & \hfill\verb?4? \\
+%\end{tabular}
+%The last line provides the loss in precision between the
+%original solution of the differential equation and its approximation
+%obtained through computation.
+%The theorical loss in precision for the coefficient of $t^{31}$
+%is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
+%loss in precision for a naive implementation is clearly more severe.
 
 
 \section{Conclusion}
@@ -1405,26 +1611,36 @@ We can solve numerically
 the corresponding differential equation
 using the algorithm of \cite{Lercier-Sirvent:08}
 over $\mathbb{Q}_3$ with lattice precision.
-We use an initial precision of 50 digits.
-Any generic implementation of the Newton
-method of \cite{Lercier-Sirvent:08} is enough.
+We use an initial precision of 50 digits
+and some generic implementation of the Newton
+method of \cite{Lercier-Sirvent:08}.
 
-\begin{tabular}{|l|}
-\verb?    R = QpL(3,50)? \\
-\verb?    A.<x> = PolynomialRing(R)?\\
-\verb?    m=67?\\
-\verb?    g=1+(1/4)*x^2+x^6?\\
-\verb?    h=1+((m^2)/4)*x^2+m^6* x^6?\\
-\verb?    y=Lercier_Sirvent(g,h,64)?\\
-\verb?    y[31]?\\
-\verb?(467995903278061284942799/3^14 + O(3^36))*x^31?\\
+
+
+\begin{tabular}{rl}
+\cIn
+ & \verb?R = Qp(3,50)? \\
+ & \verb?A.<x> = PolynomialRing(R)? \\
+ & \verb?m=67? \\
+ & \verb?g=1+(1/4)*x^2+x^6? \\
+ & \verb?h=1+((m^2)/4)*x^2+m^6* x^6? \\
+ & \verb?y=Lercier_Sirvent(g,h,6)? \\
+ & \verb?y[31]? \\
+ & \verb?u = Newton_Iteration_Solver(g, h, N)? \\
+ & \verb?u[15]? \\
+\cZpCR
+ & \verb?(467995903278061284942799/3^14 + O(3^36))*x^31? \\
+\cZpLC
+ & \verb?(467995903278061284942799/3^14 + O(3^36))*x^31? \\
 \end{tabular}
+
 
 We can then see that up to $63,$ the behaviour
 of the loss in relative precision is the same
 as for the coefficient in $x^{31}$: \textbf{no loss
-occured}.
-Thus, those simple manipulations
+occured}. This happens for \ZpCR as for \ZpLC,
+and thus, \ZpCR seems to attain the optimal precision.
+consequently, those simple manipulations
 hint at a different behaviour for the loss 
 in precision in at least some special cases of
 of isogenies defined over $\mathbb{Q}$
