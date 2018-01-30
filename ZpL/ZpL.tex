@@ -74,7 +74,6 @@
 \newcommand{\ZpL}{\text{\rm \tt ZpL}\xspace}
 \newcommand{\ZpLC}{\text{\rm \tt ZpLC}\xspace}
 \newcommand{\ZpLF}{\text{\rm \tt ZpLF}\xspace}
-\newcommand{\ZpFP}{\text{\rm \tt ZpFP}\xspace}
 
 \newcommand{\card}{\text{Card}\:}
 \newcommand{\ind}{\text{ind}}
@@ -1151,8 +1150,14 @@ that is exactly $6$ more digits than the summands $u$ and $v$.
 \subsection{Complexity}
 
 We now discuss the cost of the above operations.
-For this,
-it is convenient to introduce a total order on $\calV_t$: for $\ttv, 
+In what follows, we shall count operations in $\Qp$. Although $\Qp$
+is an inexact field, our model of complexity makes sense because the
+size of the $p$-adic numbers we manipulate will always be roughly the
+same size: for \ZpLF, it is the precision we use for Floating Point 
+Arithmetic while, for \ZpLC, it is bounded by the absolute cap which
+was fixed at the beginning.
+
+It is convenient to introduce a total order on $\calV_t$: for $\ttv, 
 \ttw \in \calV_t$, we convene that $\ttv <_t \ttw$ is \ttv was created 
 before~\ttw. By construction, the columns of the matrix $M_t$ are 
 ordered with respect to $<_t$. We denote by $r_t$ (resp. $c_t$) the
