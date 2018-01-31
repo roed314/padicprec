@@ -227,6 +227,7 @@ Results for \ZpLF are only shown when they differ from \ZpLC.
 \subsection{Elementary arithmetic}
 
 We first take some random element $x$.
+\todo{Should we say a word about the function \texttt{random\_element}?}
 
 \smallskip
 
@@ -390,7 +391,7 @@ characteristic polynomial) :
 \begin{tabular}{rl}
 \cIn
  & \verb?M = ?{\color{function}\verb?random_element?}\verb?(?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Q2?}\verb?,3), prec=10)? \\
- & \verb?M.charpoly()? \\
+ & \verb?M.?{\color{method}\verb?charpoly?}\verb?()? \\
 \cZpCR
  & \verb?...00000000000000000001*x^3 + ? \\
  & \verb?...1001011.011*x^2 + ...0111.01*x + 0? \\
