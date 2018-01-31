@@ -8,39 +8,47 @@ import io
 import pygments
 lexer = pygments.lexers.PythonLexer()
 html_formatter = pygments.formatters.HtmlFormatter()
-latex_formatter = pygments.formatters.LatexFormatter()
+# latex_formatter = pygments.formatters.LatexFormatter()
 
 from nbconvert.filters.markdown import markdown2html
 
+MAXINT = 2^1000
+
 
 randints = [ ]
-def random_element(ring, prec=None, degree=None):
+def random_element(ring, prec=None, degree=None, integral=False):
     global random_seed
     random_seed += 1
-    for _ in range(len(randints), random_seed+1):
-        randints.append(ZZ.random_element(2^1000))
+    for _ in range(len(randints), random_seed+2):
+        randints.append(ZZ.random_element(MAXINT))
     if isinstance(ring, PolynomialRing_general):
         if degree is None:
             degree = 2
         R = ring.base_ring()
-        coeffs = [ random_element(R, prec=prec) for _ in range(degree+1) ]
+        coeffs = [ random_element(R, prec=prec, integral=integral) for _ in range(degree+1) ]
         return ring(coeffs).change_ring(R.fraction_field())
     elif isinstance(ring, PowerSeriesRing_generic):
         if degree is None:
             degree = ring.default_prec()
         R = ring.base_ring()
-        coeffs = [ random_element(R, prec=prec) for _ in range(degree+1) ]
+        coeffs = [ random_element(R, prec=prec, integral=integral) for _ in range(degree+1) ]
         return ring(coeffs)
     elif isinstance(ring, MatrixSpace):
         size = ring.ncols() * ring.nrows()
         R = ring.base_ring()
-        coeffs = [ random_element(R, prec=prec, degree=degree) for _ in range(size) ]
+        coeffs = [ random_element(R, prec=prec, degree=degree, integral=integral) for _ in range(size) ]
         return ring(coeffs)
     else:
-        if prec is None:
-            return ring(randints[random_seed])
+        if not integral and ring.is_field():
+            r = randints[random_seed] - MAXINT/2
+            random_seed += 1
+            val = floor(2*MAXINT/(5*r))
         else:
-            return ring(randints[random_seed]).add_bigoh(prec)
+            val = 0
+        if prec is None:
+            return ring(randints[random_seed]) << val
+        else:
+            return (ring(randints[random_seed]).add_bigoh(prec) << val)
 
 
 def my_exec(code, ring=Zp, field=Qp):
