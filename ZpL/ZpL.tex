@@ -224,8 +224,7 @@ We first take some random element $x$.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?x = random_element(Z3,5)? \\
- & \verb?x? \\
+ & \verb?x = random_element(Z3,5); x? \\
 \cZpCR
  & \verb?...11111? \\
 %\cZpFP
@@ -242,80 +241,82 @@ is done by addition or multiplication.
 \smallskip
 
 {\noindent \small
-\begin{tabular}{rl}
+\begin{tabular}{rl@{\hspace{1.5cm}}rl}
 \cIn
- & \verb?3*x? \\
-\cZpCR
- & \verb?...111110? \\
-%\cZpFP
-% & \verb?...000000000000000111110? \\
-\cZpLC
- & \verb?...111110? \\
+ & \verb?3*x? &
 \cIn
  & \verb?x + x + x? \\
 \cZpCR
- & \verb?...11110? \\
+ & \verb?...111110? &
+\cZpCR
+ & \verb? ...11110? \\
 %\cZpFP
 % & \verb?...000000000000000111110? \\
+%\cZpFP
+% & \verb?...000000000000000111110? \\
+\cZpLC
+ & \verb?...111110? &
 \cZpLC
  & \verb?...111110? \\
 \end{tabular}}
 
 \smallskip
 
-Something is lost however in \ZpCR when performing $x+2x$.
+%Something is lost however in \ZpCR when performing $x+2x$.
+%
+%\smallskip
+%
+%{\noindent \small
+%\begin{tabular}{rl}
+%\cIn
+% & \verb?y = 2*x; y? \\
+%\cZpCR
+% & \verb?...22222? \\
+%%\cZpFP
+%% & \verb?...00000000000000022222? \\
+%\cZpLC
+% & \verb?...22222? \\
+%\cIn
+% & \verb?x + y? \\
+%\cZpCR
+% & \verb?...11110? \\
+%%\cZpFP
+%% & \verb?...000000000000000111110? \\
+%\cZpLC
+% & \verb?...111110? \\
+%\end{tabular}}
+%
+%\smallskip
+
+\noindent
+\todo{Add a short explanation?}
+
+The same phenomenon occurs for multiplication.
+%when comparing the computation of $x^3$ and $x \times x^2$.
 
 \smallskip
 
 {\noindent \small
-\begin{tabular}{rl}
+\begin{tabular}{rl@{\hspace{1.5cm}}rl}
 \cIn
- & \verb?y = 2*x; y? \\
+ & \verb?x^3? &
+\cIn
+ & \verb?x * x * x? \\
 \cZpCR
- & \verb?...22222? \\
+ & \verb?...010101? &
+\cZpCR
+ & \verb? ...10101? \\
 %\cZpFP
-% & \verb?...00000000000000022222? \\
-\cZpLC
- & \verb?...22222? \\
-\cIn
- & \verb?x + y? \\
-\cZpCR
- & \verb?...11110? \\
-%\cZpFP
-% & \verb?...000000000000000111110? \\
-\cZpLC
- & \verb?...111110? \\
-\end{tabular}}
-
-\smallskip
-
-The same phenomenon occurs when comparing the computation
-of $x^3$ and $x \times x^2$.
-
-\smallskip
-
-{\noindent \small
-\begin{tabular}{rl}
-\cIn
- & \verb?x^3? \\
-\cZpCR
- & \verb?...010101? \\
+% & \verb?...00000010100000010101? \\
 %\cZpFP
 % & \verb?...00000010100000010101? \\
 \cZpLC
- & \verb?...010101? \\
-\cIn
- & \verb?y = x^2? \\
- & \verb?x * y? \\
-\cZpCR
- & \verb?...10101? \\
-%\cZpFP
-% & \verb?...00000010100000010101? \\
+ & \verb?...010101? &
 \cZpLC
  & \verb?...010101? \\
 \end{tabular}}
 
-\smallskip
+\medskip
 
 \ZpL is also well suited for working with coefficients 
 with unbalanced precision.
@@ -328,53 +329,40 @@ with unbalanced precision.
  & \verb?x = random_element(Z2,10)? \\
  & \verb?y = random_element(Z2,5)? \\
 \cIn
- & \verb?u = x+y? \\
- & \verb?u? \\
+ & \verb?u, v = x+y, x-y? \\
+ & \verb?u, v? \\
 \cZpCR
- & \verb?...10111? \\
-%\cZpFP
-% & \verb?...000000000000000000000011010111? \\
+ & \verb?(...10111, ...01111)? \\
 \cZpLC
- & \verb?...10111? \\
-\cIn
- & \verb?v = x-y? \\
- & \verb?v? \\
-\cZpCR
- & \verb?...01111? \\
-%\cZpFP
-% & \verb?...000000000000000000000011001111? \\
-\cZpLC
- & \verb?...01111? \\
+ & \verb?(...10111, ...01111)? \\
 \end{tabular}}
 
 \smallskip
 
-Now, let us compute $u+v$ (and observe that it is actually equal to $2x$).
+\noindent
+Now, let us compute $u+v$ and compare it with $2x$.
 
 \smallskip
 
 {\noindent \small
-\begin{tabular}{rl}
+\begin{tabular}{rl@{\hphantom{\hspace{0.8cm}}}rl}
 \cIn
- & \verb?u+v? \\
-\cZpCR
- & \verb?...00110? \\
-%\cZpFP
-% & \verb?...0000000000000000000000110100110? \\
-\cZpLC
- & \verb?...00110100110? \\
+ & \verb?u + v? &
 \cIn
  & \verb?2*x? \\
 \cZpCR
+ & \verb?...00110? &
+\cZpCR
  & \verb?...00110100110? \\
-%\cZpFP
-% & \verb?...0000000000000000000000110100110? \\
+\cZpLC
+ & \verb?...00110100110? &
 \cZpLC
  & \verb?...00110100110? \\
 \end{tabular}}
 
 \smallskip
 
+\noindent
 No loss in precision appears in \ZpLC, contrary to \ZpCR.
 %We remark that \ZpFP also provides all the correct digits. 
 
