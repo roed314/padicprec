@@ -25,6 +25,15 @@
 \usepackage{tikz}
 \usetikzlibrary{patterns}
 
+\definecolor{input}{HTML}{303060}
+\definecolor{output}{HTML}{A00000}
+\definecolor{string}{HTML}{A02020}
+\definecolor{ring}{HTML}{A020A0}
+\definecolor{function}{HTML}{A06020}
+\definecolor{constructor}{HTML}{205080}
+\definecolor{method}{HTML}{205080}
+\definecolor{keyword}{HTML}{008000}
+
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
 \DeclareMathOperator{\HP}{HP}
@@ -69,11 +78,11 @@
 \newcommand{\rem}{\,\%\,}
 
 \newcommand{\sage}{\textsc{SageMath}\xspace}
-\newcommand{\ZpCR}{\text{\rm \tt ZpCR}\xspace}
-\newcommand{\ZpFP}{\text{\rm \tt ZpFP}\xspace}
-\newcommand{\ZpL}{\text{\rm \tt ZpL}\xspace}
-\newcommand{\ZpLC}{\text{\rm \tt ZpLC}\xspace}
-\newcommand{\ZpLF}{\text{\rm \tt ZpLF}\xspace}
+\newcommand{\ZpCR}{\text{\color{output} \rm \tt ZpCR}\xspace}
+\newcommand{\ZpFP}{\text{\color{output} \rm \tt ZpFP}\xspace}
+\newcommand{\ZpL}{\text{\color{output} \rm \tt ZpL}\xspace}
+\newcommand{\ZpLC}{\text{\color{output} \rm \tt ZpLC}\xspace}
+\newcommand{\ZpLF}{\text{\color{output} \rm \tt ZpLF}\xspace}
 
 \newcommand{\card}{\text{Card}\:}
 \newcommand{\ind}{\text{ind}}
@@ -96,12 +105,12 @@
 \newcommand{\inv}{\text{\rm inv}}
 \newcommand{\app}{\text{\rm app}}
 
-\newcommand{\cIn}{{\color{blue} \tt \phantom{Zp}In}:}
+\newcommand{\cIn}{{\color{input} \tt \phantom{Zp}In}:}
 \newcommand{\cOut}{{\color{red} \tt \phantom{Z}Out}:}
-\newcommand{\cZpCR}{{\color{red} \tt ZpCR}:}
-\newcommand{\cZpFP}{{\color{red} \tt ZpFP}:}
-\newcommand{\cZpLC}{{\color{red} \tt ZpLC}:}
-\newcommand{\cZpLF}{{\color{red} \tt ZpLF}:}
+\newcommand{\cZpCR}{{\color{output} \tt ZpCR}:}
+\newcommand{\cZpFP}{{\color{output} \tt ZpFP}:}
+\newcommand{\cZpLC}{{\color{output} \tt ZpLC}:}
+\newcommand{\cZpLF}{{\color{output} \tt ZpLF}:}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
@@ -199,8 +208,8 @@ The first step is the definition of the $p$-adic ring or field.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?Z2 = Zp(2, print_mode="digits")? \\
- & \verb?Q2 = Qp(2, print_mode="digits")? \\
+ & {\color{ring}\verb?Z2?}\verb? = Zp(2, print_mode=?{\color{string}\verb?'digits'?}\verb?)? \\
+ & {\color{ring}\verb?Q2?}\verb? = Qp(2, print_mode=?{\color{string}\verb?'digits'?}\verb?)? \\
 \end{tabular}}
 
 \smallskip
@@ -209,7 +218,7 @@ The first step is the definition of the $p$-adic ring or field.
 It means that we will work in various implementation of the 
 ring of $2$-adic integers with $20$ digits of precision (which
 is the default).
-The rings \verb?Z3? and \verb?Q3? are defined similarly.
+The rings {\color{ring}\verb?Z3?} and {\color{ring}\verb?Q3?} are defined similarly.
 
 We show the results for \ZpCR%, \ZpFP 
 and \ZpLC.
@@ -224,7 +233,7 @@ We first take some random element $x$.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?x = random_element(Z3,5); x? \\
+ & \verb?x = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z3?}\verb?,5); x? \\
 \cZpCR
  & \verb?...11111? \\
 %\cZpFP
@@ -326,8 +335,8 @@ with unbalanced precision.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?x = random_element(Z2,10)? \\
- & \verb?y = random_element(Z2,5)? \\
+ & \verb?x = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z2?}\verb?,10)? \\
+ & \verb?y = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z2?}\verb?,5)? \\
 \cIn
  & \verb?u, v = x+y, x-y? \\
  & \verb?u, v? \\
@@ -340,7 +349,8 @@ with unbalanced precision.
 \smallskip
 
 \noindent
-Now, let us compute $u+v$ and compare it with $2x$.
+Now, let us compute $u+v$ and compare it with $2x$ (observe that
+they should be equal).
 
 \smallskip
 
@@ -379,7 +389,7 @@ characteristic polynomial) :
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?M = random_element(MatrixSpace(Q2,3), prec=10)? \\
+ & \verb?M = ?{\color{function}\verb?random_element?}\verb?(?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Q2?}\verb?,3), prec=10)? \\
  & \verb?M.charpoly()? \\
 \cZpCR
  & \verb?...00000000000000000001*x^3 + ? \\
@@ -392,7 +402,7 @@ characteristic polynomial) :
 
 %\begin{tabular}{rl}
 %\cIn
-% & \verb?M = random_element(MatrixSpace(Q2,3), prec=10)? \\
+% & \verb?M = ?{\color{function}\verb?random_element?}\verb?(?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Q2?}\verb?,3), prec=10)? \\
 % & \verb?M.determinant()? \\
 %\cZpCR
 % & \verb?...000100000100? \\
@@ -434,10 +444,10 @@ of $p$-adic coefficients.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?S.<x> = PolynomialRing(Z2)? \\
- & \verb?P = random_element(S, degree=10, prec=5)? \\
- & \verb?Q = random_element(S, degree=10, prec=5)? \\
- & \verb?D = x^5 + random_element(S, degree=4, prec=8); D? \\
+ & \verb?S.<x> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(?{\color{ring}\verb?Z2?}\verb?)? \\
+ & \verb?P = ?{\color{function}\verb?random_element?}\verb?(S, degree=10, prec=5)? \\
+ & \verb?Q = ?{\color{function}\verb?random_element?}\verb?(S, degree=10, prec=5)? \\
+ & \verb?D = x^5 + ?{\color{function}\verb?random_element?}\verb?(S, degree=4, prec=8); D? \\
 \cZpCR
  & \verb?...00000000000000000001*x^5 + ...11111010*x^4 +? \\ 
  & \verb?...10000000*x^3 + ...11001111*x^2 +? \\
@@ -447,11 +457,11 @@ of $p$-adic coefficients.
  & \verb?...10000000*x^3 + ...11001111*x^2 +? \\
  & \verb?...10000110*x + ...11100010? \\
 \cIn
- & \verb?def euclidean(A,B):? \\
- & \verb?    while B != 0:? \\
+ & {\color{keyword}\verb?def?}\verb? ?{\color{function}\verb?euclidean?}\verb?(A,B):? \\
+ & \verb?    ?{\color{keyword}\verb?while?}\verb? B != 0:? \\
  & \verb?        A, B = B, A % B? \\
- & \verb?    return A.monic()? \\
- & \verb?euclidean(D*P, D*Q)? \\
+ & \verb?    ?{\color{keyword}\verb?return?}\verb? A.monic()? \\
+ & \verb??{\color{function}\verb?euclidean?}\verb?(D*P, D*Q)? \\
 \cZpCR
  & \verb?0*x^9 + ...1*x^8 + 0*x^7 + 0*x^6 + 0*x^5 +? \\
  & \verb?0*x^4 + 0*x^3 + ...1*x^2 + ...10*x + ...10? \\
@@ -969,8 +979,8 @@ example, the (partial) session:
 {\noindent \small
 \noindent
 \begin{tabular}{rl}
-\cIn  & \verb?v = Z2(173,10); v? \\
-\cOut & \verb?...0010101101?
+\cIn   & \verb?v = ?{\color{ring}\verb?Z2?}\verb?(173,10); v? \\
+\cZpLC & \verb?...0010101101?
 \end{tabular}}
 
 \smallskip
@@ -978,7 +988,7 @@ example, the (partial) session:
 \noindent
 indicates that the absolute precision on \ttv is $10$ since
 exactly $10$ digits are printed.
-The method \verb?precision_absolute? provides a more easy-to-use
+The method \verb??{\color{method}\verb?precision_absolute?}\verb?? provides a more easy-to-use
 access to the absolute precision.
 
 \smallskip
@@ -986,8 +996,8 @@ access to the absolute precision.
 {\noindent \small
 \noindent
 \begin{tabular}{rl}
-\cIn  & \verb?v.precision_absolute()? \\
-\cOut & \verb?10?
+\cIn   & \verb?v.?{\color{method}\verb?precision_absolute?}\verb?()? \\
+\cZpLC & \verb?10?
 \end{tabular}}
 
 \smallskip
@@ -1045,7 +1055,7 @@ Set $\Phi_{t,\ttv} = \pi_\ttv \circ \Phi_t$; it maps
 $\underline u_t \oplus \underline k_t$ to the \ttv-coordinate 
 $x_{t,\ttv}$ of $\underline x_t$ and satisfies
 $d\Phi_{t,\ttv} (U_t \oplus K_t) = \pi_\ttv(H_t) = p^N \Zp$
-where $N$ is the value returned by \verb?precision_absolute?. Thus, 
+where $N$ is the value returned by \verb??{\color{method}\verb?precision_absolute?}\verb??. Thus, 
 as soon as the assumptions of Proposition \ref{prop:precision} are
 fulfilled, we derive
 $\Phi_{t,\ttv} \big((\underline u_t + U_t) \oplus (\underline k_t + K_t)\big) = 
@@ -1087,23 +1097,23 @@ likely optimal.
 
 \noindent \textbf{Precision on a subset of elements.}
 %
-Our package implements the method \verb?precision_lattice? through which 
+Our package implements the method \verb??{\color{method}\verb?precision_lattice?}\verb?? through which 
 we can have access to the joint precision on a set of variables: it 
 outputs a matrix (in echelon form) whose rows generate a lattice 
 representing the precision on the subset of given variables.
 
 When the variables are ``independant'', the precision lattice is
-split and the method \verb?precision_lattice? outputs a diagonal
+split and the method \verb??{\color{method}\verb?precision_lattice?}\verb?? outputs a diagonal
 matrix:
 
 \smallskip
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn  & \verb?x = Z2(987,10); y = Z2(21,5)? \\
-      & \verb?R.precision().precision_lattice([x,y])? \\
-\cOut & \verb?[1024    0]? \\
-      & \verb?[   0   32]?
+\cIn   & \verb?x = ?{\color{ring}\verb?Z2?}\verb?(987,10); y = ?{\color{ring}\verb?Z2?}\verb?(21,5)? \\
+       & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision_lattice?}\verb?([x,y])? \\
+\cZpLC & \verb?[1024    0]? \\
+       & \verb?[   0   32]?
 \end{tabular}}
 
 \smallskip
@@ -1117,10 +1127,10 @@ because it is displayed in row-echelon form):
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn  & \verb?u, v = x+y, x-y? \\
-      & \verb?R.precision().precision_lattice([u,v])? \\
-\cOut & \verb?[  32 2016]? \\
-      & \verb?[   0 2048]?
+\cIn   & \verb?u, v = x+y, x-y? \\
+       & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision_lattice?}\verb?([u,v])? \\
+\cZpLC & \verb?[  32 2016]? \\
+       & \verb?[   0 2048]?
 \end{tabular}}
 
 \smallskip
@@ -1136,10 +1146,10 @@ example, the sum $u+v$ is known at precision $O(2^{11})$ while the
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn  & \verb?u, v? \\
-\cOut & \verb?(...10000, ...00110)? \\
-\cIn  & \verb?u + v? \\
-\cOut & \verb?...11110110110? \\
+\cIn   & \verb?u, v? \\
+\cZpLC & \verb?(...10000, ...00110)? \\
+\cIn   & \verb?u + v? \\
+\cZpLC & \verb?...11110110110? \\
 \end{tabular}}
 
 \medskip
@@ -1168,17 +1178,17 @@ reach on the set of $n$ variables corresponding to the basis $(e_1,
 The diffused digits of precision only appear on linear combinations
 of those variables.
 
-The method \verb?number_of_diffused_digits? computes the number of
+The method \verb??{\color{method}\verb?number_of_diffused_digits?}\verb?? computes the number of
 diffused digits of precision on a set of variables. Observe:
 
 \smallskip
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn  & \verb?R.precision().number_of_diffused_digits([x,y])? \\
-\cOut & \verb?0? \\
-\cIn  & \verb?R.precision().number_of_diffused_digits([u,v])? \\
-\cOut & \verb?6? \\
+\cIn   & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?number_of_diffused_digits?}\verb?([x,y])? \\
+\cZpLC & \verb?0? \\
+\cIn   & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?number_of_diffused_digits?}\verb?([u,v])? \\
+\cZpLC & \verb?6? \\
 \end{tabular}}
 
 \smallskip
@@ -1439,13 +1449,13 @@ of the SOMOS iteration.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?def somos4(u0, u1, u2, u3, n):? \\
+ & {\color{keyword}\verb?def?}\verb? somos4(u0, u1, u2, u3, n):? \\
  & \verb?    a, b, c, d = u0, u1, u2, u3? \\
  & \verb?    for _ in range(4, n+1):? \\
  & \verb?        a, b, c, d = b, c, d, (b*d + c*c) / a? \\
- & \verb?    return d? \\
+ & \verb?    ?{\color{keyword}\verb?return?}\verb? d? \\
 \cIn
- & \verb?u0 = u1 = u2 = Z2(1,15); u3 = Z2(3,15)? \\
+ & \verb?u0 = u1 = u2 = ?{\color{ring}\verb?Z2?}\verb?(1,15); u3 = ?{\color{ring}\verb?Z2?}\verb?(3,15)? \\
  & \verb?somos4(u0, u1, u2, u3, 18)? \\
 \cZpCR
  & \verb?...11? \\
@@ -1514,11 +1524,11 @@ added, but its first digits coincide with that of \ZpLC.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
-% & \verb?Z2 = Zp(2, prec=100)? \\
- & \verb?MS = MatrixSpace(Z2,2)? \\
- & \verb?M = random_element(MS, prec=5)? \\
+% & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=100)? \\
+ & \verb?MS = ?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Z2?}\verb?,2)? \\
+ & \verb?M = ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
  & \verb?for _ in range(100):? \\
- & \verb?    M *= random_element(MS, prec=5)? \\
+ & \verb?    M *= ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
  & \verb?M? \\
 \cZpCR
  & \verb?[ O(2^9) O(2^11)]? \\
@@ -1531,8 +1541,8 @@ added, but its first digits coincide with that of \ZpLC.
 %\ZpL can count the number of diffused digits.
 %\begin{tabular}{rl}
 %\cIn
-% & \verb?Z2.precision().number_of_diffused_digits()? \\
-%\cZpLC
+% & {\color{ring}\verb?Z2?}\verb?.precision().?{\color{method}\verb?number_of_diffused_digits?}\verb?()? \\
+%\ZpLC
 % & \verb?604? \\
 %\end{tabular}
 
@@ -1546,18 +1556,18 @@ Gröbner bases algorithms.
 \smallskip
 
 {\noindent \small
-\begin{tabular}{rl}
+\begin{tabular}{@{}rl}
 \cIn
-% & \verb?Q2 = Qp(2, prec=50, print_mode="digits")? \\
- & \verb?R.<x,y,z> = PolynomialRing(Q2, order = 'invlex')? \\
- & \verb?F = [ Q2(2,10)*x + Q2(1,10)*z, ? \\
- & \verb?      Q2(1,10)*x^2 + Q2(1,10)*y^2 - Q2(2,10)*z^2,? \\
- & \verb?      Q2(4,10)*y^2 + Q2(1,10)*y*z + Q2(8,10)*z^2 ]? \\
+% & {\color{ring}\verb?Q2?}\verb? = Qp(2, prec=50, print_mode="digits")? \\
+ & \verb?R.<x,y,z> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, order=?{\color{string}\verb?'invlex'?}\verb?)? \\
+ & \verb?F = [ ?{\color{ring}\verb?Q2?}\verb?(2,10)*x + ?{\color{ring}\verb?Q2?}\verb?(1,10)*z, ? \\
+ & \verb?      ?{\color{ring}\verb?Q2?}\verb?(1,10)*x^2 + ?{\color{ring}\verb?Q2?}\verb?(1,10)*y^2 - ?{\color{ring}\verb?Q2?}\verb?(2,10)*z^2,? \\
+ & \verb?      ?{\color{ring}\verb?Q2?}\verb?(4,10)*y^2 + ?{\color{ring}\verb?Q2?}\verb?(1,10)*y*z + ?{\color{ring}\verb?Q2?}\verb?(8,10)*z^2 ]? \\
 \cIn
- & \verb?from sage.rings.polynomial.toy_buchberger\?\\
- & \verb?    import buchberger_improved? \\
- & \verb?g = buchberger_improved(ideal(F)); g.sort()? \\
- & \verb?g? \\
+ & {\color{keyword}\verb?from?}\verb? sage.rings.polynomial.toy_buchberger\?\\
+ & \verb?    ?{\color{keyword}\verb?import?}\verb? ?{\color{function}\verb?buchberger_improved?} \\
+ & \verb?g = ?{\color{function}\verb?buchberger_improved?}\verb?(ideal(F))? \\
+ & \verb?g.?{\color{method}\verb?sort?}\verb?(); g? \\
 \cZpCR
  & \verb?[x^3, x*y + ...1100010*x^2,? \\
  & \verb? y^2 + ...11001*x^2, z + ...0000000010*x]? \\
@@ -1582,7 +1592,7 @@ when applying a Newton-method solver between
 the theoretic loss in precision and the 
 actual loss in precision for a naive implemenationin \verb?Zp(p)?.
 We can reach this theoretical loss in precision using \verb?ZpL?.
-We use a generic \verb?Newton_Iteration_Solver(g,h,N)?
+We use a generic {\color{function}\verb?Newton_Iteration_Solver?}\verb?(g,h,N)?
 that applies \verb?N? steps of the Newton method for 
 $y'=g \times h(y)$ as described in \citep{LV16}. 
 
@@ -1592,13 +1602,13 @@ $y'=g \times h(y)$ as described in \citep{LV16}.
 \begin{tabular}{rl}
 \cIn
 % & \verb?N = 4? \\
-% & \verb?Z2 = Zp(2, prec=50, print_mode="digits")? \\
-% & \verb?Q2=Z2.fraction_field()? \\
- & \verb?S.<t> = PowerSeriesRing(Q2, 16)? \\
+% & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=50, print_mode="digits")? \\
+% & {\color{ring}\verb?Q2?}\verb?=?{\color{ring}\verb?Z2?}\verb?.fraction_field()? \\
+ & \verb?S.<t> = ?{\color{constructor}\verb?PowerSeriesRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, 16)? \\
  & \verb?h = 1 + t + t^3? \\
- & \verb?y = t + t^2 * random_element(S,10)? \\
+ & \verb?y = t + t^2 * ?{\color{function}\verb?random_element?}\verb?(S,10)? \\
  & \verb?g = y.derivative() / h(y)? \\
- & \verb?u = Newton_Iteration_Solver(g, h, 4)? \\
+ & \verb?u = ?{\color{function}\verb?Newton_Iteration_Solver?}\verb?(g, h, 4)? \\
  & \verb?u[15]? \\
 \cZpCR
  & \verb?...1101? \\
@@ -1684,7 +1694,7 @@ method of \cite{Lercier-Sirvent:08}.
 \begin{tabular}{rl}
 \cIn
  & \verb?R = Qp(3,50)? \\
- & \verb?A.<x> = PolynomialRing(R)? \\
+ & \verb?A.<x> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(R)? \\
  & \verb?m = 67? \\
  & \verb?g = 1 + (1/4)*x^2 + x^6? \\
  & \verb?h = 1 + ((m^2)/4)*x^2 + m^6*x^6? \\
