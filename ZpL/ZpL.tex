@@ -434,7 +434,7 @@ Our package can be applied to computation over $p$-adic polynomials. A
 natural example is that of the computation of GCD, whose stability has 
 been studied in \cite{caruso-2017}.
 
-A naive implementation of the Euclide algorithm
+A naive implementation of the Euclidean algorithm
 can produce different behaviour depending 
 on the type of implementation of the field
 of $p$-adic coefficients.
@@ -442,7 +442,7 @@ of $p$-adic coefficients.
 \smallskip
 
 {\noindent \small
-\begin{tabular}{rl}
+\begin{tabular}{@{}rl}
 \cIn
  & \verb?S.<x> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(?{\color{ring}\verb?Z2?}\verb?)? \\
  & \verb?P = ?{\color{function}\verb?random_element?}\verb?(S, degree=10, prec=5)? \\
