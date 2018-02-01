@@ -26,13 +26,14 @@
 \usetikzlibrary{patterns}
 
 \definecolor{input}{HTML}{303060}
-\definecolor{output}{HTML}{A00000}
+\definecolor{output}{HTML}{804000}
 \definecolor{string}{HTML}{A02020}
 \definecolor{ring}{HTML}{A020A0}
-\definecolor{function}{HTML}{A06020}
+\definecolor{function}{HTML}{205080} % {A06020}
 \definecolor{constructor}{HTML}{205080}
 \definecolor{method}{HTML}{205080}
 \definecolor{keyword}{HTML}{008000}
+\definecolor{error}{HTML}{B01010}
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
@@ -462,7 +463,7 @@ of $p$-adic coefficients.
  & \verb?    ?{\color{keyword}\verb?while?}\verb? B != 0:? \\
  & \verb?        A, B = B, A % B? \\
  & \verb?    ?{\color{keyword}\verb?return?}\verb? A.monic()? \\
- & \verb??{\color{function}\verb?euclidean?}\verb?(D*P, D*Q)? \\
+ & {\color{function}\verb?euclidean?}\verb?(D*P, D*Q)? \\
 \cZpCR
  & \verb?0*x^9 + ...1*x^8 + 0*x^7 + 0*x^6 + 0*x^5 +? \\
  & \verb?0*x^4 + 0*x^3 + ...1*x^2 + ...10*x + ...10? \\
@@ -989,7 +990,7 @@ example, the (partial) session:
 \noindent
 indicates that the absolute precision on \ttv is $10$ since
 exactly $10$ digits are printed.
-The method \verb??{\color{method}\verb?precision_absolute?}\verb?? provides a more easy-to-use
+The method {\color{method}\verb?precision_absolute?} provides a more easy-to-use
 access to the absolute precision.
 
 \smallskip
@@ -1056,7 +1057,7 @@ Set $\Phi_{t,\ttv} = \pi_\ttv \circ \Phi_t$; it maps
 $\underline u_t \oplus \underline k_t$ to the \ttv-coordinate 
 $x_{t,\ttv}$ of $\underline x_t$ and satisfies
 $d\Phi_{t,\ttv} (U_t \oplus K_t) = \pi_\ttv(H_t) = p^N \Zp$
-where $N$ is the value returned by \verb??{\color{method}\verb?precision_absolute?}\verb??. Thus, 
+where $N$ is the value returned by {\color{method}\verb?precision_absolute?}. Thus, 
 as soon as the assumptions of Proposition \ref{prop:precision} are
 fulfilled, we derive
 $\Phi_{t,\ttv} \big((\underline u_t + U_t) \oplus (\underline k_t + K_t)\big) = 
@@ -1098,13 +1099,13 @@ likely optimal.
 
 \noindent \textbf{Precision on a subset of elements.}
 %
-Our package implements the method \verb??{\color{method}\verb?precision_lattice?}\verb?? through which 
+Our package implements the method {\color{method}\verb?precision_lattice?} through which 
 we can have access to the joint precision on a set of variables: it 
 outputs a matrix (in echelon form) whose rows generate a lattice 
 representing the precision on the subset of given variables.
 
 When the variables are ``independant'', the precision lattice is
-split and the method \verb??{\color{method}\verb?precision_lattice?}\verb?? outputs a diagonal
+split and the method {\color{method}\verb?precision_lattice?} outputs a diagonal
 matrix:
 
 \smallskip
@@ -1179,7 +1180,7 @@ reach on the set of $n$ variables corresponding to the basis $(e_1,
 The diffused digits of precision only appear on linear combinations
 of those variables.
 
-The method \verb??{\color{method}\verb?number_of_diffused_digits?}\verb?? computes the number of
+The method {\color{method}\verb?number_of_diffused_digits?} computes the number of
 diffused digits of precision on a set of variables. Observe:
 
 \smallskip
@@ -1450,14 +1451,14 @@ of the SOMOS iteration.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & {\color{keyword}\verb?def?}\verb? somos4(u0, u1, u2, u3, n):? \\
+ & {\color{keyword}\verb?def?}\verb? ?{\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, n):? \\
  & \verb?    a, b, c, d = u0, u1, u2, u3? \\
- & \verb?    for _ in range(4, n+1):? \\
+ & \verb?    ?{\color{keyword}\verb?for?}\verb? _ in ?{\color{keyword}\verb?range?}\verb?(4, n+1):? \\
  & \verb?        a, b, c, d = b, c, d, (b*d + c*c) / a? \\
  & \verb?    ?{\color{keyword}\verb?return?}\verb? d? \\
 \cIn
  & \verb?u0 = u1 = u2 = ?{\color{ring}\verb?Z2?}\verb?(1,15); u3 = ?{\color{ring}\verb?Z2?}\verb?(3,15)? \\
- & \verb?somos4(u0, u1, u2, u3, 18)? \\
+ & {\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, 18)? \\
 \cZpCR
  & \verb?...11? \\
 %\cZpFP
@@ -1465,9 +1466,9 @@ of the SOMOS iteration.
 \cZpLC
  & \verb?...100000000000111? \\
 \cIn
- & \verb?somos4(u0, u1, u2, u3, 100)? \\
+ & {\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, 100)? \\
 \cZpCR
- & \verb?PrecisionError: cannot divide by something?\\
+ & {\color{error}\verb?PrecisionError?}\verb?: cannot divide by something?\\
  &\verb?indistinguishable from zero.? \\
 %\cZpFP
 % & \verb?...110000101000011001001001110001? \\
@@ -1517,8 +1518,9 @@ of the SOMOS iteration.
 The multiplication of many matrices has been studied
 in \citep{caruso-roe-vaccon:15} and is known to often 
 provide an heavy diffused digits phenomenon.
-Here is a sample example. the result for \ZpFP has not been
-added, but its first digits coincide with that of \ZpLC.
+Here is a simple example.
+% The result for \ZpFP has not been
+% added, but its first digits coincide with that of \ZpLC.
 
 \smallskip
 
@@ -1528,15 +1530,15 @@ added, but its first digits coincide with that of \ZpLC.
 % & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=100)? \\
  & \verb?MS = ?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Z2?}\verb?,2)? \\
  & \verb?M = ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
- & \verb?for _ in range(100):? \\
+ & \verb?for _ in range(25):? \\
  & \verb?    M *= ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
  & \verb?M? \\
 \cZpCR
- & \verb?[ O(2^9) O(2^11)]? \\
- & \verb?[ O(2^9) O(2^11)]? \\
+ & \verb?[0 0]? \\
+ & \verb?[0 0]? \\
 \cZpLC
- & \verb?[2^9 + 2^10 + 2^11 + O(2^12)  O(2^14)]? \\
- & \verb?[       2^9 + 2^11 + O(2^12)  O(2^14)]? \\
+ & \verb?[...100000000000   ...1000000000]? \\
+ & \verb?[   ...010000000     ...00100000]? \\
 \end{tabular}}
 
 %\ZpL can count the number of diffused digits.
@@ -1699,10 +1701,8 @@ method of \cite{Lercier-Sirvent:08}.
  & \verb?m = 67? \\
  & \verb?g = 1 + (1/4)*x^2 + x^6? \\
  & \verb?h = 1 + ((m^2)/4)*x^2 + m^6*x^6? \\
- & \verb?y = Lercier_Sirvent(g, h, 6)? \\
+ & \verb?y = ?{\color{function}\verb?Lercier_Sirvent?}\verb?(g, h, 6)? \\
  & \verb?y[31]? \\
- & \verb?u = Newton_Iteration_Solver(g, h, N)? \\  % ???
- & \verb?u[15]? \\
 \cZpCR
  & \verb?(467995903278061284942799/3^14 + O(3^36))*x^31? \\
 \cZpLC
