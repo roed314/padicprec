@@ -11722,6 +11722,17 @@ div#notebook {
     page-break-inside: avoid; 
   }
 }
+
+pre {
+  width: calc(100% - 4.5em);
+}
+.timings {
+  float: right;
+  text-align: right;
+  width: 4em;
+  font-size: 70%;
+  color: #888;
+}
 </style>
 
 <!-- Custom stylesheet, it must be in the same directory as the html file -->
@@ -11771,7 +11782,8 @@ div#notebook {
 <h3 id="Legend">Legend<a class="anchor-link" href="#Legend">&#182;</a></h3><ul>
 <li><em>ZpCR</em> stands for Capped Relative precision: this is roughly the analogue of interval arithmetic (a $p$-adic number is represented by a subset of the shape $x + O(p^n)$ and precision is tracked by operating of these subsets)</li>
 <li><em>ZpFP</em> stands for Floating Point arithmetic: this is the analogue of usual floating point arithmetic (just a certain subset of $p$-adic numbers are available and results are rounded so that they always lie in this subset)</li>
-<li><em>ZpLP</em> stands for Lattice Precision (our package)</li>
+<li><em>ZpLC</em> stands for Lattice Precision with cap (provided by our package)</li>
+<li><em>ZpLF</em> stands for Lattice Precision combined with Floating Point arithmetics (provided by our package)</li>
 </ul>
 
       </div>
@@ -11794,7 +11806,19 @@ div#notebook {
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">Z2</span> <span class="o">=</span> <span class="n">Zp</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">print_mode</span><span class="o">=</span><span class="s2">&quot;digits&quot;</span><span class="p">)</span>
-<span class="n">Z3</span> <span class="o">=</span> <span class="n">Zp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">print_mode</span><span class="o">=</span><span class="s2">&quot;digits&quot;</span><span class="p">)</span>
+<span class="n">Q2</span> <span class="o">=</span> <span class="n">Z2</span><span class="o">.</span><span class="n">fraction_field</span><span class="p">()</span>
+</pre></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt">In&nbsp;[2]:</div>
+    <div class="inner_cell">
+      <div class="input_area">
+<div class="highlight"><pre><span></span><span class="n">Z3</span> <span class="o">=</span> <span class="n">Zp</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">print_mode</span><span class="o">=</span><span class="s2">&quot;digits&quot;</span><span class="p">)</span>
 </pre></div>
 
       </div>
@@ -11813,7 +11837,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[2]:</div>
+    <div class="prompt input_prompt">In&nbsp;[3]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">random_element</span><span class="p">(</span><span class="n">Z3</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
@@ -11826,9 +11850,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[2]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[3]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...02112</pre>
         </div>
       </div>
     </div>
@@ -11836,9 +11861,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[2]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[3]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000000000222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000000000002112</pre>
         </div>
       </div>
     </div>
@@ -11846,9 +11872,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[2]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[3]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...02112</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[3]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...02112</pre>
         </div>
       </div>
     </div>
@@ -11867,7 +11905,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[3]:</div>
+    <div class="prompt input_prompt">In&nbsp;[4]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="mi">3</span><span class="o">*</span><span class="n">x</span>
@@ -11879,9 +11917,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[3]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[4]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...002220</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...021120</pre>
         </div>
       </div>
     </div>
@@ -11889,9 +11928,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[3]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[4]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000002220</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...000000000000000021120</pre>
         </div>
       </div>
     </div>
@@ -11899,9 +11939,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[3]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[4]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...002220</pre>
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>...021120</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[4]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>...021120</pre>
         </div>
       </div>
     </div>
@@ -11920,7 +11972,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[4]:</div>
+    <div class="prompt input_prompt">In&nbsp;[5]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="n">x</span>
@@ -11932,9 +11984,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[4]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[5]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...02220</pre>
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>...21120</pre>
         </div>
       </div>
     </div>
@@ -11942,9 +11995,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[4]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[5]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000002220</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...000000000000000021120</pre>
         </div>
       </div>
     </div>
@@ -11952,9 +12006,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[4]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[5]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...002220</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...021120</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[5]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...021120</pre>
         </div>
       </div>
     </div>
@@ -11962,7 +12028,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[5]:</div>
+    <div class="prompt input_prompt">In&nbsp;[6]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span>
@@ -11975,9 +12041,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[5]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[6]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...01221</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...12001</pre>
         </div>
       </div>
     </div>
@@ -11985,9 +12052,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[5]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[6]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000000001221</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000000000012001</pre>
         </div>
       </div>
     </div>
@@ -11995,9 +12063,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[5]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[6]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...01221</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...12001</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[6]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...12001</pre>
         </div>
       </div>
     </div>
@@ -12005,7 +12085,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[6]:</div>
+    <div class="prompt input_prompt">In&nbsp;[7]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
@@ -12017,9 +12097,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[6]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[7]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...02220</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...21120</pre>
         </div>
       </div>
     </div>
@@ -12027,9 +12108,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[6]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[7]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000002220</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...000000000000000021120</pre>
         </div>
       </div>
     </div>
@@ -12037,9 +12119,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[6]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[7]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...002220</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...021120</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[7]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...021120</pre>
         </div>
       </div>
     </div>
@@ -12058,7 +12152,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[7]:</div>
+    <div class="prompt input_prompt">In&nbsp;[8]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">x</span><span class="o">^</span><span class="mi">3</span>
@@ -12070,9 +12164,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[7]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[8]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...002222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...022122</pre>
         </div>
       </div>
     </div>
@@ -12080,9 +12175,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[7]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[8]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000220002222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000120222022122</pre>
         </div>
       </div>
     </div>
@@ -12090,9 +12186,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[7]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[8]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...002222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...022122</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[8]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...022122</pre>
         </div>
       </div>
     </div>
@@ -12100,7 +12208,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[8]:</div>
+    <div class="prompt input_prompt">In&nbsp;[9]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
@@ -12112,9 +12220,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[8]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[9]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...02222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...22122</pre>
         </div>
       </div>
     </div>
@@ -12122,9 +12231,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[8]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[9]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000220002222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000120222022122</pre>
         </div>
       </div>
     </div>
@@ -12132,9 +12242,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[8]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[9]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...002222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...022122</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[9]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...022122</pre>
         </div>
       </div>
     </div>
@@ -12142,7 +12264,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[9]:</div>
+    <div class="prompt input_prompt">In&nbsp;[10]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">^</span><span class="mi">2</span>
@@ -12155,9 +12277,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[9]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[10]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...21001</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00021</pre>
         </div>
       </div>
     </div>
@@ -12165,9 +12288,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[9]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[10]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000000221001</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000000020100021</pre>
         </div>
       </div>
     </div>
@@ -12175,9 +12299,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[9]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[10]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...21001</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00021</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[10]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00021</pre>
         </div>
       </div>
     </div>
@@ -12185,7 +12321,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[10]:</div>
+    <div class="prompt input_prompt">In&nbsp;[11]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
@@ -12197,9 +12333,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[10]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[11]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...02222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...22122</pre>
         </div>
       </div>
     </div>
@@ -12207,9 +12344,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[10]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[11]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000220002222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000120222022122</pre>
         </div>
       </div>
     </div>
@@ -12217,9 +12355,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[10]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[11]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...002222</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...022122</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[11]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...022122</pre>
         </div>
       </div>
     </div>
@@ -12237,7 +12387,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[11]:</div>
+    <div class="prompt input_prompt">In&nbsp;[12]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">random_element</span><span class="p">(</span><span class="n">Z2</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
@@ -12250,7 +12400,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[12]:</div>
+    <div class="prompt input_prompt">In&nbsp;[13]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span>
@@ -12263,9 +12413,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[12]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[13]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...01101</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...10101</pre>
         </div>
       </div>
     </div>
@@ -12273,9 +12424,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[12]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[13]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000000001011001101</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...000000000000000000000111010101</pre>
         </div>
       </div>
     </div>
@@ -12283,9 +12435,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[12]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[13]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...01101</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...10101</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[13]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...10101</pre>
         </div>
       </div>
     </div>
@@ -12293,7 +12457,7 @@ div#notebook {
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[13]:</div>
+    <div class="prompt input_prompt">In&nbsp;[14]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">v</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span>
@@ -12306,9 +12470,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[13]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[14]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00001</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00111</pre>
         </div>
       </div>
     </div>
@@ -12316,9 +12481,10 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[13]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[14]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000000001011000001</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...000000000000000000000111000111</pre>
         </div>
       </div>
     </div>
@@ -12326,9 +12492,21 @@ div#notebook {
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[13]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[14]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00001</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00111</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[14]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00111</pre>
         </div>
       </div>
     </div>
@@ -12348,7 +12526,7 @@ Here is what we get:</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[14]:</div>
+    <div class="prompt input_prompt">In&nbsp;[15]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">u</span><span class="o">+</span><span class="n">v</span>
@@ -12360,9 +12538,10 @@ Here is what we get:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[14]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[15]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...01110</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...11100</pre>
         </div>
       </div>
     </div>
@@ -12370,9 +12549,10 @@ Here is what we get:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[14]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[15]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...0000000000000000000010110001110</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000000000000000001110011100</pre>
         </div>
       </div>
     </div>
@@ -12380,9 +12560,21 @@ Here is what we get:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[14]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[15]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...10110001110</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...01110011100</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[15]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>...01110011100</pre>
         </div>
       </div>
     </div>
@@ -12390,7 +12582,7 @@ Here is what we get:</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[15]:</div>
+    <div class="prompt input_prompt">In&nbsp;[16]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="mi">2</span><span class="o">*</span><span class="n">x</span>
@@ -12402,9 +12594,10 @@ Here is what we get:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[15]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[16]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...10110001110</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...01110011100</pre>
         </div>
       </div>
     </div>
@@ -12412,9 +12605,10 @@ Here is what we get:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[15]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[16]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...0000000000000000000010110001110</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000000000000000001110011100</pre>
         </div>
       </div>
     </div>
@@ -12422,9 +12616,21 @@ Here is what we get:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[15]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[16]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...10110001110</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...01110011100</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[16]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...01110011100</pre>
         </div>
       </div>
     </div>
@@ -12456,7 +12662,7 @@ For this reason, using the ZpL package can here be decisive.</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[16]:</div>
+    <div class="prompt input_prompt">In&nbsp;[17]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">somos</span><span class="p">(</span><span class="n">u0</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">u3</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
@@ -12472,7 +12678,7 @@ For this reason, using the ZpL package can here be decisive.</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[17]:</div>
+    <div class="prompt input_prompt">In&nbsp;[18]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">somos</span><span class="p">(</span><span class="n">Z2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">Z2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">Z2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">Z2</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="mi">18</span><span class="p">)</span>
@@ -12484,8 +12690,9 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[17]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[18]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.004&nbsp;s</div>
           <pre>...11</pre>
         </div>
       </div>
@@ -12494,8 +12701,9 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[17]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[18]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
           <pre>...110111001000100100000000000111</pre>
         </div>
       </div>
@@ -12504,8 +12712,20 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[17]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[18]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.052&nbsp;s</div>
+          <pre>...100000000000111</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[18]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.032&nbsp;s</div>
           <pre>...100000000000111</pre>
         </div>
       </div>
@@ -12514,7 +12734,7 @@ For this reason, using the ZpL package can here be decisive.</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[18]:</div>
+    <div class="prompt input_prompt">In&nbsp;[19]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">somos</span><span class="p">(</span><span class="n">Z2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">Z2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">Z2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="n">Z2</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span> <span class="mi">100</span><span class="p">)</span>
@@ -12526,8 +12746,9 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[18]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[19]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
           <pre>PrecisionError: cannot divide by something indistinguishable from zero.</pre>
         </div>
       </div>
@@ -12536,8 +12757,9 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[18]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[19]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
           <pre>...110000101000011001001001110001</pre>
         </div>
       </div>
@@ -12546,8 +12768,20 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[18]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[19]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.364&nbsp;s</div>
+          <pre>...001001001110001</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[19]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.228&nbsp;s</div>
           <pre>...001001001110001</pre>
         </div>
       </div>
@@ -12576,7 +12810,7 @@ For this reason, using the ZpL package can here be decisive.</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[19]:</div>
+    <div class="prompt input_prompt">In&nbsp;[20]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">MS</span> <span class="o">=</span> <span class="n">MatrixSpace</span><span class="p">(</span><span class="n">Z2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
@@ -12588,7 +12822,7 @@ For this reason, using the ZpL package can here be decisive.</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[20]:</div>
+    <div class="prompt input_prompt">In&nbsp;[21]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="n">MS</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -12602,7 +12836,7 @@ For this reason, using the ZpL package can here be decisive.</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[21]:</div>
+    <div class="prompt input_prompt">In&nbsp;[22]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">M</span>
@@ -12614,10 +12848,11 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[21]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[22]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>[0 0]
-[0 0]</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>[ ...010100000000000000 ...1111000000000000000]
+[   ...0011000000000000   ...10010000000000000]</pre>
         </div>
       </div>
     </div>
@@ -12625,10 +12860,11 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[21]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[22]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>[...10101011001100101101000111001100000000000000000 ...11101110000110101011010000101100000000000000000]
-[...00001000100100111111100100100100000000000000000 ...01001111011111011111111001000100000000000000000]</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>[ ...00101100101000111110111100010100000000000000 ...011010011000000010010100111111000000000000000]
+[   ...100110110001111110010001100011000000000000   ...0111001111111001101010101110010000000000000]</pre>
         </div>
       </div>
     </div>
@@ -12636,10 +12872,23 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[21]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[22]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>[...1001100000000000000000 ...0101100000000000000000]
-[...0100100000000000000000 ...1000100000000000000000]</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>[ ...00010100000000000000 ...111111000000000000000]
+[   ...100011000000000000   ...1110010000000000000]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[22]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>[ ...00010100000000000000 ...111111000000000000000]
+[   ...100011000000000000   ...1110010000000000000]</pre>
         </div>
       </div>
     </div>
@@ -12657,7 +12906,7 @@ For this reason, using the ZpL package can here be decisive.</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[22]:</div>
+    <div class="prompt input_prompt">In&nbsp;[23]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="n">diagonal_matrix</span><span class="p">([</span> <span class="n">Z3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">Z3</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">Z3</span><span class="p">(</span><span class="mi">27</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">Z3</span><span class="p">(</span><span class="mi">81</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span> <span class="p">])</span>
@@ -12670,8 +12919,9 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[22]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[23]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.040&nbsp;s</div>
           <pre>[...00001        0        0        0]
 [       0 ...00100        0        0]
 [       0        0 ...01000        0]
@@ -12683,8 +12933,9 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[22]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[23]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
           <pre>[    ...00000000000000000001                           0                           0                           0]
 [                          0   ...0000000000000000000100                           0                           0]
 [                          0                           0  ...00000000000000000001000                           0]
@@ -12696,8 +12947,23 @@ For this reason, using the ZpL package can here be decisive.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[22]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[23]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>[...00001        0        0        0]
+[       0 ...00100        0        0]
+[       0        0 ...01000        0]
+[       0        0        0 ...10000]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[23]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.000&nbsp;s</div>
           <pre>[...00001        0        0        0]
 [       0 ...00100        0        0]
 [       0        0 ...01000        0]
@@ -12721,7 +12987,7 @@ This is due to the particular shape of $D$.</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[23]:</div>
+    <div class="prompt input_prompt">In&nbsp;[24]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">D</span><span class="o">.</span><span class="n">determinant</span><span class="p">()</span>
@@ -12733,8 +12999,9 @@ This is due to the particular shape of $D$.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[23]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[24]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.012&nbsp;s</div>
           <pre>...1000000000</pre>
         </div>
       </div>
@@ -12743,8 +13010,9 @@ This is due to the particular shape of $D$.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[23]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[24]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.004&nbsp;s</div>
           <pre>...00000000000000000001000000000</pre>
         </div>
       </div>
@@ -12753,8 +13021,20 @@ This is due to the particular shape of $D$.</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[23]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[24]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.152&nbsp;s</div>
+          <pre>...1000000000</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[24]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.056&nbsp;s</div>
           <pre>...1000000000</pre>
         </div>
       </div>
@@ -12775,7 +13055,7 @@ However the software may or may not see it, depending on the method it uses for 
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[24]:</div>
+    <div class="prompt input_prompt">In&nbsp;[25]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">MS</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
@@ -12791,12 +13071,13 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[24]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[25]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>[ ...21020  ...22200  ...02011  ...20121]
-[ ...11220  ...10200  ...01021  ...00001]
-[ ...20000  ...12100  ...01200  ...20100]
-[...221200  ...12200  ...01210  ...02110]</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>[ ...00120  ...20020  ...20110 ...200100]
+[ ...12000  ...21200  ...20200  ...10100]
+[ ...21000  ...11100  ...22100  ...22200]
+[ ...20021  ...01101  ...21002  ...20220]</pre>
         </div>
       </div>
     </div>
@@ -12804,12 +13085,13 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[24]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[25]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>[   ...000000000222212121020   ...0000000001021020022200     ...00000000221022202011     ...00000000101212020121]
-[   ...000000010200001011220   ...0000000011120021010200     ...00000010200110101021     ...00000002222201100001]
-[...000000000002200020020000   ...0000000010100111112100   ...0000000002210202101200   ...0000000002020212220100]
-[  ...0000000011202110221200   ...0000000020001021212200    ...000000011201221201210    ...000000010021211202110]</pre>
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>[  ...000000011020110000120   ...000000002100101020020   ...000000011002210020110  ...0000000010121011200100]
+[...00000000020011211112000  ...0000000011121221221200  ...0000000021100012120200  ...0000000012221210210100]
+[...00000000100010222221000  ...0000000012111001011100  ...0000000100012210022100  ...0000000021210022222200]
+[   ...00000011220000220021    ...00000010010221001101    ...00000012020102121002   ...000000011100122120220]</pre>
         </div>
       </div>
     </div>
@@ -12817,12 +13099,27 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[24]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[25]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>[ ...21020  ...22200  ...02011  ...20121]
-[ ...11220  ...10200  ...01021  ...00001]
-[ ...20000  ...12100  ...01200  ...20100]
-[...221200  ...12200  ...01210  ...02110]</pre>
+          <div class="timings">0.408&nbsp;s</div>
+          <pre>[ ...00120  ...20020  ...20110 ...200100]
+[ ...12000  ...21200  ...20200  ...10100]
+[ ...21000  ...11100  ...22100  ...22200]
+[ ...20021  ...01101  ...21002  ...20220]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[25]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.428&nbsp;s</div>
+          <pre>[ ...00120  ...20020  ...20110 ...200100]
+[ ...12000  ...21200  ...20200  ...10100]
+[ ...21000  ...11100  ...22100  ...22200]
+[ ...20021  ...01101  ...21002  ...20220]</pre>
         </div>
       </div>
     </div>
@@ -12830,7 +13127,7 @@ However the software may or may not see it, depending on the method it uses for 
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[25]:</div>
+    <div class="prompt input_prompt">In&nbsp;[26]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">M</span><span class="o">.</span><span class="n">determinant</span><span class="p">()</span>
@@ -12842,8 +13139,9 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[25]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[26]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.004&nbsp;s</div>
           <pre>0</pre>
         </div>
       </div>
@@ -12852,9 +13150,10 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[25]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[26]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000021000002111222000000000</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...000000010121201222210000000000</pre>
         </div>
       </div>
     </div>
@@ -12862,9 +13161,21 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[25]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[26]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...2000000000</pre>
+          <div class="timings">0.560&nbsp;s</div>
+          <pre>...10000000000</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[26]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.376&nbsp;s</div>
+          <pre>...10000000000</pre>
         </div>
       </div>
     </div>
@@ -12872,7 +13183,7 @@ However the software may or may not see it, depending on the method it uses for 
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[26]:</div>
+    <div class="prompt input_prompt">In&nbsp;[27]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">P</span><span class="o">.</span><span class="n">determinant</span><span class="p">()</span> <span class="o">*</span> <span class="n">D</span><span class="o">.</span><span class="n">determinant</span><span class="p">()</span> <span class="o">*</span> <span class="n">Q</span><span class="o">.</span><span class="n">determinant</span><span class="p">()</span>
@@ -12884,9 +13195,10 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[26]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[27]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...2000000000</pre>
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>...10000000000</pre>
         </div>
       </div>
     </div>
@@ -12894,9 +13206,10 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[26]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[27]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...01012021000002111222000000000</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...001101010121201222210000000000</pre>
         </div>
       </div>
     </div>
@@ -12904,9 +13217,21 @@ However the software may or may not see it, depending on the method it uses for 
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[26]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[27]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...2000000000</pre>
+          <div class="timings">0.676&nbsp;s</div>
+          <pre>...10000000000</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[27]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.568&nbsp;s</div>
+          <pre>...10000000000</pre>
         </div>
       </div>
     </div>
@@ -12926,7 +13251,7 @@ This may have important consequences if, at some point, we will test if $M$ is i
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[27]:</div>
+    <div class="prompt input_prompt">In&nbsp;[28]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">M</span><span class="o">.</span><span class="n">charpoly</span><span class="p">()</span>
@@ -12938,9 +13263,10 @@ This may have important consequences if, at some point, we will test if $M$ is i
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[27]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[28]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>(...00000000000000000001)*x^4 + (...10000)*x^3 + (0)*x^2 + (...200000)*x + (0)</pre>
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>(...00000000000000000001)*x^4 + (...10120)*x^3 + (...02100)*x^2 + (0)*x + (0)</pre>
         </div>
       </div>
     </div>
@@ -12948,9 +13274,10 @@ This may have important consequences if, at some point, we will test if $M$ is i
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[27]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[28]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000000000001*x^4 + ...000222222120100021010000*x^3 + ...0001011101102010221200000*x^2 + ...2220101021012200020200000*x + ...00000021000002111222000000000</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...00000000000000000001*x^4 + ...222222011120011010120*x^3 + ...0022121020011212002100*x^2 + ...00012200222121121011000000*x + ...000000010121201222210000000000</pre>
         </div>
       </div>
     </div>
@@ -12958,9 +13285,21 @@ This may have important consequences if, at some point, we will test if $M$ is i
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[27]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[28]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...00000000000000000001*x^4 + ...10000*x^3 + ...0200000*x + ...2000000000</pre>
+          <div class="timings">0.356&nbsp;s</div>
+          <pre>...00000000000000000001*x^4 + ...10120*x^3 + ...02100*x^2 + ...1000000*x + ...10000000000</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[28]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.360&nbsp;s</div>
+          <pre>...00000000000000000001*x^4 + ...10120*x^3 + ...02100*x^2 + ...1000000*x + ...10000000000</pre>
         </div>
       </div>
     </div>
@@ -12980,7 +13319,7 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[28]:</div>
+    <div class="prompt input_prompt">In&nbsp;[29]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dodgson</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>   <span class="c1"># M must be a square matrix</span>
@@ -13002,7 +13341,7 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[29]:</div>
+    <div class="prompt input_prompt">In&nbsp;[30]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">MS</span> <span class="o">=</span> <span class="n">MatrixSpace</span><span class="p">(</span><span class="n">Z2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
@@ -13015,7 +13354,7 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[30]:</div>
+    <div class="prompt input_prompt">In&nbsp;[31]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">dodgson</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
@@ -13027,9 +13366,10 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[30]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[31]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...01111</pre>
+          <div class="timings">0.012&nbsp;s</div>
+          <pre>...1110</pre>
         </div>
       </div>
     </div>
@@ -13037,9 +13377,10 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[30]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[31]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...110011000001111011111000101111</pre>
+          <div class="timings">0.008&nbsp;s</div>
+          <pre>...0101110010011100100110100001110</pre>
         </div>
       </div>
     </div>
@@ -13047,9 +13388,21 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[30]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[31]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...1000101111</pre>
+          <div class="timings">1.004&nbsp;s</div>
+          <pre>...0100001110</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[31]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.528&nbsp;s</div>
+          <pre>...0100001110</pre>
         </div>
       </div>
     </div>
@@ -13057,7 +13410,7 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[31]:</div>
+    <div class="prompt input_prompt">In&nbsp;[32]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">M</span><span class="o">.</span><span class="n">determinant</span><span class="p">()</span>
@@ -13069,9 +13422,10 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[31]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[32]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...1000101111</pre>
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>...0100001110</pre>
         </div>
       </div>
     </div>
@@ -13079,9 +13433,10 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[31]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[32]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...110011000001111011111000101111</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...0001110010011100100110100001110</pre>
         </div>
       </div>
     </div>
@@ -13089,9 +13444,21 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[31]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[32]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...1000101111</pre>
+          <div class="timings">1.980&nbsp;s</div>
+          <pre>...0100001110</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[32]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">1.668&nbsp;s</div>
+          <pre>...0100001110</pre>
         </div>
       </div>
     </div>
@@ -13109,10 +13476,10 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[32]:</div>
+    <div class="prompt input_prompt">In&nbsp;[33]:</div>
     <div class="inner_cell">
       <div class="input_area">
-<div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.&lt;</span><span class="n">x</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Z2</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="n">S</span><span class="o">.&lt;</span><span class="n">x</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Q2</span><span class="p">)</span>
 <span class="n">P</span> <span class="o">=</span> <span class="n">random_element</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">Q</span> <span class="o">=</span> <span class="n">random_element</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">D</span> <span class="o">=</span> <span class="n">x</span><span class="o">^</span><span class="mi">5</span> <span class="o">+</span> <span class="n">random_element</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
@@ -13125,9 +13492,10 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[32]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[33]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>(...000000000000000000000000000001)*x^5 + (...10111100)*x^4 + (...11100111)*x^3 + (...01110101)*x^2 + (...00001011)*x + (...10100110)</pre>
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>(...000000000000000000000000000001)*x^5 + (...00110010)*x^4 + (...00011111)*x^3 + (...00010010)*x^2 + (...00011111)*x + (...10101000)</pre>
         </div>
       </div>
     </div>
@@ -13135,9 +13503,10 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[32]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[33]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000000000000000001*x^5 + ...00000000000000000000000010111100*x^4 + ...000000000000000000000011100111*x^3 + ...000000000000000000000001110101*x^2 + ...000000000000000000000000001011*x + ...0000000000000000000000010100110</pre>
+          <div class="timings">0.000&nbsp;s</div>
+          <pre>...000000000000000000000000000001*x^5 + ...0000000000000000000000000110010*x^4 + ...000000000000000000000000011111*x^3 + ...0000000000000000000000000010010*x^2 + ...000000000000000000000000011111*x + ...000000000000000000000000010101000</pre>
         </div>
       </div>
     </div>
@@ -13145,9 +13514,21 @@ A description of the method can be found <a href="https://en.wikipedia.org/wiki/
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[32]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[33]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000000000000000001*x^5 + ...10111100*x^4 + ...11100111*x^3 + ...01110101*x^2 + ...00001011*x + ...10100110</pre>
+          <div class="timings">0.076&nbsp;s</div>
+          <pre>...000000000000000000000000000001*x^5 + ...00110010*x^4 + ...00011111*x^3 + ...00010010*x^2 + ...00011111*x + ...10101000</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[33]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.080&nbsp;s</div>
+          <pre>...000000000000000000000000000001*x^5 + ...00110010*x^4 + ...00011111*x^3 + ...00010010*x^2 + ...00011111*x + ...10101000</pre>
         </div>
       </div>
     </div>
@@ -13167,7 +13548,7 @@ However, we observe that we do not always get this expected result:</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[33]:</div>
+    <div class="prompt input_prompt">In&nbsp;[34]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euclidean</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">):</span>
@@ -13182,7 +13563,7 @@ However, we observe that we do not always get this expected result:</p>
 </div>
  <div class="cell border-box-sizing code_cell rendered">
   <div class="input">
-    <div class="prompt input_prompt">In&nbsp;[34]:</div>
+    <div class="prompt input_prompt">In&nbsp;[35]:</div>
     <div class="inner_cell">
       <div class="input_area">
 <div class="highlight"><pre><span></span><span class="n">euclidean</span><span class="p">(</span><span class="n">D</span><span class="o">*</span><span class="n">P</span><span class="p">,</span> <span class="n">D</span><span class="o">*</span><span class="n">Q</span><span class="p">)</span>
@@ -13194,9 +13575,10 @@ However, we observe that we do not always get this expected result:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpCR&nbsp;[34]:</div>
+        <div class="prompt output_prompt">ZpCR&nbsp;[35]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>(...1)*x^6 + (...10)*x^5 + (...1)*x^4 + (...1)*x^3 + (...1)*x^2 + (...100)*x + (...100)</pre>
+          <div class="timings">0.004&nbsp;s</div>
+          <pre>(0)*x^13 + (0)*x^12 + (0)*x^11 + (...01)*x^10 + (0)*x^9 + (0)*x^8 + (0)*x^7 + (0)*x^6 + (...10)*x^5 + (0)*x^4 + (0)*x^3 + (0)*x^2 + (0)*x + (0)</pre>
         </div>
       </div>
     </div>
@@ -13204,8 +13586,9 @@ However, we observe that we do not always get this expected result:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpFP&nbsp;[34]:</div>
+        <div class="prompt output_prompt">ZpFP&nbsp;[35]:</div>
         <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.004&nbsp;s</div>
           <pre>...000000000000000000000000000001</pre>
         </div>
       </div>
@@ -13214,9 +13597,21 @@ However, we observe that we do not always get this expected result:</p>
   <div class="output_wrapper">
     <div class="output">
       <div class="output_area">
-        <div class="prompt output_prompt">ZpLP&nbsp;[34]:</div>
+        <div class="prompt output_prompt">ZpLC&nbsp;[35]:</div>
         <div class="output_text output_subarea output_execute_result">
-          <pre>...000000000000000000000000000001*x^5 + ...10111100*x^4 + ...11100111*x^3 + ...01110101*x^2 + ...00001011*x + ...10100110</pre>
+          <div class="timings">4.024&nbsp;s</div>
+          <pre>...000000000000000000000000000001*x^5 + ...0010*x^4 + ...0011111*x^3 + ...0010*x^2 + ...1111*x + ...0101000</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[35]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">2.812&nbsp;s</div>
+          <pre>...000000000000000000000000000001*x^5 + ...0010*x^4 + ...0011111*x^3 + ...0010*x^2 + ...1111*x + ...0101000</pre>
         </div>
       </div>
     </div>
@@ -13232,6 +13627,201 @@ Indeed the Euclidean algorithm stops prematurely because the software believes t
 The situation with ZpFP is the exact opposite:
 since the precision is too high (always the maximal cap), the software does not notice that the remainder vanishes. Therefore the Euclidean algorithm does not stop until it obtains a remainder of degree $0$.</p>
 
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt"></div>
+    <div class="inner_cell">
+      <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Gr&#246;bner-basis">Gr&#246;bner basis<a class="anchor-link" href="#Gr&#246;bner-basis">&#182;</a></h3>
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt">In&nbsp;[36]:</div>
+    <div class="inner_cell">
+      <div class="input_area">
+<div class="highlight"><pre><span></span><span class="n">R</span><span class="o">.&lt;</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Q2</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;invlex&#39;</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="p">[</span><span class="n">Q2</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">Q2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="p">,</span> 
+     <span class="n">Q2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="n">Q2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="o">^</span><span class="mi">2</span> <span class="o">-</span> <span class="n">Q2</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span>
+     <span class="n">Q2</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="n">Q2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="o">*</span><span class="n">z</span> <span class="o">+</span> <span class="n">Q2</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">^</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt">In&nbsp;[37]:</div>
+    <div class="inner_cell">
+      <div class="input_area">
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sage.rings.polynomial.toy_buchberger</span> <span class="kn">import</span> <span class="n">buchberger_improved</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">buchberger_improved</span><span class="p">(</span><span class="n">ideal</span><span class="p">(</span><span class="n">F</span><span class="p">));</span> <span class="n">g</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">g</span>
+</pre></div>
+
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpCR&nbsp;[37]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.016&nbsp;s</div>
+          <pre>[x^3, x*y + ...1100010*x^2, y^2 + ...11001*x^2, z + ...0000000010*x]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpFP&nbsp;[37]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.016&nbsp;s</div>
+          <pre>[x^3, x*y + ...1111111111111111111111111100010*x^2, y^2 + ...011111111111111111111111111001*x^2, z + ...0000000000000000000000000000010*x]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLC&nbsp;[37]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">1.656&nbsp;s</div>
+          <pre>[x^3, x*y + ...111100010*x^2, y^2 + ...1111111001*x^2, z + ...0000000010*x]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[37]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">1.868&nbsp;s</div>
+          <pre>[x^3, x*y + ...111100010*x^2, y^2 + ...1111111001*x^2, z + ...0000000010*x]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt"></div>
+    <div class="inner_cell">
+      <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="$p$-adic-differential-equations">$p$-adic differential equations<a class="anchor-link" href="#$p$-adic-differential-equations">&#182;</a></h2>
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt">In&nbsp;[38]:</div>
+    <div class="inner_cell">
+      <div class="input_area">
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">edp_simple</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">gen</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">u</span> <span class="o">-=</span> <span class="n">h</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">derivative</span><span class="p">()</span><span class="o">/</span><span class="n">h</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">-</span> <span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">integral</span><span class="p">()</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">[:</span><span class="mi">2</span><span class="o">^</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">u</span>
+</pre></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt">In&nbsp;[39]:</div>
+    <div class="inner_cell">
+      <div class="input_area">
+<div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">S</span><span class="o">.&lt;</span><span class="n">t</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PowerSeriesRing</span><span class="p">(</span><span class="n">Q2</span><span class="p">,</span> <span class="mi">2</span><span class="o">^</span><span class="n">N</span><span class="p">)</span>
+</pre></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt">In&nbsp;[40]:</div>
+    <div class="inner_cell">
+      <div class="input_area">
+<div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">t</span> <span class="o">+</span> <span class="n">t</span><span class="o">^</span><span class="mi">3</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">t</span><span class="o">^</span><span class="mi">2</span> <span class="o">*</span> <span class="n">random_element</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">derivative</span><span class="p">()</span> <span class="o">/</span> <span class="n">h</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+ <div class="cell border-box-sizing code_cell rendered">
+  <div class="input">
+    <div class="prompt input_prompt">In&nbsp;[41]:</div>
+    <div class="inner_cell">
+      <div class="input_area">
+<div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">edp_simple</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span>
+</pre></div>
+
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpCR&nbsp;[41]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.056&nbsp;s</div>
+          <pre>...10011</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpFP&nbsp;[41]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">0.008&nbsp;s</div>
+          <pre>...011000000000000000000011110011</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLC&nbsp;[41]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">41.623&nbsp;s</div>
+          <pre>...0011110011</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="output_wrapper">
+    <div class="output">
+      <div class="output_area">
+        <div class="prompt output_prompt">ZpLF&nbsp;[41]:</div>
+        <div class="output_text output_subarea output_execute_result">
+          <div class="timings">25.746&nbsp;s</div>
+          <pre>...0011110011</pre>
+        </div>
       </div>
     </div>
   </div>

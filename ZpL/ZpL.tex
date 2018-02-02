@@ -22,7 +22,18 @@
 \usepackage{multirow}
 \usepackage{xspace}
 \usepackage{tabularx,multicol}
-%\usepackage{tikz}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\definecolor{input}{HTML}{303060}
+\definecolor{output}{HTML}{804000}
+\definecolor{string}{HTML}{A02020}
+\definecolor{ring}{HTML}{A020A0}
+\definecolor{function}{HTML}{205080} % {A06020}
+\definecolor{constructor}{HTML}{205080}
+\definecolor{method}{HTML}{205080}
+\definecolor{keyword}{HTML}{008000}
+\definecolor{error}{HTML}{B01010}
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
@@ -46,6 +57,8 @@
 \DeclareMathOperator{\row}{row}
 \DeclareMathOperator{\col}{col}
 
+\newcommand{\ph}{\vphantom{$A^A_A$}}
+
 \newcommand{\N}{\mathbb N}
 \newcommand{\Z}{\mathbb Z}
 \newcommand{\Zp}{\Z_p}
@@ -56,10 +69,29 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\OK}{\mathcal{O}_K}
 
-\newcommand{\ZpL}{\texttt{ZpL}\xspace}
-\newcommand{\ZpLCA}{\texttt{ZpLCA}\xspace}
-\newcommand{\ZpLCR}{\texttt{ZpLCR}\xspace}
-\newcommand{\ZpLF}{\texttt{ZpLF}\xspace}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\ttv}{\texttt{v}\xspace}
+\newcommand{\ttw}{\texttt{w}\xspace}
+\newcommand{\tttmp}{\texttt{tmp}\xspace}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calK}{\mathcal{K}}
+
+\newcommand{\rem}{\,\%\,}
+
+\newcommand{\sage}{\textsc{SageMath}\xspace}
+\newcommand{\ZpCR}{\text{\color{output} \rm \tt ZpCR}\xspace}
+\newcommand{\ZpFP}{\text{\color{output} \rm \tt ZpFP}\xspace}
+\newcommand{\ZpL}{\text{\color{output} \rm \tt ZpL}\xspace}
+\newcommand{\ZpLC}{\text{\color{output} \rm \tt ZpLC}\xspace}
+\newcommand{\ZpLF}{\text{\color{output} \rm \tt ZpLF}\xspace}
+
+\newcommand{\card}{\text{Card}\:}
+\newcommand{\ind}{\text{ind}}
+\newcommand{\coind}{\text{coind}}
+\newcommand{\hgt}{\text{hgt}}
+\newcommand{\cohgt}{\text{cohgt}}
+\newcommand{\inp}{\text{in}}
+\newcommand{\out}{\text{out}}
 
 \newcommand{\famN}{\mathcal{N}}
 
@@ -68,12 +100,18 @@
 \newcommand{\llp}{(\mkern-2.5mu(}
 \newcommand{\rrp}{)\mkern-2.5mu)}
 
-\newcommand{\calU}{\mathcal{U}}
 
 \newcommand{\softO}{O\tilde{~}}
 
 \newcommand{\inv}{\text{\rm inv}}
 \newcommand{\app}{\text{\rm app}}
+
+\newcommand{\cIn}{{\color{input} \tt \phantom{Zp}In}:}
+\newcommand{\cOut}{{\color{red} \tt \phantom{Z}Out}:}
+\newcommand{\cZpCR}{{\color{output} \tt ZpCR}:}
+\newcommand{\cZpFP}{{\color{output} \tt ZpFP}:}
+\newcommand{\cZpLC}{{\color{output} \tt ZpLC}:}
+\newcommand{\cZpLF}{{\color{output} \tt ZpLF}:}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
@@ -98,7 +136,7 @@
 \newtheorem{quest}[theo]{Question}
 \newtheorem{conj}[theo]{Conjecture}
 \theoremstyle{definition}
-\newtheorem{rem}[theo]{Remark}
+\newtheorem{rmk}[theo]{Remark}
 \newtheorem{ex}[theo]{Example}
 \newtheorem{deftn}[theo]{Definition}
 
@@ -132,10 +170,18 @@
 
 \ccsdesc[500]{Computing methodologies~Algebraic algorithms}
 
-\keywords{Algorithms, $p$-adic precision, characteristic polynomial,
-eigenvalue}
+\keywords{Algorithms, $p$-adic precision, Automatic Differentiation}
 
 \begin{abstract}
+We present a new package \ZpL for the Computer Algebra system \sage. It 
+implements a sharp tracking of precision on $p$-adic numbers, following 
+the theory of ultrametric precision introduced in \cite{padicprec}. The 
+underlying algorithms are mostly based on Automatic Differentiation 
+techniques. We introduce them, study their complexity and discuss our 
+design choices.
+We illustrate the benefits of our package (in comparison with previous 
+implementations) with a large sample of examples coming from Linear 
+Algebra, Commutative Algebra and Differential Equations.
 \end{abstract}
 
 \maketitle
@@ -154,148 +200,1396 @@ In this paper, we describe an implementation of this idea in Sage \todo{cite Sag
 
 \todo{Plan of article}
 
+\todo{Convention: in matrices, vectors are represented by row-vector.}
+
 \section{Examples}
+
+We begin our tour of the features of the \ZpL package
+with some basic arithmetic computations.
+The first step is the definition of the $p$-adic ring or field.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+ & {\color{ring}\verb?Z2?}\verb? = Zp(2, print_mode=?{\color{string}\verb?'digits'?}\verb?)? \\
+ & {\color{ring}\verb?Q2?}\verb? = Qp(2, print_mode=?{\color{string}\verb?'digits'?}\verb?)? \\
+\end{tabular}}
+
+\smallskip
+
+\noindent
+It means that we will work in various implementation of the 
+ring of $2$-adic integers with $20$ digits of precision (which
+is the default).
+The rings {\color{ring}\verb?Z3?} and {\color{ring}\verb?Q3?} are defined similarly.
+
+We show the results for \ZpCR%, \ZpFP 
+and \ZpLC.
+Results for \ZpLF are only shown when they differ from \ZpLC.
 
 \subsection{Elementary arithmetic}
 
-\begin{tabular}{|l|l|}
-\verb?R = Zp(3,5)? & \verb?R = ZpL(3,5)? \\
-\verb?x = R(143,5); x? & \verb?x = R(143,5); x? \\
-\hfill\verb?...12022? & \hfill\verb?...12022? \\
-\verb?3*x? & \verb?3*x? \\
-\hfill\verb?...120220? & \hfill\verb?...120220? \\
-\verb?x + x + x? & \verb?x + x + x? \\
-\hfill\verb?...20220? & \hfill\verb?...120220? \\
-\verb?x^3? & \verb?x^3? \\
-\hfill\verb?...020222? & \hfill\verb?...020222? \\
-\verb?x * x * x? & \verb?x * x * x? \\
-\hfill\verb?...20222? & \hfill\verb?...020222? \\
-\end{tabular}
+We first take some random element $x$.
+\todo{Should we say a word about the function \texttt{random\_element}?}
 
-\begin{tabular}{|l|l|}
-\verb?R = Zp(2,10)? & \verb?R = ZpL(2,10)? \\
-\verb?x = R(987,10); x? & \verb?x = R(987,10); x? \\
-\hfill\verb?...1111011011? & \hfill\verb?...1111011011? \\
-\verb?y = R(21,5); y? & \verb?y = R(21,5); y? \\
-\hfill\verb?...10101? & \hfill\verb?...10101? \\
-\verb?u = x + y; u? & \verb?u = x + y; u? \\
-\hfill\verb?...10000? & \hfill\verb?...10000? \\
-\verb?v = x - y; v? & \verb?v = x - y; v? \\
-\hfill\verb?...00110? & \hfill\verb?...00110? \\
-\verb?u + v? & \verb?u + v? \\
-\hfill\verb?...10110? & \hfill\verb?...11110110110? \\
-\end{tabular}
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+ & \verb?x = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z3?}\verb?,5); x? \\
+\cZpCR
+ & \verb?...11111? \\
+%\cZpFP
+% & \verb?...00000000000000011111? \\
+\cZpLC
+ & \verb?...11111? \\
+\end{tabular}}
+
+\smallskip
+
+Multiplication by $3$ is a shift on the digits, whether it 
+is done by addition or multiplication.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl@{\hspace{1.5cm}}rl}
+\cIn
+ & \verb?3*x? &
+\cIn
+ & \verb?x + x + x? \\
+\cZpCR
+ & \verb?...111110? &
+\cZpCR
+ & \verb? ...11110? \\
+%\cZpFP
+% & \verb?...000000000000000111110? \\
+%\cZpFP
+% & \verb?...000000000000000111110? \\
+\cZpLC
+ & \verb?...111110? &
+\cZpLC
+ & \verb?...111110? \\
+\end{tabular}}
+
+\smallskip
+
+%Something is lost however in \ZpCR when performing $x+2x$.
+%
+%\smallskip
+%
+%{\noindent \small
+%\begin{tabular}{rl}
+%\cIn
+% & \verb?y = 2*x; y? \\
+%\cZpCR
+% & \verb?...22222? \\
+%%\cZpFP
+%% & \verb?...00000000000000022222? \\
+%\cZpLC
+% & \verb?...22222? \\
+%\cIn
+% & \verb?x + y? \\
+%\cZpCR
+% & \verb?...11110? \\
+%%\cZpFP
+%% & \verb?...000000000000000111110? \\
+%\cZpLC
+% & \verb?...111110? \\
+%\end{tabular}}
+%
+%\smallskip
+
+\noindent
+\todo{Add a short explanation?}
+
+The same phenomenon occurs for multiplication.
+%when comparing the computation of $x^3$ and $x \times x^2$.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl@{\hspace{1.5cm}}rl}
+\cIn
+ & \verb?x^3? &
+\cIn
+ & \verb?x * x * x? \\
+\cZpCR
+ & \verb?...010101? &
+\cZpCR
+ & \verb? ...10101? \\
+%\cZpFP
+% & \verb?...00000010100000010101? \\
+%\cZpFP
+% & \verb?...00000010100000010101? \\
+\cZpLC
+ & \verb?...010101? &
+\cZpLC
+ & \verb?...010101? \\
+\end{tabular}}
+
+\medskip
+
+\ZpL is also well suited for working with coefficients 
+with unbalanced precision.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+ & \verb?x = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z2?}\verb?,10)? \\
+ & \verb?y = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z2?}\verb?,5)? \\
+\cIn
+ & \verb?u, v = x+y, x-y? \\
+ & \verb?u, v? \\
+\cZpCR
+ & \verb?(...10111, ...01111)? \\
+\cZpLC
+ & \verb?(...10111, ...01111)? \\
+\end{tabular}}
+
+\smallskip
+
+\noindent
+Now, let us compute $u+v$ and compare it with $2x$ (observe that
+they should be equal).
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl@{\hphantom{\hspace{0.8cm}}}rl}
+\cIn
+ & \verb?u + v? &
+\cIn
+ & \verb?2*x? \\
+\cZpCR
+ & \verb?...00110? &
+\cZpCR
+ & \verb?...00110100110? \\
+\cZpLC
+ & \verb?...00110100110? &
+\cZpLC
+ & \verb?...00110100110? \\
+\end{tabular}}
+
+\smallskip
+
+\noindent
+No loss in precision appears in \ZpLC, contrary to \ZpCR.
+%We remark that \ZpFP also provides all the correct digits. 
 
 \subsection{Linear algebra}
 
-\begin{itemize}
-\item determinant
-\item characteristic polynomial
-\end{itemize}
+In linear algebra, determinant and characteristic polynomial are 
+notoriously hard to compute: see \cite{caruso-roe-vaccon:15, 
+caruso-roe-vaccon:17}. We illustrate this with the following example 
+(using a division-free algorithm for the computation of the 
+characteristic polynomial) :
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+ & \verb?M = ?{\color{function}\verb?random_element?}\verb?(?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Q2?}\verb?,3), prec=10)? \\
+ & \verb?M.?{\color{method}\verb?charpoly?}\verb?()? \\
+\cZpCR
+ & \verb?...00000000000000000001*x^3 + ? \\
+ & \verb?...1001011.011*x^2 + ...0111.01*x + 0? \\
+\cZpLC
+ & \verb?...00000000000000000001*x^3 + ? \\
+ & \verb?...1001011.011*x^2 + ...11100111.01*x +? \\
+ & \verb?...010000010? \\
+\end{tabular}}
+
+%\begin{tabular}{rl}
+%\cIn
+% & \verb?M = ?{\color{function}\verb?random_element?}\verb?(?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Q2?}\verb?,3), prec=10)? \\
+% & \verb?M.determinant()? \\
+%\cZpCR
+% & \verb?...000100000100? \\
+%\cZpFP
+% & \verb? ...11010101010? \\
+%\cZpLC
+% & \verb?  ...0110110001? \\
+%\cZpLF
+% & \verb?...001110111100? \\
+%\cIn
+% & \verb?M.charpoly()? \\
+%\cZpCR
+% & \verb?(...0000000001)*x^3 + (...1001111111)*x^2 ?\\
+% & \verb?+ (...01110101110)*x + (...111011111100)? \\
+%\cZpFP
+% & \verb?...0000000001*x^3 + ...1101001001*x^2 + ?\\
+% & \verb?...0100110011*x + ...00101010110? \\
+%\cZpLC
+% & \verb?...0000000001*x^3 + ...1011000111*x^2 + ?\\
+% & \verb?...0011101000*x + ...1001001111? \\
+%\cZpLF
+% & \verb?...0000000001*x^3 + ...1111000101*x^2 + ?\\
+% & \verb?...0011111111*x + ...110001000100? \\
+%\end{tabular}
 
 \subsection{Commutative algebra}
 
-\begin{itemize}
-\item gcd of polynomials
-\end{itemize}
+Our package can be applied to computation over $p$-adic polynomials. A 
+natural example is that of the computation of GCD, whose stability has 
+been studied in \cite{caruso-2017}.
 
-\section{Theory}
+A naive implementation of the Euclidean algorithm
+can produce different behaviour depending 
+on the type of implementation of the field
+of $p$-adic coefficients.
 
-\subsection{The precision Lemma}
+\smallskip
 
-\subsection{The way the precision is tracked with \ZpL}
+{\noindent \small
+\begin{tabular}{@{}rl}
+\cIn
+ & \verb?S.<x> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(?{\color{ring}\verb?Z2?}\verb?)? \\
+ & \verb?P = ?{\color{function}\verb?random_element?}\verb?(S, degree=10, prec=5)? \\
+ & \verb?Q = ?{\color{function}\verb?random_element?}\verb?(S, degree=10, prec=5)? \\
+ & \verb?D = x^5 + ?{\color{function}\verb?random_element?}\verb?(S, degree=4, prec=8); D? \\
+\cZpCR
+ & \verb?...00000000000000000001*x^5 + ...11111010*x^4 +? \\ 
+ & \verb?...10000000*x^3 + ...11001111*x^2 +? \\
+ & \verb?...10000110*x + ...11100010? \\
+\cZpLC
+ & \verb?...00000000000000000001*x^5 + ...11111010*x^4 +? \\ 
+ & \verb?...10000000*x^3 + ...11001111*x^2 +? \\
+ & \verb?...10000110*x + ...11100010? \\
+\cIn
+ & {\color{keyword}\verb?def?}\verb? ?{\color{function}\verb?euclidean?}\verb?(A,B):? \\
+ & \verb?    ?{\color{keyword}\verb?while?}\verb? B != 0:? \\
+ & \verb?        A, B = B, A % B? \\
+ & \verb?    ?{\color{keyword}\verb?return?}\verb? A.monic()? \\
+ & {\color{function}\verb?euclidean?}\verb?(D*P, D*Q)? \\
+\cZpCR
+ & \verb?0*x^9 + ...1*x^8 + 0*x^7 + 0*x^6 + 0*x^5 +? \\
+ & \verb?0*x^4 + 0*x^3 + ...1*x^2 + ...10*x + ...10? \\
+\cZpLC
+ & \verb?...00000000000000000001*x^5 + ...11111010*x^4 +? \\ 
+ & \verb?...10000000*x^3 + ...11001111*x^2 +? \\
+ & \verb?...10000110*x + ...11100010? \\
+\end{tabular}}
 
-We follow the precision lattice.
-Closely related to automatic differentiation.
+\smallskip
 
-\begin{itemize}
-\item \ZpLCR, \ZpLCA: we use a cap to ensure that we have a lattice at
-each step.
-\item \ZpLF: we work with $\Zp$-submodules of possible positive codimension
-and represent them using matrices of floating point $p$-adics.
-\end{itemize}
+\noindent
+With high probability, $P$ and $Q$ are coprime, implying that the gcd of 
+$DP$ is $DQ$ is $D$.  However, we observe that we do not always get this 
+expected result. More precisely, \ZpCR often founds a gcd of higher 
+degree. Indeed the Euclidean algorithm stops prematurely because the 
+software believes that some early remainder vanishes due to the lack of 
+precision.
+%The situation with ZpFP is the exact opposite:
+%since the precision is too high (always the maximal cap), 
+%the software sometimes does not notice that the remainder vanishes.
+%Hence, it happens that the Euclidean algorithm 
+%obtains a last non-zero remainder of degree less than that of
+%$D.$
 
-\subsection{The notion of working precision}
-
-\begin{itemize}
-\item what is it?
-\item how can we compute it? (Answer: Hermite reduction of the transpose)
-\item how can we estimate it?
-\end{itemize}
-
-\subsection{Correctness}
-
-\begin{itemize}
-\item prove that \ZpLCA and \ZpLCR are correct under some assumptions
-(to be determined)
-\item explain that \ZpLF is not meant to provide proved results
-\end{itemize}
-
-\subsection{Complexity}
-
-\begin{tabular}{l|c|c|}
-& \ZpLCA/\ZpLCR & \ZpLF \\
-\hline
-Creation of a variable & $O(n)$ & $O(n_0)$ \\
-\hline
-Deletion of a variable & $O(m^2)$ & $-$ \\
-\hline
-\end{tabular}
-
-discussion on temporal locality
 
 \section{Presentation of the package}
 
-\begin{itemize}
-\item Discuss coercion/conversion: \texttt{Zp} coerces to \ZpL but no coersion
-in the other direction
-\item How to access to the precision
-\item Diffused digits
-\item Historic of variables creation/deletion, etc...
-\item Other features?
-\end{itemize}
+In this Section, we explain how our package \ZpL works and we analyze
+its performances.
+The main theoretical result on which our package is based in the 
+ultrametric precision theory developed in \cite{padicprec}, which 
+suggests to track precision \emph{via} lattices and differential 
+computations. For this reason, our approach is very inspired by 
+Automatic Differentiation techniques \cite{} and our implementation 
+follows the usual Operator Overloading strategy \cite{}.
+We will introduce two versions of our package, namely \ZpLC and \ZpLF: 
+this former is safer while the latter is faster.
 
-\subsection{More examples}
+This Section is organized as follows.
+\S \ref{ssec:preclemma} contains a brief overview on the theory of
+$p$-adic precision of \cite{padicprec}. 
+In the next two subsections, we explain in more details how \ZpLC and 
+\ZpLF work. \S \ref{ssec:trackprec} is devoted to the implementation of 
+Automatic Differentiation leading to the actual computation of a
+global object modeling the precision (which is the aforementioned 
+lattice). 
+In \S \ref{ssec:viewprec}, we explain how precision on any individual number
+can be recoved from the above computations and discuss the validity
+of our results.
+The overhead complexity induced by our package is analyzed in
+\S \ref{ssec:complexity}.
 
-\begin{tabular}{|l|l|}
-\verb?R = Zp(2)? & \verb?R = ZpL(2)? \\
-\multicolumn{2}{|l|}{\tt x, y, z, t = R(1,15), R(1,15), R(1,15), R(3,15)} \\
-\multicolumn{2}{|l|}{\tt for \_ in range(20):} \\
-\multicolumn{2}{|l|}{\tt \ \ \ \ x, y, z, t = y, z, t, (y*t + z*z)/x} \\
-\multicolumn{2}{|l|}{\tt \ \ \ \ print t} \\
-\hfill\verb?...000000000000100? & \hfill\verb?...000000000000100? \\
-\hfill\verb?...000000000001101? & \hfill\verb?...000000000001101? \\
-\hfill\verb?...000000000110111? & \hfill\verb?...000000000110111? \\
-\hfill\verb?...101010111010111? & \hfill\verb?...101010111010111? \\
-\hfill\verb?...1100111101111? & \hfill\verb?...101100111101111? \\
-\hfill\verb?...1110000010010? & \hfill\verb?...111110000010010? \\
-\hfill\verb?...0001000111001? & \hfill\verb?...100001000111001? \\
-\hfill\verb?...0000011111101? & \hfill\verb?...100000011111101? \\
-\hfill\verb?...1000000110101? & \hfill\verb?...001000000110101? \\
-\hfill\verb?...101101010011? & \hfill\verb?...010101101010011? \\
-\hfill\verb?...110000000000? & \hfill\verb?...001110000000000? \\
-\hfill\verb?...000101011101? & \hfill\verb?...111000101011101? \\
-\hfill\verb?...001001101011? & \hfill\verb?...111001001101011? \\
-\hfill\verb?...000011110011? & \hfill\verb?...111000011110011? \\
-\hfill\verb?...11? & \hfill\verb?...0000000111? \\
-\hfill\verb?...10? & \hfill\verb?...1010001110? \\
-\hfill\verb?...01? & \hfill\verb?...1110110001? \\
-\hfill\verb?...01? & \hfill\verb?...011110111001? \\
-\hfill\verb?...01? & \hfill\verb?...100101101001001? \\
-\hfill\verb?...1? & \hfill\verb?...11111000011? \\
-\end{tabular}
+\smallskip
 
-\begin{itemize}
-\item SOMOS sequence
-\item many multiplications of matrices
-\item Dodgson algorithm
-\item subresultants
-\item Grobner basis
-\item $p$-adic differential equations
-\end{itemize}
+\noindent \textit{Remark about the naming.}
+%
+The letter \texttt{L}, which appears in the name of the package, 
+comes from ``lattices''. The letters \texttt{C} (in \ZpLC) and 
+\texttt{F} (in \ZpLF) stand for ``cap'' and ``float'' respectively.
 
-\subsubsection{$p$-adic differential equations}
+\subsection{The precision Lemma}
+\label{ssec:preclemma}
 
+In \cite{caruso-roe-vaccon:14a}, we have suggested the 
+use of lattices to represent the precision of elements in 
+$K$-vector spaces.  It contrasts with the
+\emph{coordinate-wise method} (of \textit{e.g.}
+ \verb?Zp(5)?) that is used traditionally in \sage and
+where the precision of an element is specified by giving the precision
+of each coordinate separately and is updated after each basic
+operation.
+
+Consider a finite 
+dimensional normed vector space $E$ 
+defined over $K$. 
+We use the notation $\Vert \cdot \Vert_E$ for the norm 
+on $E$ and $B^-_E(r)$ (resp. $B^{\phantom -}_E(r)$) for the open (resp. 
+closed) ball of radius $r$ centered at the origin. A \emph{lattice} $L \subset 
+E$ is a sub-$\O_K$-module which generates $E$ over $K$. 
+Because of ultrametricity, the balls $B^{\phantom 
+-}_E(r)$ and $B^-_E(r)$ are examples of lattices. 
+Lattices can be thought of as special neighborhoods of $0,$
+ and therefore are good 
+candidates to model precision data. Moreover, as revealed in 
+\cite{caruso-roe-vaccon:14a}, they behave quite well under (strictly) 
+differentiable maps:
+
+\begin{prop}
+\label{prop:precision}
+Let $E$ and $F$ be two finite dimensional normed vector spaces over $K$ 
+and $f : U \rightarrow F$ be a function defined on an open subset $U$ of 
+$E$. We assume that $f$ is differentiable at some point $v_0 \in U$ and 
+that the differential $df_{v_0}$ is surjective.
+Then, for all $\rho \in (0, 1]$, there exists a positive real
+number $\delta$ such that, for all $r \in (0, \delta)$, any lattice
+$H$ such that $B^-_E(\rho r) \subset H \subset B^{\phantom -}_E(r)$ 
+satisfies:
+\begin{equation}
+\label{eq:firstorder}
+f(v_0 + H) = f(v_0) + df_{v_0} (H).
+\end{equation}
+\end{prop}
+
+This proposition enables the \emph{lattice method} of tracking precision,
+where the precision of the input is specified as a lattice $H$ and precision
+is tracked via differentials of the steps within a given algorithm.
+The equality sign in Eq.~\eqref{eq:firstorder} shows that this method
+yields the optimum possible precision. 
+We refer to \cite[\S 4.1]{caruso-roe-vaccon:14a} for a more complete 
+exposition.
+We emphasize that polynomials, rational fractions (outside of their poles)
+and converging power series are strictly differentiable.
+
+%The lemma is more precise in the context of so-called
+%integral polynomial functions.
+%A function $f : E \to F$ is said to be
+%\emph{integral polynomial} if it is given by multivariate polynomial 
+%functions with coefficients in $\O_K$ in any (equivalently all) system 
+%of coordinates associated to a $\OK$-basis of $B_E(1)$.
+%
+%\begin{prop}
+%\label{prop:precision2}
+%We keep the notation of Proposition \ref{prop:precision} and assume 
+%in addition that $f$ is integral polynomial. Let $C$ be a positive real
+%number such that $B_F(1) \subset df_{v_0}(B_E(C))$. 
+%Then Proposition \ref{prop:precision} holds with $\delta = C \cdot
+%\rho^{-1}$.
+%\end{prop}
+
+\subsection{Tracking precision}
+\label{ssec:trackprec}
+
+We now explain in more details the internal mecanisms \ZpLC and \ZpLF 
+use for tracking precision. 
+
+In what follows, it will be convenient to use a notion of discrete time 
+represented by the letter $t$. Rigorously, it is defined as follows: 
+$t=0$ when the $p$-adic ring $\ZpLC(\:\cdots)$ is created and increases by 
+$1$ each time a variable is created, deleted\footnote{The deletion can
+be explicit (through a call to the \texttt{del} operator) or implicit
+(handled by the garbage collector).} or updated.
+
+Let $\calV_t$ be the set of alive variables at time $t$. Set $E_t = 
+\Qp^{\calV_t}$; it is a finite dimensional vector space over $\Qp$ which 
+should be thought as the set of all possible values that can be taken by 
+the variables in $\calV_t$. For $\ttv \in \calV_t$, let $e_\ttv \in
+\Qp^{\calV_t}$ be the vector whose all coordinates vanished except 
+that at position $\ttv$ which takes the value $1$. The family 
+$(e_\ttv)_{\ttv \in \calV_t}$ is obviously a basis of $E_t$; we will 
+refer to it as the \emph{canonical basis}.
+
+\subsubsection{The case of \ZpLC.}
+
+Following Proposition~\ref{prop:precision},
+the package \ZpLC follows the precision by keeping track of a lattice
+$H_t$ in $E_t$, which is a global object whose purpose is to model the 
+precision on all the variables in $\calV_t$ all together.
+Concretely, this lattice is represented by a matrix $M_t$ in row-echelon 
+form whose rows form a set of generators.
+Below, we explain how the matrices $M_t$ are updated each time
+$t$ increases.
+
+\smallskip
+
+\noindent \textit{Creating a variable.}
+%
+This happens when we encounter an instruction having one of the
+two following forms:
+
+\medskip
+
+\noindent \hspace{5mm} \makebox[2.5cm]{[Computation]\hfill\null}
+\verb?w = ?$f$\verb?(v_1,? \ldots\verb?, v_n)?
+
+\smallskip
+
+\noindent \hspace{5mm} \makebox[2.5cm]{[New value]\hfill\null}
+\verb?w = ?\verb?R(?\text{value}\verb?, ?\text{prec}\verb?)?
+
+\medskip
+
+\noindent
+In both cases, $\ttw$ is the newly created variable. 
+The $\ttv_i$'s stand for already defined variables and $f$ is some 
+$n$-ary builtin function (in most cases it is just addition, 
+subtraction, multiplication or division). On the contrary, the terms 
+``value'' and ``prec'' refer to user-specified constants or integral 
+values which was computed earlier.
+
+\smallskip
+
+Let us first examine the first construction [Computation].
+With our conventions, if $t$ is the time just before the execution of 
+the instruction we are interested in, the $\ttv_i$'s lie in $\calV_t$ 
+while $\ttw$ does not. Moreover $\calV_{t+1} = \calV_t \sqcup \{\ttw\}$, 
+so that $E_{t+1} = E_t \oplus \Qp e_\ttw$.
+The mapping taking the values of variables at time $t$ to that at 
+time $t{+}1$ is:
+$$\begin{array}{rcl}
+F: \quad E_t & \longrightarrow & E_{t+1} \smallskip \\
+\underline x & \mapsto & \underline x \:\oplus f(x_1, \ldots, x_n)
+\end{array}$$
+where $x_i$ is the $\ttv_i$-th coordinate of the vector $\underline x$.
+The Jacobian matrix of $F$ at $\underline x$ is easily computed; it 
+is the block matrix $J_{\underline x}(F) = \big( \begin{matrix} I & L
+\end{matrix} \big)$ where $I$ is the identity matrix of size $\text{Card}
+\:\calV_t$ and $L$ is the column vector whose $\ttv$-th entry is
+$\frac{\partial f}{\partial \ttv} (\underline x)$ if $\ttv$ is one of 
+the $\ttv_i$'s and $0$ otherwise.
+Therefore, the image of $H_t$ under $dF_{\underline x}$ is represented 
+by the matrix $J_{\underline x}(F) \cdot M_t = \big( \begin{matrix} M_t & C
+\end{matrix} \big)$ where $C$ is the column vector:
+\begin{equation}
+\label{eq:defC}
+C = \sum_{i=1}^n \frac{\partial f}{\partial{\ttv_i}} (\underline x)
+\cdot C_i
+\end{equation}
+where $C_i$ is the column vector of $M_t$ corresponding to the
+variable $\ttv_i$.
+Observe that the matrix $J_{\underline x}(F) \cdot M_t$ is no longer a 
+square matrix; it has one extra column. This reflects the fact that 
+$\dim E_{t+1} = \dim E_t + 1$. Rephasing this in a different language, 
+the image of $H_t$ under $dF_{\underline x}$ is no longer a lattice in 
+$E_{t+1}$ but is included in an hyperplane.
+
+The package \ZpLC tackles this issue by introducing a cap: we do not 
+work with $dF_{\underline x}(H_t)$ but instead define the lattice
+$H_{t+1} = dF_{\underline x}(H_t) \oplus p^{N_{t+1}} \Zp e_\ttw$
+where $N_{t+1}$ is an integer, the so-called \emph{cap}.
+Alternatively, one may introduce the application:
+\begin{equation}
+\label{eq:tildeF}
+\begin{array}{rcl}
+\tilde F: \quad E_t \oplus \Qp & \longrightarrow & E_{t+1} \smallskip \\
+\underline x \oplus c & \mapsto & \underline x \:\oplus 
+\big(f(x_1, \ldots, x_n) + c\big).
+\end{array}
+\end{equation}
+The lattice $H_{t+1}$ is then the image of $H_t \oplus p^{N_{t+1}}
+\Zp$ under $d\tilde F_{(\underline x, \star)}$ for any value of $\star$.
+The choice of the 
+cap is of course a sensitive question. \ZpLC proceeds as follows. When a 
+ring is created, it comes with two constants (which can be specified by 
+the user): a relative cap \textsc{relcap} and an absolute cap 
+\textsc{abscap}. With these predefined values, the chosen cap is:
+\begin{equation}
+\label{eq:cap}
+N_{t+1} = 
+\min\big(\textsc{abscap},\, \textsc{relcap} + v_p(y)\big)
+\end{equation}
+with $y = f(x_1, \ldots, x_n)$.
+In concrete terms, the lattice $H_{t+1}$ is represented by the block 
+matrix:
+$$\left(\begin{matrix}
+M_t & C \smallskip \\ 0 & p^{N_{t+1}}
+\end{matrix}\right).$$
+Performing row operations, we see then the entries of $C$ can be
+reduced modulo $p^{N_{t+1}}$ without changing the lattice. In order
+to optimize the size of the objects, we perform this reduction and
+define $M_{t+1}$ by:
+$$M_{t+1} = \left(\begin{matrix}
+M_t & C \text{ mod } p^{N_{t+1}} \smallskip \\ 0 & p^{N_{t+1}}
+\end{matrix}\right).$$
+We observe in particular that $M_{t+1}$ is still in row-echelon form.
+
+Finally, we need to precise which value is set to the newly created 
+variable $\ttw$. We observe that it cannot be exactly $f(x_1, \ldots, 
+x_n)$ because the latter is \emph{a priori} a $p$-adic number which 
+cannot be computed exactly. For this reason, we have to truncate it at 
+some finite precision. Again we choose the precision $O(p^{N_{t+1}})$,
+\emph{i.e.} we define $x_\ttw$ as $f(x_1, \ldots, x_n) \text{ mod } 
+p^{N_{t+1}}$. 
+The congruence
+$\bar x \oplus f(x_1, \ldots, x_n) \equiv
+\bar x \oplus x_\ttw \pmod{H_{t+1}}$
+(which holds thanks to the extra generator we have added) justifies
+this choice.
+
+\smallskip
+
+The second construction
+``\verb?w = ?\verb?R(?\text{value}\verb?, ?\text{prec}\verb?)?''
+is easier to handle since, roughly speaking, it corresponds to the
+case $n = 0$.
+In this situation, keeping in mind the cap, the lattice $H_{t+1}$ is 
+defined by
+$H_{t+1} = H_t + p^{\min(\text{prec}, N_{t+1})} \Zp e_\ttw$
+where the cap $N_{t+1}$ is:
+$$N_{t+1} = \min\big(\textsc{abscap},\, \textsc{relcap} + 
+v_p(\text{value})\big).$$
+The corresponding matrix $M_{t+1}$ is then given by:
+$$M_{t+1} = \left(\begin{matrix}
+M_t & 0 \smallskip \\ 0 & p^{\min(\text{prec}, N_{t+1})}
+\end{matrix}\right).$$
+
+\medskip
+
+\noindent \textit{Deleting a variable.}
+%
+Let us now examine the case where a variable $\ttw$ is deleted (or 
+collected by the garbage collector). Just after the deletion, at
+time $t{+}1$, we then have $\calV_{t+1} = \calV_t \backslash \{\ttw\}$.
+Thus $E_t = E_{t+1} \oplus \Qp e_\ttw$. Moreover, the deletion of $\ttw$
+is modeled by the canonical projection $f : E_t \to E_{t+1}$. Since $f$
+is linear, it is its own differential (at each point) and we set 
+$H_{t+1} = f(H_t)$.
+A matrix representing $H_{t+1}$ is deduced from $M_t$ by erasing the 
+column corresponding to $\ttw$. However the matrix we get this way is 
+no longer in row-echelon form. We then need to re-echelonize it.
+
+\smallskip
+
+More precisely, in the \ZpLC case, the obtained matrix has this 
+shape:
+$$\left(\raisebox{-0.5\height}{\begin{tikzpicture}[scale=0.3]
+\fill[black!20] (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2)--(2,-3)
+    --(3,-3)--(3,-4)--(4,-4)--(4,-5)--(5,-5)--(5,-6)--(6,-6)
+    --(6,-7)--(7,-7)--(7,0)--cycle;
+\draw (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2)--(2,-3)
+    --(3,-3)--(3,-4)--(4,-4)--(4,-5)--(5,-5)--(5,-6)--(6,-6)
+    --(6,-7)--(7,-7);
+\draw[thin] (7,-7)--(7,0)--(0,0);
+\begin{scope}
+\clip (3,0.2) rectangle (4,-4.2);
+\draw[pattern=north east lines] (2.5,0.5) rectangle (4.5,-4.5);
+\end{scope}
+\draw[->] (2.9,-4.8)--(3.2,-4.2);
+\node[scale=0.8] at (2,-5.2) { deleted };
+\node[scale=0.8] at (2,-6) { column };
+\end{tikzpicture}}\right)
+\quad = \quad
+\left(\raisebox{-0.5\height}{\begin{tikzpicture}[scale=0.3]
+\fill[black!20] (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2)--(2,-3)
+    --(3,-3)--(3,-5)--(4,-5)--(4,-6)--(5,-6)--(5,-7)--(6,-7)--(6,0)--cycle;
+\draw (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2)--(2,-3)
+    --(3,-3)--(3,-5)--(4,-5)--(4,-6)--(5,-6)--(5,-7)--(6,-7);
+\draw[thin] (6,-7)--(6,0)--(0,0);
+\end{tikzpicture}}\right)$$
+where a cell is colored when it can contain a non-vanishing entry.
+The top part of the matrix is then already echenolized, so that we
+only have to re-echelonize the bottom right corner whose size is
+the distance from the column corresponding to the erased variable
+to the end. 
+Thanks to the particular shape of the matrix, the echelonization can be 
+performed efficiently: we combine the first rows (of the bottom right 
+part) in order to clear the first unwanted nonzero entry and then 
+proceed recursively.
+
+\medskip
+
+\noindent \textit{Updating a variable.}
+%
+Just like for creation, this happens when the program reaches an
+affectation ``\verb?w = ...?'' where the variable \ttw is already 
+defined. This situation reduces to the creation of the temporary
+variable (the value of the right-hand-size), the deletion of the
+old variable \ttw and a renaming. It can then be handled using the
+methods discussed previously.
+
+\subsubsection{The case of \ZpLF.}
+
+The way the package \ZpLF tracks precision is based on similar 
+techniques but differs from \ZpLC in that it does not introduce a cap 
+but instead allows $H_t$ to be a sub-$\Zp$-module of $E_t$ of any 
+codimension.
+This point of view is nice because it implies smaller objects and 
+consequently leads to faster algorithms. However, it has a huge 
+drawback; indeed, unlike lattices, submodules of $E_t$ of arbitrary 
+codimensions are \emph{not} exact objects, in the sense that they cannot 
+be represented by integral matrices in full generality. Consequently,
+they cannot be encoded on a computer.
+We work around this drawback by replacing everywhere exact $p$-adic 
+numbers by Floating Point $p$-adic numbers (at some given precision) 
+\cite{}.
+
+The fact that the lattice $H_t$ can now have arbitrary codimension
+translates to the fact the matrix $M_t$ can be rectangular.
+Precisely, we will maintain matrices $M_t$ of the shape:
+\begin{equation}
+\label{eq:shapeM-ZpLF}
+\left(\raisebox{-0.5\height}{\begin{tikzpicture}[scale=0.3]
+\fill[black!20] (0,0)--(0,-1)--(3,-1)--(3,-2)--(5,-2)--(5,-3)
+    --(6,-3)--(6,-4)--(8,-4)--(8,-5)--(9,-5)--(9,-6)--(12,-6)
+    --(12,-7)--(14,-7)--(14,0)--cycle;
+\draw (0,0)--(0,-1)--(3,-1)--(3,-2)--(5,-2)--(5,-3)
+    --(6,-3)--(6,-4)--(8,-4)--(8,-5)--(9,-5)--(9,-6)--(12,-6)
+    --(12,-7)--(14,-7);
+\fill (0,0) rectangle (1,-1);
+\fill (3,-1) rectangle (4,-2);
+\fill (5,-2) rectangle (6,-3);
+\fill (6,-3) rectangle (7,-4);
+\fill (8,-4) rectangle (9,-5);
+\fill (9,-5) rectangle (10,-6);
+\fill (12,-6) rectangle (13,-7);
+\draw[thin] (14,-7)--(14,0)--(0,0);
+\end{tikzpicture}}\right)
+\end{equation}
+where only the colored cells may contain a nonzero value and the 
+black cells ---the so-called \emph{pivots}--- do not vanish. A
+variable whose corresponding column contains a pivot will be called 
+a \emph{pivot variable at time $t$}.
+
+%Below, we explain in more details how the package \ZpLF updates 
+%the matrix $M_t$ when a variable is created or deleted.
+
+\medskip
+
+\noindent \textit{Creating a variable.}
+%
+We assume first that the newly created variable is defined through an
+affectation of the form:
+``\verb?w = ?$f$\verb?(v_1,? \ldots\verb?, v_n)?''.
+As already explained in the case of \ZpLC, this code is 
+modeled by the mathematical mapping:
+$$\begin{array}{rcl}
+F: \quad E_t & \longrightarrow & E_{t+1} \smallskip \\
+\underline x & \mapsto & \underline x \:\oplus f(x_1, \ldots, x_n).
+\end{array}$$
+Here $\underline x$ represents the state of memory at time $t$, 
+and $x_i$ is the coordinate of $\underline x$ corresponding to the
+variable $\ttv_i$.
+
+In the \ZpLF framework, $H_{t+1}$ is defined as the image of $H_t$
+under the differential $dF_{\underline x}$. Accordingly, the matrix
+$M_{t+1}$ is defined as $M_{t+1} = \left(\begin{matrix}
+M_t & C \end{matrix}\right)$
+where $C$ is the column vector defined by Eq.~\eqref{eq:defC}.
+%$$C = \sum_{i=1}^n \frac{\partial f}{\partial{\ttv_i}} (\underline x)
+%\cdot C_i.$$
+However, we insist on the fact that all the computations now take
+place in the ``ring'' of Floating Point $p$-adic numbers. Therefore,
+we cannot guarantee that the rows of $M_{t+1}$ generate $H_{t+1}$.
+Nonetheless, they generate a module which is expected to be close
+to $H_{t+1}$.
+
+\smallskip
+
+If \ttw is created by the code
+``\verb?w = ?\verb?R(?\text{value}\verb?, ?\text{prec}\verb?)?'',
+we define $H_{t+1} = H_t \oplus p^{\text{prec}} \Zp e_\ttw$ and consequently:
+$$M_{t+1} = \left(\begin{matrix}
+M_t & 0 \smallskip \\ 0 & p^{\text{prec}}
+\end{matrix}\right)$$
+If $\text{prec}$ is $+\infty$ (or, equivalently, not specified), we
+agree that $H_{t+1} = H_t$ and $M_{t+1} = (\begin{matrix} M_t & 0 
+\end{matrix})$.
+
+\medskip
+
+\noindent \textit{Deleting a variable.} 
+% 
+As for \ZpLC, the matrix operation implied by the deletion of the 
+variable \ttw is the deletion of the corresponding column of $M_t$. If 
+\ttw is not a pivot variable at time $t$, the matrix $M_t$ keeps the 
+form \eqref{eq:shapeM-ZpLF} after erasure; therefore no more treatment 
+is needed in this case.
+
+Otherwise, we re-echelonize the matrix as follows. After the deletion 
+of the column $C_\ttw$, we examine the first column $C$ which was 
+located on the right of $C_\ttw$. Two situations may occur (depending
+on the fact that $C$ was or was not a pivot column):
+
+\noindent \hfill
+\begin{tikzpicture}[scale=0.5]
+\fill[black!20] (0,0)--(1,0)--(1,-2)--(2,-2)--(2,1)--(0,1)--(0,0);
+\draw (0,0)--(1,0)--(1,-2)--(2,-2);
+\node at (1.5,1.8) { $C$ };
+\draw[->] (1.5,1.4)--(1.5,1.1);
+\node at (1.5,-0.5) { \ph $x$ };
+\node at (1.5,-1.5) { \ph $y$ };
+\node[scale=0.9] at (1,-2.8) { First case };
+\begin{scope}[xshift=5cm]
+\fill[black!20] (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2)--(2,1)--(0,1)--(0,0);
+\draw (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2);
+\node at (1.5,1.8) { $C$ };
+\draw[->] (1.5,1.4)--(1.5,1.1);
+\node at (1.5,-1.5) { \ph $y$ };
+\node[scale=0.9] at (1,-2.8) { Second case };
+\end{scope}
+\end{tikzpicture}
+\hfill\null
+
+\noindent
+
+In the first case, we perform row operations in order to replace the 
+couple $(x,y)$ by $(d, 0)$ where $d$ is element of smallest valuation 
+among $x$ and $y$. Observe that $y$ is necessarily nonzero in this case, 
+so that $d$ does not vanish as well. After this operation, we move to
+the next column and repeat the same process.
+
+The second case is divided into two subcases. First, if $y$ does not 
+vanish, it can serve as a pivot and the obtained matrix has the desired 
+shape. When this occurs, the echelonization stops. On the contrary, if 
+$y = 0$, we just untint the corresponding cell and move to the next 
+column without modifying the matrix.
+
+\subsection{Visualizing the precision}
+\label{ssec:viewprec}
+
+Our package implements several methods giving access to the precision 
+structure. In the subsection, we present and discuss the most relevant 
+features in this direction.
+
+\medskip
+
+\noindent \textbf{Absolute precision of one element.}
+%
+This is the simplest accessible precision datum.
+It is encapsulated in the notation when an element is printed. For
+example, the (partial) session:
+
+\smallskip
+
+{\noindent \small
+\noindent
+\begin{tabular}{rl}
+\cIn   & \verb?v = ?{\color{ring}\verb?Z2?}\verb?(173,10); v? \\
+\cZpLC & \verb?...0010101101?
+\end{tabular}}
+
+\smallskip
+
+\noindent
+indicates that the absolute precision on \ttv is $10$ since
+exactly $10$ digits are printed.
+The method {\color{method}\verb?precision_absolute?} provides a more easy-to-use
+access to the absolute precision.
+
+\smallskip
+
+{\noindent \small
+\noindent
+\begin{tabular}{rl}
+\cIn   & \verb?v.?{\color{method}\verb?precision_absolute?}\verb?()? \\
+\cZpLC & \verb?10?
+\end{tabular}}
+
+\smallskip
+
+\noindent
+Both \ZpLC and \ZpLF compute the absolute precision of \ttv (at time 
+$t$) as the smallest valuation of an entry of the column of $M_t$ 
+corresponding to the variable \ttv. Alternatively, it can be defined as 
+the unique integer $N$ for which $\pi_\ttv(H_t) = p^N \Zp$ where 
+$\pi_\ttv : E_t \to \Qp$ takes a vector to its \ttv-coordinate.
+This definition of the absolute precision sounds revelant because, if we 
+believe that the submodule $H_t \subset E_t$ is supposed to encode the 
+precision on the variables in $\calV_t$, 
+Proposition~\ref{prop:precision} applied with the mapping $\pi_\ttv$ 
+indicates that a good candidate for the precision on $e_\ttv$ is 
+$\pi_\ttv(H_t)$, that is $p^N \Zp$.
+
+\medskip
+
+\noindent \textit{About correctness.}
+%
+We emphasize that the absolute precision computed this way is \emph{not} 
+proved, either for \ZpLF or \ZpLC. However, in the case of \ZpLC, one
+can be slightly more precise. Let $\calU_t$ be the vector space of 
+user-defined variables before time $t$ and $U_t$ be the lattice
+modeling the precision on them. The pair $(\calU_t, U_t)$ is defined 
+inductively as follows: we set $\calU_0 = U_0 = 0$ and 
+$\calU_{t+1} = \calU_t \oplus \Qp e_\ttw$,
+$U_{t+1} = U_t \oplus p^{\text{prec}} \Zp e_\ttw$
+when a new variable \ttw is created by
+``\verb?w = R(?value\verb?, ?prec\verb?)?''; otherwise, we put 
+$\calU_{t+1} = \calU_t$ and $U_{t+1} = U_t$. Moreover the values
+entered by the user defines a vector (with integral coordinates)
+$\underline u_t \in \calU_t$.
+
+Similarly, in order to model the caps, we define a pair $(\calK_t, 
+K_t)$ by the recurrence $\calK_{t+1} = \calK_t \oplus \Qp e_\ttw$,
+$K_{t+1} = K_t \oplus p^{N_{t+1}} \Zp e_\ttw$
+each time a new variable \ttw is created. 
+Here, the exponent $N_{t+1}$ is the cap defined by Eq.~\eqref{eq:cap}.
+In case of deletion, we put $\calK_{t+1} = \calK_t$ and $K_{t+1} = K_t$.
+
+Taking the compositum of all the functions $\tilde F$ (\emph{cf} 
+Eq.~\eqref{eq:tildeF}) from time $0$ to $t$, we find that the execution 
+of the session until time $t$ is modeled by a mathematical function
+$\Phi_t : \calU_t \oplus \calK_t \to E_t$.
+From the design of \ZpLC, we deduce further that there exists a 
+vector $\underline k_t \in K_t$ such that:
+$$\Phi_t(\underline u_t \oplus \underline k_t) = \underline x_t 
+\quad \text{and} \quad
+d\Phi_t (U_t \oplus K_t) = H_t$$
+where the differential of $\Phi_t$ is taken at the point
+$\underline u_t \oplus \underline k_t$. 
+Set $\Phi_{t,\ttv} = \pi_\ttv \circ \Phi_t$; it maps 
+$\underline u_t \oplus \underline k_t$ to the \ttv-coordinate 
+$x_{t,\ttv}$ of $\underline x_t$ and satisfies
+$d\Phi_{t,\ttv} (U_t \oplus K_t) = \pi_\ttv(H_t) = p^N \Zp$
+where $N$ is the value returned by {\color{method}\verb?precision_absolute?}. Thus, 
+as soon as the assumptions of Proposition \ref{prop:precision} are
+fulfilled, we derive
+$\Phi_{t,\ttv} \big((\underline u_t + U_t) \oplus (\underline k_t + K_t)\big) = 
+x_{t,\ttv} + p^N \Zp$.
+Noting that $k_t \in K_t$, we finally get:
+\begin{equation}
+\label{eq:absprec}
+\Phi_{t,\ttv} (\underline u_t + U_t) \subset
+\Phi_{t,\ttv} \big((\underline u_t + U_t) \oplus K_t\big) = 
+x_{t,\ttv} + p^N \Zp.
+\end{equation}
+The latter inclusion means that the computed value $x_{t,\ttv}$ is
+accurate at precision $O(p^N)$, \emph{i.e.} that the output absolute
+precision is correct. 
+
+Unfortunately, checking automatically the assumptions of Proposition 
+\ref{prop:precision} in full generality seems to be difficult, though it 
+can be done by hand for many particular examples \cite{}.
+
+\begin{rmk}
+Assuming that Proposition \ref{prop:precision} applies, 
+the absolute precision computed as above is optimal if and only if
+the inclusion of \eqref{eq:absprec} is an equality. Applying again
+Proposition \ref{prop:precision}
+with the restricted mapping $\Phi_{t,\ttv} : \calU_t \to \Qp$ and the
+lattice $U_t$, we find that this happens if and only if
+$d\Phi_{t,\ttv}(U_t) = p^N \Zp$.
+
+Unfortunately, the latter condition cannot be checked on the matrix 
+$M_t$ (because of reductions). 
+However it is possible (and easy) to check whether the weaker condition 
+$d\Phi_{t,\ttv}(K_t) \subsetneq p^N \Zp$. This checking is achieved by 
+the method
+\verb?is_precision_capped? (provided by our package) which returns true 
+if $d\Phi_{t,\ttv}(K_t) = p^N \Zp$. As a consequence, when this method
+answers false, the absolute precision computed by the software is
+likely optimal.
+\end{rmk}
+
+\noindent \textbf{Precision on a subset of elements.}
+%
+Our package implements the method {\color{method}\verb?precision_lattice?} through which 
+we can have access to the joint precision on a set of variables: it 
+outputs a matrix (in echelon form) whose rows generate a lattice 
+representing the precision on the subset of given variables.
+
+When the variables are ``independant'', the precision lattice is
+split and the method {\color{method}\verb?precision_lattice?} outputs a diagonal
+matrix:
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn   & \verb?x = ?{\color{ring}\verb?Z2?}\verb?(987,10); y = ?{\color{ring}\verb?Z2?}\verb?(21,5)? \\
+       & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision_lattice?}\verb?([x,y])? \\
+\cZpLC & \verb?[1024    0]? \\
+       & \verb?[   0   32]?
+\end{tabular}}
+
+\smallskip
+
+\noindent
+However, after some computations, the precision matrix evolves and 
+does not remain diagonal in general (though it is always triangular
+because it is displayed in row-echelon form):
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn   & \verb?u, v = x+y, x-y? \\
+       & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision_lattice?}\verb?([u,v])? \\
+\cZpLC & \verb?[  32 2016]? \\
+       & \verb?[   0 2048]?
+\end{tabular}}
+
+\smallskip
+
+\noindent
+The fact that the precision matrix is no longer diagonal indicates
+that some well-chosen linear combinations of $u$ and $v$ are known
+with more digits than $u$ and $v$ themselves. In this particular
+example, the sum $u+v$ is known at precision $O(2^{11})$ while the
+(optimal) precision on $u$ and $v$ separately is only $O(2^5)$.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn   & \verb?u, v? \\
+\cZpLC & \verb?(...10000, ...00110)? \\
+\cIn   & \verb?u + v? \\
+\cZpLC & \verb?...11110110110? \\
+\end{tabular}}
+
+\medskip
+
+\noindent \textit{Diffused digits of precision.}
+%
+The phenomenon observed above is formalized by the notion of
+diffused digits of precision introduced in \cite{}. We recall
+briefly its definition.
+
+\begin{deftn}
+\label{def:diffused}
+Let $E$ be a $\Qp$-vector space endowed with a distinguished basis 
+$(e_1, \ldots, e_n)$ and write $\pi_i : E \to \Qp e_i$ for the 
+projections.
+Let $H \subset E$ be a lattice. The number of \emph{diffused digits of 
+precision} of $H$ is the length of $H_0/H$ where $H_0 = \pi_1(H) \oplus 
+\cdots \oplus \pi_n(H)$.
+\end{deftn}
+
+If $H$ represents the actual precision on some object, then
+$H_0$ is the smallest diagonal lattice containing $H$. It then
+corresponds to the maximal \emph{coordinate-wise} precision we can 
+reach on the set of $n$ variables corresponding to the basis $(e_1,
+\ldots, e_n)$.
+The diffused digits of precision only appear on linear combinations
+of those variables.
+
+The method {\color{method}\verb?number_of_diffused_digits?} computes the number of
+diffused digits of precision on a set of variables. Observe:
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn   & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?number_of_diffused_digits?}\verb?([x,y])? \\
+\cZpLC & \verb?0? \\
+\cIn   & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?number_of_diffused_digits?}\verb?([u,v])? \\
+\cZpLC & \verb?6? \\
+\end{tabular}}
+
+\smallskip
+
+\noindent
+For the last example, we recall that the relevant precision lattice 
+$H$ is generated by the $2 \times 2$ matrix:
+$$\left(\begin{matrix} 2^5 & 2016 \\ 0 & 2^{11} \end{matrix}\right).$$
+The minimal diagonal suplattice $H_0$ of $H$ is generated by the scalar matrix 
+$2^5 \cdot \text{I}_2$ and contains $H$ with index $2^6$ in it. This is 
+where the $6$ digits of precision comes from.
+There are easily visible here: the sum $u+v$ is known with $11$ digits,
+that is exactly $6$ more digits than the summands $u$ and $v$.
+
+\subsection{Complexity}
+\label{ssec:complexity}
+
+We now discuss the cost of the above operations.
+In what follows, we shall count operations in $\Qp$. Although $\Qp$
+is an inexact field, our model of complexity makes sense because the
+size of the $p$-adic numbers we manipulate will all have roughly the
+same size: for \ZpLF, it is the precision we use for Floating Point 
+Arithmetic while, for \ZpLC, it is the absolute cap which
+was fixed at the beginning.
+
+It is convenient to introduce a total order on $\calV_t$: for $\ttv, 
+\ttw \in \calV_t$, we convene that $\ttv <_t \ttw$ is \ttv was created 
+before~\ttw. By construction, the columns of the matrix $M_t$ are 
+ordered with respect to $<_t$. We denote by $r_t$ (resp. $c_t$) the
+number of rows (resp. columns) of $M_t$. By construction $r_t$ is
+also the cardinality of $\calV_t$. We have $c_t \leq r_t$ and the 
+equality always holds in the \ZpLC case.
+
+For $\ttv \in \calV_t$, we define the \emph{index} of \ttv, denoted by 
+$\ind_t(\ttv)$ as the number of elements of $\calV_t$ which are not 
+greater than \ttv. If we sort the elements of $\calV_t$ by increasing 
+order, \ttv then appears in $\ind_t(\ttv)$-th position.
+We also define the \emph{co-index} of \ttv by
+$\coind_t(\ttv) = r_t - \ind_t(\ttv)$.
+
+Similarly, for any variable $\ttv \in \calV_t$, we define the 
+\emph{height} (resp. the \emph{co-height}) of \ttv at time $t$ as the 
+number of pivot variables \ttw such that $\ttw \leq_t \ttv$ (resp. 
+$\ttw >_t \ttv$). We denote it by $\hgt_t(\ttv)$ (resp. by 
+$\cohgt_t(\ttv)$). Clearly $\hgt_t(\ttv) + \cohgt_t(\ttv) = c_t$.
+The height of \ttv is the height of the significant 
+part of the column of $M_t$ which corresponds to \ttv. In the case of
+\ZpLC, all variables are pivot variables and thus $\hgt_t(\ttv) = 
+\ind_t(\ttv)$ and $\cohgt_t(\ttv) = \coind_t(\ttv)$ for all \ttv.
+
+\medskip
+
+\noindent \textbf{Creating a variable.}
+%
+With the notations of \S \ref{ssec:trackprec}, it is obvious that 
+creating a new variable \ttw requires:
+$$O\bigg(\sum_{i=1}^n \hgt_i(\ttv_i)\bigg) \subset O(n \: c_t)$$ 
+operations in $\Qp$. Here, we recall that $n$ is the arity of the 
+operation defining \ttw. In most cases it is $2$; thus the above
+complexity reduces to $O(c_t)$.
+
+In the \ZpLF context, $c_t$ counts the number of user-defined variables. 
+It is then expected to be constant (roughly equal to the size of the 
+input) while running a given algorithm.
+
+On the contrary, in the \ZpLC context, $c_t$ counts the number of
+variables which are alive at time $t$. It is no longer expected to
+be constant but evolves continuously when the algorithm runs.
+%
+\begin{figure}
+% Characteristic polynomial
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent\hfill%
+\begin{tabular}{|l|r|r|r|r|r|}
+\hline
+\textbf{Dimension} &
+ 2 &   5 &   10 &    20 &      50 \\
+\hline
+\textbf{Total} &
+35 & 424 & 5\:539 & 83\:369 & 3\:170\:657 \\
+\hline
+\textbf{Simult.} &
+17 &  65 &  225 &   845 &    5\:101 \\
+\hline
+\end{tabular}%
+\hfill\null
+
+\vspace{1mm}
+
+\noindent\hfill%
+{\small Computation of characteristic polynomial}%
+\hfill\null
+
+\bigskip
+
+% Euclidean algorithm
+
+\noindent\hfill%
+\begin{tabular}{|l|r|r|r|r|r|r|}
+\hline
+\textbf{Degree} &
+ 2 &   5 &   10 &   20 &   50 &   100 \\
+\hline
+\textbf{Total} &
+54 & 130 &  332 & 1\:036 & 4\:110 & 10\:578 \\ 
+\hline
+\textbf{Simult.} &
+18 &  31 &   56 &  106 &  256 &   507 \\
+\hline
+\end{tabular}%
+\hfill\null
+
+\vspace{1mm}
+
+\noindent\hfill%
+{\small Naive Euclidean algorithm}%
+\hfill\null
+
+\caption{Numbers of involved variables}
+\label{fig:variables}
+\end{figure}
+%
+The tables of Figure~\ref{fig:variables} show the total number of 
+created variables (which reflects the complexity) together with the 
+maximum number of variables alive at the same time (which reflects 
+the memory occupation) while executing two basic computations.
+The first one is the computation of the characteristic polynomial of a 
+square matrix by the default algorithm used by \sage for $p$-adic fields 
+(which is a division-free algorithm of quartic complexity) while the
+second one is the computation of the gcd of two polynomials using a
+naive Euclidean algorithm (of quadratic complexity). We can observe 
+that, for both of them, the memory occupation is roughly equal to the 
+square root of the complexity.
+
+\medskip
+
+\noindent \textbf{Deleting a variable.}
+%
+The deletion of the variable \ttw induces the deletion of the 
+corresponding column of $M_t$, possibly followed by a partial 
+row-echelonization. In terms of algebraic complexity, the deletion is 
+free. The cost of the echelonization is within
+$O\big(\coind_t(\ttw) \cdot \cohgt_t(\ttw) \big)$
+operations in $\Qp$.
+
+In the \ZpLF case, we expect that, most of the time, the deleted
+variables were created after all initial variables were set by the
+user. This means that we expect $\cohgt_t(\ttw)$ to vanish and so,
+the corresponding cost to be negligible.
+
+In the \ZpLC case, we always have $\cohgt_t(\ttw) = \coind_t(\ttw)$, so 
+that the cost becomes $O\big(\coind_t(\ttw)^2\big)$. This does not look 
+nice \emph{a priori}. However, the principle of temporal locality \cite{}
+asserts that $\cohgt_t(\ttw)$ tends to be small in general: destroyed 
+variables are often variables that were created recently. As a basic 
+exemple, variables which are local to a small piece of code (\emph{e.g.} 
+a short function or a loop) do not survive for a long time. It turns
+out that this behaviour is typical in many implementations!
+%
+\begin{figure}
+\noindent\hfill%
+\begin{tikzpicture}[xscale=0.35,yscale=0.08]
+\draw[fill=blue] (-0.45,0) rectangle (0.45,46);
+\draw[fill=blue] (0.65,0) rectangle (1.45,69);
+\draw[fill=blue] (1.65,0) rectangle (2.45,5);
+\draw[fill=blue] (2.65,0) rectangle (3.45,7);
+\draw[fill=blue] (3.65,0) rectangle (4.45,7);
+\draw[fill=blue] (4.65,0) rectangle (5.45,12);
+\draw[fill=blue] (5.65,0) rectangle (6.45,7);
+\draw[fill=blue] (6.65,0) rectangle (7.45,5);
+\draw[fill=blue] (7.65,0) rectangle (8.45,1);
+\draw[fill=blue] (8.65,0) rectangle (9.45,1);
+\draw (9.65,0)--(10.45,0);
+\draw[fill=blue] (10.65,0) rectangle (11.45,1);
+\draw[fill=blue] (11.65,0) rectangle (12.45,1);
+\draw[fill=blue] (12.65,0) rectangle (13.45,2);
+\draw[fill=blue] (13.65,0) rectangle (14.45,2);
+\draw[fill=blue] (14.65,0) rectangle (15.45,2);
+\draw[fill=blue] (15.65,0) rectangle (16.45,2);
+\draw[fill=blue] (16.65,0) rectangle (17.45,1);
+\draw[fill=blue] (17.65,0) rectangle (18.45,1);
+\draw[fill=blue] (18.65,0) rectangle (19.45,1);
+\node[scale=0.7] at (0,-2.5) { $0$ };
+\node[scale=0.7] at (5,-2.5) { $5$ };
+\node[scale=0.7] at (10,-2.5) { $10$ };
+\node[scale=0.7] at (15,-2.5) { $15$ };
+\draw (-2,0)--(-2,72);
+\draw (-2.2,0)--(-1.8,0);
+\node[scale=0.7,left] at (-2.1,0) { $0$ };
+\draw (-2.2,10)--(-1.8,10);
+\node[scale=0.7,left] at (-2.1,10) { $10$ };
+\draw (-2.2,20)--(-1.8,20);
+\node[scale=0.7,left] at (-2.1,20) { $20$ };
+\draw (-2.2,30)--(-1.8,30);
+\node[scale=0.7,left] at (-2.1,30) { $30$ };
+\draw (-2.2,40)--(-1.8,40);
+\node[scale=0.7,left] at (-2.1,40) { $40$ };
+\draw (-2.2,50)--(-1.8,50);
+\node[scale=0.7,left] at (-2.1,50) { $50$ };
+\draw (-2.2,60)--(-1.8,60);
+\node[scale=0.7,left] at (-2.1,60) { $60$ };
+\draw (-2.2,70)--(-1.8,70);
+\node[scale=0.7,left] at (-2.1,70) { $70$ };
+\end{tikzpicture}%
+\hfill\null
+
+\caption{The distribution of $\cohgt_t(\ttw)$}
+\label{fig:deletion}
+\end{figure}
+%
+The histogram of Figure~\ref{fig:deletion} shows 
+the distribution of $\cohgt_t(\ttw)$ while executing the Euclidean
+algorithm (naive implementation) with two polynomials of degree $7$
+as input. The bias is evident: most of the time $\cohgt_t(\ttw) \leq
+1$.
+
+\medskip
+
+\noindent \textbf{Summary: Impact on complexity.}
+% 
+We consider the case of an algorithm with the following characteristics: 
+its complexity is $c$ operations in $\Qp$ (without any tracking of 
+precision), its memory usage is $m$ elements of $\Qp$, its input and its 
+output have size $s_\inp$ and $s_\out$ (elements of $\Qp$) respectively.
+
+In the case of \ZpLF, creating a variable has a cost $O(s_\inp)$ 
+whereas deleting a variable is free. 
+Thus when executed with the \ZpLF mecanism, the complexity of our
+algorithm becomes $O(s_\inp c)$.
+
+In the \ZpLC framework, creating a variable has a cost $O(m)$. The case 
+of deletion is more difficult to handle. However, by the temporal 
+locality principle, it seems safe to assume that it is not the 
+bottleneck (which is the case in practice). Therefore, when executed 
+with the \ZpLF mecanism, the cost of our algorithm is expected to be 
+roughly $O(mc)$. Going further in speculation, we might estimate the 
+magnitude of $m$ as about $s + \sqrt c$ with $s = \max(s_\inp, 
+s_\out)$, leading to a complexity of $O(c^{3/2} + sc)$. For 
+quasi-optimal algorithms, the term $sc \simeq c^2$ dominates. However, 
+as soon as the complexity is at least quadratic in $s$, the dominant 
+term is $c^{3/2}$ and the impact on the complexity is then moderated.
+
+\section{More examples}
+
+\subsection{SOMOS-4}
+
+The SOMOS-4 sequence is a well-known example
+of a computation with a large gap between
+the theoretical loss in precision
+and that of a naive computation (see \cite{caruso-roe-vaccon:14a}).
+We show here that precision can be saved
+even when using a generic implementation
+of the SOMOS iteration.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+ & {\color{keyword}\verb?def?}\verb? ?{\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, n):? \\
+ & \verb?    a, b, c, d = u0, u1, u2, u3? \\
+ & \verb?    ?{\color{keyword}\verb?for?}\verb? _ in ?{\color{keyword}\verb?range?}\verb?(4, n+1):? \\
+ & \verb?        a, b, c, d = b, c, d, (b*d + c*c) / a? \\
+ & \verb?    ?{\color{keyword}\verb?return?}\verb? d? \\
+\cIn
+ & \verb?u0 = u1 = u2 = ?{\color{ring}\verb?Z2?}\verb?(1,15); u3 = ?{\color{ring}\verb?Z2?}\verb?(3,15)? \\
+ & {\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, 18)? \\
+\cZpCR
+ & \verb?...11? \\
+%\cZpFP
+% & \verb?...110111001000100100000000000111? \\
+\cZpLC
+ & \verb?...100000000000111? \\
+\cIn
+ & {\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, 100)? \\
+\cZpCR
+ & {\color{error}\verb?PrecisionError?}\verb?: cannot divide by something?\\
+ &\verb?indistinguishable from zero.? \\
+%\cZpFP
+% & \verb?...110000101000011001001001110001? \\
+\cZpLC
+ & \verb?...001001001110001? \\
+\end{tabular}}
+
+%
+%\begin{tabular}{|l|l|}
+%\verb?R = Zp(2)? & \verb?R = ZpL(2)? \\
+%\multicolumn{2}{|l|}{\tt x, y, z, t = R(1,15), R(1,15), R(1,15), R(3,15)} \\
+%\multicolumn{2}{|l|}{\tt for \_ in range(20):} \\
+%\multicolumn{2}{|l|}{\tt \ \ \ \ x, y, z, t = y, z, t, (y*t + z*z)/x} \\
+%\multicolumn{2}{|l|}{\tt \ \ \ \ print t} \\
+%\hfill\verb?...000000000000100? & \hfill\verb?...000000000000100? \\
+%\hfill\verb?...000000000001101? & \hfill\verb?...000000000001101? \\
+%\hfill\verb?...000000000110111? & \hfill\verb?...000000000110111? \\
+%\hfill\verb?...101010111010111? & \hfill\verb?...101010111010111? \\
+%\hfill\verb?...1100111101111? & \hfill\verb?...101100111101111? \\
+%\hfill\verb?...1110000010010? & \hfill\verb?...111110000010010? \\
+%\hfill\verb?...0001000111001? & \hfill\verb?...100001000111001? \\
+%\hfill\verb?...0000011111101? & \hfill\verb?...100000011111101? \\
+%\hfill\verb?...1000000110101? & \hfill\verb?...001000000110101? \\
+%\hfill\verb?...101101010011? & \hfill\verb?...010101101010011? \\
+%\hfill\verb?...110000000000? & \hfill\verb?...001110000000000? \\
+%\hfill\verb?...000101011101? & \hfill\verb?...111000101011101? \\
+%\hfill\verb?...001001101011? & \hfill\verb?...111001001101011? \\
+%\hfill\verb?...000011110011? & \hfill\verb?...111000011110011? \\
+%\hfill\verb?...11? & \hfill\verb?...0000000111? \\
+%\hfill\verb?...10? & \hfill\verb?...1010001110? \\
+%\hfill\verb?...01? & \hfill\verb?...1110110001? \\
+%\hfill\verb?...01? & \hfill\verb?...011110111001? \\
+%\hfill\verb?...01? & \hfill\verb?...100101101001001? \\
+%\hfill\verb?...1? & \hfill\verb?...11111000011? \\
+%\end{tabular}
+%
+%\begin{itemize}
+%\item SOMOS sequence
+%\item many multiplications of matrices
+%\item Dodgson algorithm
+%\item subresultants
+%\item Grobner basis
+%\item $p$-adic differential equations
+%\end{itemize}
+
+\subsection{Matrix multiplication}
+The multiplication of many matrices has been studied
+in \citep{caruso-roe-vaccon:15} and is known to often 
+provide an heavy diffused digits phenomenon.
+Here is a simple example.
+% The result for \ZpFP has not been
+% added, but its first digits coincide with that of \ZpLC.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+% & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=100)? \\
+ & \verb?MS = ?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Z2?}\verb?,2)? \\
+ & \verb?M = ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
+ & \verb?for _ in range(25):? \\
+ & \verb?    M *= ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
+ & \verb?M? \\
+\cZpCR
+ & \verb?[0 0]? \\
+ & \verb?[0 0]? \\
+\cZpLC
+ & \verb?[...100000000000   ...1000000000]? \\
+ & \verb?[   ...010000000     ...00100000]? \\
+\end{tabular}}
+
+%\ZpL can count the number of diffused digits.
+%\begin{tabular}{rl}
+%\cIn
+% & {\color{ring}\verb?Z2?}\verb?.precision().?{\color{method}\verb?number_of_diffused_digits?}\verb?()? \\
+%\ZpLC
+% & \verb?604? \\
+%\end{tabular}
+
+
+\subsection{Gröbner bases}
+Our package can be applied 
+on complex computations like that of
+Gröbner bases using generic
+Gröbner bases algorithms.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{@{}rl}
+\cIn
+% & {\color{ring}\verb?Q2?}\verb? = Qp(2, prec=50, print_mode="digits")? \\
+ & \verb?R.<x,y,z> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, order=?{\color{string}\verb?'invlex'?}\verb?)? \\
+ & \verb?F = [ ?{\color{ring}\verb?Q2?}\verb?(2,10)*x + ?{\color{ring}\verb?Q2?}\verb?(1,10)*z, ? \\
+ & \verb?      ?{\color{ring}\verb?Q2?}\verb?(1,10)*x^2 + ?{\color{ring}\verb?Q2?}\verb?(1,10)*y^2 - ?{\color{ring}\verb?Q2?}\verb?(2,10)*z^2,? \\
+ & \verb?      ?{\color{ring}\verb?Q2?}\verb?(4,10)*y^2 + ?{\color{ring}\verb?Q2?}\verb?(1,10)*y*z + ?{\color{ring}\verb?Q2?}\verb?(8,10)*z^2 ]? \\
+\cIn
+ & {\color{keyword}\verb?from?}\verb? sage.rings.polynomial.toy_buchberger\?\\
+ & \verb?    ?{\color{keyword}\verb?import?}\verb? ?{\color{function}\verb?buchberger_improved?} \\
+ & \verb?g = ?{\color{function}\verb?buchberger_improved?}\verb?(ideal(F))? \\
+ & \verb?g.?{\color{method}\verb?sort?}\verb?(); g? \\
+\cZpCR
+ & \verb?[x^3, x*y + ...1100010*x^2,? \\
+ & \verb? y^2 + ...11001*x^2, z + ...0000000010*x]? \\
+\cZpLC
+ & \verb?[x^3, x*y + ...111100010*x^2,? \\
+ & \verb? y^2 + ...1111111001*x^2, z + ...0000000010*x]? \\
+\end{tabular}}
+
+\smallskip
+
+As we can see, some loss in precision occurs in the
+Buchberger algorithm and is avoided thanks to \ZpL.
+%Had we used \ZpFP, many padded zeroes or one would have appeared.
+
+\subsection{$p$-adic differential equations}
 
 In \cite{LV16}, the behaviour of the precision when solving
 $p$-adic differential equations with separation of 
@@ -305,24 +1599,47 @@ when applying a Newton-method solver between
 the theoretic loss in precision and the 
 actual loss in precision for a naive implemenationin \verb?Zp(p)?.
 We can reach this theoretical loss in precision using \verb?ZpL?.
-We use a generic \verb?Newton_Iteration_Solver(g,h,N)?
+We use a generic {\color{function}\verb?Newton_Iteration_Solver?}\verb?(g,h,N)?
 that applies \verb?N? steps of the Newton method for 
 $y'=g \times h(y)$ as described in \cite{LV16}.
 
-\begin{tabular}{|l|l|}
-\verb?R = Qp(2,250)? & \verb?R = QpL(2,250)? \\
-\verb?S = Zp(2,250)? & \verb?S = ZpL(2,250)? \\
-\multicolumn{2}{|l|}{\tt A.<x> = PowerSeriesRing(R,32) } \\
-\multicolumn{2}{|l|}{\tt B.<x> = PowerSeriesRing(S,32)) } \\
-\multicolumn{2}{|l|}{\tt h,y =1+x+x\^{}3 , x+x\^{}2*A(B.random\_element()) } \\
-\multicolumn{2}{|l|}{\tt g=y.derivative()/h(y) } \\
-\multicolumn{2}{|l|}{\tt s=Newton\_Iteration\_Solver(g,h,5)} \\
-\multicolumn{2}{|l|}{\tt print 250-(s[31].lift()-y[31].lift()).valuation(2)} \\
-\hfill\verb?9? & \hfill\verb?4? \\
-\end{tabular}
-The theorical loss in precision for the coefficient of $t^{31}$
-is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
-loss in precision for a naive implementation is clearly more severe.
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+% & \verb?N = 4? \\
+% & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=50, print_mode="digits")? \\
+% & {\color{ring}\verb?Q2?}\verb?=?{\color{ring}\verb?Z2?}\verb?.fraction_field()? \\
+ & \verb?S.<t> = ?{\color{constructor}\verb?PowerSeriesRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, 16)? \\
+ & \verb?h = 1 + t + t^3? \\
+ & \verb?y = t + t^2 * ?{\color{function}\verb?random_element?}\verb?(S,10)? \\
+ & \verb?g = y.derivative() / h(y)? \\
+ & \verb?u = ?{\color{function}\verb?Newton_Iteration_Solver?}\verb?(g, h, 4)? \\
+ & \verb?u[15]? \\
+\cZpCR
+ & \verb?...1101? \\
+\cZpLC
+ & \verb?...11011101? \\
+\end{tabular}}
+
+%\begin{tabular}{|l|l|}
+%\verb?R = Qp(2,250)? & \verb?R = QpL(2,250)? \\
+%\verb?S = Zp(2,250)? & \verb?S = ZpL(2,250)? \\
+%\multicolumn{2}{|l|}{\tt A.<x> = PowerSeriesRing(R,32) } \\
+%\multicolumn{2}{|l|}{\tt B.<x> = PowerSeriesRing(S,32)) } \\
+%\multicolumn{2}{|l|}{\tt h,y =1+x+x\^{}3 , x+x\^{}2*A(B.random\_element()) } \\
+%\multicolumn{2}{|l|}{\tt g=y.derivative()/h(y) } \\
+%\multicolumn{2}{|l|}{\tt s=Newton\_Iteration\_Solver(g,h,5)} \\
+%\multicolumn{2}{|l|}{\tt print 250-(s[31].lift()-y[31].lift()).valuation(2)} \\
+%\hfill\verb?9? & \hfill\verb?4? \\
+%\end{tabular}
+%The last line provides the loss in precision between the
+%original solution of the differential equation and its approximation
+%obtained through computation.
+%The theorical loss in precision for the coefficient of $t^{31}$
+%is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
+%loss in precision for a naive implementation is clearly more severe.
 
 
 \section{Conclusion}
@@ -374,25 +1691,36 @@ We can solve numerically
 the corresponding differential equation
 using the algorithm of \cite{Lercier-Sirvent:08}
 over $\mathbb{Q}_3$ with lattice precision.
-Any generic implementation of the Newton
-method of \cite{Lercier-Sirvent:08} is enough.
+We use an initial precision of 50 digits
+and some generic implementation of the Newton
+method of \cite{Lercier-Sirvent:08}.
 
-\begin{tabular}{|l|}
-\verb?    R = QpL(3)? \\
-\verb?    A.<x> = PolynomialRing(R)?\\
-\verb?    m=67?\\
-\verb?    g=1+(1/4)*x^2+x^6?\\
-\verb?    h=1+((m^2)/4)*x^2+m^6* x^6?\\
-\verb?    y=Lercier_Sirvent(g,h,64)?\\
-\verb?    y[31]?\\
-\verb?(467995903278061284942799/3^14 + O(3^36))*x^31?\\
-\end{tabular}
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+ & \verb?R = Qp(3,50)? \\
+ & \verb?A.<x> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(R)? \\
+ & \verb?m = 67? \\
+ & \verb?g = 1 + (1/4)*x^2 + x^6? \\
+ & \verb?h = 1 + ((m^2)/4)*x^2 + m^6*x^6? \\
+ & \verb?y = ?{\color{function}\verb?Lercier_Sirvent?}\verb?(g, h, 6)? \\
+ & \verb?y[31]? \\
+\cZpCR
+ & \verb?(467995903278061284942799/3^14 + O(3^36))*x^31? \\
+\cZpLC
+ & \verb?(467995903278061284942799/3^14 + O(3^36))*x^31? \\
+\end{tabular}}
+
+\smallskip
 
 We can then see that up to $63,$ the behaviour
 of the loss in relative precision is the same
 as for the coefficient in $x^{31}$: \textbf{no loss
-occured}.
-Thus, those simple manipulations
+occured}. This happens for \ZpCR as for \ZpLC,
+and thus, \ZpCR seems to attain the optimal precision.
+consequently, those simple manipulations
 hint at a different behaviour for the loss 
 in precision in at least some special cases of
 of isogenies defined over $\mathbb{Q}$
