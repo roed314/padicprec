@@ -175,7 +175,7 @@
 \begin{abstract}
 We present a new package \ZpL for the Computer Algebra system \sage. It 
 implements a sharp tracking of precision on $p$-adic numbers, following 
-the theory of ultrametric precision introduced in \cite{padicprec}. The 
+the theory of ultrametric precision introduced in \cite{caruso-roe-vaccon:14a}. The 
 underlying algorithms are mostly based on Automatic Differentiation 
 techniques. We introduce them, study their complexity and discuss our 
 design choices.
@@ -438,7 +438,7 @@ characteristic polynomial) :
 
 Our package can be applied to computation over $p$-adic polynomials. A 
 natural example is that of the computation of GCD, whose stability has 
-been studied in \cite{caruso-2017}.
+been studied in \cite{caruso:2017}.
 
 A naive implementation of the Euclidean algorithm
 can produce different behaviour depending 
@@ -499,17 +499,17 @@ precision.
 In this Section, we explain how our package \ZpL works and we analyze
 its performances.
 The main theoretical result on which our package is based in the 
-ultrametric precision theory developed in \cite{padicprec}, which 
+ultrametric precision theory developed in \cite{caruso-roe-vaccon:14a}, which 
 suggests to track precision \emph{via} lattices and differential 
 computations. For this reason, our approach is very inspired by 
-Automatic Differentiation techniques \cite{} and our implementation 
-follows the usual Operator Overloading strategy \cite{}.
+Automatic Differentiation techniques \cite{rall:1981} and our implementation 
+follows the usual Operator Overloading strategy.
 We will introduce two versions of our package, namely \ZpLC and \ZpLF: 
 this former is safer while the latter is faster.
 
 This Section is organized as follows.
 \S \ref{ssec:preclemma} contains a brief overview on the theory of
-$p$-adic precision of \cite{padicprec}. 
+$p$-adic precision of \cite{caruso-roe-vaccon:14a}. 
 In the next two subsections, we explain in more details how \ZpLC and 
 \ZpLF work. \S \ref{ssec:trackprec} is devoted to the implementation of 
 Automatic Differentiation leading to the actual computation of a
@@ -534,31 +534,27 @@ comes from ``lattices''. The letters \texttt{C} (in \ZpLC) and
 
 In \cite{caruso-roe-vaccon:14a}, we have suggested the 
 use of lattices to represent the precision of elements in 
-$K$-vector spaces.  It contrasts with the
+$\Qp$-vector spaces.  It contrasts with the
 \emph{coordinate-wise method} (of \textit{e.g.}
  \verb?Zp(5)?) that is used traditionally in \sage and
 where the precision of an element is specified by giving the precision
 of each coordinate separately and is updated after each basic
 operation.
 
-Consider a finite 
-dimensional normed vector space $E$ 
-defined over $K$. 
-We use the notation $\Vert \cdot \Vert_E$ for the norm 
-on $E$ and $B^-_E(r)$ (resp. $B^{\phantom -}_E(r)$) for the open (resp. 
-closed) ball of radius $r$ centered at the origin. A \emph{lattice} $L \subset 
-E$ is a sub-$\OK$-module which generates $E$ over $K$. 
-Because of ultrametricity, the balls $B^{\phantom 
--}_E(r)$ and $B^-_E(r)$ are examples of lattices. 
-Lattices can be thought of as special neighborhoods of $0,$
- and therefore are good 
-candidates to model precision data. Moreover, as revealed in 
-\cite{caruso-roe-vaccon:14a}, they behave quite well under (strictly) 
-differentiable maps:
+Consider a finite dimensional normed vector space $E$ defined over 
+$\Qp$. We use the notation $\Vert \cdot \Vert_E$ for the norm on $E$ and 
+$B^-_E(r)$ (resp. $B^{\phantom -}_E(r)$) for the open (resp. closed) 
+ball of radius $r$ centered at the origin. A \emph{lattice} $L \subset 
+E$ is a sub-$\Zp$-module which generates $E$ over $\Qp$. Because of 
+ultrametricity, the balls $B^{\phantom -}_E(r)$ and $B^-_E(r)$ are 
+examples of lattices. Lattices can be thought of as special 
+neighborhoods of $0$, and therefore are good candidates to model 
+precision data. Moreover, as revealed in \cite{caruso-roe-vaccon:14a}, 
+they behave quite well under (strictly) differentiable maps:
 
 \begin{prop}
 \label{prop:precision}
-Let $E$ and $F$ be two finite dimensional normed vector spaces over $K$ 
+Let $E$ and $F$ be two finite dimensional normed vector spaces over $\Qp$ 
 and $f : U \rightarrow F$ be a function defined on an open subset $U$ of 
 $E$. We assume that $f$ is differentiable at some point $v_0 \in U$ and 
 that the differential $df_{v_0}$ is surjective.
@@ -586,8 +582,8 @@ and convergent power series are strictly differentiable.
 %integral polynomial functions.
 %A function $f : E \to F$ is said to be
 %\emph{integral polynomial} if it is given by multivariate polynomial 
-%functions with coefficients in $\O_K$ in any (equivalently all) system 
-%of coordinates associated to a $\OK$-basis of $B_E(1)$.
+%functions with coefficients in $\Zp$ in any (equivalently all) system 
+%of coordinates associated to a $\Zp$-basis of $B_E(1)$.
 %
 %\begin{prop}
 %\label{prop:precision2}
@@ -606,10 +602,11 @@ use for tracking precision.
 
 In what follows, it will be convenient to use a notion of discrete time 
 represented by the letter $t$. Rigorously, it is defined as follows: 
-$t=0$ when the $p$-adic ring $\ZpLC(\:\cdots)$ is created and increases by 
-$1$ each time a variable is created, deleted\footnote{The deletion can
-be explicit (through a call to the \texttt{del} operator) or implicit
-(handled by the garbage collector).} or updated.
+$t=0$ when the $p$-adic ring $\ZpLC(\:\cdots)$ or $\ZpLF(\:\cdots)$ is 
+created and increases by $1$ each time a variable is created, 
+deleted\footnote{The deletion can be explicit (through a call to the 
+\texttt{del} operator) or implicit (handled by the garbage collector).} 
+or updated.
 
 Let $\calV_t$ be the set of alive variables at time $t$. Set $E_t = 
 \Qp^{\calV_t}$; it is a finite dimensional vector space over $\Qp$ which 
@@ -842,7 +839,7 @@ be represented by integral matrices in full generality. Consequently,
 they cannot be encoded on a computer.
 We work around this drawback by replacing everywhere exact $p$-adic 
 numbers by Floating Point $p$-adic numbers (at some given precision) 
-\cite{}.
+\cite{course-padic}.
 
 The fact that the lattice $H_t$ can now have arbitrary codimension
 translates to the fact the matrix $M_t$ can be rectangular.
@@ -1079,7 +1076,8 @@ precision is correct.
 
 Unfortunately, checking automatically the assumptions of Proposition 
 \ref{prop:precision} in full generality seems to be difficult, though it 
-can be done by hand for many particular examples \cite{}.
+can be done by hand for many particular examples
+\cite{caruso-roe-vaccon:14a, caruso:2017, LV16}.
 
 \begin{rmk}
 Assuming that Proposition \ref{prop:precision} applies, 
@@ -1162,9 +1160,9 @@ example, the sum $u+v$ is known at precision $O(2^{11})$ while the
 
 \noindent \textit{Diffused digits of precision.}
 %
-The phenomenon observed above is formalized by the notion of
-diffused digits of precision introduced in \cite{}. We recall
-briefly its definition.
+The phenomenon observed above is formalized by the notion of diffused
+digits of precision introduced in \cite{caruso-roe-vaccon:15}.
+We recall briefly its definition.
 
 \begin{deftn}
 \label{def:diffused}
@@ -1348,7 +1346,8 @@ the corresponding cost to be negligible.
 
 In the \ZpLC case, we always have $\cohgt_t(\ttw) = \coind_t(\ttw)$, so 
 that the cost becomes $O\big(\coind_t(\ttw)^2\big)$. This does not look 
-nice \emph{a priori}. However, the principle of temporal locality \cite{}
+nice \emph{a priori}. However, the principle of temporal locality 
+\cite{denning:2005}
 asserts that $\cohgt_t(\ttw)$ tends to be small in general: destroyed 
 variables are often variables that were created recently. As a basic 
 exemple, variables which are local to a small piece of code (\emph{e.g.} 
@@ -1598,7 +1597,7 @@ The authors have investigated the gap when that appears
 when applying a Newton-method solver between
 the theoretic loss in precision and the 
 actual loss in precision for a naive implemenationin \verb?Zp(p)?.
-We can reach this theoretical loss in precision using \verb?ZpL?.
+We can reach this theoretical loss in precision using \ZpL.
 We use a generic {\color{function}\verb?Newton_Iteration_Solver?}\verb?(g,h,N)?
 that applies \verb?N? steps of the Newton method for 
 $y'=g \times h(y)$ as described in \cite{LV16}.
@@ -1615,8 +1614,7 @@ $y'=g \times h(y)$ as described in \cite{LV16}.
  & \verb?h = 1 + t + t^3? \\
  & \verb?y = t + t^2 * ?{\color{function}\verb?random_element?}\verb?(S,10)? \\
  & \verb?g = y.derivative() / h(y)? \\
- & \verb?u = ?{\color{function}\verb?Newton_Iteration_Solver?}\verb?(g, h, 4)? \\
- & \verb?u[15]? \\
+ & \verb?u = ?{\color{function}\verb?Newton_Iteration_Solver?}\verb?(g, h, 4); u[15]? \\
 \cZpCR
  & \verb?...1101? \\
 \cZpLC
@@ -1731,4 +1729,3 @@ but not necessarily over $\mathbb{Z}_p.$
 
 
 \end{document}
-
