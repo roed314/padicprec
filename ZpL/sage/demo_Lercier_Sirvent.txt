@@ -1,0 +1,33 @@
+def Lercier_Sirvent(R,g,h,N):
+    S = R.gen()
+    alpha = 0
+    beta = 1
+    d = 2
+    U = 1/beta
+    J = 1
+    V = 1
+    for j in range(0,N):
+        print j
+        Sprime = S.derivative()
+        compo= h(S)
+        U = (U*(2-Sprime*U))[:2^j] 
+        V = R((V+J*compo*(2-V*J))/2)[:2^j]  
+        J = (J*(2-V*J))[:2^j]  
+        S = R(S +V*(((U*J/2)*(g*compo-Sprime^2)).integral()))[:2^(1+j)] 
+        d = 2*d
+        print(S)
+    return S
+    
+    
+A = Qp(3,50,print_mode='terse')
+R.<x> = PolynomialRing(A)
+
+m=67
+
+g=1+(1/4)*x^2+x^6
+h=1+((m^2)/4)*x^2+m^6* x^6 
+S= Lercier_Sirvent(R,g,h,5)
+
+S[15]
+
+S.derivative()^2-g*h(S)

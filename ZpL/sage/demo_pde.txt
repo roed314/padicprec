@@ -1,0 +1,26 @@
+Z2 = Zp(2, prec=50, print_mode="digits")
+Q2=Z2.fraction_field()
+
+def edp_simple(g, h, N):
+    S = g.parent()
+    u = S.gen()
+    for i in range(N):
+        print i
+        u -= h(u) * (u.derivative()/h(u) - g).integral()
+        u = u[:2^(i+1)]
+    return u
+
+N = 5
+S.<t> = PowerSeriesRing(Q2, 2^N)
+S0.<t0> = PowerSeriesRing(Z2, 2^N)
+
+h = 1 + t + t^3
+y = t +t^2*S(random_element(S0,8,18))
+g = y.derivative() / h(y)
+
+u = edp_simple(g, h, 6)
+u
+
+u[15]
+
+y[15]
