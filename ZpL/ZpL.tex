@@ -84,6 +84,8 @@
 \newcommand{\ZpL}{\text{\color{output} \rm \tt ZpL}\xspace}
 \newcommand{\ZpLC}{\text{\color{output} \rm \tt ZpLC}\xspace}
 \newcommand{\ZpLF}{\text{\color{output} \rm \tt ZpLF}\xspace}
+\newcommand{\ZpXX}{\text{\color{output} \rm \tt ZpXX}\xspace}
+\newcommand{\QpXX}{\text{\color{output} \rm \tt QpXX}\xspace}
 
 \newcommand{\card}{\text{Card}\:}
 \newcommand{\ind}{\text{ind}}
@@ -204,35 +206,36 @@ In this paper, we describe an implementation of this idea in \sage \cite{sage}. 
 
 \section{Examples}
 
-We begin our tour of the features of the \ZpL package
-with some basic arithmetic computations.
-The first step is the definition of the $p$-adic ring or field.
+The first step is to define the parents, that are the rings of $p$-adic
+numbers we will work with.
 
 \smallskip
 
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & {\color{ring}\verb?Z2?}\verb? = Zp(2, print_mode=?{\color{string}\verb?'digits'?}\verb?)? \\
- & {\color{ring}\verb?Q2?}\verb? = Qp(2, print_mode=?{\color{string}\verb?'digits'?}\verb?)? \\
+ & {\color{ring}\verb?Z2?}\verb? = ?{\color{output}\verb?ZpXX?}\verb?(2, print_mode=?{\color{string}\verb?'digits'?}\verb?)? \\
+ & {\color{ring}\verb?Q2?}\verb? = ?{\color{output}\verb?QpXX?}\verb?(2, print_mode=?{\color{string}\verb?'digits'?}\verb?)? \\
 \end{tabular}}
 
 \smallskip
 
 \noindent
-It means that we will work in various implementation of the 
-ring of $2$-adic integers with $20$ digits of precision (which
-is the default).
-The rings {\color{ring}\verb?Z3?} and {\color{ring}\verb?Q3?} are defined similarly.
-
-We show the results for \ZpCR%, \ZpFP 
-and \ZpLC.
+\ZpXX is a generic notation for \ZpCR, \ZpLC and \ZpLF.
+The first one \ZpCR is the usual constructor for $p$-adic parents in 
+\sage. It tracks precision using interval arithmetics. On the contrary
+\ZpLC and \ZpLF are provided by our package. In the sequel, we will
+compare the results output with the three 
 Results for \ZpLF are only shown when they differ from \ZpLC.
 
 \subsection{Elementary arithmetic}
 
-We first take some random element $x$.
-\todo{Should we say a word about the function \texttt{random\_element}?}
+We begin our tour of the features of the \ZpL package with some basic 
+arithmetic computations.
+We first pick some random element $x$.
+The function {\color{function}\verb?random_element?} is designed so
+that it guarantees that the picked random element is the same for
+each constructor \ZpCR, \ZpLC and \ZpLF.
 
 \smallskip
 
@@ -250,8 +253,12 @@ We first take some random element $x$.
 
 \smallskip
 
-Multiplication by $3$ is a shift on the digits, whether it 
-is done by addition or multiplication.
+\noindent
+Multiplication by $p$ (here $3$) is a shift on the digits and thus
+leads to a gain of one digit in absolute precision.
+On the example below, we observe that when this multiplication is
+split into several steps, \ZpCR does not see the gain of precision
+while \ZpLC and \ZpLF do.
 
 \smallskip
 
@@ -304,8 +311,6 @@ is done by addition or multiplication.
 %\smallskip
 
 \noindent
-\todo{Add a short explanation?}
-
 The same phenomenon occurs for multiplication.
 %when comparing the computation of $x^3$ and $x \times x^2$.
 
@@ -379,16 +384,21 @@ they should be equal).
 \smallskip
 
 \noindent
-No loss in precision appears in \ZpLC, contrary to \ZpCR.
-%We remark that \ZpFP also provides all the correct digits. 
+Again \ZpCR does not output the optimal precision when the computation
+is split into several steps whereas \ZpLC and \ZpLF do.
+Actually, these toy examples illustrate quite common situations which 
+often occur during the execution of many algorithms. For this reason,
+interval arithmetics often overestimates the losses of precision. 
+Roughly speaking, the aim of our package is to ``fix this misfeature''.
+In the next subsections, we present a bunch of examples showing the
+benefit of \ZpL in various contexts.
 
 \subsection{Linear algebra}
 
-In linear algebra, determinant and characteristic polynomial are 
-notoriously hard to compute: see \cite{caruso-roe-vaccon:15, 
-caruso-roe-vaccon:17}. We illustrate this with the following example 
-(using a division-free algorithm for the computation of the 
-characteristic polynomial) :
+In linear algebra, characteristic polynomials are notoriously hard to 
+compute: see \cite{caruso-roe-vaccon:15, caruso-roe-vaccon:17}. We 
+illustrate this with the following example (using a division-free 
+algorithm for the computation of the characteristic polynomial) :
 
 \smallskip
 
@@ -396,6 +406,12 @@ characteristic polynomial) :
 \begin{tabular}{rl}
 \cIn
  & \verb?M = ?{\color{function}\verb?random_element?}\verb?(?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Q2?}\verb?,3), prec=10)? \\
+ & \verb?M.?{\color{method}\verb?determinant?}\verb?()? \\
+\cZpCR
+ & \verb?...010000010? \\
+\cZpLC
+ & \verb?...010000010? \\
+\cIn
  & \verb?M.?{\color{method}\verb?charpoly?}\verb?()? \\
 \cZpCR
  & \verb?...00000000000000000001*x^3 + ? \\
@@ -434,9 +450,17 @@ characteristic polynomial) :
 % & \verb?...0011111111*x + ...110001000100? \\
 %\end{tabular}
 
+\smallskip
+
+\noindent
+We observe that \ZpLC can guarantee $4$ more digits on the $x$ 
+coefficient. Moreover, it recovers the correct precision on the
+constant coefficient (which is the determinant) whereas \ZpCR is 
+confused and cannot even certify that it does not vanish.
+
 \subsection{Commutative algebra}
 
-Our package can be applied to computation over $p$-adic polynomials. A 
+Our package can be applied to computation with $p$-adic polynomials. A 
 natural example is that of the computation of GCD, whose stability has 
 been studied in \cite{caruso:2017}.
 
@@ -481,11 +505,10 @@ of $p$-adic coefficients.
 
 \noindent
 With high probability, $P$ and $Q$ are coprime, implying that the gcd of 
-$DP$ is $DQ$ is $D$.  However, we observe that we do not always get this 
-expected result. More precisely, \ZpCR often finds a gcd of higher 
-degree. Indeed the Euclidean algorithm stops prematurely because the 
-software believes that some early remainder vanishes due to the lack of 
-precision.
+$DP$ is $DQ$ is $D$.  However, we observe that \ZpCR output a quite 
+different result. The point is that, in the \ZpCR case, Euclidean 
+algorithm stops prematurely because the test \verb?B != 0? fails 
+too early due to the lack of precision.
 %The situation with ZpFP is the exact opposite:
 %since the precision is too high (always the maximal cap), 
 %the software sometimes does not notice that the remainder vanishes.
