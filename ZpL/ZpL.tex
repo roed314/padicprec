@@ -694,10 +694,10 @@ Buchberger algorithm and is avoided thanks to \ZpL.
 In \cite{LV16}, the behaviour of the precision when solving
 $p$-adic differential equations with separation of 
 variables has been studied.
-The authors have investigated the gap when that appears
+The authors have investigated the gap that appears
 when applying a Newton-method solver between
 the theoretic loss in precision and the 
-actual loss in precision for a naive implemenationin \verb?Zp(p)?.
+actual loss in precision for a naive implemenation in \verb?Zp(p)?.
 We can reach this theoretical loss in precision using \ZpL.
 We use a generic {\color{function}\verb?Newton_Iteration_Solver?}\verb?(g,h,N)?
 that applies \verb?N? steps of the Newton method for 
@@ -821,8 +821,8 @@ The equality sign in Eq.~\eqref{eq:firstorder} shows that this method
 yields the optimum possible precision. 
 We refer to \cite[\S 4.1]{caruso-roe-vaccon:14a} for a more complete 
 exposition.
-We emphasize that polynomials, rational functions (away from their poles)
-and convergent power series are strictly differentiable.
+%We emphasize that polynomials, rational functions (away from their poles)
+%and convergent power series are strictly differentiable.
 
 %The lemma is more precise in the context of so-called
 %integral polynomial functions.
@@ -999,15 +999,15 @@ case $n = 0$.
 In this situation, keeping in mind the cap, the lattice $H_{t+1}$ is 
 defined by
 $H_{t+1} = H_t + p^{\min(\text{prec}, N_{t+1})} \Zp e_\ttw$
-where the cap $N_{t+1}$ is:
-$$N_{t+1} = \min\big(\textsc{abscap},\, \textsc{relcap} + 
-v_p(\text{value})\big).$$
+for the cap
+$N_{t+1} = \min\big(\textsc{abscap},\, \textsc{relcap} + 
+v_p(\text{value})\big)$.
 The corresponding matrix $M_{t+1}$ is then given by:
 $$M_{t+1} = \left(\begin{matrix}
 M_t & 0 \smallskip \\ 0 & p^{\min(\text{prec}, N_{t+1})}
 \end{matrix}\right).$$
 
-\medskip
+\smallskip
 
 \noindent \textit{Deleting a variable.}
 %
@@ -1600,6 +1600,7 @@ exemple, variables which are local to a small piece of code (\emph{e.g.}
 a short function or a loop) do not survive for a long time. It turns
 out that this behaviour is typical in many implementations!
 %
+\begin{comment}
 \begin{figure}
 \noindent\hfill%
 \begin{tikzpicture}[xscale=0.35,yscale=0.08]
@@ -1656,6 +1657,10 @@ the distribution of $\cohgt_t(\ttw)$ while executing the Euclidean
 algorithm (naive implementation) with two polynomials of degree $7$
 as input. The bias is evident: most of the time $\cohgt_t(\ttw) \leq
 1$.
+\end{comment}
+For example, while executing the Euclidean algorithm (naive 
+implementation) with two polynomials of degree $7$, most of the 
+time $\cohgt_t(\ttw) \leq 1$.
 
 \medskip
 
