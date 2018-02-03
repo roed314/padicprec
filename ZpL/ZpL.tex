@@ -482,7 +482,7 @@ of $p$-adic coefficients.
 \noindent
 With high probability, $P$ and $Q$ are coprime, implying that the gcd of 
 $DP$ is $DQ$ is $D$.  However, we observe that we do not always get this 
-expected result. More precisely, \ZpCR often founds a gcd of higher 
+expected result. More precisely, \ZpCR often finds a gcd of higher 
 degree. Indeed the Euclidean algorithm stops prematurely because the 
 software believes that some early remainder vanishes due to the lack of 
 precision.
@@ -547,7 +547,7 @@ defined over $K$.
 We use the notation $\Vert \cdot \Vert_E$ for the norm 
 on $E$ and $B^-_E(r)$ (resp. $B^{\phantom -}_E(r)$) for the open (resp. 
 closed) ball of radius $r$ centered at the origin. A \emph{lattice} $L \subset 
-E$ is a sub-$\O_K$-module which generates $E$ over $K$. 
+E$ is a sub-$\OK$-module which generates $E$ over $K$. 
 Because of ultrametricity, the balls $B^{\phantom 
 -}_E(r)$ and $B^-_E(r)$ are examples of lattices. 
 Lattices can be thought of as special neighborhoods of $0,$
@@ -579,8 +579,8 @@ The equality sign in Eq.~\eqref{eq:firstorder} shows that this method
 yields the optimum possible precision. 
 We refer to \cite[\S 4.1]{caruso-roe-vaccon:14a} for a more complete 
 exposition.
-We emphasize that polynomials, rational fractions (outside of their poles)
-and converging power series are strictly differentiable.
+We emphasize that polynomials, rational functions (away from their poles)
+and convergent power series are strictly differentiable.
 
 %The lemma is more precise in the context of so-called
 %integral polynomial functions.
@@ -613,10 +613,10 @@ be explicit (through a call to the \texttt{del} operator) or implicit
 
 Let $\calV_t$ be the set of alive variables at time $t$. Set $E_t = 
 \Qp^{\calV_t}$; it is a finite dimensional vector space over $\Qp$ which 
-should be thought as the set of all possible values that can be taken by 
+should be thought of as the set of all possible values that can be taken by 
 the variables in $\calV_t$. For $\ttv \in \calV_t$, let $e_\ttv \in
-\Qp^{\calV_t}$ be the vector whose all coordinates vanished except 
-that at position $\ttv$ which takes the value $1$. The family 
+\Qp^{\calV_t}$ be the vector whose coordinates all vanish except 
+at position $\ttv$ which takes the value $1$. The family 
 $(e_\ttv)_{\ttv \in \calV_t}$ is obviously a basis of $E_t$; we will 
 refer to it as the \emph{canonical basis}.
 
@@ -698,7 +698,7 @@ The package \ZpLC tackles this issue by introducing a cap: we do not
 work with $dF_{\underline x}(H_t)$ but instead define the lattice
 $H_{t+1} = dF_{\underline x}(H_t) \oplus p^{N_{t+1}} \Zp e_\ttw$
 where $N_{t+1}$ is an integer, the so-called \emph{cap}.
-Alternatively, one may introduce the application:
+Alternatively, one may introduce the map:
 \begin{equation}
 \label{eq:tildeF}
 \begin{array}{rcl}
@@ -734,7 +734,7 @@ M_t & C \text{ mod } p^{N_{t+1}} \smallskip \\ 0 & p^{N_{t+1}}
 \end{matrix}\right).$$
 We observe in particular that $M_{t+1}$ is still in row-echelon form.
 
-Finally, we need to precise which value is set to the newly created 
+Finally, we need to explain which value is set to the newly created 
 variable $\ttw$. We observe that it cannot be exactly $f(x_1, \ldots, 
 x_n)$ because the latter is \emph{a priori} a $p$-adic number which 
 cannot be computed exactly. For this reason, we have to truncate it at 
@@ -879,7 +879,7 @@ a \emph{pivot variable at time $t$}.
 \noindent \textit{Creating a variable.}
 %
 We assume first that the newly created variable is defined through an
-affectation of the form:
+statement of the form:
 ``\verb?w = ?$f$\verb?(v_1,? \ldots\verb?, v_n)?''.
 As already explained in the case of \ZpLC, this code is 
 modeled by the mathematical mapping:
@@ -954,8 +954,8 @@ on the fact that $C$ was or was not a pivot column):
 \noindent
 
 In the first case, we perform row operations in order to replace the 
-couple $(x,y)$ by $(d, 0)$ where $d$ is element of smallest valuation 
-among $x$ and $y$. Observe that $y$ is necessarily nonzero in this case, 
+pair $(x,y)$ by $(d, 0)$ where $d$ is an element of valuation 
+$\min(v_p(x), v_p(y))$. Observe that $y$ is necessarily nonzero in this case, 
 so that $d$ does not vanish as well. After this operation, we move to
 the next column and repeat the same process.
 
@@ -1108,7 +1108,7 @@ we can have access to the joint precision on a set of variables: it
 outputs a matrix (in echelon form) whose rows generate a lattice 
 representing the precision on the subset of given variables.
 
-When the variables are ``independant'', the precision lattice is
+When the variables are ``independent'', the precision lattice is
 split and the method {\color{method}\verb?precision_lattice?} outputs a diagonal
 matrix:
 
@@ -1221,7 +1221,7 @@ Arithmetic while, for \ZpLC, it is the absolute cap which
 was fixed at the beginning.
 
 It is convenient to introduce a total order on $\calV_t$: for $\ttv, 
-\ttw \in \calV_t$, we convene that $\ttv <_t \ttw$ is \ttv was created 
+\ttw \in \calV_t$, we say that $\ttv <_t \ttw$ if \ttv was created 
 before~\ttw. By construction, the columns of the matrix $M_t$ are 
 ordered with respect to $<_t$. We denote by $r_t$ (resp. $c_t$) the
 number of rows (resp. columns) of $M_t$. By construction $r_t$ is
@@ -1327,7 +1327,7 @@ square matrix by the default algorithm used by \sage for $p$-adic fields
 (which is a division-free algorithm of quartic complexity) while the
 second one is the computation of the gcd of two polynomials using a
 naive Euclidean algorithm (of quadratic complexity). We can observe 
-that, for both of them, the memory occupation is roughly equal to the 
+that, for both of them, the memory usage is roughly equal to the 
 square root of the complexity.
 
 \medskip
@@ -1520,7 +1520,7 @@ of the SOMOS iteration.
 
 \subsection{Matrix multiplication}
 The multiplication of many matrices has been studied
-in \citep{caruso-roe-vaccon:15} and is known to often 
+in \cite{caruso-roe-vaccon:15} and is known to often 
 provide an heavy diffused digits phenomenon.
 Here is a simple example.
 % The result for \ZpFP has not been
@@ -1687,7 +1687,7 @@ over $\mathbb{Q}$ if  $m$ is an odd integer.
 We take $m=67.$ The corresponding isogeny has coefficients with possibly
 negative $3$-adic valuation.
 
-We can solve numerically 
+We can numerically solve 
 the corresponding differential equation
 using the algorithm of \cite{Lercier-Sirvent:08}
 over $\mathbb{Q}_3$ with lattice precision.
