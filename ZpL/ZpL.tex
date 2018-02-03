@@ -243,7 +243,7 @@ each constructor \ZpCR, \ZpLC and \ZpLF.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?x = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z3?}\verb?,5); x? \\
+ & \verb?x = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z3?}\verb?, prec=5); x? \\
 \cZpCR
  & \verb?...11111? \\
 %\cZpFP
@@ -347,8 +347,8 @@ with unbalanced precision.
 {\noindent \small
 \begin{tabular}{rl}
 \cIn
- & \verb?x = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z2?}\verb?,10)? \\
- & \verb?y = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z2?}\verb?,5)? \\
+ & \verb?x = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z2?}\verb?, prec=10)? \\
+ & \verb?y = ?{\color{function}\verb?random_element?}\verb?(?{\color{ring}\verb?Z2?}\verb?, prec=5)? \\
 \cIn
  & \verb?u, v = x+y, x-y? \\
  & \verb?u, v? \\
@@ -485,7 +485,7 @@ algorithm, nor the implementation.
 \noindent \textbf{Matrix multiplication.}
 %
 As revealed in \cite{caruso-roe-vaccon:15}, a first simple example where 
-this phenomenon appears is simply matrix multiplication.
+unstability appears is simply matrix multiplication.
 This might be surprising because no division occurs in this situation.
 Observe nevertheless the difference between \ZpCR and \ZpLC.
 
@@ -713,7 +713,7 @@ $y'=g \times h(y)$ as described in \cite{LV16}.
 % & {\color{ring}\verb?Q2?}\verb?=?{\color{ring}\verb?Z2?}\verb?.fraction_field()? \\
  & \verb?S.<t> = ?{\color{constructor}\verb?PowerSeriesRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, 16)? \\
  & \verb?h = 1 + t + t^3? \\
- & \verb?y = t + t^2 * ?{\color{function}\verb?random_element?}\verb?(S,10)? \\
+ & \verb?y = t + t^2 * ?{\color{function}\verb?random_element?}\verb?(S, prec=10)? \\
  & \verb?g = y.derivative() / h(y)? \\
  & \verb?u = ?{\color{function}\verb?Newton_Iteration_Solver?}\verb?(g, h, 4); u[15]? \\
 \cZpCR
@@ -1339,7 +1339,7 @@ $M_t$ (because of reductions).
 However it is possible (and easy) to check whether the weaker condition 
 $d\Phi_{t,\ttv}(K_t) \subsetneq p^N \Zp$. This checking is achieved by 
 the method
-\verb?is_precision_capped? (provided by our package) which returns true 
+{\color{method}\verb?is_precision_capped?} (provided by our package) which returns true 
 if $d\Phi_{t,\ttv}(K_t) = p^N \Zp$. As a consequence, when this method
 answers false, the absolute precision computed by the software is
 likely optimal.
