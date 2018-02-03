@@ -194,7 +194,7 @@ When computing with real and $p$-adic fields, exact results are usually impossib
 
 The standard method for handling precision when computing with real numbers is floating point arithmetic, which may also be used in $p$-adic computation.  At a given precision level, a finite set of representable numbers are chosen, and arithmetic operations are defined to give a representable number that is close to the true result \cite{ieee754:2008}.  Floating point arithmetic has the benefit of efficient arithmetic operations, but users are responsible for tracking the precision of the results.  Numerically unstable algorithms can lead to very inaccurate answers \todo{add reference for numerical stability}.
 
-If provably correct results are desired, interval arithmetic provides an alternative to floating point.  Instead of just tracking an approximation to the answer, the package also tracks a radius within which the true result lies.  This method is commonly used for $p$-adic computations since the ultrametric property of $p$-adic fields frequently keeps the radius small.  Computations remain fairly efficient with this approach, but numerical instability can still lead to dramatic losses in precision, (see Section \ref{sec:demo} for many examples).
+If provably correct results are desired, interval arithmetic provides an alternative to floating point.  Instead of just tracking an approximation to the answer, the package also tracks a radius within which the true result lies.  This method is commonly used for $p$-adic computations since the ultrametric property of $p$-adic fields frequently keeps the radius small.  Computations remain fairly efficient with this approach, but numerical instability can still lead to dramatic losses in precision (see Section \ref{sec:demo} for many examples).
 
 For better control of precision, we may use ellipsoids rather than balls.  This change would have little utility for real numbers, since ellipsoids are not preserved by most functions.  For $p$-adic fields, in contrast, sufficiently small ellipsoids are preserved by differentiable maps.  From an algebraic perspective, these ellipsoids are just cosets of a lattice $H$ inside a $p$-adic vector space, and Proposition \ref{prop:precision} describes how the image of such a coset under a map $f$ is given exactly by applying the differential of $f$ to $H$.
 
@@ -1341,8 +1341,8 @@ $d\Phi_{t,\ttv}(K_t) \subsetneq p^N \Zp$. This checking is achieved by
 the method
 {\color{method}\verb?is_precision_capped?} (provided by our package) which returns true 
 if $d\Phi_{t,\ttv}(K_t) = p^N \Zp$. As a consequence, when this method
-answers false, the absolute precision computed by the software is
-likely optimal.
+answers \textsc{false}, the absolute precision computed by the software 
+is likely optimal.
 \end{rmk}
 
 \noindent \textbf{Precision on a subset of elements.}
@@ -1681,15 +1681,45 @@ magnitude of $m$ as about $s + \sqrt c$ with $s = \max(s_\inp,
 s_\out)$, leading to a complexity of $O(c^{3/2} + sc)$. For 
 quasi-optimal algorithms, the term $sc \simeq c^2$ dominates. However, 
 as soon as the complexity is at least quadratic in $s$, the dominant 
-term is $c^{3/2}$ and the impact on the complexity is then moderated.
+term is $c^{3/2}$ and the impact on the complexity is then limited.
 
 \section{Conclusion}
 
-\begin{itemize}
-\item In which case should we use this package? Mainly for exploration
-\item example of $p$-adic differential equations (especially for $p=2$)
-\end{itemize}
+The package \ZpL provides powerful tools (based on Automatic 
+Differentiation) to track precision in the $p$-adic setting. In many 
+concrete situations, it heavily outdoes usual interval arithmetics 
+which is currently widely used by Computer Algebra softwares (see
+\S \ref{sec:demo} for many examples).
+The impact of complexity is controlled but nevertheless non-negligible 
+(see \S \ref{ssec:complexity}). For this reason, it is not really 
+reasonable to believe that a fast algorithm could rely \emph{directly} 
+on the machinery proposed by \ZpL. At least for now, bringing together 
+rapidity and stability still requires a substantial human contribution 
+and a careful special study of all parameters.
 
+Nevertheless, we do believe that \ZpL can be extremely helpful to 
+whoever wants to design a fast and stable $p$-adic algorihm for a couple 
+of reasons. First, it provides solutions 
+to automatically detect which steps of a given algorithm are stable and 
+which ones are not. This way, it highlights the parts of the algorithm 
+on which the researcher has to concentrate its efforts.
+Second, recall that a classical strategy to improve stability consists 
+in working internally at higher precision. The point is that adjusting 
+at best the internal precision (\emph{i.e.} finding the good compromise 
+between efficiency and accuracy) is not an easy task in general. It 
+turns out that the knowledge of the number of diffused digits of 
+precision gives very useful hints in this direction. Indeed, as an 
+extreme example, consider the case when there is no diffused digit of 
+precision. Then, the optimal precision completely splits over the
+variables and there is no need to increase internally the precision. On 
+the contrary, when there are many diffused digits of precision, a large 
+increment is often required.
+Since \ZpL gives a direct access to the number of diffused digits of 
+precision, it could be very useful to the designer who is concerned
+with the balance between efficiency and accuracy.
+
+
+\begin{comment}
 \subsection{Exploration}
 
 The purpose of this package is that of exploration
@@ -1766,6 +1796,7 @@ hint at a different behaviour for the loss
 in precision in at least some special cases of
 of isogenies defined over $\mathbb{Q}$
 but not necessarily over $\mathbb{Z}_p.$ 
+\end{comment}
 
 \bibliographystyle{plain}
 \bibliography{ZpL}
