@@ -194,7 +194,7 @@ When computing with real and $p$-adic fields, exact results are usually impossib
 
 The standard method for handling precision when computing with real numbers is floating point arithmetic, which may also be used in $p$-adic computation.  At a given precision level, a finite set of representable numbers are chosen, and arithmetic operations are defined to give a representable number that is close to the true result \cite{ieee754:2008}.  Floating point arithmetic has the benefit of efficient arithmetic operations, but users are responsible for tracking the precision of the results.  Numerically unstable algorithms can lead to very inaccurate answers \todo{add reference for numerical stability}.
 
-If provably correct results are desired, interval arithmetic provides an alternative to floating point.  Instead of just tracking an approximation to the answer, the package also tracks a radius within which the true result lies.  This method is commonly used for $p$-adic computations since the ultrametric property of $p$-adic fields frequently keeps the radius small.  Computations remain fairly efficient with this approach, but numerical instability can still lead to dramatic losses in precision, (see Section \ref{SOMOS-4} for example).
+If provably correct results are desired, interval arithmetic provides an alternative to floating point.  Instead of just tracking an approximation to the answer, the package also tracks a radius within which the true result lies.  This method is commonly used for $p$-adic computations since the ultrametric property of $p$-adic fields frequently keeps the radius small.  Computations remain fairly efficient with this approach, but numerical instability can still lead to dramatic losses in precision, (see Section \ref{sec:demo} for many examples).
 
 For better control of precision, we may use ellipsoids rather than balls.  This change would have little utility for real numbers, since ellipsoids are not preserved by most functions.  For $p$-adic fields, in contrast, sufficiently small ellipsoids are preserved by differentiable maps.  From an algebraic perspective, these ellipsoids are just cosets of a lattice $H$ inside a $p$-adic vector space, and Proposition \ref{prop:precision} describes how the image of such a coset under a map $f$ is given exactly by applying the differential of $f$ to $H$.
 
@@ -204,7 +204,8 @@ In this paper, we describe an implementation of this idea in \sage \cite{sage}. 
 
 \todo{Convention: in matrices, vectors are represented by row-vector.}
 
-\section{Examples}
+\section{Short demonstration}
+\label{sec:demo}
 
 The first step is to define the parents, that are the rings of $p$-adic
 numbers we will work with.
@@ -393,12 +394,144 @@ Roughly speaking, the aim of our package is to ``fix this misfeature''.
 In the next subsections, we present a bunch of examples showing the
 benefit of \ZpL in various contexts.
 
+\medskip
+
+\noindent \textbf{SOMOS 4.}
+%
+A first example is the SOMOS-4 sequence. It is defined by the recurrence: 
+$$u_{n+4} = \frac{u_{n+1} u_{n+3} + u_{n+2}^2}{u_n}$$
+and is known for its high numerical instability (see 
+\cite{caruso-roe-vaccon:14a}). Nevertheless, the \ZpL package saves 
+precision even when using a generic unstable implementation of the SOMOS 
+iteration.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+ & {\color{keyword}\verb?def?}\verb? ?{\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, n):? \\
+ & \verb?    a, b, c, d = u0, u1, u2, u3? \\
+ & \verb?    ?{\color{keyword}\verb?for?}\verb? _ in ?{\color{keyword}\verb?range?}\verb?(4, n+1):? \\
+ & \verb?        a, b, c, d = b, c, d, (b*d + c*c) / a? \\
+ & \verb?    ?{\color{keyword}\verb?return?}\verb? d? \\
+\cIn
+ & \verb?u0 = u1 = u2 = ?{\color{ring}\verb?Z2?}\verb?(1,15); u3 = ?{\color{ring}\verb?Z2?}\verb?(3,15)? \\
+ & {\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, 18)? \\
+\cZpCR
+ & \verb?...11? \\
+%\cZpFP
+% & \verb?...110111001000100100000000000111? \\
+\cZpLC
+ & \verb?...100000000000111? \\
+\cIn
+ & {\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, 100)? \\
+\cZpCR
+ & {\color{error}\verb?PrecisionError?}\verb?: cannot divide by something?\\
+ &\verb?indistinguishable from zero.? \\
+%\cZpFP
+% & \verb?...110000101000011001001001110001? \\
+\cZpLC
+ & \verb?...001001001110001? \\
+\end{tabular}}
+
+%
+%\begin{tabular}{|l|l|}
+%\verb?R = Zp(2)? & \verb?R = ZpL(2)? \\
+%\multicolumn{2}{|l|}{\tt x, y, z, t = R(1,15), R(1,15), R(1,15), R(3,15)} \\
+%\multicolumn{2}{|l|}{\tt for \_ in range(20):} \\
+%\multicolumn{2}{|l|}{\tt \ \ \ \ x, y, z, t = y, z, t, (y*t + z*z)/x} \\
+%\multicolumn{2}{|l|}{\tt \ \ \ \ print t} \\
+%\hfill\verb?...000000000000100? & \hfill\verb?...000000000000100? \\
+%\hfill\verb?...000000000001101? & \hfill\verb?...000000000001101? \\
+%\hfill\verb?...000000000110111? & \hfill\verb?...000000000110111? \\
+%\hfill\verb?...101010111010111? & \hfill\verb?...101010111010111? \\
+%\hfill\verb?...1100111101111? & \hfill\verb?...101100111101111? \\
+%\hfill\verb?...1110000010010? & \hfill\verb?...111110000010010? \\
+%\hfill\verb?...0001000111001? & \hfill\verb?...100001000111001? \\
+%\hfill\verb?...0000011111101? & \hfill\verb?...100000011111101? \\
+%\hfill\verb?...1000000110101? & \hfill\verb?...001000000110101? \\
+%\hfill\verb?...101101010011? & \hfill\verb?...010101101010011? \\
+%\hfill\verb?...110000000000? & \hfill\verb?...001110000000000? \\
+%\hfill\verb?...000101011101? & \hfill\verb?...111000101011101? \\
+%\hfill\verb?...001001101011? & \hfill\verb?...111001001101011? \\
+%\hfill\verb?...000011110011? & \hfill\verb?...111000011110011? \\
+%\hfill\verb?...11? & \hfill\verb?...0000000111? \\
+%\hfill\verb?...10? & \hfill\verb?...1010001110? \\
+%\hfill\verb?...01? & \hfill\verb?...1110110001? \\
+%\hfill\verb?...01? & \hfill\verb?...011110111001? \\
+%\hfill\verb?...01? & \hfill\verb?...100101101001001? \\
+%\hfill\verb?...1? & \hfill\verb?...11111000011? \\
+%\end{tabular}
+%
+%\begin{itemize}
+%\item SOMOS sequence
+%\item many multiplications of matrices
+%\item Dodgson algorithm
+%\item subresultants
+%\item Grobner basis
+%\item $p$-adic differential equations
+%\end{itemize}
+
 \subsection{Linear algebra}
 
-In linear algebra, characteristic polynomials are notoriously hard to 
-compute: see \cite{caruso-roe-vaccon:15, caruso-roe-vaccon:17}. We 
-illustrate this with the following example (using a division-free 
-algorithm for the computation of the characteristic polynomial) :
+Many generic algorithms of linear algebra lead to quite important 
+instability when they are used with $p$-adic numbers. In many cases, 
+our package \ZpL rubs this instability without having to change the 
+algorithm, nor the implementation.
+
+\medskip
+
+\noindent \textbf{Matrix multiplication.}
+%
+As revealed in \cite{caruso-roe-vaccon:15}, a first simple example where 
+this phenomenon appears is simply matrix multiplication.
+This might be surprising because no division occurs in this situation.
+Observe nevertheless the difference between \ZpCR and \ZpLC.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+% & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=100)? \\
+ & \verb?MS = ?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Z2?}\verb?,2)? \\
+ & \verb?M = ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
+ & \verb?for _ in range(25):? \\
+ & \verb?    M *= ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
+ & \verb?M? \\
+\cZpCR
+ & \verb?[0 0]? \\
+ & \verb?[0 0]? \\
+\cZpLC
+ & \verb?[...100000000000   ...1000000000]? \\
+ & \verb?[   ...010000000     ...00100000]? \\
+\end{tabular}}
+
+%\ZpL can count the number of diffused digits.
+%\begin{tabular}{rl}
+%\cIn
+% & {\color{ring}\verb?Z2?}\verb?.precision().?{\color{method}\verb?number_of_diffused_digits?}\verb?()? \\
+%\ZpLC
+% & \verb?604? \\
+%\end{tabular}
+
+\smallskip
+
+\noindent
+On the aforementioned example, we notice that \ZpCR is unable to decide 
+whether the product vanishes or not. Having good estimates on the 
+precision is therefore very important in such situations.
+
+\medskip
+
+\noindent \textbf{Characteristic polynomials.}
+%
+Characteristic polynomials are notoriously hard to compute 
+\cite{caruso-roe-vaccon:15, caruso-roe-vaccon:17}. We illustrate this 
+with the following example (using the default algorithm of \sage for the 
+computation of the characteristic polynomial, which is a division free 
+algorithm in this setting) :
 
 \smallskip
 
@@ -460,14 +593,17 @@ confused and cannot even certify that it does not vanish.
 
 \subsection{Commutative algebra}
 
-Our package can be applied to computation with $p$-adic polynomials. A 
-natural example is that of the computation of GCD, whose stability has 
-been studied in \cite{caruso:2017}.
+Our package can be applied to computation with $p$-adic polynomials. 
 
-A naive implementation of the Euclidean algorithm
-can produce different behaviour depending 
-on the type of implementation of the field
-of $p$-adic coefficients.
+\medskip
+
+\noindent \textbf{Euclidean algorithm.}
+%
+A natural example is that of the computation of GCD, whose stability has 
+been studied in \cite{caruso:2017}.
+A naive implementation of the Euclidean algorithm can produce different 
+behaviour depending on the type of implementation of the field of 
+$p$-adic coefficients.
 
 \smallskip
 
@@ -516,8 +652,95 @@ too early due to the lack of precision.
 %obtains a last non-zero remainder of degree less than that of
 %$D.$
 
+\medskip
 
-\section{Presentation of the package}
+\noindent \textbf{Gröbner bases.}
+%
+Our package can be applied on complex computations like that of Gröbner 
+bases using generic Gröbner bases algorithms.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{@{}rl}
+\cIn
+% & {\color{ring}\verb?Q2?}\verb? = Qp(2, prec=50, print_mode="digits")? \\
+ & \verb?R.<x,y,z> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, order=?{\color{string}\verb?'invlex'?}\verb?)? \\
+ & \verb?F = [ ?{\color{ring}\verb?Q2?}\verb?(2,10)*x + ?{\color{ring}\verb?Q2?}\verb?(1,10)*z, ? \\
+ & \verb?      ?{\color{ring}\verb?Q2?}\verb?(1,10)*x^2 + ?{\color{ring}\verb?Q2?}\verb?(1,10)*y^2 - ?{\color{ring}\verb?Q2?}\verb?(2,10)*z^2,? \\
+ & \verb?      ?{\color{ring}\verb?Q2?}\verb?(4,10)*y^2 + ?{\color{ring}\verb?Q2?}\verb?(1,10)*y*z + ?{\color{ring}\verb?Q2?}\verb?(8,10)*z^2 ]? \\
+\cIn
+ & {\color{keyword}\verb?from?}\verb? sage.rings.polynomial.toy_buchberger\?\\
+ & \verb?    ?{\color{keyword}\verb?import?}\verb? ?{\color{function}\verb?buchberger_improved?} \\
+ & \verb?g = ?{\color{function}\verb?buchberger_improved?}\verb?(ideal(F))? \\
+ & \verb?g.?{\color{method}\verb?sort?}\verb?(); g? \\
+\cZpCR
+ & \verb?[x^3, x*y + ...1100010*x^2,? \\
+ & \verb? y^2 + ...11001*x^2, z + ...0000000010*x]? \\
+\cZpLC
+ & \verb?[x^3, x*y + ...111100010*x^2,? \\
+ & \verb? y^2 + ...1111111001*x^2, z + ...0000000010*x]? \\
+\end{tabular}}
+
+\smallskip
+
+\noindent
+As we can see, some loss in precision occurs in the
+Buchberger algorithm and is avoided thanks to \ZpL.
+%Had we used \ZpFP, many padded zeroes or one would have appeared.
+
+\subsection{$p$-adic differential equations}
+
+In \cite{LV16}, the behaviour of the precision when solving
+$p$-adic differential equations with separation of 
+variables has been studied.
+The authors have investigated the gap when that appears
+when applying a Newton-method solver between
+the theoretic loss in precision and the 
+actual loss in precision for a naive implemenationin \verb?Zp(p)?.
+We can reach this theoretical loss in precision using \ZpL.
+We use a generic {\color{function}\verb?Newton_Iteration_Solver?}\verb?(g,h,N)?
+that applies \verb?N? steps of the Newton method for 
+$y'=g \times h(y)$ as described in \cite{LV16}.
+
+\smallskip
+
+{\noindent \small
+\begin{tabular}{rl}
+\cIn
+% & \verb?N = 4? \\
+% & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=50, print_mode="digits")? \\
+% & {\color{ring}\verb?Q2?}\verb?=?{\color{ring}\verb?Z2?}\verb?.fraction_field()? \\
+ & \verb?S.<t> = ?{\color{constructor}\verb?PowerSeriesRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, 16)? \\
+ & \verb?h = 1 + t + t^3? \\
+ & \verb?y = t + t^2 * ?{\color{function}\verb?random_element?}\verb?(S,10)? \\
+ & \verb?g = y.derivative() / h(y)? \\
+ & \verb?u = ?{\color{function}\verb?Newton_Iteration_Solver?}\verb?(g, h, 4); u[15]? \\
+\cZpCR
+ & \verb?...1101? \\
+\cZpLC
+ & \verb?...11011101? \\
+\end{tabular}}
+
+%\begin{tabular}{|l|l|}
+%\verb?R = Qp(2,250)? & \verb?R = QpL(2,250)? \\
+%\verb?S = Zp(2,250)? & \verb?S = ZpL(2,250)? \\
+%\multicolumn{2}{|l|}{\tt A.<x> = PowerSeriesRing(R,32) } \\
+%\multicolumn{2}{|l|}{\tt B.<x> = PowerSeriesRing(S,32)) } \\
+%\multicolumn{2}{|l|}{\tt h,y =1+x+x\^{}3 , x+x\^{}2*A(B.random\_element()) } \\
+%\multicolumn{2}{|l|}{\tt g=y.derivative()/h(y) } \\
+%\multicolumn{2}{|l|}{\tt s=Newton\_Iteration\_Solver(g,h,5)} \\
+%\multicolumn{2}{|l|}{\tt print 250-(s[31].lift()-y[31].lift()).valuation(2)} \\
+%\hfill\verb?9? & \hfill\verb?4? \\
+%\end{tabular}
+%The last line provides the loss in precision between the
+%original solution of the differential equation and its approximation
+%obtained through computation.
+%The theorical loss in precision for the coefficient of $t^{31}$
+%is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
+%loss in precision for a naive implementation is clearly more severe.
+
+\section{What's behind the scene?}
 
 In this Section, we explain how our package \ZpL works and we analyze
 its performances.
@@ -1459,209 +1682,6 @@ s_\out)$, leading to a complexity of $O(c^{3/2} + sc)$. For
 quasi-optimal algorithms, the term $sc \simeq c^2$ dominates. However, 
 as soon as the complexity is at least quadratic in $s$, the dominant 
 term is $c^{3/2}$ and the impact on the complexity is then moderated.
-
-\section{More examples}
-
-\subsection{SOMOS-4}
-
-The SOMOS-4 sequence is a well-known example
-of a computation with a large gap between
-the theoretical loss in precision
-and that of a naive computation (see \cite{caruso-roe-vaccon:14a}).
-We show here that precision can be saved
-even when using a generic implementation
-of the SOMOS iteration.
-
-\smallskip
-
-{\noindent \small
-\begin{tabular}{rl}
-\cIn
- & {\color{keyword}\verb?def?}\verb? ?{\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, n):? \\
- & \verb?    a, b, c, d = u0, u1, u2, u3? \\
- & \verb?    ?{\color{keyword}\verb?for?}\verb? _ in ?{\color{keyword}\verb?range?}\verb?(4, n+1):? \\
- & \verb?        a, b, c, d = b, c, d, (b*d + c*c) / a? \\
- & \verb?    ?{\color{keyword}\verb?return?}\verb? d? \\
-\cIn
- & \verb?u0 = u1 = u2 = ?{\color{ring}\verb?Z2?}\verb?(1,15); u3 = ?{\color{ring}\verb?Z2?}\verb?(3,15)? \\
- & {\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, 18)? \\
-\cZpCR
- & \verb?...11? \\
-%\cZpFP
-% & \verb?...110111001000100100000000000111? \\
-\cZpLC
- & \verb?...100000000000111? \\
-\cIn
- & {\color{function}\verb?somos4?}\verb?(u0, u1, u2, u3, 100)? \\
-\cZpCR
- & {\color{error}\verb?PrecisionError?}\verb?: cannot divide by something?\\
- &\verb?indistinguishable from zero.? \\
-%\cZpFP
-% & \verb?...110000101000011001001001110001? \\
-\cZpLC
- & \verb?...001001001110001? \\
-\end{tabular}}
-
-%
-%\begin{tabular}{|l|l|}
-%\verb?R = Zp(2)? & \verb?R = ZpL(2)? \\
-%\multicolumn{2}{|l|}{\tt x, y, z, t = R(1,15), R(1,15), R(1,15), R(3,15)} \\
-%\multicolumn{2}{|l|}{\tt for \_ in range(20):} \\
-%\multicolumn{2}{|l|}{\tt \ \ \ \ x, y, z, t = y, z, t, (y*t + z*z)/x} \\
-%\multicolumn{2}{|l|}{\tt \ \ \ \ print t} \\
-%\hfill\verb?...000000000000100? & \hfill\verb?...000000000000100? \\
-%\hfill\verb?...000000000001101? & \hfill\verb?...000000000001101? \\
-%\hfill\verb?...000000000110111? & \hfill\verb?...000000000110111? \\
-%\hfill\verb?...101010111010111? & \hfill\verb?...101010111010111? \\
-%\hfill\verb?...1100111101111? & \hfill\verb?...101100111101111? \\
-%\hfill\verb?...1110000010010? & \hfill\verb?...111110000010010? \\
-%\hfill\verb?...0001000111001? & \hfill\verb?...100001000111001? \\
-%\hfill\verb?...0000011111101? & \hfill\verb?...100000011111101? \\
-%\hfill\verb?...1000000110101? & \hfill\verb?...001000000110101? \\
-%\hfill\verb?...101101010011? & \hfill\verb?...010101101010011? \\
-%\hfill\verb?...110000000000? & \hfill\verb?...001110000000000? \\
-%\hfill\verb?...000101011101? & \hfill\verb?...111000101011101? \\
-%\hfill\verb?...001001101011? & \hfill\verb?...111001001101011? \\
-%\hfill\verb?...000011110011? & \hfill\verb?...111000011110011? \\
-%\hfill\verb?...11? & \hfill\verb?...0000000111? \\
-%\hfill\verb?...10? & \hfill\verb?...1010001110? \\
-%\hfill\verb?...01? & \hfill\verb?...1110110001? \\
-%\hfill\verb?...01? & \hfill\verb?...011110111001? \\
-%\hfill\verb?...01? & \hfill\verb?...100101101001001? \\
-%\hfill\verb?...1? & \hfill\verb?...11111000011? \\
-%\end{tabular}
-%
-%\begin{itemize}
-%\item SOMOS sequence
-%\item many multiplications of matrices
-%\item Dodgson algorithm
-%\item subresultants
-%\item Grobner basis
-%\item $p$-adic differential equations
-%\end{itemize}
-
-\subsection{Matrix multiplication}
-The multiplication of many matrices has been studied
-in \cite{caruso-roe-vaccon:15} and is known to often 
-provide an heavy diffused digits phenomenon.
-Here is a simple example.
-% The result for \ZpFP has not been
-% added, but its first digits coincide with that of \ZpLC.
-
-\smallskip
-
-{\noindent \small
-\begin{tabular}{rl}
-\cIn
-% & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=100)? \\
- & \verb?MS = ?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Z2?}\verb?,2)? \\
- & \verb?M = ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
- & \verb?for _ in range(25):? \\
- & \verb?    M *= ?{\color{function}\verb?random_element?}\verb?(MS, prec=5)? \\
- & \verb?M? \\
-\cZpCR
- & \verb?[0 0]? \\
- & \verb?[0 0]? \\
-\cZpLC
- & \verb?[...100000000000   ...1000000000]? \\
- & \verb?[   ...010000000     ...00100000]? \\
-\end{tabular}}
-
-%\ZpL can count the number of diffused digits.
-%\begin{tabular}{rl}
-%\cIn
-% & {\color{ring}\verb?Z2?}\verb?.precision().?{\color{method}\verb?number_of_diffused_digits?}\verb?()? \\
-%\ZpLC
-% & \verb?604? \\
-%\end{tabular}
-
-
-\subsection{Gröbner bases}
-Our package can be applied 
-on complex computations like that of
-Gröbner bases using generic
-Gröbner bases algorithms.
-
-\smallskip
-
-{\noindent \small
-\begin{tabular}{@{}rl}
-\cIn
-% & {\color{ring}\verb?Q2?}\verb? = Qp(2, prec=50, print_mode="digits")? \\
- & \verb?R.<x,y,z> = ?{\color{constructor}\verb?PolynomialRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, order=?{\color{string}\verb?'invlex'?}\verb?)? \\
- & \verb?F = [ ?{\color{ring}\verb?Q2?}\verb?(2,10)*x + ?{\color{ring}\verb?Q2?}\verb?(1,10)*z, ? \\
- & \verb?      ?{\color{ring}\verb?Q2?}\verb?(1,10)*x^2 + ?{\color{ring}\verb?Q2?}\verb?(1,10)*y^2 - ?{\color{ring}\verb?Q2?}\verb?(2,10)*z^2,? \\
- & \verb?      ?{\color{ring}\verb?Q2?}\verb?(4,10)*y^2 + ?{\color{ring}\verb?Q2?}\verb?(1,10)*y*z + ?{\color{ring}\verb?Q2?}\verb?(8,10)*z^2 ]? \\
-\cIn
- & {\color{keyword}\verb?from?}\verb? sage.rings.polynomial.toy_buchberger\?\\
- & \verb?    ?{\color{keyword}\verb?import?}\verb? ?{\color{function}\verb?buchberger_improved?} \\
- & \verb?g = ?{\color{function}\verb?buchberger_improved?}\verb?(ideal(F))? \\
- & \verb?g.?{\color{method}\verb?sort?}\verb?(); g? \\
-\cZpCR
- & \verb?[x^3, x*y + ...1100010*x^2,? \\
- & \verb? y^2 + ...11001*x^2, z + ...0000000010*x]? \\
-\cZpLC
- & \verb?[x^3, x*y + ...111100010*x^2,? \\
- & \verb? y^2 + ...1111111001*x^2, z + ...0000000010*x]? \\
-\end{tabular}}
-
-\smallskip
-
-As we can see, some loss in precision occurs in the
-Buchberger algorithm and is avoided thanks to \ZpL.
-%Had we used \ZpFP, many padded zeroes or one would have appeared.
-
-\subsection{$p$-adic differential equations}
-
-In \cite{LV16}, the behaviour of the precision when solving
-$p$-adic differential equations with separation of 
-variables has been studied.
-The authors have investigated the gap when that appears
-when applying a Newton-method solver between
-the theoretic loss in precision and the 
-actual loss in precision for a naive implemenationin \verb?Zp(p)?.
-We can reach this theoretical loss in precision using \ZpL.
-We use a generic {\color{function}\verb?Newton_Iteration_Solver?}\verb?(g,h,N)?
-that applies \verb?N? steps of the Newton method for 
-$y'=g \times h(y)$ as described in \cite{LV16}.
-
-\smallskip
-
-{\noindent \small
-\begin{tabular}{rl}
-\cIn
-% & \verb?N = 4? \\
-% & {\color{ring}\verb?Z2?}\verb? = Zp(2, prec=50, print_mode="digits")? \\
-% & {\color{ring}\verb?Q2?}\verb?=?{\color{ring}\verb?Z2?}\verb?.fraction_field()? \\
- & \verb?S.<t> = ?{\color{constructor}\verb?PowerSeriesRing?}\verb?(?{\color{ring}\verb?Q2?}\verb?, 16)? \\
- & \verb?h = 1 + t + t^3? \\
- & \verb?y = t + t^2 * ?{\color{function}\verb?random_element?}\verb?(S,10)? \\
- & \verb?g = y.derivative() / h(y)? \\
- & \verb?u = ?{\color{function}\verb?Newton_Iteration_Solver?}\verb?(g, h, 4); u[15]? \\
-\cZpCR
- & \verb?...1101? \\
-\cZpLC
- & \verb?...11011101? \\
-\end{tabular}}
-
-%\begin{tabular}{|l|l|}
-%\verb?R = Qp(2,250)? & \verb?R = QpL(2,250)? \\
-%\verb?S = Zp(2,250)? & \verb?S = ZpL(2,250)? \\
-%\multicolumn{2}{|l|}{\tt A.<x> = PowerSeriesRing(R,32) } \\
-%\multicolumn{2}{|l|}{\tt B.<x> = PowerSeriesRing(S,32)) } \\
-%\multicolumn{2}{|l|}{\tt h,y =1+x+x\^{}3 , x+x\^{}2*A(B.random\_element()) } \\
-%\multicolumn{2}{|l|}{\tt g=y.derivative()/h(y) } \\
-%\multicolumn{2}{|l|}{\tt s=Newton\_Iteration\_Solver(g,h,5)} \\
-%\multicolumn{2}{|l|}{\tt print 250-(s[31].lift()-y[31].lift()).valuation(2)} \\
-%\hfill\verb?9? & \hfill\verb?4? \\
-%\end{tabular}
-%The last line provides the loss in precision between the
-%original solution of the differential equation and its approximation
-%obtained through computation.
-%The theorical loss in precision for the coefficient of $t^{31}$
-%is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
-%loss in precision for a naive implementation is clearly more severe.
-
 
 \section{Conclusion}
 
