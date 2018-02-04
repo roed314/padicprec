@@ -146,7 +146,7 @@
 
 \begin{document}
 
-\title{\ZpL: a p-adic precision package}
+\title{\texorpdfstring{\ZpL}{ZpL}: a p-adic precision package}
 
 \author{Xavier Caruso}
   \affiliation{Universit\'e Rennes 1; \\
@@ -222,8 +222,8 @@ with axes parallel to the coordinate axes.
 
 For better control of precision, we may allow arbitrary axes.  This change would have
 little utility for real numbers, since such ellipsoids are not preserved by most functions.
-For $p$-adic fields, in contrast, sufficiently small ellipsoids are mapped to other
-ellipsoids by differentiable maps.  From an algebraic perspective,
+For $p$-adic fields, in contrast, differentiable maps with surjective differential will send
+sufficiently small ellipsoids to other ellipsoids.  From an algebraic perspective,
 these ellipsoids are just cosets of a lattice $H$ inside a $p$-adic vector space,
 and Proposition \ref{prop:precision} describes how the image of such a coset
 under a map $f$ is given exactly by applying the differential of $f$ to $H$.
@@ -264,7 +264,7 @@ hints as to when further precision analysis would be useful.
 \section{Short demonstration}
 \label{sec:demo}
 
-The first step is to define the parents, that are the rings of $p$-adic
+The first step is to define the parents: the rings of $p$-adic
 numbers we will work with.
 
 \smallskip
@@ -280,10 +280,10 @@ numbers we will work with.
 
 \noindent
 \ZpXX is a generic notation for \ZpCR, \ZpLC and \ZpLF.
-The first one \ZpCR is the usual constructor for $p$-adic parents in 
+The first, \ZpCR, is the usual constructor for $p$-adic parents in 
 \sage. It tracks precision using interval arithmetic. On the contrary
 \ZpLC and \ZpLF are provided by our package. In the sequel, we will
-compare the results output with the three 
+compare the outputs provided by each parent. 
 Results for \ZpLF are only shown when they differ from \ZpLC.
 
 \subsection{Elementary arithmetic}
@@ -447,7 +447,7 @@ Again \ZpCR does not output the optimal precision when the computation
 is split into several steps whereas \ZpLC and \ZpLF do.
 Actually, these toy examples illustrate quite common situations which 
 often occur during the execution of many algorithms. For this reason,
-interval arithmetics often overestimates the losses of precision. 
+interval arithmetic often overestimates the losses of precision. 
 Roughly speaking, the aim of our package is to ``fix this misfeature''.
 In the next subsections, we present a bunch of examples showing the
 benefit of \ZpL in various contexts.
@@ -544,7 +544,7 @@ algorithm, nor the implementation.
 \noindent \textbf{Matrix multiplication.}
 %
 As revealed in \cite{caruso-roe-vaccon:15}, a first simple example where 
-unstability appears is simply matrix multiplication.
+instability appears is simply matrix multiplication.
 This might be surprising because no division occurs in this situation.
 Observe nevertheless the difference between \ZpCR and \ZpLC.
 
@@ -662,7 +662,7 @@ Our package can be applied to computation with $p$-adic polynomials.
 A natural example is that of the computation of GCD, whose stability has 
 been studied in \cite{caruso:2017}.
 A naive implementation of the Euclidean algorithm can produce different 
-behaviour depending on the type of implementation of the field of 
+behavior depending on the type of implementation of the field of 
 $p$-adic coefficients.
 
 \smallskip
@@ -752,13 +752,13 @@ Buchberger algorithm and is avoided thanks to \ZpL.
 \subsection{$p$-adic differential equations}
 \label{ssec:diffeq}
 
-In \cite{LV16}, the behaviour of the precision when solving
+In \cite{LV16}, the behavior of the precision when solving
 $p$-adic differential equations with separation of 
 variables has been studied.
 The authors have investigated the gap that appears
 when applying a Newton-method solver between
 the theoretic loss in precision and the 
-actual loss in precision for a naive implemenation in \verb?Zp(p)?.
+actual loss in precision for a naive implementation in \verb?Zp(p)?.
 We can reach this theoretical loss in precision using \ZpL.
 We use a generic {\color{function}\verb?Newton_Iteration_Solver?}\verb?(g,h,N)?
 that applies \verb?N? steps of the Newton method for 
@@ -801,17 +801,17 @@ $y'=g \times h(y)$ as described in \cite{LV16}.
 %is $\lfloor log_2 (31)\rfloor=4$ and is then reached, whereas the
 %loss in precision for a naive implementation is clearly more severe.
 
-\section{What's behind the scene?}
+\section{Behind the scenes}
 \label{sec:implementation}
 
-In this Section, we explain how our package \ZpL works and we analyze
-its performances.
-The main theoretical result on which our package is based in the 
+In this section, we explain how our package \ZpL works and analyze
+its performance.
+The main theoretical result on which our package is based is the 
 ultrametric precision theory developed in \cite{caruso-roe-vaccon:14a}, which 
-suggests to track precision \emph{via} lattices and differential 
+suggests tracking precision \emph{via} lattices and differential 
 computations. For this reason, our approach is very inspired by 
-Automatic Differentiation techniques \cite{rall:1981} and our implementation 
-follows the usual Operator Overloading strategy.
+automatic differentiation techniques \cite{rall:1981} and our implementation 
+follows the usual operator overloading strategy.
 We will introduce two versions of our package, namely \ZpLC and \ZpLF: 
 this former is safer while the latter is faster.
 
@@ -826,11 +826,11 @@ comes from ``lattices''. The letters \texttt{C} (in \ZpLC) and
 \subsection{The precision Lemma}
 \label{ssec:preclemma}
 
-In \cite{caruso-roe-vaccon:14a}, we have suggested the 
+In \cite{caruso-roe-vaccon:14a}, we suggest the 
 use of lattices to represent the precision of elements in 
-$\Qp$-vector spaces.  It contrasts with the
+$\Qp$-vector spaces.  This approach contrasts with the
 \emph{coordinate-wise method} (of \textit{e.g.}
- \verb?Zp(5)?) that is used traditionally in \sage and
+ \verb?Zp(5)?) that is traditionally used in \sage
 where the precision of an element is specified by giving the precision
 of each coordinate separately and is updated after each basic
 operation.
@@ -891,7 +891,7 @@ exposition.
 \subsection{Tracking precision}
 \label{ssec:trackprec}
 
-We now explain in more details the internal mecanisms \ZpLC and \ZpLF 
+We now explain in more details the internal mechanisms \ZpLC and \ZpLF 
 use for tracking precision. 
 
 In what follows, it will be convenient to use a notion of discrete time 
@@ -981,7 +981,7 @@ where $C_i$ is the column vector of $M_t$ corresponding to the
 variable $\ttv_i$.
 Observe that the matrix $J_{\underline x}(F) \cdot M_t$ is no longer a 
 square matrix; it has one extra column. This reflects the fact that 
-$\dim E_{t+1} = \dim E_t + 1$. Rephasing this in a different language, 
+$\dim E_{t+1} = \dim E_t + 1$. Rephrasing this in a different language, 
 the image of $H_t$ under $dF_{\underline x}$ is no longer a lattice in 
 $E_{t+1}$ but is included in an hyperplane.
 
@@ -1099,7 +1099,7 @@ $$\left(\raisebox{-0.5\height}{\begin{tikzpicture}[scale=0.3]
 \draw[thin] (6,-7)--(6,0)--(0,0);
 \end{tikzpicture}}\right)$$
 where a cell is colored when it can contain a non-vanishing entry.
-The top part of the matrix is then already echenolized, so that we
+The top part of the matrix is then already echelonized, so that we
 only have to re-echelonize the bottom right corner whose size is
 the distance from the column corresponding to the erased variable
 to the end. 
@@ -1644,9 +1644,9 @@ nice \emph{a priori}. However, the principle of temporal locality
 \cite{denning:2005}
 asserts that $\cohgt_t(\ttw)$ tends to be small in general: destroyed 
 variables are often variables that were created recently. As a basic 
-exemple, variables which are local to a small piece of code (\emph{e.g.} 
+example, variables which are local to a small piece of code (\emph{e.g.} 
 a short function or a loop) do not survive for a long time. It turns
-out that this behaviour is typical in many implementations!
+out that this behavior is typical in many implementations!
 %
 \begin{figure}
 \noindent\hfill%
@@ -1726,7 +1726,7 @@ In the \ZpLC framework, creating a variable has a cost $O(m)$. The case
 of deletion is more difficult to handle. However, by the temporal 
 locality principle, it seems safe to assume that it is not the 
 bottleneck (which is the case in practice). Therefore, when executed 
-with the \ZpLF mecanism, the cost of our algorithm is expected to be 
+with the \ZpLF mechanism, the cost of our algorithm is expected to be 
 roughly $O(mc)$. Going further in speculation, we might estimate the 
 magnitude of $m$ as about $s + \sqrt c$ with $s = \max(s_\inp, 
 s_\out)$, leading to a complexity of $O(c^{3/2} + sc)$. For 
@@ -1737,39 +1737,36 @@ term is $c^{3/2}$ and the impact on the complexity is then limited.
 \section{Conclusion}
 \label{sec:conclusion}
 
-The package \ZpL provides powerful tools (based on Automatic 
-Differentiation) to track precision in the $p$-adic setting. In many 
-concrete situations, it heavily outdoes usual interval arithmetics 
-which is currently widely used by Computer Algebra softwares (see
-\S \ref{sec:demo} for many examples).
-The impact of complexity is controlled but nevertheless non-negligible 
-(see \S \ref{ssec:complexity}). For this reason, it is not really 
-reasonable to believe that a fast algorithm could rely \emph{directly} 
-on the machinery proposed by \ZpL. At least for now, bringing together 
-rapidity and stability still requires a substantial human contribution 
+The package \ZpL provides powerful tools (based on automatic 
+differentiation) to track precision in the $p$-adic setting. In many 
+concrete situations, it greatly outperforms standard interval arithmetic,
+as shown in \S \ref{sec:demo}.
+The impact on complexity is controlled but nevertheless non-negligible 
+(see \S \ref{ssec:complexity}). For this reason, it is unlikely that a fast
+algorithm will rely \emph{directly} on the machinery proposed by \ZpL,
+though it might do so for a specific part of a computation.
+At least for now, bringing together rapidity and stability
+still requires a substantial human contribution 
 and a careful special study of all parameters.
 
-Nevertheless, we do believe that \ZpL can be extremely helpful to 
-whoever wants to design a fast and stable $p$-adic algorihm for a couple 
-of reasons. First, it provides solutions 
+Nevertheless, we believe that \ZpL can be extremely helpful to 
+anyone designing a fast and stable $p$-adic algorithm for a couple 
+of reasons. First, it provides mechanisms 
 to automatically detect which steps of a given algorithm are stable and 
-which ones are not. This way, it highlights the parts of the algorithm 
-on which the researcher has to concentrate its efforts.
+which ones are not. In this way, it highlights the parts of the algorithm 
+on which the researcher has to concentrate their effort.
 Second, recall that a classical strategy to improve stability consists 
-in working internally at higher precision. The point is that adjusting 
-at best the internal precision (\emph{i.e.} finding the good compromise 
-between efficiency and accuracy) is not an easy task in general. It 
-turns out that the knowledge of the number of diffused digits of 
-precision gives very useful hints in this direction. Indeed, as an 
-extreme example, consider the case when there is no diffused digit of 
-precision. Then, the optimal precision completely splits over the
-variables and there is no need to increase internally the precision. On 
+in working internally at higher precision. Finding the internal increase
+in precision that best balances efficiency and accuracy is not an easy
+task in general. Understanding the number of diffused digits of 
+precision gives very useful hints in this direction. For example, when there are
+no diffused digits of precision then the optimal precision completely splits over the
+variables and there is no need to internally increase the precision. On 
 the contrary, when there are many diffused digits of precision, a large 
 increment is often required.
 Since \ZpL gives a direct access to the number of diffused digits of 
 precision, it could be very useful to the designer who is concerned
 with the balance between efficiency and accuracy.
-
 
 \begin{comment}
 \subsection{Exploration}
@@ -1782,7 +1779,7 @@ isogenies between elliptic curves over finite fields.
 Techniques to compute these isogenies
 through the solving of $p$-adic differential equations
 have a long history, and a first
-analysis of the behaviour of precision using
+analysis of the behavior of precision using
 lattices has been investigated in \cite{LV16}.
 
 In that article, the authors were interested in
@@ -1798,14 +1795,14 @@ the Newton method for solving the equation
 yield a loss in $\log_p(n)^2.$
 
 However, this does not encompass the case of 
-elliptic curves defined and isogeneous 
+elliptic curves defined and isogenous 
 over $\mathbb{Q},$ which can yield a differential 
 equation with a solution $y$ whose coefficients
 have negative valuation.
 
 For instance, the curves 
 $E: \: y^2=x^3+1$
-and $E': \: y^2= x^3+ (m^2-1)x^2/4 + m^6$ are isogeneous
+and $E': \: y^2= x^3+ (m^2-1)x^2/4 + m^6$ are isogenous
 over $\mathbb{Q}$ if  $m$ is an odd integer.
 We take $m=67.$ The corresponding isogeny has coefficients with possibly
 negative $3$-adic valuation.
@@ -1838,13 +1835,13 @@ method of \cite{Lercier-Sirvent:08}.
 
 \smallskip
 
-We can then see that up to $63,$ the behaviour
+We can then see that up to $63,$ the behavior
 of the loss in relative precision is the same
 as for the coefficient in $x^{31}$: \textbf{no loss
-occured}. This happens for \ZpCR as for \ZpLC,
+occurred}. This happens for \ZpCR as for \ZpLC,
 and thus, \ZpCR seems to attain the optimal precision.
 consequently, those simple manipulations
-hint at a different behaviour for the loss 
+hint at a different behavior for the loss 
 in precision in at least some special cases of
 of isogenies defined over $\mathbb{Q}$
 but not necessarily over $\mathbb{Z}_p.$ 
