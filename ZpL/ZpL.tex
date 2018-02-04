@@ -34,6 +34,7 @@
 \definecolor{method}{HTML}{205080}
 \definecolor{keyword}{HTML}{008000}
 \definecolor{error}{HTML}{B01010}
+\definecolor{comment}{HTML}{606060}
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
@@ -226,7 +227,7 @@ numbers we will work with.
 The first one \ZpCR is the usual constructor for $p$-adic parents in 
 \sage. It tracks precision using interval arithmetics. On the contrary
 \ZpLC and \ZpLF are provided by our package. In the sequel, we will
-compare the results output with the three 
+compare the results output with the three constructors.
 Results for \ZpLF are only shown when they differ from \ZpLC.
 
 \subsection{Elementary arithmetic}
@@ -1361,7 +1362,9 @@ matrix:
 {\noindent \small
 \begin{tabular}{rl}
 \cIn   & \verb?x = ?{\color{ring}\verb?Z2?}\verb?(987,10); y = ?{\color{ring}\verb?Z2?}\verb?(21,5)? \\
-       & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision_lattice?}\verb?([x,y])? \\
+\cIn   & {\color{comment}\verb?#? \textit{We first retrieve the precision object}} \\
+       & \verb?L = ?{\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision?}\verb?()?\\
+\cIn   & \verb?L.?{\color{method}\verb?precision_lattice?}\verb?([x,y])? \\
 \cZpLC & \verb?[1024    0]? \\
        & \verb?[   0   32]?
 \end{tabular}}
@@ -1378,7 +1381,7 @@ because it is displayed in row-echelon form):
 {\noindent \small
 \begin{tabular}{rl}
 \cIn   & \verb?u, v = x+y, x-y? \\
-       & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision_lattice?}\verb?([u,v])? \\
+       & \verb?L.?{\color{method}\verb?precision_lattice?}\verb?([u,v])? \\
 \cZpLC & \verb?[  32 2016]? \\
        & \verb?[   0 2048]?
 \end{tabular}}
@@ -1435,9 +1438,9 @@ diffused digits of precision on a set of variables. Observe:
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn   & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?number_of_diffused_digits?}\verb?([x,y])? \\
+\cIn   & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?([x,y])? \\
 \cZpLC & \verb?0? \\
-\cIn   & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?number_of_diffused_digits?}\verb?([u,v])? \\
+\cIn   & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?([u,v])? \\
 \cZpLC & \verb?6? \\
 \end{tabular}}
 
@@ -1680,7 +1683,7 @@ In the \ZpLC framework, creating a variable has a cost $O(m)$. The case
 of deletion is more difficult to handle. However, by the temporal 
 locality principle, it seems safe to assume that it is not the 
 bottleneck (which is the case in practice). Therefore, when executed 
-with the \ZpLF mecanism, the cost of our algorithm is expected to be 
+with the \ZpLC mecanism, the cost of our algorithm is expected to be 
 roughly $O(mc)$. Going further in speculation, we might estimate the 
 magnitude of $m$ as about $s + \sqrt c$ with $s = \max(s_\inp, 
 s_\out)$, leading to a complexity of $O(c^{3/2} + sc)$. For 
