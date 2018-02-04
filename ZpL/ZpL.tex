@@ -158,8 +158,8 @@
 \author{David Roe}
   \affiliation{MIT; \\
   %\institution{Department of Mathematics}
-  %\city{Pittsburgh, PA, USA}
-  %\postcode{15260}
+  %\city{Cambridge, MA, USA}
+  %\postcode{02139}
 }
 \email{roed@mit.edu}
 \author{Tristan Vaccon}
@@ -175,34 +175,91 @@
 \keywords{Algorithms, $p$-adic precision, Automatic Differentiation}
 
 \begin{abstract}
-We present a new package \ZpL for the Computer Algebra system \sage. It 
+We present a new package \ZpL for the mathematical software system \sage. It 
 implements a sharp tracking of precision on $p$-adic numbers, following 
 the theory of ultrametric precision introduced in \cite{caruso-roe-vaccon:14a}. The 
-underlying algorithms are mostly based on Automatic Differentiation 
+underlying algorithms are mostly based on automatic differentiation 
 techniques. We introduce them, study their complexity and discuss our 
 design choices.
 We illustrate the benefits of our package (in comparison with previous 
-implementations) with a large sample of examples coming from Linear 
-Algebra, Commutative Algebra and Differential Equations.
+implementations) with a large sample of examples coming from linear 
+algebra, commutative algebra and differential equations.
 \end{abstract}
 
 \maketitle
 
 \section{Introduction}
 
-When computing with real and $p$-adic fields, exact results are usually impossible, since most elements have infinite decimal or $p$-adic expansions.  Working with these fields thus requires an analysis of how precision evolves through the sequence of steps involved in carrying out a computation.  In this paper, we describe a package for computing with $p$-adic rings and fields, based on a series of papers by the same authors \cite{caruso-roe-vaccon:14a,caruso-roe-vaccon:15,caruso-roe-vaccon:16,caruso-roe-vaccon:17}.  The core of the package is a method for tracking precision using $p$-adic lattices which can yield dramatically more precise results, at the cost of increased runtime and memory usage.
+When computing with real and $p$-adic fields, exact results are usually impossible,
+since most elements have infinite decimal or $p$-adic expansions.
+Working with these fields thus requires an analysis of how precision evolves
+through the sequence of steps involved in carrying out a computation.
+In this paper, we describe a package for computing with $p$-adic rings and fields,
+based on a series of papers by the same authors
+\cite{caruso-roe-vaccon:14a,caruso-roe-vaccon:15,caruso-roe-vaccon:16,caruso-roe-vaccon:17}.
+The core of the package is a method for tracking precision using $p$-adic lattices which
+can yield dramatically more precise results, at the cost of increased runtime and memory usage.
 
-The standard method for handling precision when computing with real numbers is floating point arithmetic, which may also be used in $p$-adic computation.  At a given precision level, a finite set of representable numbers are chosen, and arithmetic operations are defined to give a representable number that is close to the true result \cite{ieee754:2008}.  Floating point arithmetic has the benefit of efficient arithmetic operations, but users are responsible for tracking the precision of the results.  Numerically unstable algorithms can lead to very inaccurate answers \todo{add reference for numerical stability}.
+The standard method for handling precision when computing with real numbers
+is floating point arithmetic, which may also be used in $p$-adic computation.
+At a given precision level, a finite set of representable numbers are chosen,
+and arithmetic operations are defined to give a representable number
+that is close to the true result \cite{ieee754:2008}.  Floating point arithmetic
+has the benefit of efficient arithmetic operations, but users are responsible
+for tracking the precision of the results.  Numerically unstable algorithms can
+lead to very inaccurate answers \cite{higham:2002}.
 
-If provably correct results are desired, interval arithmetic provides an alternative to floating point.  Instead of just tracking an approximation to the answer, the package also tracks a radius within which the true result lies.  This method is commonly used for $p$-adic computations since the ultrametric property of $p$-adic fields frequently keeps the radius small.  Computations remain fairly efficient with this approach, but numerical instability can still lead to dramatic losses in precision, (see Section \ref{sec:demo} for many examples).
+If provably correct results are desired, interval arithmetic provides
+an alternative to floating point.  Instead of just tracking an approximation to the answer,
+the package also tracks a radius within which the true result lies.
+This method is commonly used for $p$-adic computations since
+the ultrametric property of $p$-adic fields frequently keeps the radius small.
+Computations remain fairly efficient with this approach, but numerical instability
+can still lead to dramatic losses in precision, (see Section \ref{sec:demo} for many examples).
+Tracking the precision of multiple variables concurrently, the set of possible
+true values associated to an inexact value takes the form of an ellipsoid
+with axes parallel to the coordinate axes.
 
-For better control of precision, we may use ellipsoids rather than balls.  This change would have little utility for real numbers, since ellipsoids are not preserved by most functions.  For $p$-adic fields, in contrast, sufficiently small ellipsoids are preserved by differentiable maps.  From an algebraic perspective, these ellipsoids are just cosets of a lattice $H$ inside a $p$-adic vector space, and Proposition \ref{prop:precision} describes how the image of such a coset under a map $f$ is given exactly by applying the differential of $f$ to $H$.
+For better control of precision, we may allow arbitrary axes.  This change would have
+little utility for real numbers, since such ellipsoids are not preserved by most functions.
+For $p$-adic fields, in contrast, sufficiently small ellipsoids are mapped to other
+ellipsoids by differentiable maps.  From an algebraic perspective,
+these ellipsoids are just cosets of a lattice $H$ inside a $p$-adic vector space,
+and Proposition \ref{prop:precision} describes how the image of such a coset
+under a map $f$ is given exactly by applying the differential of $f$ to $H$.
 
-In this paper, we describe an implementation of this idea in \sage \cite{sage}.  \todo{Add short description of package features.}
+In this paper, we describe an implementation of this idea in \sage \cite{sage}.
+Rather than attaching a precision to each element, we store the precision of
+many elements together by tracking a precision lattice for the whole collection
+of variables.  As variables are created and destroyed, we update a matrix whose
+rows represent the vectors in the lattice.  Information about the precision
+of elements is extracted from the matrix as necessary.
 
-\todo{Plan of article}
+The article is structured as follows. In \S \ref{sec:demo} we provide a demonstration
+of the package, showing how it can provide more precise answers than the
+traditional methods for tracking $p$-adic precision.  In particular, \S \ref{ssec:elem}
+describes elementary arithmetic and the SOMOS-4 sequence, \S \ref{ssec:linalg}
+gives examples from linear algebra, \S \ref{ssec:comalg} examples using polynomials,
+and \S \ref{ssec:diffeq} examples of differential equations.
 
-\todo{Convention: in matrices, vectors are represented by row-vector.}
+In \S \ref{sec:implementation} we give more details on the implementation.
+\S \ref{ssec:preclemma} contains a brief overview on the theory of
+$p$-adic precision of \cite{caruso-roe-vaccon:14a}. 
+In the next two subsections, we explain in more details how \ZpLC and 
+\ZpLF work. \S \ref{ssec:trackprec} is devoted to the implementation of 
+automatic differentiation leading to the actual computation of the
+lattice that models the precision.
+In \S \ref{ssec:viewprec}, we explain how precision on any individual number
+can be recovered and discuss the validity
+of our results.
+The complexity overhead induced by our package is analyzed in
+\S \ref{ssec:complexity}.
+
+Finally, \S \ref{sec:conclusion} contains a discussion of how we see this
+package fitting into the existing $p$-adic implementations.  While these
+methods do introduce overhead, they are well suited to exploring
+precision behavior when designing algorithms, and can provide
+hints as to when further precision analysis would be useful.
 
 \section{Short demonstration}
 \label{sec:demo}
@@ -224,12 +281,13 @@ numbers we will work with.
 \noindent
 \ZpXX is a generic notation for \ZpCR, \ZpLC and \ZpLF.
 The first one \ZpCR is the usual constructor for $p$-adic parents in 
-\sage. It tracks precision using interval arithmetics. On the contrary
+\sage. It tracks precision using interval arithmetic. On the contrary
 \ZpLC and \ZpLF are provided by our package. In the sequel, we will
 compare the results output with the three 
 Results for \ZpLF are only shown when they differ from \ZpLC.
 
 \subsection{Elementary arithmetic}
+\label{ssec:elem}
 
 We begin our tour of the features of the \ZpL package with some basic 
 arithmetic computations.
@@ -257,7 +315,7 @@ each constructor \ZpCR, \ZpLC and \ZpLF.
 \noindent
 Multiplication by $p$ (here $3$) is a shift on the digits and thus
 leads to a gain of one digit in absolute precision.
-On the example below, we observe that when this multiplication is
+In the example below, we observe that when this multiplication is
 split into several steps, \ZpCR does not see the gain of precision
 while \ZpLC and \ZpLF do.
 
@@ -474,6 +532,7 @@ iteration.
 %\end{itemize}
 
 \subsection{Linear algebra}
+\label{ssec:linalg}
 
 Many generic algorithms of linear algebra lead to quite important 
 instability when they are used with $p$-adic numbers. In many cases, 
@@ -592,6 +651,7 @@ constant coefficient (which is the determinant) whereas \ZpCR is
 confused and cannot even certify that it does not vanish.
 
 \subsection{Commutative algebra}
+\label{ssec:comalg}
 
 Our package can be applied to computation with $p$-adic polynomials. 
 
@@ -690,6 +750,7 @@ Buchberger algorithm and is avoided thanks to \ZpL.
 %Had we used \ZpFP, many padded zeroes or one would have appeared.
 
 \subsection{$p$-adic differential equations}
+\label{ssec:diffeq}
 
 In \cite{LV16}, the behaviour of the precision when solving
 $p$-adic differential equations with separation of 
@@ -741,6 +802,7 @@ $y'=g \times h(y)$ as described in \cite{LV16}.
 %loss in precision for a naive implementation is clearly more severe.
 
 \section{What's behind the scene?}
+\label{sec:implementation}
 
 In this Section, we explain how our package \ZpL works and we analyze
 its performances.
@@ -752,20 +814,6 @@ Automatic Differentiation techniques \cite{rall:1981} and our implementation
 follows the usual Operator Overloading strategy.
 We will introduce two versions of our package, namely \ZpLC and \ZpLF: 
 this former is safer while the latter is faster.
-
-This Section is organized as follows.
-\S \ref{ssec:preclemma} contains a brief overview on the theory of
-$p$-adic precision of \cite{caruso-roe-vaccon:14a}. 
-In the next two subsections, we explain in more details how \ZpLC and 
-\ZpLF work. \S \ref{ssec:trackprec} is devoted to the implementation of 
-Automatic Differentiation leading to the actual computation of a
-global object modeling the precision (which is the aforementioned 
-lattice). 
-In \S \ref{ssec:viewprec}, we explain how precision on any individual number
-can be recoved from the above computations and discuss the validity
-of our results.
-The overhead complexity induced by our package is analyzed in
-\S \ref{ssec:complexity}.
 
 \smallskip
 
@@ -1668,7 +1716,7 @@ output have size $s_\inp$ and $s_\out$ (elements of $\Qp$) respectively.
 
 In the case of \ZpLF, creating a variable has a cost $O(s_\inp)$ 
 whereas deleting a variable is free. 
-Thus when executed with the \ZpLF mecanism, the complexity of our
+Thus when executed with the \ZpLF mechanism, the complexity of our
 algorithm becomes $O(s_\inp c)$.
 
 In the \ZpLC framework, creating a variable has a cost $O(m)$. The case 
@@ -1684,13 +1732,14 @@ as soon as the complexity is at least quadratic in $s$, the dominant
 term is $c^{3/2}$ and the impact on the complexity is then moderated.
 
 \section{Conclusion}
+\label{sec:conclusion}
 
-\begin{itemize}
-\item In which case should we use this package? Mainly for exploration
-\item example of $p$-adic differential equations (especially for $p=2$)
-\end{itemize}
+%\begin{itemize}
+%\item In which case should we use this package? Mainly for exploration
+%\item example of $p$-adic differential equations (especially for $p=2$)
+%\end{itemize}
 
-\subsection{Exploration}
+%\subsection{Exploration}
 
 The purpose of this package is that of exploration
 of the $p$-adic precision.
