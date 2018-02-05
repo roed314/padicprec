@@ -34,6 +34,7 @@
 \definecolor{method}{HTML}{205080}
 \definecolor{keyword}{HTML}{008000}
 \definecolor{error}{HTML}{B01010}
+\definecolor{comment}{HTML}{606060}
 
 \newcommand{\noopsort}[1]{}
 \DeclareMathOperator{\NP}{NP}
@@ -215,24 +216,27 @@ the package also tracks a radius within which the true result lies.
 This method is commonly used for $p$-adic computations since
 the ultrametric property of $p$-adic fields frequently keeps the radius small.
 Computations remain fairly efficient with this approach, but numerical instability
-can still lead to dramatic losses in precision (see Section \ref{sec:demo} for many examples).
+can still lead to dramatic losses in precision (see \S \ref{sec:demo} for many examples).
 Tracking the precision of multiple variables concurrently, the set of possible
 true values associated to an inexact value takes the form of an ellipsoid
 with axes parallel to the coordinate axes.
 
-For better control of precision, we may allow arbitrary axes.  This change would have
-little utility for real numbers, since such ellipsoids are not preserved by most functions.
-For $p$-adic fields, in contrast, differentiable maps with surjective differential will send
-sufficiently small ellipsoids to other ellipsoids.  From an algebraic perspective,
-these ellipsoids are just cosets of a lattice $H$ inside a $p$-adic vector space,
-and Proposition \ref{prop:precision} describes how the image of such a coset
-under a map $f$ is given exactly by applying the differential of $f$ to $H$.
+For better control of precision, we may allow arbitrary axes.  This 
+change would have little utility for real numbers, since such ellipsoids 
+are not preserved by most functions. For $p$-adic fields, in contrast, 
+differentiable maps with surjective differential will send sufficiently 
+small ellipsoids to other ellipsoids.  From an algebraic perspective, 
+these ellipsoids are just cosets of a lattice $H$ inside a $p$-adic 
+vector space, and the main result of \cite{caruso-roe-vaccon:14a} (see 
+also Proposition \ref{prop:precision} below) describes how the image of 
+such a coset under a map $f$ is given exactly by applying the 
+differential of $f$ to $H$.
 
 In this paper, we describe an implementation of this idea in \sage \cite{sage}.
 Rather than attaching a precision to each element, we store the precision of
-many elements together by tracking a precision lattice for the whole collection
+many elements together by tracking a precision module for the whole collection
 of variables.  As variables are created and destroyed, we update a matrix whose
-rows represent the vectors in the lattice.  Information about the precision
+rows represent the vectors in the module.  Information about the precision
 of elements is extracted from the matrix as necessary.
 
 The article is structured as follows. In \S \ref{sec:demo} we provide a demonstration
@@ -248,7 +252,7 @@ $p$-adic precision of \cite{caruso-roe-vaccon:14a}.
 In the next two subsections, we explain in more details how \ZpLC and 
 \ZpLF work. \S \ref{ssec:trackprec} is devoted to the implementation of 
 automatic differentiation leading to the actual computation of the
-lattice that models the precision.
+module that models the precision.
 In \S \ref{ssec:viewprec}, we explain how precision on any individual number
 can be recovered and discuss the validity
 of our results.
@@ -283,8 +287,8 @@ numbers we will work with.
 The first, \ZpCR, is the usual constructor for $p$-adic parents in 
 \sage. It tracks precision using interval arithmetic. On the contrary
 \ZpLC and \ZpLF are provided by our package. In the sequel, we will
-compare the outputs provided by each parent. 
-Results for \ZpLF are only shown when they differ from \ZpLC.
+compare the outputs provided by each parent.
+Results for \ZpLF are only displayed when they differ from \ZpLC.
 
 \subsection{Elementary arithmetic}
 \label{ssec:elem}
@@ -317,7 +321,7 @@ Multiplication by $p$ (here $3$) is a shift on the digits and thus
 leads to a gain of one digit in absolute precision.
 In the example below, we observe that when this multiplication is
 split into several steps, \ZpCR does not see the gain of precision
-while \ZpLC and \ZpLF do.
+while \ZpL does.
 
 \smallskip
 
@@ -444,7 +448,7 @@ they should be equal).
 
 \noindent
 Again \ZpCR does not output the optimal precision when the computation
-is split into several steps whereas \ZpLC and \ZpLF do.
+is split into several steps whereas \ZpL does.
 Actually, these toy examples illustrate quite common situations which 
 often occur during the execution of many algorithms. For this reason,
 interval arithmetic often overestimates the losses of precision. 
@@ -906,7 +910,7 @@ Let $\calV_t$ be the set of alive variables at time $t$. Set $E_t =
 \Qp^{\calV_t}$; it is a finite dimensional vector space over $\Qp$ which 
 should be thought of as the set of all possible values that can be taken by 
 the variables in $\calV_t$. For $\ttv \in \calV_t$, let $e_\ttv \in
-\Qp^{\calV_t}$ be the vector whose coordinates all vanish except 
+E_t$ be the vector whose coordinates all vanish except 
 at position $\ttv$ which takes the value $1$. The family 
 $(e_\ttv)_{\ttv \in \calV_t}$ is obviously a basis of $E_t$; we will 
 refer to it as the \emph{canonical basis}.
@@ -1070,10 +1074,7 @@ A matrix representing $H_{t+1}$ is deduced from $M_t$ by erasing the
 column corresponding to $\ttw$. However the matrix we get this way is 
 no longer in row-echelon form. We then need to re-echelonize it.
 
-\smallskip
-
-More precisely, in the \ZpLC case, the obtained matrix has this 
-shape:
+More precisely, the obtained matrix has this shape:
 $$\left(\raisebox{-0.5\height}{\begin{tikzpicture}[scale=0.3]
 \fill[black!20] (0,0)--(0,-1)--(1,-1)--(1,-2)--(2,-2)--(2,-3)
     --(3,-3)--(3,-4)--(4,-4)--(4,-5)--(5,-5)--(5,-6)--(6,-6)
@@ -1132,7 +1133,7 @@ codimensions are \emph{not} exact objects, in the sense that they cannot
 be represented by integral matrices in full generality. Consequently,
 they cannot be encoded on a computer.
 We work around this drawback by replacing everywhere exact $p$-adic 
-numbers by Floating Point $p$-adic numbers (at some given precision) 
+numbers by floating point $p$-adic numbers (at some given precision) 
 \cite{course-padic}.
 
 The fact that the lattice $H_t$ can now have arbitrary codimension
@@ -1169,7 +1170,7 @@ a \emph{pivot variable at time $t$}.
 
 \noindent \textit{Creating a variable.}
 %
-We assume first that the newly created variable is defined through an
+We assume first that the newly created variable is defined through a
 statement of the form:
 ``\verb?w = ?$f$\verb?(v_1,? \ldots\verb?, v_n)?''.
 As already explained in the case of \ZpLC, this code is 
@@ -1190,7 +1191,7 @@ where $C$ is the column vector defined by Eq.~\eqref{eq:defC}.
 %$$C = \sum_{i=1}^n \frac{\partial f}{\partial{\ttv_i}} (\underline x)
 %\cdot C_i.$$
 However, we insist on the fact that all the computations now take
-place in the ``ring'' of Floating Point $p$-adic numbers. Therefore,
+place in the ``ring'' of floating point $p$-adic numbers. Therefore,
 we cannot guarantee that the rows of $M_{t+1}$ generate $H_{t+1}$.
 Nonetheless, they generate a module which is expected to be close
 to $H_{t+1}$.
@@ -1302,7 +1303,7 @@ access to the absolute precision.
 \noindent
 Both \ZpLC and \ZpLF compute the absolute precision of \ttv (at time 
 $t$) as the smallest valuation of an entry of the column of $M_t$ 
-corresponding to the variable \ttv. Alternatively, it can be defined as 
+corresponding to the variable \ttv. Alternatively, it is
 the unique integer $N$ for which $\pi_\ttv(H_t) = p^N \Zp$ where 
 $\pi_\ttv : E_t \to \Qp$ takes a vector to its \ttv-coordinate.
 This definition of the absolute precision sounds revelant because, if we 
@@ -1409,7 +1410,9 @@ matrix:
 {\noindent \small
 \begin{tabular}{rl}
 \cIn   & \verb?x = ?{\color{ring}\verb?Z2?}\verb?(987,10); y = ?{\color{ring}\verb?Z2?}\verb?(21,5)? \\
-       & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision_lattice?}\verb?([x,y])? \\
+\cIn   & {\color{comment}\verb?#? \textit{We first retrieve the precision object}} \\
+       & \verb?L = ?{\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision?}\verb?()?\\
+\cIn   & \verb?L.?{\color{method}\verb?precision_lattice?}\verb?([x,y])? \\
 \cZpLC & \verb?[1024    0]? \\
        & \verb?[   0   32]?
 \end{tabular}}
@@ -1426,7 +1429,7 @@ because it is displayed in row-echelon form):
 {\noindent \small
 \begin{tabular}{rl}
 \cIn   & \verb?u, v = x+y, x-y? \\
-       & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?precision_lattice?}\verb?([u,v])? \\
+       & \verb?L.?{\color{method}\verb?precision_lattice?}\verb?([u,v])? \\
 \cZpLC & \verb?[  32 2016]? \\
        & \verb?[   0 2048]?
 \end{tabular}}
@@ -1473,8 +1476,8 @@ $H_0$ is the smallest diagonal lattice containing $H$. It then
 corresponds to the maximal \emph{coordinate-wise} precision we can 
 reach on the set of $n$ variables corresponding to the basis $(e_1,
 \ldots, e_n)$.
-The diffused digits of precision only appear on linear combinations
-of those variables.
+%The diffused digits of precision only appear on linear combinations
+%of those variables.
 
 The method {\color{method}\verb?number_of_diffused_digits?} computes the number of
 diffused digits of precision on a set of variables. Observe:
@@ -1483,9 +1486,9 @@ diffused digits of precision on a set of variables. Observe:
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn   & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?number_of_diffused_digits?}\verb?([x,y])? \\
+\cIn   & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?([x,y])? \\
 \cZpLC & \verb?0? \\
-\cIn   & {\color{ring}\verb?Z2?}\verb?.?{\color{method}\verb?number_of_diffused_digits?}\verb?([u,v])? \\
+\cIn   & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?([u,v])? \\
 \cZpLC & \verb?6? \\
 \end{tabular}}
 
@@ -1497,7 +1500,7 @@ $H$ is generated by the $2 \times 2$ matrix:
 $$\left(\begin{matrix} 2^5 & 2016 \\ 0 & 2^{11} \end{matrix}\right).$$
 The minimal diagonal suplattice $H_0$ of $H$ is generated by the scalar matrix 
 $2^5 \cdot \text{I}_2$ and contains $H$ with index $2^6$ in it. This is 
-where the $6$ digits of precision comes from.
+where the $6$ digits of precision come from.
 There are easily visible here: the sum $u+v$ is known with $11$ digits,
 that is exactly $6$ more digits than the summands $u$ and $v$.
 
@@ -1508,8 +1511,8 @@ We now discuss the cost of the above operations.
 In what follows, we shall count operations in $\Qp$. Although $\Qp$
 is an inexact field, our model of complexity makes sense because the
 size of the $p$-adic numbers we manipulate will all have roughly the
-same size: for \ZpLF, it is the precision we use for Floating Point 
-Arithmetic while, for \ZpLC, it is the absolute cap which
+same size: for \ZpLF, it is the precision we use for floating point 
+arithmetic while, for \ZpLC, it is the absolute cap which
 was fixed at the beginning.
 
 It is convenient to introduce a total order on $\calV_t$: for $\ttv, 
@@ -1642,7 +1645,7 @@ In the \ZpLC case, we always have $\cohgt_t(\ttw) = \coind_t(\ttw)$, so
 that the cost becomes $O\big(\coind_t(\ttw)^2\big)$. This does not look 
 nice \emph{a priori}. However, the principle of temporal locality 
 \cite{denning:2005}
-asserts that $\cohgt_t(\ttw)$ tends to be small in general: destroyed 
+asserts that $\coind_t(\ttw)$ tends to be small in general: destroyed 
 variables are often variables that were created recently. As a basic 
 example, variables which are local to a small piece of code (\emph{e.g.} 
 a short function or a loop) do not survive for a long time. It turns
@@ -1695,18 +1698,18 @@ out that this behavior is typical in many implementations!
 \end{tikzpicture}%
 \hfill\null
 
-\caption{The distribution of $\cohgt_t(\ttw)$}
+\caption{The distribution of $\coind_t(\ttw)$}
 \label{fig:deletion}
 \end{figure}
 %
 The histogram of Figure~\ref{fig:deletion} shows 
-the distribution of $\cohgt_t(\ttw)$ while executing the Euclidean
+the distribution of $\coind_t(\ttw)$ while executing the Euclidean
 algorithm (naive implementation) with two polynomials of degree $7$
-as input. The bias is evident: most of the time $\cohgt_t(\ttw) \leq
+as input. The bias is evident: most of the time $\coind_t(\ttw) \leq
 1$.
 %For example, while executing the Euclidean algorithm (naive 
 %implementation) with two polynomials of degree $7$, most of the 
-%time $\cohgt_t(\ttw) \leq 1$.
+%time $\coind_t(\ttw) \leq 1$.
 
 \medskip
 
