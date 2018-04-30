@@ -285,17 +285,19 @@ numbers we will work with.
 \noindent
 \ZpXX is a generic notation for \ZpCR, \ZpLC and \ZpLF.
 The first, \ZpCR, is the usual constructor for $p$-adic parents in 
-\sage. It tracks precision using interval arithmetic. On the contrary
+\sage.\footnote{It stands for \textit{capped relative}.} It tracks precision using interval arithmetic. On the contrary
 \ZpLC and \ZpLF are provided by our package. In the sequel, we will
 compare the outputs provided by each parent.
-Results for \ZpLF are only displayed when they differ from \ZpLC.
+As the results for \ZpLF and \ZpLC agree on all examples in this section, so we only write \ZpLC for them. 
+More details about what are precisely \ZpLC and \ZpLF are provided in Section \ref{sec:implementation}.
 
 \subsection{Elementary arithmetic}
 \label{ssec:elem}
 
 We begin our tour of the features of the \ZpL package with some basic 
 arithmetic computations.
-We first pick some random element $x$.
+We first pick some random element $x$ (using the natural
+Haar measure on $\mathbb{Z}_p$, as is default in \sage).
 The function {\color{function}\verb?random_element?} is designed so
 that it guarantees that the picked random element is the same for
 each constructor \ZpCR, \ZpLC and \ZpLF.
@@ -705,7 +707,7 @@ $p$-adic coefficients.
 
 \noindent
 With high probability, $P$ and $Q$ are coprime, implying that the gcd of 
-$DP$ is $DQ$ is $D$.  However, we observe that \ZpCR output a quite 
+$DP$ and $DQ$ is $D$.  However, we observe that \ZpCR output a quite 
 different result. The point is that, in the \ZpCR case, Euclidean 
 algorithm stops prematurely because the test \verb?B != 0? fails 
 too early due to the lack of precision.
@@ -768,7 +770,7 @@ when computing the coefficient $x^n$ of $y$
 from $g$ and $h$ was in $\log_p(n)$
 even though a naive analysis of
 the Newton method for solving the equation
-yield a loss in $\log_p(n)^2.$
+yields a loss in $\log_p(n)^2.$
 
 We can reach this theoretical loss in precision using \ZpL, while \ZpCR does not perform as well.
 We apply \verb?N? steps of the Newton method for 
@@ -957,7 +959,7 @@ The $\ttv_i$'s stand for already defined variables and $f$ is some
 $n$-ary builtin function (in most cases it is just addition, 
 subtraction, multiplication or division). On the contrary, the terms 
 ``value'' and ``prec'' refer to user-specified constants or integral 
-values which was computed earlier.
+values which were computed earlier.
 
 \smallskip
 
@@ -1026,7 +1028,7 @@ matrix:
 $$\left(\begin{matrix}
 M_t & C \smallskip \\ 0 & p^{N_{t+1}}
 \end{matrix}\right).$$
-Performing row operations, we see then the entries of $C$ can be
+Performing row operations, we see then that the entries of $C$ can be
 reduced modulo $p^{N_{t+1}}$ without changing the lattice. In order
 to optimize the size of the objects, we perform this reduction and
 define $M_{t+1}$ by:
@@ -1292,7 +1294,7 @@ example, the (partial) session:
 \noindent
 indicates that the absolute precision on \ttv is $10$ since
 exactly $10$ digits are printed.
-The method {\color{method}\verb?precision_absolute?} provides a more easy-to-use
+The method {\color{method}\verb?precision_absolute?} provides an easier-to-use
 access to the absolute precision.
 
 \smallskip
@@ -1814,7 +1816,7 @@ when computing the coefficient $x^n$ of $y$
 from $g$ and $h$ was in $\log_p(n)$
 even though a naive analysis of
 the Newton method for solving the equation
-yield a loss in $\log_p(n)^2.$
+yields a loss in $\log_p(n)^2.$
 
 However, this does not encompass the case of 
 elliptic curves defined and isogenous 
