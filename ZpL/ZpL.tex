@@ -239,10 +239,13 @@ differential of $f$ to $H$.
 
 In this paper, we describe an implementation of this idea in \sage \cite{sage}.
 Rather than attaching a precision to each element, we store the precision of
-many elements together by tracking a precision module for the whole collection
-of variables.  As variables are created and destroyed, we update a matrix whose
-rows represent the vectors in the module.  Information about the precision
-of elements is extracted from the matrix as necessary.
+many elements together by tracking a precision module\footnote{Throughout
+the paper, the word ``module'' has its mathematical meaning: it denotes 
+an additive group endowed with an external product by scalars in $\Zp$.} 
+for the whole collection of variables.  As variables are created and 
+destroyed, we update a matrix whose rows represent the vectors in the 
+module.  Information about the precision of elements is extracted from 
+the matrix as necessary.
 Concretely, our package provides two new \sage 
 parents\footnote{Parents in \sage are the analogues of container objects 
 in computer science. Basically it corresponds to the implementation of a 
