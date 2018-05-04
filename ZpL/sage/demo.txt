@@ -180,7 +180,7 @@ euclidean(D*P, D*Q)
 
 %% markdown
 More precisely, ZpCR often found a gcd of higher degree.
-Indeed the Euclidean algorithm stops prematurely because the software believes that some early remainder vanishes due to the lack of precision.  
+Indeed the Euclidean algorithm stops prematurely because the software believes that some early remainder vanishes due to the lack of precision.
 The situation with ZpFP is the exact opposite:
 since the precision is too high (always the maximal cap), the software does not notice that the remainder vanishes. Therefore the Euclidean algorithm does not stop until it obtains a remainder of degree $0$.
 

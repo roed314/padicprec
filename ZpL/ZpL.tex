@@ -86,7 +86,12 @@
 \newcommand{\ZpLC}{\text{\color{output} \rm \tt ZpLC}\xspace}
 \newcommand{\ZpLF}{\text{\color{output} \rm \tt ZpLF}\xspace}
 \newcommand{\ZpXX}{\text{\color{output} \rm \tt ZpXX}\xspace}
+\newcommand{\QpLC}{\text{\color{output} \rm \tt QpLC}\xspace}
+\newcommand{\QpLF}{\text{\color{output} \rm \tt QpLF}\xspace}
 \newcommand{\QpXX}{\text{\color{output} \rm \tt QpXX}\xspace}
+
+\newcommand{\LC}{\text{\rm \tt LC}\xspace}
+\newcommand{\LF}{\text{\rm \tt LF}\xspace}
 
 \newcommand{\card}{\text{Card}\:}
 \newcommand{\ind}{\text{ind}}
@@ -238,6 +243,14 @@ many elements together by tracking a precision module for the whole collection
 of variables.  As variables are created and destroyed, we update a matrix whose
 rows represent the vectors in the module.  Information about the precision
 of elements is extracted from the matrix as necessary.
+Concretely, our package provides two new \sage 
+parents\footnote{Parents in \sage are the analogues of container objects 
+in computer science. Basically it corresponds to the implementation of a 
+concrete mathematical structure, as the ring of $p$-adic integers.}, 
+namely \ZpLC and \ZpLF (and their fraction fields \QpLC and \QpLF). The 
+acronyms \LC and \LF stand for ``lattice-cap'' and ``lattice-float''
+respectively (see \S \ref{sec:implementation} for details). Our package 
+is merged in the standard distribution of \sage since version 8.2.
 
 The article is structured as follows. In \S \ref{sec:demo} we provide a demonstration
 of the package, showing how it can provide more precise answers than the
@@ -249,8 +262,8 @@ and \S \ref{ssec:diffeq} examples of differential equations.
 In \S \ref{sec:implementation} we give more details on the implementation.
 \S \ref{ssec:preclemma} contains a brief overview on the theory of
 $p$-adic precision of \cite{caruso-roe-vaccon:14a}. 
-In the next two subsections, we explain in more details how \ZpLC and 
-\ZpLF work. \S \ref{ssec:trackprec} is devoted to the implementation of 
+In the next two subsections, we explain in more details how our package
+works. \S \ref{ssec:trackprec} is devoted to the implementation of 
 automatic differentiation leading to the actual computation of the
 module that models the precision.
 In \S \ref{ssec:viewprec}, we explain how precision on any individual number
@@ -285,19 +298,32 @@ numbers we will work with.
 \noindent
 \ZpXX is a generic notation for \ZpCR, \ZpLC and \ZpLF.
 The first, \ZpCR, is the usual constructor for $p$-adic parents in 
-\sage.\footnote{It stands for \textit{capped relative}.} It tracks precision using interval arithmetic. On the contrary
+\sage\footnote{It stands for \textit{capped relative}.}. It tracks 
+precision using interval arithmetic. On the contrary
 \ZpLC and \ZpLF are provided by our package. In the sequel, we will
 compare the outputs provided by each parent.
-As the results for \ZpLF and \ZpLC agree on all examples in this section, so we only write \ZpLC for them. 
+As the results for \ZpLF and \ZpLC agree on all examples in this section, 
+we shall only mention \ZpLC in the sequel.
 More details about what are precisely \ZpLC and \ZpLF are provided in Section \ref{sec:implementation}.
+
+In what follows, random elements in $\Zp$ are always picked with respect 
+to the Haar measure. Random elements in $\Qp$ are constructed as a 
+product $p^V \cdot U$ where $U$ is a random element in $\Zp$ 
+(distributed according to the Haar measure) and $V$ is a random variable
+taking values in $\Z$ which is independant from $U$ and distributed as
+follows:
+$$\textstyle
+\text{Prob}[V{=}0] = \frac 1 5, \quad
+\text{Prob}[V{=}v] = \frac 2 {5|v|\cdot (|v|+1)}, \, \forall v \neq 0.$$
+This distribution is the default in \sage.
+
 
 \subsection{Elementary arithmetic}
 \label{ssec:elem}
 
 We begin our tour of the features of the \ZpL package with some basic 
 arithmetic computations.
-We first pick some random element $x$ (using the natural
-Haar measure on $\mathbb{Z}_p$, as is default in \sage).
+We first pick some random element $x$.
 The function {\color{function}\verb?random_element?} is designed so
 that it guarantees that the picked random element is the same for
 each constructor \ZpCR, \ZpLC and \ZpLF.
@@ -665,9 +691,9 @@ Our package can be applied to computation with $p$-adic polynomials.
 
 \noindent \textbf{Euclidean algorithm.}
 %
-A natural example is that of the computation of GCD, whose stability has 
-been studied in \cite{caruso:2017}.
-A naive implementation of the Euclidean algorithm can produce different 
+A natural example is that of the computation of GCD in the Euclidean 
+ring $\Qp[X]$, whose stability has been studied in \cite{caruso:2017}. A 
+naive implementation of the Euclidean algorithm can produce different 
 behavior depending on the type of implementation of the field of 
 $p$-adic coefficients.
 
@@ -1294,8 +1320,8 @@ example, the (partial) session:
 \noindent
 indicates that the absolute precision on \ttv is $10$ since
 exactly $10$ digits are printed.
-The method {\color{method}\verb?precision_absolute?} provides an easier-to-use
-access to the absolute precision.
+The method {\color{method}\verb?precision_absolute?} provides an 
+easier-to-use access to the absolute precision.
 
 \smallskip
 
@@ -1346,7 +1372,7 @@ each time a new variable \ttw is created.
 Here, the exponent $N_{t+1}$ is the cap defined by Eq.~\eqref{eq:cap}.
 In case of deletion, we put $\calK_{t+1} = \calK_t$ and $K_{t+1} = K_t$.
 
-Taking the compositum of all the functions $\tilde F$ (\emph{cf} 
+Taking the composition of all the functions $\tilde F$ (\emph{cf} 
 Eq.~\eqref{eq:tildeF}) from time $0$ to $t$, we find that the execution 
 of the session until time $t$ is modeled by a mathematical function
 $\Phi_t : \calU_t \oplus \calK_t \to E_t$.
