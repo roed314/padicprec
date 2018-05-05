@@ -86,7 +86,12 @@
 \newcommand{\ZpLC}{\text{\color{output} \rm \tt ZpLC}\xspace}
 \newcommand{\ZpLF}{\text{\color{output} \rm \tt ZpLF}\xspace}
 \newcommand{\ZpXX}{\text{\color{output} \rm \tt ZpXX}\xspace}
+\newcommand{\QpLC}{\text{\color{output} \rm \tt QpLC}\xspace}
+\newcommand{\QpLF}{\text{\color{output} \rm \tt QpLF}\xspace}
 \newcommand{\QpXX}{\text{\color{output} \rm \tt QpXX}\xspace}
+
+\newcommand{\LC}{\text{\rm \tt LC}\xspace}
+\newcommand{\LF}{\text{\rm \tt LF}\xspace}
 
 \newcommand{\card}{\text{Card}\:}
 \newcommand{\ind}{\text{ind}}
@@ -234,10 +239,21 @@ differential of $f$ to $H$.
 
 In this paper, we describe an implementation of this idea in \sage \cite{sage}.
 Rather than attaching a precision to each element, we store the precision of
-many elements together by tracking a precision module for the whole collection
-of variables.  As variables are created and destroyed, we update a matrix whose
-rows represent the vectors in the module.  Information about the precision
-of elements is extracted from the matrix as necessary.
+many elements together by tracking a precision module\footnote{Throughout
+the paper, the word ``module'' has its mathematical meaning: it denotes 
+an additive group endowed with an external product by scalars in $\Zp$.} 
+for the whole collection of variables.  As variables are created and 
+destroyed, we update a matrix whose rows represent the vectors in the 
+module.  Information about the precision of elements is extracted from 
+the matrix as necessary.
+Concretely, our package provides two new \sage 
+parents\footnote{Parents in \sage are the analogues of container objects 
+in computer science. Basically it corresponds to the implementation of a 
+concrete mathematical structure, as the ring of $p$-adic integers.}, 
+namely \ZpLC and \ZpLF (and their fraction fields \QpLC and \QpLF). The 
+acronyms \LC and \LF stand for ``lattice-cap'' and ``lattice-float''
+respectively (see \S \ref{sec:implementation} for details). Our package 
+is merged in the standard distribution of \sage since version 8.2.
 
 The article is structured as follows. In \S \ref{sec:demo} we provide a demonstration
 of the package, showing how it can provide more precise answers than the
@@ -249,8 +265,8 @@ and \S \ref{ssec:diffeq} examples of differential equations.
 In \S \ref{sec:implementation} we give more details on the implementation.
 \S \ref{ssec:preclemma} contains a brief overview on the theory of
 $p$-adic precision of \cite{caruso-roe-vaccon:14a}. 
-In the next two subsections, we explain in more details how \ZpLC and 
-\ZpLF work. \S \ref{ssec:trackprec} is devoted to the implementation of 
+In the next two subsections, we explain in more details how our package
+works. \S \ref{ssec:trackprec} is devoted to the implementation of 
 automatic differentiation leading to the actual computation of the
 module that models the precision.
 In \S \ref{ssec:viewprec}, we explain how precision on any individual number
@@ -285,10 +301,25 @@ numbers we will work with.
 \noindent
 \ZpXX is a generic notation for \ZpCR, \ZpLC and \ZpLF.
 The first, \ZpCR, is the usual constructor for $p$-adic parents in 
-\sage. It tracks precision using interval arithmetic. On the contrary
+\sage\footnote{It stands for \textit{capped relative}.}. It tracks 
+precision using interval arithmetic. On the contrary
 \ZpLC and \ZpLF are provided by our package. In the sequel, we will
 compare the outputs provided by each parent.
-Results for \ZpLF are only displayed when they differ from \ZpLC.
+As the results for \ZpLF and \ZpLC agree on all examples in this section, 
+we shall only mention \ZpLC in the sequel.
+More details about what are precisely \ZpLC and \ZpLF are provided in Section \ref{sec:implementation}.
+
+In what follows, random elements in $\Zp$ are always picked with respect 
+to the Haar measure. Random elements in $\Qp$ are constructed as a 
+product $p^V \cdot U$ where $U$ is a random element in $\Zp$ 
+(distributed according to the Haar measure) and $V$ is a random variable
+taking values in $\Z$ which is independant from $U$ and distributed as
+follows:
+$$\textstyle
+\text{Prob}[V{=}0] = \frac 1 5, \quad
+\text{Prob}[V{=}v] = \frac 2 {5|v|\cdot (|v|+1)}, \, \forall v \neq 0.$$
+This distribution is the default in \sage.
+
 
 \subsection{Elementary arithmetic}
 \label{ssec:elem}
@@ -663,9 +694,9 @@ Our package can be applied to computation with $p$-adic polynomials.
 
 \noindent \textbf{Euclidean algorithm.}
 %
-A natural example is that of the computation of GCD, whose stability has 
-been studied in \cite{caruso:2017}.
-A naive implementation of the Euclidean algorithm can produce different 
+A natural example is that of the computation of GCD in the Euclidean 
+ring $\Qp[X]$, whose stability has been studied in \cite{caruso:2017}. A 
+naive implementation of the Euclidean algorithm can produce different 
 behavior depending on the type of implementation of the field of 
 $p$-adic coefficients.
 
@@ -705,7 +736,7 @@ $p$-adic coefficients.
 
 \noindent
 With high probability, $P$ and $Q$ are coprime, implying that the gcd of 
-$DP$ is $DQ$ is $D$.  However, we observe that \ZpCR output a quite 
+$DP$ and $DQ$ is $D$.  However, we observe that \ZpCR output a quite 
 different result. The point is that, in the \ZpCR case, Euclidean 
 algorithm stops prematurely because the test \verb?B != 0? fails 
 too early due to the lack of precision.
@@ -768,7 +799,7 @@ when computing the coefficient $x^n$ of $y$
 from $g$ and $h$ was in $\log_p(n)$
 even though a naive analysis of
 the Newton method for solving the equation
-yield a loss in $\log_p(n)^2.$
+yields a loss in $\log_p(n)^2.$
 
 We can reach this theoretical loss in precision using \ZpL, while \ZpCR does not perform as well.
 We apply \verb?N? steps of the Newton method for 
@@ -957,7 +988,7 @@ The $\ttv_i$'s stand for already defined variables and $f$ is some
 $n$-ary builtin function (in most cases it is just addition, 
 subtraction, multiplication or division). On the contrary, the terms 
 ``value'' and ``prec'' refer to user-specified constants or integral 
-values which was computed earlier.
+values which were computed earlier.
 
 \smallskip
 
@@ -1026,7 +1057,7 @@ matrix:
 $$\left(\begin{matrix}
 M_t & C \smallskip \\ 0 & p^{N_{t+1}}
 \end{matrix}\right).$$
-Performing row operations, we see then the entries of $C$ can be
+Performing row operations, we see then that the entries of $C$ can be
 reduced modulo $p^{N_{t+1}}$ without changing the lattice. In order
 to optimize the size of the objects, we perform this reduction and
 define $M_{t+1}$ by:
@@ -1292,8 +1323,8 @@ example, the (partial) session:
 \noindent
 indicates that the absolute precision on \ttv is $10$ since
 exactly $10$ digits are printed.
-The method {\color{method}\verb?precision_absolute?} provides a more easy-to-use
-access to the absolute precision.
+The method {\color{method}\verb?precision_absolute?} provides an 
+easier-to-use access to the absolute precision.
 
 \smallskip
 
@@ -1344,7 +1375,7 @@ each time a new variable \ttw is created.
 Here, the exponent $N_{t+1}$ is the cap defined by Eq.~\eqref{eq:cap}.
 In case of deletion, we put $\calK_{t+1} = \calK_t$ and $K_{t+1} = K_t$.
 
-Taking the compositum of all the functions $\tilde F$ (\emph{cf} 
+Taking the composition of all the functions $\tilde F$ (\emph{cf} 
 Eq.~\eqref{eq:tildeF}) from time $0$ to $t$, we find that the execution 
 of the session until time $t$ is modeled by a mathematical function
 $\Phi_t : \calU_t \oplus \calK_t \to E_t$.
@@ -1814,7 +1845,7 @@ when computing the coefficient $x^n$ of $y$
 from $g$ and $h$ was in $\log_p(n)$
 even though a naive analysis of
 the Newton method for solving the equation
-yield a loss in $\log_p(n)^2.$
+yields a loss in $\log_p(n)^2.$
 
 However, this does not encompass the case of 
 elliptic curves defined and isogenous 
