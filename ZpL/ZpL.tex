@@ -251,8 +251,8 @@ module.  Information about the precision of elements is extracted from
 the matrix as necessary.
 Concretely, our package provides two new \sage 
 parents\footnote{Parents in \sage are the analogues of container objects 
-in computer science. Basically it corresponds to the implementation of a 
-concrete mathematical structure, as the ring of $p$-adic integers.}, 
+in computer science. Basically a parent corresponds to an implementation
+of a concrete mathematical structure, as the ring of $p$-adic integers.}, 
 namely \ZpLC and \ZpLF (and their fraction fields \QpLC and \QpLF). The 
 acronyms \LC and \LF stand for ``lattice-cap'' and ``lattice-float''
 respectively (see \S \ref{sec:implementation} for details). Our package 
@@ -1416,6 +1416,9 @@ Unfortunately, automatically checking the assumptions of Proposition
 on higher derivatives.  To produce provably correct results, the assumptions
 can be checked by hand \cite{caruso-roe-vaccon:14a, caruso:2017, LV16},
 or \ZpCR may be used.
+\todo{NDXavier: I would not mention \ZpCR here but say instead that we
+can use \cite[Proposition~3.12]{caruso-roe-vaccon:14a} and that we plan
+to include this in a next release of the package.}
 
 \begin{rmk} \label{rmk:cap_optimality}
 Assuming that Proposition \ref{prop:precision} applies, 
