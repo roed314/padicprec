@@ -86,6 +86,7 @@
 \newcommand{\ZpLC}{\text{\color{output} \rm \tt ZpLC}\xspace}
 \newcommand{\ZpLF}{\text{\color{output} \rm \tt ZpLF}\xspace}
 \newcommand{\ZpXX}{\text{\color{output} \rm \tt ZpXX}\xspace}
+\newcommand{\QpCR}{\text{\color{output} \rm \tt QpCR}\xspace}
 \newcommand{\QpLC}{\text{\color{output} \rm \tt QpLC}\xspace}
 \newcommand{\QpLF}{\text{\color{output} \rm \tt QpLF}\xspace}
 \newcommand{\QpXX}{\text{\color{output} \rm \tt QpXX}\xspace}
@@ -120,6 +121,8 @@
 \newcommand{\cZpFP}{{\color{output} \tt ZpFP}:}
 \newcommand{\cZpLC}{{\color{output} \tt ZpLC}:}
 \newcommand{\cZpLF}{{\color{output} \tt ZpLF}:}
+\newcommand{\cQpCR}{{\color{output} \tt QpCR}:}
+\newcommand{\cQpLC}{{\color{output} \tt QpLC}:}
 
 \def\todo#1{\ \!\!{\color{red} #1}}
 \definecolor{purple}{rgb}{0.6,0,0.6}
@@ -217,7 +220,7 @@ lead to very inaccurate answers \cite{higham:2002}.
 
 If provably correct results are desired, interval arithmetic provides
 an alternative to floating point.  Instead of just tracking an approximation to the answer,
-the package also tracks a radius within which the true result lies.
+one also tracks a radius within which the true result lies.
 This method is commonly used for $p$-adic computations since
 the ultrametric property of $p$-adic fields frequently keeps the radius small.
 Computations remain fairly efficient with this approach, but numerical instability
@@ -253,7 +256,7 @@ concrete mathematical structure, as the ring of $p$-adic integers.},
 namely \ZpLC and \ZpLF (and their fraction fields \QpLC and \QpLF). The 
 acronyms \LC and \LF stand for ``lattice-cap'' and ``lattice-float''
 respectively (see \S \ref{sec:implementation} for details). Our package 
-is merged in the standard distribution of \sage since version 8.2.
+has been included in the standard distribution of \sage since version 8.2.
 
 The article is structured as follows. In \S \ref{sec:demo} we provide a demonstration
 of the package, showing how it can provide more precise answers than the
@@ -480,10 +483,10 @@ they should be equal).
 \noindent
 Again \ZpCR does not output the optimal precision when the computation
 is split into several steps whereas \ZpL does.
-Actually, these toy examples illustrate quite common situations which 
-often occur during the execution of many algorithms. For this reason,
-interval arithmetic often overestimates the losses of precision. 
-Roughly speaking, the aim of our package is to ``fix this misfeature''.
+These basic examples illustrate situations 
+that occur during the execution of many algorithms. 
+As a result, interval arithmetic frequently overestimates the loss of precision. 
+The aim of our package is to reduce this precision loss.
 In the next subsections, we present a bunch of examples showing the
 benefit of \ZpL in various contexts.
 
@@ -569,10 +572,10 @@ iteration.
 \subsection{Linear algebra}
 \label{ssec:linalg}
 
-Many generic algorithms of linear algebra lead to quite important 
-instability when they are used with $p$-adic numbers. In many cases, 
-our package \ZpL rubs this instability without having to change the 
-algorithm, nor the implementation.
+Many generic algorithms of linear algebra exhibit
+instability when used with $p$-adic numbers.
+Our package \ZpL frequently eliminates this instability without having to change either the 
+algorithm or the implementation.
 
 \medskip
 
@@ -622,10 +625,10 @@ precision is therefore very important in such situations.
 \noindent \textbf{Characteristic polynomials.}
 %
 Characteristic polynomials are notoriously hard to compute 
-\cite{caruso-roe-vaccon:15, caruso-roe-vaccon:17}. We illustrate this 
-with the following example (using the default algorithm of \sage for the 
-computation of the characteristic polynomial, which is a division free 
-algorithm in this setting) :
+\cite{caruso-roe-vaccon:15, caruso-roe-vaccon:17}.  By default,
+\sage uses a division-free algorithm over $\Qp$, this choice is not enough to achieve optimal
+precision in the \QpCR case since negative valuations may appear.  We illustrate the different
+precision behavior in the following example.
 
 \smallskip
 
@@ -634,16 +637,16 @@ algorithm in this setting) :
 \cIn
  & \verb?M = ?{\color{function}\verb?random_element?}\verb?(?{\color{constructor}\verb?MatrixSpace?}\verb?(?{\color{ring}\verb?Q2?}\verb?,3), prec=10)? \\
  & \verb?M.?{\color{method}\verb?determinant?}\verb?()? \\
-\cZpCR
+\cQpCR
  & \verb?...010000010? \\
-\cZpLC
+\cQpLC
  & \verb?...010000010? \\
 \cIn
  & \verb?M.?{\color{method}\verb?charpoly?}\verb?()? \\
-\cZpCR
+\cQpCR
  & \verb?...00000000000000000001*x^3 + ? \\
  & \verb?...1001011.011*x^2 + ...0111.01*x + 0? \\
-\cZpLC
+\cQpLC
  & \verb?...00000000000000000001*x^3 + ? \\
  & \verb?...1001011.011*x^2 + ...11100111.01*x +? \\
  & \verb?...010000010? \\
@@ -769,10 +772,10 @@ bases using generic Gröbner bases algorithms.
  & \verb?    ?{\color{keyword}\verb?import?}\verb? ?{\color{function}\verb?buchberger_improved?} \\
  & \verb?g = ?{\color{function}\verb?buchberger_improved?}\verb?(ideal(F))? \\
  & \verb?g.?{\color{method}\verb?sort?}\verb?(); g? \\
-\cZpCR
+\cQpCR
  & \verb?[x^3, x*y + ...1100010*x^2,? \\
  & \verb? y^2 + ...11001*x^2, z + ...0000000010*x]? \\
-\cZpLC
+\cQpLC
  & \verb?[x^3, x*y + ...111100010*x^2,? \\
  & \verb? y^2 + ...1111111001*x^2, z + ...0000000010*x]? \\
 \end{tabular}}
@@ -818,9 +821,9 @@ $y'=g \times h(y)$ as described in \cite{LV16}, using a generic {\color{function
  & \verb?y = t + t^2 * ?{\color{function}\verb?random_element?}\verb?(S, prec=10)? \\
  & \verb?g = y.derivative() / h(y)? \\
  & \verb?u = ?{\color{function}\verb?Newton_Iteration_Solver?}\verb?(g, h, 4); u[15]? \\
-\cZpCR
+\cQpCR
  & \verb?...1101? \\
-\cZpLC
+\cQpLC
  & \verb?...11011101? \\
 \end{tabular}}
 
@@ -1024,12 +1027,13 @@ Observe that the matrix $J_{\underline x}(F) \cdot M_t$ is no longer a
 square matrix; it has one extra column. This reflects the fact that 
 $\dim E_{t+1} = \dim E_t + 1$. Rephrasing this in a different language, 
 the image of $H_t$ under $dF_{\underline x}$ is no longer a lattice in 
-$E_{t+1}$ but is included in an hyperplane.
+$E_{t+1}$ but is included in an hyperplane, violating our definition of
+a precision lattice.
 
-The package \ZpLC tackles this issue by introducing a cap: we do not 
-work with $dF_{\underline x}(H_t)$ but instead define the lattice
-$H_{t+1} = dF_{\underline x}(H_t) \oplus p^{N_{t+1}} \Zp e_\ttw$
-where $N_{t+1}$ is an integer, the so-called \emph{cap}.
+The package \ZpLC tackles this issue by introducing a cap, analogous
+to adding $O(p^N)$ when creating a $p$-adic number from an integer.
+Specifically, we choose an integer $N_{t+1}$ and replace the $\Zp$-submodule
+$dF_{\underline x}(H_t)$ with the lattice $H_{t+1} = dF_{\underline x}(H_t) \oplus p^{N_{t+1}} \Zp e_\ttw$.
 Alternatively, one may introduce the map:
 \begin{equation}
 \label{eq:tildeF}
@@ -1041,17 +1045,18 @@ Alternatively, one may introduce the map:
 \end{equation}
 The lattice $H_{t+1}$ is then the image of $H_t \oplus p^{N_{t+1}}
 \Zp$ under $d\tilde F_{(\underline x, \star)}$ for any value of $\star$.
-The choice of the 
-cap is of course a sensitive question. \ZpLC proceeds as follows. When a 
-ring is created, it comes with two constants (which can be specified by 
-the user): a relative cap \textsc{relcap} and an absolute cap 
-\textsc{abscap}. With these predefined values, the chosen cap is:
+In order to carry out this strategy, one must choose $N_{t+1}$.  We do
+so by associating two constants to each ring: a relative cap \textsc{relcap}
+and an absolute cap \textsc{abscap}. We then set
 \begin{equation}
 \label{eq:cap}
 N_{t+1} = 
 \min\big(\textsc{abscap},\, \textsc{relcap} + v_p(y)\big)
 \end{equation}
 with $y = f(x_1, \ldots, x_n)$.
+Larger caps mean that the precision of the final result is less likely to be affected,
+but require more space.  See Remark \ref{rmk:cap_optimality} for more details.
+
 In concrete terms, the lattice $H_{t+1}$ is represented by the block 
 matrix:
 $$\left(\begin{matrix}
@@ -1059,7 +1064,7 @@ M_t & C \smallskip \\ 0 & p^{N_{t+1}}
 \end{matrix}\right).$$
 Performing row operations, we see then that the entries of $C$ can be
 reduced modulo $p^{N_{t+1}}$ without changing the lattice. In order
-to optimize the size of the objects, we perform this reduction and
+save space, we perform this reduction and
 define $M_{t+1}$ by:
 $$M_{t+1} = \left(\begin{matrix}
 M_t & C \text{ mod } p^{N_{t+1}} \smallskip \\ 0 & p^{N_{t+1}}
@@ -1170,8 +1175,11 @@ codimensions are \emph{not} exact objects, in the sense that they cannot
 be represented by integral matrices in full generality. Consequently,
 they cannot be encoded on a computer.
 We work around this drawback by replacing everywhere exact $p$-adic 
-numbers by floating point $p$-adic numbers (at some given precision) 
-\cite{course-padic}.
+numbers by floating point $p$-adic numbers (at some given relative precision $k$) 
+\cite{course-padic}.  In the floating point model, we approximate all
+numbers in the disc $p^v(u + O(p^k))$ by a single rational number
+$p^vu$.  Operations on these numbers are then not exact, but instead
+produce the representative in the correct disc.
 
 The fact that the lattice $H_t$ can now have arbitrary codimension
 translates to the fact the matrix $M_t$ can be rectangular.
@@ -1227,11 +1235,8 @@ M_t & C \end{matrix}\right)$
 where $C$ is the column vector defined by Eq.~\eqref{eq:defC}.
 %$$C = \sum_{i=1}^n \frac{\partial f}{\partial{\ttv_i}} (\underline x)
 %\cdot C_i.$$
-However, we insist on the fact that all the computations now take
-place in the ``ring'' of floating point $p$-adic numbers. Therefore,
-we cannot guarantee that the rows of $M_{t+1}$ generate $H_{t+1}$.
-Nonetheless, they generate a module which is expected to be close
-to $H_{t+1}$.
+However, since operations defining $M_{t+1}$ are performed with floating point numbers,
+the matrix $M_{t+1}$ gives only an approximate basis for $H_{t+1}$.
 
 \smallskip
 
@@ -1406,12 +1411,13 @@ The latter inclusion means that the computed value $x_{t,\ttv}$ is
 accurate at precision $O(p^N)$, \emph{i.e.} that the output absolute
 precision is correct. 
 
-Unfortunately, checking automatically the assumptions of Proposition 
-\ref{prop:precision} in full generality seems to be difficult, though it 
-can be done by hand for many particular examples
-\cite{caruso-roe-vaccon:14a, caruso:2017, LV16}.
+Unfortunately, automatically checking the assumptions of Proposition 
+\ref{prop:precision} in full generality is difficult because it requires bounds
+on higher derivatives.  To produce provably correct results, the assumptions
+can be checked by hand \cite{caruso-roe-vaccon:14a, caruso:2017, LV16},
+or \ZpCR may be used.
 
-\begin{rmk}
+\begin{rmk} \label{rmk:cap_optimality}
 Assuming that Proposition \ref{prop:precision} applies, 
 the absolute precision computed as above is optimal if and only if
 the inclusion of \eqref{eq:absprec} is an equality. Applying again
@@ -1692,14 +1698,12 @@ user. This means that we expect $\cohgt_t(\ttw)$ to vanish and so,
 the corresponding cost to be negligible.
 
 In the \ZpLC case, we always have $\cohgt_t(\ttw) = \coind_t(\ttw)$, so 
-that the cost becomes $O\big(\coind_t(\ttw)^2\big)$. This does not look 
-nice \emph{a priori}. However, the principle of temporal locality 
-\cite{denning:2005}
-asserts that $\coind_t(\ttw)$ tends to be small in general: destroyed 
-variables are often variables that were created recently. As a basic 
+that the cost becomes $O\big(\coind_t(\ttw)^2\big)$, which seems high \emph{a priori}.
+However, the principle of temporal locality \cite{denning:2005}
+asserts that $\coind_t(\ttw)$ tends to be small: destroyed 
+variables are often recently created ones.  As a simple 
 example, variables which are local to a small piece of code (\emph{e.g.} 
-a short function or a loop) do not survive for a long time. It turns
-out that this behavior is typical in many implementations!
+a short function or a loop) have a short lifetime.
 %
 \begin{figure}
 \noindent\hfill%
@@ -1791,16 +1795,16 @@ term is $c^{3/2}$ and the impact on the complexity is then limited.
 \label{sec:conclusion}
 
 The package \ZpL provides powerful tools (based on automatic 
-differentiation) to track precision in the $p$-adic setting. In many 
-concrete situations, it greatly outperforms standard interval arithmetic,
-as shown in \S \ref{sec:demo}.
+differentiation) to track precision in the $p$-adic setting.
+It frequently outperforms standard interval arithmetic in terms of the
+precision of the output, as shown in \S \ref{sec:demo}.
 The impact on complexity is controlled but nevertheless non-negligible 
 (see \S \ref{ssec:complexity}). For this reason, it is unlikely that a fast
 algorithm will rely \emph{directly} on the machinery proposed by \ZpL,
 though it might do so for a specific part of a computation.
 At least for now, bringing together rapidity and stability
 still requires a substantial human contribution 
-and a careful special study of all parameters.
+and a careful study of all parameters.
 
 Nevertheless, we believe that \ZpL can be extremely helpful to 
 anyone designing a fast and stable $p$-adic algorithm for a couple 
@@ -1809,16 +1813,16 @@ to automatically detect which steps of a given algorithm are stable and
 which ones are not. In this way, it highlights the parts of the algorithm 
 on which the researcher has to concentrate their effort.
 Second, recall that a classical strategy to improve stability consists 
-in working internally at higher precision. Finding the internal increase
+of working internally at higher precision. Finding the internal increase
 in precision that best balances efficiency and accuracy is not an easy
-task in general. Understanding the number of diffused digits of 
+task in general. Understanding the diffused 
 precision gives very useful hints in this direction. For example, when there are
 no diffused digits of precision then the optimal precision completely splits over the
 variables and there is no need to internally increase the precision. On 
 the contrary, when there are many diffused digits of precision, a large 
-increment is often required.
+increment is required.
 Since \ZpL gives a direct access to the number of diffused digits of 
-precision, it could be very useful to the designer who is concerned
+precision, it can be very useful to the designer who is concerned
 with the balance between efficiency and accuracy.
 
 \begin{comment}
