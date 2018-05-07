@@ -301,35 +301,35 @@ numbers we will work with.
 \noindent
 \ZpXX is a generic notation for \ZpCR, \ZpLC and \ZpLF.
 The first, \ZpCR, is the usual constructor for $p$-adic parents in 
-\sage\footnote{It stands for \textit{capped relative}.}. It tracks 
-precision using interval arithmetic. On the contrary
-\ZpLC and \ZpLF are provided by our package. In the sequel, we will
-compare the outputs provided by each parent.
+\sage. It tracks 
+precision using interval arithmetic. The parents 
+\ZpLC and \ZpLF provided by our package\footnote{\text{\color{output} \rm \tt CR} stands for \textit{capped relative},
+\text{\color{output} \rm \tt LC} for \textit{lattice-cap}, and \text{\color{output} \rm \tt LF} for \textit{lattice-float}.}
+track precision differently; more details will be provided in Section \ref{sec:implementation}.
+In the sequel, we will compare the outputs provided by each parent.
 As the results for \ZpLF and \ZpLC agree on all examples in this section, 
-we shall only mention \ZpLC in the sequel.
-More details about what are precisely \ZpLC and \ZpLF are provided in Section \ref{sec:implementation}.
+we will only give those for \ZpLC.
 
 In what follows, random elements in $\Zp$ are always picked with respect 
 to the Haar measure. Random elements in $\Qp$ are constructed as a 
 product $p^V \cdot U$ where $U$ is a random element in $\Zp$ 
 (distributed according to the Haar measure) and $V$ is a random variable
-taking values in $\Z$ which is independant from $U$ and distributed as
+taking values in $\Z$ which is independent from $U$ and distributed as
 follows:
 $$\textstyle
 \text{Prob}[V{=}0] = \frac 1 5, \quad
 \text{Prob}[V{=}v] = \frac 2 {5|v|\cdot (|v|+1)}, \, \forall v \neq 0.$$
-This distribution is the default in \sage.
+This distribution is the default in \sage, and the function {\color{function}\verb?random_element?}
+used below picks the same element for each of \ZpCR, \ZpLC and \ZpLF.
 
 
 \subsection{Elementary arithmetic}
 \label{ssec:elem}
 
-We begin our tour of the features of the \ZpL package with some basic 
-arithmetic computations.
-We first pick some random element $x$.
-The function {\color{function}\verb?random_element?} is designed so
-that it guarantees that the picked random element is the same for
-each constructor \ZpCR, \ZpLC and \ZpLF.
+We begin our tour of the \ZpL package with some basic 
+arithmetic.  Elements are approximated by giving a valuation
+and a unit, where the unit is specified modulo a power of $p$ determined
+by the global lattice precision.
 
 \smallskip
 
@@ -1666,7 +1666,7 @@ be constant but evolves continuously when the algorithm runs.
 The tables of Figure~\ref{fig:variables} show the total number of 
 created variables (which reflects the complexity) together with the 
 maximum number of variables alive at the same time (which reflects 
-the memory occupation) while executing two basic computations.
+the memory usage) while executing two basic computations.
 The first one is the computation of the characteristic polynomial of a 
 square matrix by the default algorithm used by \sage for $p$-adic fields 
 (which is a division-free algorithm of quartic complexity) while the
@@ -1767,7 +1767,7 @@ as input. The bias is evident: most of the time $\coind_t(\ttw) \leq
 % 
 We consider the case of an algorithm with the following characteristics: 
 its complexity is $c$ operations in $\Qp$ (without any tracking of 
-precision), its memory usage is $m$ elements of $\Qp$, its input and its 
+precision), its memory usage is $m$ elements of $\Qp$, its input and 
 output have size $s_\inp$ and $s_\out$ (elements of $\Qp$) respectively.
 
 In the case of \ZpLF, creating a variable has a cost $O(s_\inp)$ 
