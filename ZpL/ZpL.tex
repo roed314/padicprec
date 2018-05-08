@@ -1,4 +1,5 @@
 \documentclass[sigconf]{acmart}
+%\documentclass{acmart}
 
 \setlength{\paperheight}{11in}
 \setlength{\paperwidth}{8.5in}
@@ -155,10 +156,27 @@
 
 \begin{document}
 
+\copyrightyear{2018}
+\acmYear{2018}
+\setcopyright{acmlicensed}
+\acmConference[ISSAC '18]{2018 ACM International Symposium on Symbolic and
+Algebraic Computation}{July 16--19, 2018}{New York, NY, USA}
+\acmBooktitle{ISSAC '18: 2018 ACM International Symposium on Symbolic and
+Algebraic Computation, July 16--19, 2018, New York, NY, USA}
+\acmPrice{15.00}
+\acmDOI{10.1145/3208976.3208995}
+\acmISBN{978-1-4503-5550-6/18/07}
+
+%\CopyrightYear{2018}
+%\setcopyright{acmlicensed}
+%\conferenceinfo{ISSAC '18,}{July 16--19, 2018, New York, NY, USA}
+%\isbn{978-1-4503-5550-6/18/07}\acmPrice{$15.00}
+%\doi{https://doi.org/10.1145/3208976.3208995}
+
 \title{\texorpdfstring{\ZpL}{ZpL}: a p-adic precision package}
 
 \author{Xavier Caruso}
-  \affiliation{Universit\'e Rennes 1; \\
+  \affiliation{CNRS, Universit\'e Rennes 1; \\
   %\institution{IRMAR}
   %\city{Rennes, France}
   %\postcode{35042}
@@ -277,7 +295,6 @@ can be recovered and discuss the validity
 of our results.
 The complexity overhead induced by our package is analyzed in
 \S \ref{ssec:complexity}.
-
 Finally, \S \ref{sec:conclusion} contains a discussion of how we see this
 package fitting into the existing $p$-adic implementations.  While these
 methods do introduce overhead, they are well suited to exploring
