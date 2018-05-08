@@ -151,6 +151,14 @@
 \newtheorem{rmk}[theo]{Remark}
 \newtheorem{ex}[theo]{Example}
 \newtheorem{deftn}[theo]{Definition}
+\copyrightyear{2018}
+\acmYear{2018}
+\setcopyright{acmlicensed}
+\acmConference[ISSAC'18]{2018 ACM International Symposium on Symbolic and Algebraic Computation}{July 16--19, 2018}{New York, NY, USA}
+\acmBooktitle{ISSAC'18: 2018 ACM Int'l Symposium on Symbolic \& Algebraic Computation, July 16--19, 2018, NY, NY, USA}
+\acmPrice{15.00}
+\acmDOI{10.1145/XXXXXX.XXXXXX}
+\acmISBN{978-1-4503-5550-6/18/07}
 
 \fancyhead{}
 
@@ -221,11 +229,13 @@ When computing with real and $p$-adic fields, exact results are usually impossib
 since most elements have infinite decimal or $p$-adic expansions.
 Working with these fields thus requires an analysis of how precision evolves
 through the sequence of steps involved in carrying out a computation.
+Such analysis can be carried out automatically by the software, or via theorems specific
+to a particular application \cite{kedlaya:01a, lauder:04a}.
 In this paper, we describe a package for computing with $p$-adic rings and fields \cite{trac:23505},
 based on a series of papers by the same authors
 \cite{caruso-roe-vaccon:14a,caruso-roe-vaccon:15,caruso-roe-vaccon:16,caruso-roe-vaccon:17}.
 The core of the package is a method for tracking precision using $p$-adic lattices which
-can yield dramatically more precise results, at the cost of increased runtime and memory usage.
+can yield dramatically more precise results than traditional methods, at the cost of increased runtime and memory usage.
 
 The standard method for handling precision when computing with real numbers
 is floating point arithmetic, which may also be used in $p$-adic computation.
