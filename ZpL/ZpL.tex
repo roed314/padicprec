@@ -284,12 +284,12 @@ traditional methods for tracking $p$-adic precision.  In particular, \S \ref{sse
 describes elementary arithmetic and the SOMOS-4 sequence, \S \ref{ssec:linalg}
 gives examples from linear algebra, \S \ref{ssec:comalg} examples using polynomials,
 and \S \ref{ssec:diffeq} examples of differential equations.
-
 In \S \ref{sec:implementation} we give more details on the implementation.
 \S \ref{ssec:preclemma} contains a brief overview on the theory of
 $p$-adic precision of \cite{caruso-roe-vaccon:14a}. 
-In the next two subsections, we explain in more details how our package
-works. \S \ref{ssec:trackprec} is devoted to the implementation of 
+%In the next two subsections, we explain in more details how our package
+%works.
+\S \ref{ssec:trackprec} is devoted to the implementation of 
 automatic differentiation leading to the actual computation of the
 module that models the precision.
 In \S \ref{ssec:viewprec}, we explain how precision on any individual number
@@ -325,8 +325,9 @@ numbers we will work with.
 The first, \ZpCR, is the usual constructor for $p$-adic parents in 
 \sage. It tracks 
 precision using interval arithmetic. The parents 
-\ZpLC and \ZpLF provided by our package\footnote{\text{\color{output} \rm \tt CR} stands for \textit{capped relative},
-\text{\color{output} \rm \tt LC} for \textit{lattice-cap}, and \text{\color{output} \rm \tt LF} for \textit{lattice-float}.}
+\ZpLC and \ZpLF provided by our package
+%\footnote{\text{\color{output} \rm \tt CR} stands for \textit{capped relative},
+%\text{\color{output} \rm \tt LC} for \textit{lattice-cap}, and \text{\color{output} \rm \tt LF} for \textit{lattice-float}.}
 track precision differently; more details will be provided in Section \ref{sec:implementation}.
 In the sequel, we will compare the outputs provided by each parent.
 As the results for \ZpLF and \ZpLC agree on all examples in this section, 
