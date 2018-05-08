@@ -618,7 +618,7 @@ Observe nevertheless the difference between \ZpCR and \ZpLC.
 %\ZpL can count the number of diffused digits.
 %\begin{tabular}{rl}
 %\cIn
-% & {\color{ring}\verb?Z2?}\verb?.precision().?{\color{method}\verb?number_of_diffused_digits?}\verb?()? \\
+% & {\color{ring}\verb?Z2?}\verb?.precision().?{\color{method}\verb?diffused_digits?}\verb?()? \\
 %\ZpLC
 % & \verb?604? \\
 %\end{tabular}
@@ -1422,13 +1422,13 @@ accurate at precision $O(p^N)$, \emph{i.e.} that the output absolute
 precision is correct. 
 
 Unfortunately, automatically checking the assumptions of Proposition 
-\ref{prop:precision} in full generality is difficult because it requires bounds
-on higher derivatives.  To produce provably correct results, the assumptions
-can be checked by hand \cite{caruso-roe-vaccon:14a, caruso:2017, LV16},
-or \ZpCR may be used.
-\todo{NDXavier: I would not mention \ZpCR here but say instead that we
-can use \cite[Proposition~3.12]{caruso-roe-vaccon:14a} and that we plan
-to include this in a next release of the package.}
+\ref{prop:precision} in full generality is not straightforward because 
+it requires bounds on higher derivatives. For now, our package does not 
+perform this inspection but we plan to include it in a forthcoming 
+release, along the lines of 
+\cite[Proposition~3.12]{caruso-roe-vaccon:14a}. 
+Meanwhile, the assumptions can be checked by hand using the results
+of \cite{caruso-roe-vaccon:14a, caruso:2017, LV16}.
 
 \begin{rmk} \label{rmk:cap_optimality}
 Assuming that Proposition \ref{prop:precision} applies, 
@@ -1535,16 +1535,16 @@ reach on the set of $n$ variables corresponding to the basis $(e_1,
 %The diffused digits of precision only appear on linear combinations
 %of those variables.
 
-The method {\color{method}\verb?number_of_diffused_digits?} computes the number of
+The method {\color{method}\verb?diffused_digits?} computes the number of
 diffused digits of precision on a set of variables. Observe:
 
 \smallskip
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn   & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?([x,y])? \\
+\cIn   & \verb?L.?{\color{method}\verb?diffused_digits?}\verb?([x,y])? \\
 \cZpLC & \verb?0? \\
-\cIn   & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?([u,v])? \\
+\cIn   & \verb?L.?{\color{method}\verb?diffused_digits?}\verb?([u,v])? \\
 \cZpLC & \verb?6? \\
 \end{tabular}}
 
@@ -1567,7 +1567,7 @@ example of \S \ref{ssec:linalg}, we get
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?(M.?{\color{method}\verb?list?}\verb?())? \\
+\cIn & \verb?L.?{\color{method}\verb?diffused_digits?}\verb?(M.?{\color{method}\verb?list?}\verb?())? \\
 \cZpLC & \verb?11? \\
 \end{tabular}}
 
