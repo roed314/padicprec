@@ -608,7 +608,7 @@ Observe nevertheless the difference between \ZpCR and \ZpLC.
 %\ZpL can count the number of diffused digits.
 %\begin{tabular}{rl}
 %\cIn
-% & {\color{ring}\verb?Z2?}\verb?.precision().?{\color{method}\verb?number_of_diffused_digits?}\verb?()? \\
+% & {\color{ring}\verb?Z2?}\verb?.precision().?{\color{method}\verb?diffused_digits?}\verb?()? \\
 %\ZpLC
 % & \verb?604? \\
 %\end{tabular}
@@ -1525,16 +1525,16 @@ reach on the set of $n$ variables corresponding to the basis $(e_1,
 %The diffused digits of precision only appear on linear combinations
 %of those variables.
 
-The method {\color{method}\verb?number_of_diffused_digits?} computes the number of
+The method {\color{method}\verb?diffused_digits?} computes the number of
 diffused digits of precision on a set of variables. Observe:
 
 \smallskip
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn   & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?([x,y])? \\
+\cIn   & \verb?L.?{\color{method}\verb?diffused_digits?}\verb?([x,y])? \\
 \cZpLC & \verb?0? \\
-\cIn   & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?([u,v])? \\
+\cIn   & \verb?L.?{\color{method}\verb?diffused_digits?}\verb?([u,v])? \\
 \cZpLC & \verb?6? \\
 \end{tabular}}
 
@@ -1557,7 +1557,7 @@ example of \S \ref{ssec:linalg}, we get
 
 {\noindent \small
 \begin{tabular}{rl}
-\cIn & \verb?L.?{\color{method}\verb?number_of_diffused_digits?}\verb?(M.?{\color{method}\verb?list?}\verb?())? \\
+\cIn & \verb?L.?{\color{method}\verb?diffused_digits?}\verb?(M.?{\color{method}\verb?list?}\verb?())? \\
 \cZpLC & \verb?11? \\
 \end{tabular}}
 
