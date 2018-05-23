@@ -1,0 +1,183 @@
+\documentclass{article}
+
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+
+\usepackage[utf8]{inputenc}
+
+\hyphenation{regarding}
+
+\usepackage{amsmath,amssymb}
+%\usepackage{amsthmnoproof}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+%\let\bibsection\relax
+%\usepackage{amsrefs}
+%\usepackage[usenames,dvipsnames]{color}
+\usepackage{stmaryrd}
+\usepackage{enumerate}
+%\usepackage[algoruled,vlined,english,linesnumbered]{algorithm2e}
+%\usepackage[pdfpagelabels,colorlinks=true,citecolor=blue]{hyperref}
+\usepackage{comment}
+\usepackage{multirow}
+\usepackage{xspace}
+\usepackage{tabularx,multicol}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\definecolor{input}{HTML}{303060}
+\definecolor{output}{HTML}{804000}
+\definecolor{string}{HTML}{A02020}
+\definecolor{ring}{HTML}{A020A0}
+\definecolor{function}{HTML}{205080} % {A06020}
+\definecolor{constructor}{HTML}{205080}
+\definecolor{method}{HTML}{205080}
+\definecolor{keyword}{HTML}{008000}
+\definecolor{error}{HTML}{B01010}
+\definecolor{comment}{HTML}{606060}
+
+\newcommand{\noopsort}[1]{}
+\DeclareMathOperator{\NP}{NP}
+\DeclareMathOperator{\HP}{HP}
+\DeclareMathOperator{\PP}{PP}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\val}{val}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\tr}{Tr}
+\DeclareMathOperator{\adj}{Adj}
+\DeclareMathOperator{\Grass}{Grass}
+\DeclareMathOperator{\Lat}{Lat}
+\DeclareMathOperator{\round}{round}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\rec}{rec}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\disc}{Disc}
+\DeclareMathOperator{\row}{row}
+\DeclareMathOperator{\col}{col}
+
+\newcommand{\ph}{\vphantom{$A^A_A$}}
+
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Zp}{\Z_p}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Qp}{\Q_p}
+\newcommand{\Fp}{\mathbb{F}_p}
+\newcommand{\Fq}{\mathbb{F}_q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\OK}{\mathcal{O}_K}
+
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\ttv}{\texttt{v}\xspace}
+\newcommand{\ttw}{\texttt{w}\xspace}
+\newcommand{\tttmp}{\texttt{tmp}\xspace}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calK}{\mathcal{K}}
+
+\newcommand{\rem}{\,\%\,}
+
+\newcommand{\sage}{\textsc{SageMath}\xspace}
+\newcommand{\ZpCR}{\text{\color{output} \rm \tt ZpCR}\xspace}
+\newcommand{\ZpFP}{\text{\color{output} \rm \tt ZpFP}\xspace}
+\newcommand{\ZpL}{\text{\color{output} \rm \tt ZpL}\xspace}
+\newcommand{\ZpLC}{\text{\color{output} \rm \tt ZpLC}\xspace}
+\newcommand{\ZpLF}{\text{\color{output} \rm \tt ZpLF}\xspace}
+\newcommand{\ZpXX}{\text{\color{output} \rm \tt ZpXX}\xspace}
+\newcommand{\QpXX}{\text{\color{output} \rm \tt QpXX}\xspace}
+
+\newcommand{\card}{\text{Card}\:}
+\newcommand{\ind}{\text{ind}}
+\newcommand{\coind}{\text{coind}}
+\newcommand{\hgt}{\text{hgt}}
+\newcommand{\cohgt}{\text{cohgt}}
+\newcommand{\inp}{\text{in}}
+\newcommand{\out}{\text{out}}
+
+\newcommand{\famN}{\mathcal{N}}
+
+\newcommand{\llb}{[\mkern-2.5mu[}
+\newcommand{\rrb}{]\mkern-2.5mu]}
+\newcommand{\llp}{(\mkern-2.5mu(}
+\newcommand{\rrp}{)\mkern-2.5mu)}
+
+
+\newcommand{\softO}{O\tilde{~}}
+
+\newcommand{\inv}{\text{\rm inv}}
+\newcommand{\app}{\text{\rm app}}
+
+\newcommand{\cIn}{{\color{input} \tt \phantom{Zp}In}:}
+\newcommand{\cOut}{{\color{red} \tt \phantom{Z}Out}:}
+\newcommand{\cZpCR}{{\color{output} \tt ZpCR}:}
+\newcommand{\cZpFP}{{\color{output} \tt ZpFP}:}
+\newcommand{\cZpLC}{{\color{output} \tt ZpLC}:}
+\newcommand{\cZpLF}{{\color{output} \tt ZpLF}:}
+
+\def\todo#1{\ \!\!{\color{red} #1}}
+\definecolor{purple}{rgb}{0.6,0,0.6}
+\def\todofor#1#2{\ \!\!{\color{purple} {\bf #1}: #2}}
+
+\newcommand{\done}[1]{\textcolor{blue}{#1}}
+\newcommand{\tdo}[1]{\textcolor{red}{#1}}
+\definecolor{answer}{rgb}{0,0.5,0.2}
+\newcommand{\xavier}[1]{\textcolor{answer}{{\bf Xavier:} #1}}
+\newcommand{\tristan}[1]{\textcolor{answer}{{\bf Tristan:} #1}}
+\newcommand{\david}[1]{\textcolor{answer}{{\bf David:} #1}}
+
+\def\binom#1#2{\Big(\begin{array}{cc} #1 \\ #2 \end{array}\Big)}
+
+\clubpenalty=10000
+\widowpenalty = 10000
+
+\newtheorem{theo}{Theorem}[section]
+\newtheorem{lem}[theo]{Lemma}
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{cor}[theo]{Corollary}
+\newtheorem{quest}[theo]{Question}
+\newtheorem{conj}[theo]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{rmk}[theo]{Remark}
+\newtheorem{ex}[theo]{Example}
+\newtheorem{deftn}[theo]{Definition}
+
+\begin{document}
+
+\title{Fast computation of $p$-adic special functions}
+\author{Xavier Caruso, David Roe and Tristan Vaccon}
+\date{\today}
+
+\maketitle
+
+\section{Introduction}
+
+We apply remainder trees to the computation of various $p$-adic special functions.
+
+\section{Logarithms and Exponentials}
+
+\section{$D$-finite functions}
+
+\subsection{The general case}
+
+\subsection{Hypergeometric functions}
+
+\subsection{Polylogarithms}
+
+\section{Artin-Hasse exponentials}
+
+\section{The $p$-adic Gamma function}
+
+Recall that ${\displaystyle \Gamma(n) = (-1)^n\prod_{\substack{i \le n \\ p \nmid i}} i}$.  We define
+\[
+a_j(k) = \begin{cases} 1 & \text{if } j = 0 \text{ and } p \mid k, \\
+k & \text{if } j = 0 \text{ and } p \nmid k, \\
+\prod_{i=0}^{p-1} a_{j-1}(pk+i) & \text{otherwise}.\end{cases}
+%a_j(k) &=  % \prod_{\substack{p^jk < i < p^j(k+1) \\ p \nmid i}} i.
+\]
+Then $\Gamma(n) = (-1)^n
+
+\section{Precision}
+
+\end{document}
